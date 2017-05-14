@@ -1,0 +1,91 @@
+#!/usr/bin/bash
+
+if [ $1 ]; then
+	while test $# -gt 0; do
+		case $1 in
+			-h|--help)
+				echo "Create files from template"
+				echo ""
+				echo "Usage: new [options] newFile"
+				echo ""
+				echo "Options:"
+				echo "--------"
+				echo -e "{-t,--template} filename \t Force use of template in Template Directory"
+				echo -e "{-l,--list} \t\t\t Lists the available templates"
+				echo -e "{-h,--help} \t\t\t Show this help text"
+				exit 0
+				;;
+			-t|--template)
+				shift
+				if [[ -f "$HOME/Templates/$1" ]]; then 
+					template="$HOME/Templates/$1"
+				else
+					echo "The file $HOME/Templates/$1 does not exits"
+					exit 1
+				fi
+				shift
+				;;
+			-l|--list)
+				shift
+				for file in $HOME/Templates/*$1; do
+					echo ${file##*/}
+				done
+				exit 0
+				;;
+			*)
+				file=$1
+				if [[ "$template" == "" ]]; then
+					extention=${file##*.}
+					posTemplates=()
+					if [[ -f $HOME/Templates/$extention ]]; then
+						posTemplates+=("$HOME/Templates/$extention")
+					fi
+					for template in $HOME/Templates/*.$extention; do
+						if [[ -f $template ]]; then
+							posTemplates+=( $template )
+						fi
+					done
+					if [[ ${#posTemplates[@]} == 1 ]]; then
+						echo "Only one template"
+						template=${posTemplates[0]}
+					else
+
+						posTemplates+=("Cancel")
+						while
+							echo Your options are:
+							for (( i=0; i<${#posTemplates[@]}; i++ )); do
+								echo "$i: ${posTemplates[$i]##*/}"
+							done
+							echo -e -n "Please enter a number: [0] "
+							read input
+							if [[ "$input"=="" ]]; then
+								test=0
+							fi;
+							if [[ "$input" == "$(expr ${#posTemplates[@]} - 1)" ]]; then
+								echo "Exited By User"
+								exit 0
+							fi
+							template=${posTemplates[$input]}
+							[[ $input>=${#posTemplates[@]} || $input<0 ]]
+						do 
+							echo
+							echo Please chose one of the available options
+						done
+					fi
+				fi
+
+
+				if [[ -f "$file" ]]; then
+					echo "$file already exists"
+					echo "delete it first"
+					exit 1
+				fi
+				cat "$template" > "$file"
+				echo "$file created from template $template"
+				exit 0
+				;;
+		esac
+	done
+else
+	echo "You haven't given anything to work with"
+fi

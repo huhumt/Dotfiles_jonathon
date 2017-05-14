@@ -1,0 +1,7 @@
+#!/usr/bin/bash
+initial=$@
+place=${initial// /+}
+if [[ "$place" == "" ]]; then
+	place="Bury+St+Edmunds"
+fi
+curl "wttr.in/$place"

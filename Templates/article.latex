@@ -1,0 +1,33 @@
+\documentclass[12pt]{article}
+
+\usepackage{geometry} % Required for adjusting page dimensions
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage{amssymb}
+\usepackage{amsfonts}
+\usepackage{longtable}
+\usepackage{booktabs}
+\usepackage[UKenglish]{babel}
+\geometry{
+	paper=a4paper, % Change to letterpaper for US letter
+	top=3cm, % Top margin
+	bottom=1.5cm, % Bottom margin
+	left=4.5cm, % Left margin
+	right=4.5cm, % Right margin
+	%showframe, % Uncomment to show how the type block is set on the page
+}
+
+\title{<++>}
+\author{Jonathan Hodgson}
+\date{\today}
+
+
+\begin{document}
+\maketitle
+
+
+\section{<++>}
+<++>
+
+
+\end{document}

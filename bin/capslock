@@ -1,0 +1,3 @@
+#!/usr/bin/bash
+v=$(xset -q | grep Caps)
+echo ${v:7:17}

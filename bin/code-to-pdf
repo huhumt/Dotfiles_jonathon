@@ -1,0 +1,22 @@
+#!/usr/bin/env bash
+
+TITLE="$1"
+shift
+
+enscript -1 --media=A4 \
+    --toc \
+    --header '%H - $N | | page $% of $= in file $v' \
+    --font "Menlo-Regular@8.5" \
+    --header-font "Menlo-Bold@10" \
+    --margins=60:60:18:60 \
+    --fancy-header=sjl \
+    --title $TITLE \
+    --baselineskip 3 \
+    --line-numbers \
+    --highlight \
+    --color \
+    --mark-wrapped-lines=arrow \
+    -p - \
+    --word-wrap $* \
+    | ps2pdf -i -o code.pdf
+

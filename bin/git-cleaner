@@ -1,0 +1,75 @@
+#!/usr/bin/bash
+
+function help() {
+cat <<HELP
+Git Clean 
+https://jonathanh.co.uk
+
+Some code came from Ben Alman
+http://benalman.com/
+
+
+Usage: $(basename "$0") [command]
+
+Commands:
+	clean      Remove current unstaged changes/untracked files**
+	cleanall   Remove all saved tags, unstaged changes and untracked files**
+
+** This action is destructive and cannot be undone!
+
+Description:
+	Cleans unstaged changes and untracked files
+
+Copyright (c) 2014 "Cowboy" Ben Alman
+Licensed under the MIT license.
+http://benalman.com/about/license/
+HELP
+}
+
+function usage() {
+  echo "Usage: $(basename "$0") [clean | cleanall]"
+}
+
+function git_head_sha() {
+  git rev-parse --short HEAD
+}
+
+# Get absolute path to root of Git repo
+function git_repo_toplevel() {
+  git rev-parse --show-toplevel
+}
+
+# Clean (permanently) current changes and remove the current saved tag
+function clean() {
+  local head_sha=$(git_head_sha)
+  git tag -d "git-jump-$head_sha" &>/dev/null
+  if [[ $? == 0 ]]; then
+    echo "Removed stored data for commit $head_sha."
+  fi
+  local repo_root="$(git_repo_toplevel)"
+  git reset HEAD "$repo_root" >/dev/null
+  git clean -f -d -q -- "$repo_root" >/dev/null
+  git checkout -- "$repo_root" >/dev/null
+  echo "Unstaged changes and untracked files removed."
+}
+
+# Remove (permanently) all saved tags
+function clean_all_tags() {
+  git for-each-ref refs/tags --format='%(refname:short)' | \
+  while read tag; do
+    if [[ "$tag" =~ ^git-jump- ]]; then
+      git tag -d "$tag"
+    fi
+  done
+}
+
+# Handle CLI arguments
+if [[ "$1" == "clean" ]]; then
+  clean
+elif [[ "$1" == "cleanall" ]]; then
+  clean_all_tags
+  clean
+else
+  usage
+  exit 1
+fi

@@ -1,0 +1,31 @@
+#!/usr/bin/bash
+line=$(php --version | grep "PHP" -m 1)
+target="$1"
+lampp='/opt/lampp/lampp'
+echo $phpexe
+if [ "$(id -u)" != "0" ]; then
+	echo "Sorry, you are not root."
+	exit 1
+fi
+if [[ $target = "" ]]; then
+	echo "PLease specify the version you want"
+	exit 1
+fi;
+
+file="/opt/lampp/etc/extra/httpd-xampp-php$target.conf"
+phpexe=$(ls /opt/lampp/bin/php-$target*)
+phpcgi=$(ls /opt/lampp/bin/php-cgi-$target*)
+phpconfig=$(ls /opt/lampp/bin/php-config-$target*)
+phpize=$(ls /opt/lampp/bin/phpize-$target*)
+
+$lampp stopapache
+ln -s -f $file /opt/lampp/etc/extra/httpd-xampp.conf
+ln -s -f $phpexe /opt/lampp/bin/php
+ln -s -f $phpcgi /opt/lampp/bin/php-cgi
+ln -s -f $phpconfig /opt/lampp/bin/php-config
+ln -s -f $phpize /opt/lampp/bin/phpize
+
+$lampp startapache
+echo
+echo "Now on PHP $target"
+exit 0

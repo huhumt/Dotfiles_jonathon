@@ -1,0 +1,60 @@
+%----------------------------------------------------------------------------------------
+%	DOCUMENT CONFIGURATION
+%----------------------------------------------------------------------------------------
+
+\documentclass[12pt,a4paper,stdletter,sigleft]{newlfm} % 10pt font size default, 11pt and 12pt are also possible
+
+
+%\longindentation=0pt % Un-commenting this line will push the closing "Sincerely," to the left of the page
+
+
+\usepackage[T1]{fontenc} % Output font encoding for international characters
+\usepackage[utf8]{inputenc} % Required for inputting international characters
+\usepackage[UKenglish]{babel}
+\usepackage{stix} % Use the Stix font by default
+
+\usepackage{microtype} % Improve justification
+
+%----------------------------------------------------------------------------------------
+%	YOUR NAME & ADDRESS SECTION
+%----------------------------------------------------------------------------------------
+
+\signature{Jonathan Hodgson} % Your name for the signature at the bottom
+
+\address{***REMOVED*** \\ ***REMOVED***} % Your address and phone number
+
+%----------------------------------------------------------------------------------------
+
+\begin{document}
+
+%----------------------------------------------------------------------------------------
+%	ADDRESSEE SECTION
+%----------------------------------------------------------------------------------------
+
+\begin{letter}{<++>} % Name/title of the addressee{Recipient Name \\ Recipient Address}
+
+%----------------------------------------------------------------------------------------
+%	LETTER CONTENT SECTION
+%----------------------------------------------------------------------------------------
+
+\opening{\textbf{Dear Sir or Madam,}}
+
+<++>
+
+Thank you for your time and consideration.
+
+I look forward to your reply.
+
+\vspace{2\parskip} % Extra whitespace for aesthetics
+\closing{Yours failthfully,}
+\vspace{2\parskip} % Extra whitespace for aesthetics
+
+%\ps{P.S. You can find additional information attached to this letter.} % Postscript text, comment this line to remove it
+
+%\encl{Copyright permission form} % Enclosures with the letter, comment this line to remove it
+
+%----------------------------------------------------------------------------------------
+
+\end{letter}
+ 
+\end{document}
