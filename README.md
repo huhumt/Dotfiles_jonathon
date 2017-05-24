@@ -1,4 +1,4 @@
-#My Configuration
+# My Configuration
 
 This is a configuration that is for my Arch Linux machines with i3 as my window manager.
 
