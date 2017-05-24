@@ -8,7 +8,7 @@
 export TERMINAL=/usr/bin/konsole
 export TERM=xterm-256color
 export PATH=~/.bin:/opt/lampp/bin:$PATH:.
-export EDITOR=vim
+export EDITOR='vim --servername jab2870'
 export CDPATH=.:~:~/Sites
 
 #Ruby things
@@ -184,6 +184,9 @@ alias .v='cd ~/.vim/'
 #else
 	alias df='cd ~/.dotfiles'
 #fi
+
+#Make vim start in server mode
+alias vim='vim --servername jab2870'
 
 # moon phase
 alias moonphase='weather moon'
