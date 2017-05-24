@@ -170,7 +170,7 @@ assign [class="skypeforlinux"] $workspace10
 for_window [class="Galculator"] floating enable
 
 # reload the configuration file
-bindsym $mod+Shift+c reload
+#bindsym $mod+Shift+c reload
 
 # restart i3 inplace (preserves your layout/session, can be used to upgrade i3)
 bindsym $mod+Shift+r restart
@@ -217,7 +217,7 @@ bindsym $mod+r mode "resize"
 # finds out, if available)
 bar {
         status_command i3status
-        #tray_output primary
+        tray_output primary
         colors {
               separator $base03
               background $base01
@@ -233,7 +233,8 @@ bar {
 #Use xfce4 panel instead of i3's
 #exec --no-startup-id xfce4-panel --disable-wm-check
 
-bindsym control+mod1+c exec chromium, workspace $workspace1
+bindsym $mod+c exec chromium-snapshot-bin, workspace $workspace1
+bindsym $mod+Shift+c exec chromium-snapshot-bin --force-device-scale-factor=2, workspace $workspace1
 bindsym control+mod1+f exec thunar
 bindsym XF86Mail exec thunderbird
 bindsym $mod+z exec zeal
@@ -342,8 +343,8 @@ mode "$mode_gaps_outer" {
 
 
 #exec --no-startup-id redshift-gtk
-
-#exec --no-startup-id redshift-gtk
+exec --no-startup-id redshift
+exec --no-startup-id pasystray
 #exec feh --bg-scale /home/jonathan/Pictures/Wallpapers/blueConky/ram_memory_chip-wallpaper-3554x1999.jpg
 exec --no-startup-id compton -f -i 0.95
 exec_always --no-startup-id /usr/lib/kdeconnectd
@@ -354,10 +355,10 @@ exec --no-startup-id xfce4-clipman
 #exec --no-startup-id xfce4-power-manager
 #exec_always --no-startup-id killall conky
 #exec_always --no-startup-id sleep 1s; killall -9 conky
-exec --no-startup-id xrandr --output HDMI-1 --auto --left-of DP-1
+exec --no-startup-id xrandr --output DP-1 --primary --mode 2560x1440 --pos 1440x0 --rotate normal --output HDMI-1 --mode 1440x900 --pos 0x0 --rotate normal --output HDMI-2 --off
 exec_always --no-startup-id /usr/lib/xfce4/notifyd/xfce4-notifyd
 exec --no-startup-id sh ~/.fehbg
 exec_always --no-startup-id sh "/home/jonathan/.config/conky/conky-startup.sh"
 #exec --no-startup-id conky -c "/home/jonathan/.config/conky/BibleVerse/bibleGateway"
 #exec --no-startup-id conky -c "/home/jonathan/.config/conky/MyBlue/MyBlue"
-exec --no-startup-id albert
+exec_always --no-startup-id albert

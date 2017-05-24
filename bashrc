@@ -12,10 +12,10 @@ export EDITOR=vim
 export CDPATH=.:~:~/Sites
 
 #Ruby things
-#GEM_HOME=$(ls -t -U | ruby -e 'puts Gem.user_dir')
-#GEM_PATH=$GEM_HOME
-#export PATH=$PATH:$GEM_HOME/bin
-#export GEM_HOME=$(ruby -e 'print Gem.user_dir')
+GEM_HOME=$(ls -t -U | ruby -e 'puts Gem.user_dir')
+GEM_PATH=$GEM_HOME
+export PATH=$PATH:$GEM_HOME/bin
+export GEM_HOME=$(ruby -e 'print Gem.user_dir')
 
 big-chromium () {
 	chromium --force-device-scale-factor=$1
@@ -185,6 +185,9 @@ alias .v='cd ~/.vim/'
 	alias df='cd ~/.dotfiles'
 #fi
 
+# moon phase
+alias moonphase='weather moon'
+
 #Old ps1
 #PS1='[\u@\h \W]\$ '
 
@@ -338,7 +341,7 @@ fi
 #If on work computer, cd into sites
 
 clear
-screenfetch
+#screenfetch
 set -o vi
 
 # vim: foldmethod=marker

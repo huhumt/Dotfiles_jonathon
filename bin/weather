@@ -4,4 +4,4 @@ place=${initial// /+}
 if [[ "$place" == "" ]]; then
 	place="Bury+St+Edmunds"
 fi
-curl "wttr.in/$place"
+curl "wttr.in/$place" 2> /dev/null | head -n -2
