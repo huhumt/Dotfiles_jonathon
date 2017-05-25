@@ -86,7 +86,7 @@ searchjs() {
 }
 searchcss() {
 	# This will search through .css and .less files but won't search minified files
-	grep -r -i -n --color="auto" --include=\*.{css,less} --exclude=\*.min.css "$1" .
+	grep -r -i -n --color="auto" --include=\*.{css,less,scss,sass} --exclude=\*.min.css "$1" .
 }
 searchphp() {
 	grep -r -i -n --color="auto" --include="*.php" "$1" .
