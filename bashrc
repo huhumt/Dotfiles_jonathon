@@ -5,17 +5,6 @@
 # If not running interactively, don't do anything
 [[ $- != *i* ]] && return
 
-export TERMINAL=/usr/bin/konsole
-export TERM=xterm-256color
-export PATH=~/.bin:$PATH:.
-export EDITOR='vim --servername jab2870'
-export CDPATH=.:~:~/Sites
-
-#Ruby things
-GEM_HOME=$(ls -t -U | ruby -e 'puts Gem.user_dir')
-GEM_PATH=$GEM_HOME
-export PATH=$PATH:$GEM_HOME/bin
-export GEM_HOME=$(ruby -e 'print Gem.user_dir')
 
 big-chromium () {
 	chromium --force-device-scale-factor=$1
@@ -115,6 +104,9 @@ alias net='sudo systemctl start NetworkManager.service'
 # Alias lampp because I don't want to clog my PATH
 alias lampp='/opt/lampp/lampp'
 alias glampp='gksudo /opt/lampp/manager-linux-x64.run'
+alias php='/opt/lampp/bin/php'
+alias php-cgi='/opt/lampp/bin/php-cgi'
+alias php-config='/opt/lampp/bin/php-config'
 
 #Always make all directories necesary
 alias mkdir='mkdir -p'
