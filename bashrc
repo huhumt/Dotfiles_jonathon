@@ -7,7 +7,7 @@
 
 export TERMINAL=/usr/bin/konsole
 export TERM=xterm-256color
-export PATH=~/.bin:/opt/lampp/bin:$PATH:.
+export PATH=~/.bin:$PATH:.
 export EDITOR='vim --servername jab2870'
 export CDPATH=.:~:~/Sites
 
