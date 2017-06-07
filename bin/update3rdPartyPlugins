@@ -4,5 +4,5 @@ pluginFolder="/home/jonathan/WPPlugins"
 for dir in $pluginFolder/*/; do
 	cd $dir
 	pwd | cowsay
-	git-svn-mirror update
+	/home/jonathan/.gem/ruby/2.4.0/bin/git-svn-mirror update
 done
