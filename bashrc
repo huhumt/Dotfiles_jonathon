@@ -190,6 +190,8 @@ alias radio4="$AUDIO http://a.files.bbci.co.uk/media/live/manifesto/audio/simulc
 alias classic="$AUDIO http://icy-e-bab-04-cr.sharp-stream.com/absoluteradio.mp3"
 alias absolute="$AUDIO http://network.absoluteradio.co.uk/core/audio/mp3/live.pls?service=vrbb"
 
+alias bs="curl -s http://cbsg.sourceforge.net/cgi-bin/live | grep -Eo '^<li>.*</li>' | sed s,\\</\\\\?li\\>,,g | shuf -n 1 | cowsay"
+
 #Old ps1
 #PS1='[\u@\h \W]\$ '
 
@@ -220,6 +222,9 @@ export GIT_PS1_SHOWUPSTREAM="auto"
 
 source /usr/share/git/completion/git-completion.bash
 source /usr/share/git/completion/git-prompt.sh
+
+source $HOME/.dotfiles/t-completion.sh
+
 
 ############################################
 ##                                        ##
@@ -344,6 +349,6 @@ fi
 
 clear
 #screenfetch
-set -o vi
+#set -o vi
 
 # vim: foldmethod=marker
