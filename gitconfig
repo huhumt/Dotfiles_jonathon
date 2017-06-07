@@ -3,6 +3,7 @@
 	name = Jonathan Hodgson
 [core]
 	editor = vim
+	excludesfile = ~/.gitignore
 [status]
 	submoduleSummary = true
 [alias]
