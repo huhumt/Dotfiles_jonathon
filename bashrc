@@ -192,6 +192,8 @@ alias absolute="$AUDIO http://network.absoluteradio.co.uk/core/audio/mp3/live.pl
 
 alias bs="curl -s http://cbsg.sourceforge.net/cgi-bin/live | grep -Eo '^<li>.*</li>' | sed s,\\</\\\\?li\\>,,g | shuf -n 1 | cowsay"
 
+alias jq="jq -C"
+
 #Old ps1
 #PS1='[\u@\h \W]\$ '
 
