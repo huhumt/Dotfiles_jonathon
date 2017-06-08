@@ -1,0 +1,353 @@
+#!/bin/bash
+
+DIR="$PWD"
+#
+#while test $# -gt 0; do
+#	case "$1" in
+#		--uploads)
+#			shift
+#			uploads=$1
+#			if [ ${uploads:0:1} == "-" ]; then
+#				uploads=""
+#			else
+#				shift
+#			fi
+#			;;
+#		-h|--help)
+#			echo -e "htaccess Generator"
+#			echo -e "This generates an htaccess file"
+#			echo -e "It adds 301 redirects to the new locations of wp-includes and wp-admin"
+#			echo -e "It also sets up 301 redirects to or from the www version of the site"
+#			echo -e "For use on dev or local sites, you can specify a url to have for the wp-uploads"
+#			echo -e " "
+#			echo -e "Options"
+#			echo -e "-h, --help \t\t\t Show this help"
+#			echo -e "--uploads [url] \t\t\t The URL to redirect uploads to"
+#			echo -e "--with-www \t\t\t Indicate that the primary site should have www"
+#			echo -e "--without-www \t\t\t Indicate that the primary site shouldn't have www"
+#			echo -e "--domain [domain]\t\t\t The domain without www or http etc."
+#			exit 0
+#			;;
+#		-a|--auto)
+#			defaults=true
+#			shift
+#			;;
+#		--with-www)
+#			www="with"
+#			shift
+#			;;
+#		--without-www)
+#			www="without"
+#			shift
+#			;;
+#		--domain)
+#			shift
+#			domain=$1
+#			if [ ${domain:0:1} == "-" ]; then
+#				domain=""
+#			else
+#				shift
+#			fi
+#			;;
+#		*)
+#			echo -e "You entered something that wasn't help or salt"
+#			shift
+#			;;
+#	esac
+#	
+#done
+
+if [ -f "$DIR/.htaccess" ]; then
+	echo -e "The file .htaccess already exists."
+	echo -e "What do you want to do? [ b=Create Backup | o=Overwrite | a=Abort] \c"
+	read choice
+	choice=$(echo -e $choice | tr '[:upper:]' '[:lower:]' | head -c 1)
+	if [[ "$choice" == "b" ]]; then
+		name=".htaccess.backup$(date +'%y:%m:%d:%T')"
+		mv "$DIR/.htaccess" "$DIR/$name"
+		echo -e "Would you like to add this new file to .gitignore? [Y/n] \c"
+		read input
+		input=$(echo -e $input | tr '[:upper:]' '[:lower:]' | head -c 1)
+		if [[ $input != 'n' ]];then
+			echo "$name" >> .gitignore
+		fi
+
+	fi
+	if [[ "$choice" == "a" ]]; then
+		echo -e "Aborted by user"
+		return 1
+	fi
+	rm "$DIR/.htaccess"
+fi
+
+
+echo -e "Will you be running wordpress from a wp subdirectory? [Y/n] \c"
+read input
+input=$(echo -e $input | tr '[:upper:]' '[:lower:]' | head -c 1)
+if [[ $input != 'n' ]]; then
+	subdirectory="true"
+else
+	subdirectory="false"
+fi
+
+# Little hack to make any 404 urls set in .htaccess use the wp 404 page
+echo 'ErrorDocument 404 /404/' > "$DIR/.htaccess"
+
+# If wordpress is installed in a sub-directory, add redirects
+if [[ "subdirectory" == "true" ]]; then
+	echo 'RedirectMatch 301 ^/wp-admin/(.*)$ /wp/wp-admin/$1' >> "$DIR/.htaccess"
+	echo 'RedirectMatch 301 ^/wp-includes/(.*)$ /wp/wp-includes/$1' >> "$DIR/.htaccess"
+fi
+
+#This makes sure all git folders and files are inaccessible 
+echo 'RedirectMatch 404 /\.git' >> "$DIR/.htaccess"
+
+#This makes sure aquariusGo is not accessible
+echo 'RedirectMatch 404 ^/aquariusGo' >> "$DIR/.htaccess"
+
+#This makes sure htaccess is not accessible
+echo 'RedirectMatch 404 ^/\.htaccess' >> "$DIR/.htaccess"
+
+echo -e "Would you like to add cache, expire and gzip rules? [Y/n] \c"
+read input
+input=$(echo -e $input | tr '[:upper:]' '[:lower:]' | head -c 1)
+if [[ $input != 'n' ]]; then
+	cacheRules="true"
+else
+	cacheRules="false"
+fi
+if [[ "$cacheRules" == "true" ]]; then
+	echo '# Add Browser Cache expires rules' >> "$DIR/.htaccess"
+	echo '<IfModule mod_mime.c>' >> "$DIR/.htaccess"
+	echo '        AddType text/css .css' >> "$DIR/.htaccess"
+	echo '        AddType text/x-component .htc' >> "$DIR/.htaccess"
+	echo '        AddType application/x-javascript .js' >> "$DIR/.htaccess"
+	echo '        AddType application/javascript .js2' >> "$DIR/.htaccess"
+	echo '        AddType text/javascript .js3' >> "$DIR/.htaccess"
+	echo '        AddType text/x-js .js4' >> "$DIR/.htaccess"
+	echo '        AddType text/html .html .htm' >> "$DIR/.htaccess"
+	echo '        AddType text/richtext .rtf .rtx' >> "$DIR/.htaccess"
+	echo '        AddType image/svg+xml .svg .svgz' >> "$DIR/.htaccess"
+	echo '        AddType text/plain .txt' >> "$DIR/.htaccess"
+	echo '        AddType text/xsd .xsd' >> "$DIR/.htaccess"
+	echo '        AddType text/xsl .xsl' >> "$DIR/.htaccess"
+	echo '        AddType text/xml .xml' >> "$DIR/.htaccess"
+	echo '        AddType video/asf .asf .asx .wax .wmv .wmx' >> "$DIR/.htaccess"
+	echo '        AddType video/avi .avi' >> "$DIR/.htaccess"
+	echo '        AddType image/bmp .bmp' >> "$DIR/.htaccess"
+	echo '        AddType application/java .class' >> "$DIR/.htaccess"
+	echo '        AddType video/divx .divx' >> "$DIR/.htaccess"
+	echo '        AddType application/msword .doc .docx' >> "$DIR/.htaccess"
+	echo '        AddType application/vnd.ms-fontobject .eot' >> "$DIR/.htaccess"
+	echo '        AddType application/x-msdownload .exe' >> "$DIR/.htaccess"
+	echo '        AddType image/gif .gif' >> "$DIR/.htaccess"
+	echo '        AddType application/x-gzip .gz .gzip' >> "$DIR/.htaccess"
+	echo '        AddType image/x-icon .ico' >> "$DIR/.htaccess"
+	echo '        AddType image/jpeg .jpg .jpeg .jpe' >> "$DIR/.htaccess"
+	echo '        AddType application/json .json' >> "$DIR/.htaccess"
+	echo '        AddType application/vnd.ms-access .mdb' >> "$DIR/.htaccess"
+	echo '        AddType audio/midi .mid .midi' >> "$DIR/.htaccess"
+	echo '        AddType video/quicktime .mov .qt' >> "$DIR/.htaccess"
+	echo '        AddType audio/mpeg .mp3 .m4a' >> "$DIR/.htaccess"
+	echo '        AddType video/mp4 .mp4 .m4v' >> "$DIR/.htaccess"
+	echo '        AddType video/mpeg .mpeg .mpg .mpe' >> "$DIR/.htaccess"
+	echo '        AddType application/vnd.ms-project .mpp' >> "$DIR/.htaccess"
+	echo '        AddType application/x-font-otf .otf' >> "$DIR/.htaccess"
+	echo '        AddType application/vnd.ms-opentype ._otf' >> "$DIR/.htaccess"
+	echo '        AddType application/vnd.oasis.opendocument.database .odb' >> "$DIR/.htaccess"
+	echo '        AddType application/vnd.oasis.opendocument.chart .odc' >> "$DIR/.htaccess"
+	echo '        AddType application/vnd.oasis.opendocument.formula .odf' >> "$DIR/.htaccess"
+	echo '        AddType application/vnd.oasis.opendocument.graphics .odg' >> "$DIR/.htaccess"
+	echo '        AddType application/vnd.oasis.opendocument.presentation .odp' >> "$DIR/.htaccess"
+	echo '        AddType application/vnd.oasis.opendocument.spreadsheet .ods' >> "$DIR/.htaccess"
+	echo '        AddType application/vnd.oasis.opendocument.text .odt' >> "$DIR/.htaccess"
+	echo '        AddType audio/ogg .ogg' >> "$DIR/.htaccess"
+	echo '        AddType application/pdf .pdf' >> "$DIR/.htaccess"
+	echo '        AddType image/png .png' >> "$DIR/.htaccess"
+	echo '        AddType application/vnd.ms-powerpoint .pot .pps .ppt .pptx' >> "$DIR/.htaccess"
+	echo '        AddType audio/x-realaudio .ra .ram' >> "$DIR/.htaccess"
+	echo '        AddType application/x-shockwave-flash .swf' >> "$DIR/.htaccess"
+	echo '        AddType application/x-tar .tar' >> "$DIR/.htaccess"
+	echo '        AddType image/tiff .tif .tiff' >> "$DIR/.htaccess"
+	echo '        AddType application/x-font-ttf .ttf .ttc' >> "$DIR/.htaccess"
+	echo '        AddType application/vnd.ms-opentype ._ttf' >> "$DIR/.htaccess"
+	echo '        AddType audio/wav .wav' >> "$DIR/.htaccess"
+	echo '        AddType audio/wma .wma' >> "$DIR/.htaccess"
+	echo '        AddType application/vnd.ms-write .wri' >> "$DIR/.htaccess"
+	echo '        AddType application/font-woff .woff' >> "$DIR/.htaccess"
+	echo '        AddType application/font-woff2 .woff2' >> "$DIR/.htaccess"
+	echo '        AddType application/vnd.ms-excel .xla .xls .xlsx .xlt .xlw' >> "$DIR/.htaccess"
+	echo '        AddType application/zip .zip' >> "$DIR/.htaccess"
+	echo '</IfModule>' >> "$DIR/.htaccess"
+	echo '<IfModule mod_expires.c>' >> "$DIR/.htaccess"
+	echo '        ExpiresActive On' >> "$DIR/.htaccess"
+	echo '        ExpiresByType text/css A31536000' >> "$DIR/.htaccess"
+	echo '        ExpiresByType text/x-component A31536000' >> "$DIR/.htaccess"
+	echo '        ExpiresByType application/x-javascript A31536000' >> "$DIR/.htaccess"
+	echo '        ExpiresByType application/javascript A31536000' >> "$DIR/.htaccess"
+	echo '        ExpiresByType text/javascript A31536000' >> "$DIR/.htaccess"
+	echo '        ExpiresByType text/x-js A31536000' >> "$DIR/.htaccess"
+	echo '        ExpiresByType text/html A3600' >> "$DIR/.htaccess"
+	echo '        ExpiresByType text/richtext A3600' >> "$DIR/.htaccess"
+	echo '        ExpiresByType image/svg+xml A3600' >> "$DIR/.htaccess"
+	echo '        ExpiresByType text/plain A3600' >> "$DIR/.htaccess"
+	echo '        ExpiresByType text/xsd A3600' >> "$DIR/.htaccess"
+	echo '        ExpiresByType text/xsl A3600' >> "$DIR/.htaccess"
+	echo '        ExpiresByType text/xml A3600' >> "$DIR/.htaccess"
+	echo '        ExpiresByType video/asf A31536000' >> "$DIR/.htaccess"
+	echo '        ExpiresByType video/avi A31536000' >> "$DIR/.htaccess"
+	echo '        ExpiresByType image/bmp A31536000' >> "$DIR/.htaccess"
+	echo '        ExpiresByType application/java A31536000' >> "$DIR/.htaccess"
+	echo '        ExpiresByType video/divx A31536000' >> "$DIR/.htaccess"
+	echo '        ExpiresByType application/msword A31536000' >> "$DIR/.htaccess"
+	echo '        ExpiresByType application/vnd.ms-fontobject A31536000' >> "$DIR/.htaccess"
+	echo '        ExpiresByType application/x-msdownload A31536000' >> "$DIR/.htaccess"
+	echo '        ExpiresByType image/gif A31536000' >> "$DIR/.htaccess"
+	echo '        ExpiresByType application/x-gzip A31536000' >> "$DIR/.htaccess"
+	echo '        ExpiresByType image/x-icon A31536000' >> "$DIR/.htaccess"
+	echo '        ExpiresByType image/jpeg A31536000' >> "$DIR/.htaccess"
+	echo '        ExpiresByType application/json A31536000' >> "$DIR/.htaccess"
+	echo '        ExpiresByType application/vnd.ms-access A31536000' >> "$DIR/.htaccess"
+	echo '        ExpiresByType audio/midi A31536000' >> "$DIR/.htaccess"
+	echo '        ExpiresByType video/quicktime A31536000' >> "$DIR/.htaccess"
+	echo '        ExpiresByType audio/mpeg A31536000' >> "$DIR/.htaccess"
+	echo '        ExpiresByType video/mp4 A31536000' >> "$DIR/.htaccess"
+	echo '        ExpiresByType video/mpeg A31536000' >> "$DIR/.htaccess"
+	echo '        ExpiresByType application/vnd.ms-project A31536000' >> "$DIR/.htaccess"
+	echo '        ExpiresByType application/x-font-otf A31536000' >> "$DIR/.htaccess"
+	echo '        ExpiresByType application/vnd.ms-opentype A31536000' >> "$DIR/.htaccess"
+	echo '        ExpiresByType application/vnd.oasis.opendocument.database A31536000' >> "$DIR/.htaccess"
+	echo '        ExpiresByType application/vnd.oasis.opendocument.chart A31536000' >> "$DIR/.htaccess"
+	echo '        ExpiresByType application/vnd.oasis.opendocument.formula A31536000' >> "$DIR/.htaccess"
+	echo '        ExpiresByType application/vnd.oasis.opendocument.graphics A31536000' >> "$DIR/.htaccess"
+	echo '        ExpiresByType application/vnd.oasis.opendocument.presentation A31536000' >> "$DIR/.htaccess"
+	echo '        ExpiresByType application/vnd.oasis.opendocument.spreadsheet A31536000' >> "$DIR/.htaccess"
+	echo '        ExpiresByType application/vnd.oasis.opendocument.text A31536000' >> "$DIR/.htaccess"
+	echo '        ExpiresByType audio/ogg A31536000' >> "$DIR/.htaccess"
+	echo '        ExpiresByType application/pdf A31536000' >> "$DIR/.htaccess"
+	echo '        ExpiresByType image/png A31536000' >> "$DIR/.htaccess"
+	echo '        ExpiresByType application/vnd.ms-powerpoint A31536000' >> "$DIR/.htaccess"
+	echo '        ExpiresByType audio/x-realaudio A31536000' >> "$DIR/.htaccess"
+	echo '        ExpiresByType image/svg+xml A31536000' >> "$DIR/.htaccess"
+	echo '        ExpiresByType application/x-shockwave-flash A31536000' >> "$DIR/.htaccess"
+	echo '        ExpiresByType application/x-tar A31536000' >> "$DIR/.htaccess"
+	echo '        ExpiresByType image/tiff A31536000' >> "$DIR/.htaccess"
+	echo '        ExpiresByType application/x-font-ttf A31536000' >> "$DIR/.htaccess"
+	echo '        ExpiresByType application/vnd.ms-opentype A31536000' >> "$DIR/.htaccess"
+	echo '        ExpiresByType audio/wav A31536000' >> "$DIR/.htaccess"
+	echo '        ExpiresByType audio/wma A31536000' >> "$DIR/.htaccess"
+	echo '        ExpiresByType application/vnd.ms-write A31536000' >> "$DIR/.htaccess"
+	echo '        ExpiresByType application/font-woff A31536000' >> "$DIR/.htaccess"
+	echo '        ExpiresByType application/font-woff2 A31536000' >> "$DIR/.htaccess"
+	echo '        ExpiresByType application/vnd.ms-excel A31536000' >> "$DIR/.htaccess"
+	echo '        ExpiresByType application/zip A31536000' >> "$DIR/.htaccess"
+	echo '</IfModule>' >> "$DIR/.htaccess"
+
+
+	#Add Gzip Compression
+	echo '<IfModule mod_deflate.c>' >> "$DIR/.htaccess"
+	echo '  # force deflate for mangled headers' >> "$DIR/.htaccess"
+	echo '  # developer.yahoo.com/blogs/ydn/posts/2010/12/pushing-beyond-gzipping/' >> "$DIR/.htaccess"
+	echo '  <IfModule mod_setenvif.c>' >> "$DIR/.htaccess"
+	echo '    <IfModule mod_headers.c>' >> "$DIR/.htaccess"
+	echo '      SetEnvIfNoCase ^(Accept-EncodXng|X-cept-Encoding|X{15}|~{15}|-{15})$ ^((gzip|deflate)\s*,?\s*)+|[X~-]{4,13}$ HAVE_Accept-Encoding' >> "$DIR/.htaccess"
+	echo '      RequestHeader append Accept-Encoding "gzip,deflate" env=HAVE_Accept-Encoding' >> "$DIR/.htaccess"
+	echo '    </IfModule>' >> "$DIR/.htaccess"
+	echo '  </IfModule>' >> "$DIR/.htaccess"
+	echo '' >> "$DIR/.htaccess"
+	echo '  # HTML, TXT, CSS, JavaScript, JSON, XML, HTC:' >> "$DIR/.htaccess"
+	echo '  <IfModule filter_module>' >> "$DIR/.htaccess"
+	echo '    FilterDeclare   COMPRESS' >> "$DIR/.htaccess"
+	echo '    FilterProvider  COMPRESS  DEFLATE resp=Content-Type $text/html' >> "$DIR/.htaccess"
+	echo '    FilterProvider  COMPRESS  DEFLATE resp=Content-Type $text/css' >> "$DIR/.htaccess"
+	echo '    FilterProvider  COMPRESS  DEFLATE resp=Content-Type $text/plain' >> "$DIR/.htaccess"
+	echo '    FilterProvider  COMPRESS  DEFLATE resp=Content-Type $text/xml' >> "$DIR/.htaccess"
+	echo '    FilterProvider  COMPRESS  DEFLATE resp=Content-Type $text/x-component' >> "$DIR/.htaccess"
+	echo '    FilterProvider  COMPRESS  DEFLATE resp=Content-Type $application/javascript' >> "$DIR/.htaccess"
+	echo '    FilterProvider  COMPRESS  DEFLATE resp=Content-Type $application/json' >> "$DIR/.htaccess"
+	echo '    FilterProvider  COMPRESS  DEFLATE resp=Content-Type $application/xml' >> "$DIR/.htaccess"
+	echo '    FilterProvider  COMPRESS  DEFLATE resp=Content-Type $application/xhtml+xml' >> "$DIR/.htaccess"
+	echo '    FilterProvider  COMPRESS  DEFLATE resp=Content-Type $application/rss+xml' >> "$DIR/.htaccess"
+	echo '    FilterProvider  COMPRESS  DEFLATE resp=Content-Type $application/atom+xml' >> "$DIR/.htaccess"
+	echo '    FilterProvider  COMPRESS  DEFLATE resp=Content-Type $application/vnd.ms-fontobject' >> "$DIR/.htaccess"
+	echo '    FilterProvider  COMPRESS  DEFLATE resp=Content-Type $image/svg+xml' >> "$DIR/.htaccess"
+	echo '    FilterProvider  COMPRESS  DEFLATE resp=Content-Type $application/x-font-ttf' >> "$DIR/.htaccess"
+	echo '    FilterProvider  COMPRESS  DEFLATE resp=Content-Type $font/opentype' >> "$DIR/.htaccess"
+	echo '    FilterChain     COMPRESS' >> "$DIR/.htaccess"
+	echo '    FilterProtocol  COMPRESS  DEFLATE change=yes;byteranges=no' >> "$DIR/.htaccess"
+	echo '  </IfModule>' >> "$DIR/.htaccess"
+	echo '' >> "$DIR/.htaccess"
+	echo '  <IfModule !mod_filter.c>' >> "$DIR/.htaccess"
+	echo '    # Legacy versions of Apache' >> "$DIR/.htaccess"
+	echo '    AddOutputFilterByType DEFLATE text/html text/plain text/css application/json' >> "$DIR/.htaccess"
+	echo '    AddOutputFilterByType DEFLATE application/javascript' >> "$DIR/.htaccess"
+	echo '    AddOutputFilterByType DEFLATE text/xml application/xml text/x-component' >> "$DIR/.htaccess"
+	echo '    AddOutputFilterByType DEFLATE application/xhtml+xml application/rss+xml ' >> "$DIR/.htaccess"
+	echo '    AddOutputFilterByType DEFLATE application/atom+xml' >> "$DIR/.htaccess"
+	echo '    AddOutputFilterByType DEFLATE image/svg+xml application/vnd.ms-fontobject ' >> "$DIR/.htaccess"
+	echo '    AddOutputFilterByType DEFLATE application/x-font-ttf font/opentype' >> "$DIR/.htaccess"
+	echo '  </IfModule>' >> "$DIR/.htaccess"
+	echo '</IfModule>' >> "$DIR/.htaccess"
+fi
+
+
+echo '<IfModule mod_rewrite.c>' >> "$DIR/.htaccess"
+echo 'RewriteEngine On' >> "$DIR/.htaccess"
+echo 'RewriteBase /' >> "$DIR/.htaccess"
+if [ ! "$www" ]; then
+	if [ "$defaults" == "true" ]; then
+		www="without"
+		echo -e "Default is to not use www"
+		echo -e "To change, run with flag --with-www"
+		echo -e "For more options, run with flag --help\n"
+	else
+		echo -e "Would you like the primary version of the site to use wwws? [y/N] \c"
+		read input
+		input=$(echo -e $input | tr '[:upper:]' '[:lower:]' | head -c 1)
+		if [[ $input != 'y' ]]; then
+			www="without"
+		else
+			www="with"
+		fi
+	fi
+fi
+if [ ! "$domain" ]; then
+	echo -e "Please enter the domain without wwws, http or trailing slash \c"
+	read domain
+fi
+if [[ "$www" == "with" ]]; then
+	echo "#Primary Site will have wwws" >> "$DIR/.htaccess"
+	echo "RewriteCond %{HTTP_HOST} ^$domain [NC]" >> "$DIR/.htaccess"
+	echo "RewriteRule ^(.*)$ http://www.$domain/\$1 [L,R=301,NC]" >> "$DIR/.htaccess"
+else
+	echo "#Primary site will not have wwws" >> "$DIR/.htaccess"
+	echo "RewriteCond %{HTTP_HOST} ^www.$domain [NC]" >> "$DIR/.htaccess"
+	echo "RewriteRule ^(.*)$ http://$domain/\$1 [L,R=301]" >> "$DIR/.htaccess"
+fi
+
+if [ ! "$uploads" ]; then
+	if [ "$defaults" == "true" ]; then
+		echo -e "By default, the uploads folder will be used as normal"
+		echo -e "To change, run with flag uploads [url]"
+		echo -e "For more options, run with flag --help\n"
+	else
+		echo "Aquarius Go now has the ability to redirect an uploads folder to a different"
+		echo "This is usefull for dev sites or local copies of sites"
+		echo "In order to use it, enter the url with the http(s):// and a trailing slash"
+		echo "Don't enter anything if you want to use the default location"
+		echo -e "URL: \c"
+		read uploads
+	fi
+fi
+if [ "$uploads" ]; then
+	echo 'RewriteCond %{REQUEST_FILENAME} !-d' >> "$DIR/.htaccess"
+	echo 'RewriteCond %{REQUEST_FILENAME} !-f' >> "$DIR/.htaccess"
+	echo 'RewriteRule wp-content/uploads/(.*) \' >> "$DIR/.htaccess"
+	echo "    $uploads\$1 [NC,L]" >> "$DIR/.htaccess"
+fi
+echo 'RewriteRule ^index\.php$ - [L]' >> "$DIR/.htaccess"
+echo 'RewriteCond %{REQUEST_FILENAME} !-f' >> "$DIR/.htaccess"
+echo 'RewriteCond %{REQUEST_FILENAME} !-d' >> "$DIR/.htaccess"
+echo 'RewriteRule . /index.php [L]' >> "$DIR/.htaccess"
+echo '</IfModule>' >> "$DIR/.htaccess"
+
