@@ -3,6 +3,6 @@
 pluginFolder="/home/jonathan/WPPlugins"
 for dir in $pluginFolder/*/; do
 	cd $dir
-	pwd | cowsay
+	pwd | cowsay -f tux
 	/home/jonathan/.gem/ruby/2.4.0/bin/git-svn-mirror update
 done
