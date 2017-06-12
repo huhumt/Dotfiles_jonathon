@@ -1,0 +1,13 @@
+#!/usr/bin/bash
+comic=$1
+if [[ "$comic" == "" ]]; then
+	json=$(curl https://xkcd.com/info.0.json 2> /dev/null)
+elif [[ "$comic" == "random" ]] || [[ "$comic" == "r" ]]; then
+	latest=$(curl https://xkcd.com/info.0.json 2> /dev/null | /usr/bin/jq ".num")
+	number=$(shuf -i1-$latest -n1)
+	json=$(curl https://xkcd.com/$number/info.0.json 2> /dev/null)
+else
+	json=$(curl https://xkcd.com/$comic/info.0.json 2> /dev/null)
+fi
+echo $json | /usr/bin/jq -C
+echo $json | /usr/bin/jq ".img" | xargs feh

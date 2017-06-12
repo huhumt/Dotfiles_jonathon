@@ -194,6 +194,8 @@ alias bs="curl -s http://cbsg.sourceforge.net/cgi-bin/live | grep -Eo '^<li>.*</
 
 alias jq="jq -C"
 
+#alias xkcd='curl https://xkcd.com/info.0.json 2> /dev/null| \jq ".img" | xargs feh'
+
 #Old ps1
 #PS1='[\u@\h \W]\$ '
 
@@ -348,6 +350,9 @@ fi
 [ -r "$HOME/.smartcd_config" ] && ( [ -n $BASH_VERSION ] || [ -n $ZSH_VERSION ] ) && source ~/.smartcd_config
 
 #If on work computer, cd into sites
+
+#Add tab completeion to sudo commands
+complete -cf sudo
 
 clear
 #screenfetch
