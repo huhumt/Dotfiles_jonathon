@@ -28,7 +28,7 @@ function old() {
 #This prints the current working directory after doing a cd"
 cdls(){
 	cd "$@"
-	ls -F --color=auto
+	ls -F --color=always
 }
 
 #Takes you to the aquarius theme
@@ -71,14 +71,14 @@ function theme() {
 #These search functions use grep to search all sub-folders of the current working directory
 searchjs() {
 	# This will search through .js and .es6 files but won't search minified files
-	grep -r -i -n --color="auto" --include=\*.{js,es6} --exclude=\*.min.js "$1" .
+	grep -r -i -n --color="always" --include=\*.{js,es6} --exclude=\*.min.js "$1" .
 }
 searchcss() {
 	# This will search through .css and .less files but won't search minified files
-	grep -r -i -n --color="auto" --include=\*.{css,less,scss,sass} --exclude=\*.min.css "$1" .
+	grep -r -i -n --color="always" --include=\*.{css,less,scss,sass} --exclude=\*.min.css "$1" .
 }
 searchphp() {
-	grep -r -i -n --color="auto" --include="*.php" "$1" .
+	grep -r -i -n --color="always" --include="*.php" "$1" .
 }
 
 # This makes cd use function above
@@ -90,7 +90,7 @@ alias file-perms='find . -type f -not -path "./.git/*" -not -path "./.git" -exec
 alias wp-perms='folder-perms; file-perms'
 
 # Make ls add Indicators to file names and colour the output
-alias ls='ls -F --color=auto'
+alias ls='ls -F --color=always'
 
 # Make tree add indicators and color
 alias tree='tree -F -C'
@@ -132,7 +132,7 @@ alias pull='git pull '
 alias bb='git open'
 
 # Always make grep ouput color
-alias grep="grep --color=auto"
+alias grep="grep --color=always"
 
 # Shortcuts to sites folder
 alias sites="cd ~/Sites"
