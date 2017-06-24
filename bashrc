@@ -88,9 +88,10 @@ alias cd="cdls"
 alias folder-perms='find . -type d -not -path "./.git/*" -not -path "./.git" -exec chmod 775 {} \;'
 alias file-perms='find . -type f -not -path "./.git/*" -not -path "./.git" -exec chmod 664 {} \;'
 alias wp-perms='folder-perms; file-perms'
-
-# Make ls add Indicators to file names and colour the output
-alias ls='ls -F --color=always'
+alias magentoPerms='cd ${PWD%/public_html*}/public_html;sudo chown -R jonathan:http .; folder-perms; file-perms; chmod +x bin/magento; cd -'
+                       #
+# Make ls add Indicator#s to file names and colour the output
+alias ls='ls -F --color=auto'
 
 # Make tree add indicators and color
 alias tree='tree -F -C'
@@ -132,7 +133,7 @@ alias pull='git pull '
 alias bb='git open'
 
 # Always make grep ouput color
-alias grep="grep --color=always"
+alias grep="grep --color=auto"
 
 # Shortcuts to sites folder
 alias sites="cd ~/Sites"
