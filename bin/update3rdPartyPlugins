@@ -3,6 +3,7 @@
 pluginFolder="/home/jonathan/WPPlugins"
 for dir in $pluginFolder/*/; do
 	cd $dir
-	pwd | cowsay -f tux
+	name=${PWD##*/}
+	echo $name | toilet -w 200
 	/home/jonathan/.gem/ruby/2.4.0/bin/git-svn-mirror update
 done
