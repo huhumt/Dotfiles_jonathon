@@ -195,6 +195,7 @@ alias bs="curl -s http://cbsg.sourceforge.net/cgi-bin/live | grep -Eo '^<li>.*</
 
 alias jq="jq -C"
 
+alias debugBuild='node --inspect-brk /usr/bin/grunt build'
 
 #alias xkcd='curl https://xkcd.com/info.0.json 2> /dev/null| \jq ".img" | xargs feh'
 

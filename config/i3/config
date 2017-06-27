@@ -339,7 +339,7 @@ exec --no-startup-id compton -f -i 0.95
 exec --no-startup-id albert
 #exec --no-startup-id nm-applet
 #exec --no-startup-id blueman-applet
-#exec --no-startup-id xfce4-clipman
+exec --no-startup-id xfce4-clipman
 #exec --no-startup-id xfce4-power-manager
 #exec_always --no-startup-id /usr/lib/kdeconnectd
 #exec_always --no-startup-id indicator-kdeconnect
