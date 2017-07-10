@@ -110,3 +110,5 @@ alias bs="curl -s http://cbsg.sourceforge.net/cgi-bin/live | grep -Eo '^<li>.*</
 alias jq="jq -C"
 
 alias debugBuild='node --inspect-brk /usr/bin/grunt build'
+
+alias lc="colorls -r"

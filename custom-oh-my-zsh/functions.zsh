@@ -17,13 +17,19 @@ function old() {
 	mv "$1" "$1.old"
 }
 
+function cdlc() {
+	cd "$@"
+	/home/jonathan/.gem/ruby/2.4.0/bin/colorls --report | tail -n +2
+}
+alias cd="cdlc"
+
 #Takes you to the aquarius theme
 function aquarius() {
 	public_html=${PWD%/public_html*}/public_html
 	if [ -d $public_html ]; then
 		theme=$public_html/wp-content/themes
 		if [ -d $theme ]; then
-			cdls $theme/aquarius
+			cdlc $theme/aquarius
 		else
 			echo " Can't find theme folder "
 		fi
@@ -39,7 +45,7 @@ function theme() {
 		theme=$public_html/wp-content/themes
 		if [ -d $theme ]; then
 			child=$(ls -d $theme/*/ | grep -v "$theme\/aquarius" | grep -v "$theme\/twenty*" | grep -v "$theme\/barelycorporate" -m 1)
-			cdls $child
+			cdlc $child
 		else
 			echo " Can't find theme folder "
 		fi
