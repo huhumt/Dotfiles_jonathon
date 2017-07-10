@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/bin/bash
 
 # Opens the BitBucket/GitHub page for a repo/branch in your browser.
 #
