@@ -1,3 +1,4 @@
+export LANG="en_GB.UTF-8"
 export TERMINAL=/usr/bin/konsole
 export TERM=xterm-256color
 export PATH=~/.bin:$PATH:/opt/lampp/bin:.
