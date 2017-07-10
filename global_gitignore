@@ -1,2 +1,8 @@
 *~
+# This is for vim swap files
 *.sw*
+
+#Web stuff
+/wp-config.php
+/.htaccess
+/wp-content/uploads/
