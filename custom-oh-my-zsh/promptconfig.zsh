@@ -5,16 +5,23 @@ function my_dir(){
 	homeIcon=" "
 	wpPluginsIcon="  "
 	wpThemesIcon=""
+	siteIcon=" "
 	# Gets the path.
 	local current_path="$(print -P "%~")"
 
 	# Replace either ~ or ~/ with  
 	current_path=$(echo $current_path | sed -r -e "s/\~?/$homeIcon/")
 
-	# Replace wp-content/themes with .. if in theme
-	current_path=$(echo $current_path | sed -r -e "s/wp\-content\/themes\//\.\.\//") 
+	# Replace wp-content/themes with theme icon if in theme
+	current_path=$(echo $current_path | sed -r -e "s/wp\-content\/themes/$wpThemesIcon/")
 
-	echo $current_path $wpPluginsIcon
+	# Replace wp-content/plugins with plugin icon if in plugin
+	current_path=$(echo $current_path | sed -r -e "s/wp\-content\/plugins/$wpPluginsIcon/")
+
+	#If in a site folder, replace home/Sites/<site-name>/public_html with siteIcon <site-name>
+	current_path=$(echo $current_path | sed -r -e "s/$homeIcon\/Sites\/([a-z_\-]*)\/public_html/$siteIcon\1/")
+	
+	echo $current_path
 
 }
 POWERLEVEL9K_CUSTOM_DIR="my_dir"
