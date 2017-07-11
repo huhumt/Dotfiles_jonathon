@@ -57,6 +57,9 @@ alias s="cd ~/Sites"
 alias documents="cd ~/Documents/"
 alias d="cd ~/Documents/"
 
+# Shortcuts to documents folder
+alias db="cd ~/Dropbox/"
+
 # Shortcuts to home folder
 alias home="cd ~/"
 alias ~="cd ~/"
@@ -112,3 +115,5 @@ alias jq="jq -C"
 alias debugBuild='node --inspect-brk /usr/bin/grunt build'
 
 alias lc="colorls -r"
+
+

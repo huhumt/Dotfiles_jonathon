@@ -6,6 +6,7 @@ function my_dir(){
 	wpPluginsIcon="  "
 	wpThemesIcon=""
 	siteIcon=" "
+	dropboxIcon=" "
 	# Gets the path.
 	local current_path="$(print -P "%~")"
 
@@ -20,6 +21,9 @@ function my_dir(){
 
 	#If in a site folder, replace home/Sites/<site-name>/public_html with siteIcon <site-name>
 	current_path=$(echo $current_path | sed -r -e "s/$homeIcon\/Sites\/([a-z_\-]*)\/public_html/$siteIcon\1/")
+
+	#Replace Dropbox with icon
+	current_path=$(echo $current_path | sed -r -e "s/$homeIcon\/Dropbox/$dropboxIcon/")
 	
 	echo $current_path
 

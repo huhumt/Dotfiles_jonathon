@@ -19,7 +19,7 @@ function old() {
 
 function cdlc() {
 	cd "$@"
-	/home/jonathan/.gem/ruby/2.4.0/bin/colorls --report | tail -n +2
+	/home/jonathan/.gem/ruby/2.4.0/bin/colorls | tail -n +2
 }
 alias cd="cdlc"
 
@@ -48,6 +48,36 @@ function theme() {
 			cdlc $child
 		else
 			echo " Can't find theme folder "
+		fi
+	else
+		echo " Can't find public_html folder."
+	fi
+}
+
+#Takes you to the plugin directory
+function plugins() {
+	public_html=${PWD%/public_html*}/public_html
+	if [ -d $public_html ]; then
+		plugins=$public_html/wp-content/plugins
+		if [ -d $plugins ]; then
+			cdlc $plugins
+		else
+			echo " Can't find plugins folder "
+		fi
+	else
+		echo " Can't find public_html folder."
+	fi
+}
+
+#Takes you to the theme directory
+function themes() {
+	public_html=${PWD%/public_html*}/public_html
+	if [ -d $public_html ]; then
+		themes=$public_html/wp-content/themes
+		if [ -d $themes ]; then
+			cdlc $themes
+		else
+			echo " Can't find plugins folder "
 		fi
 	else
 		echo " Can't find public_html folder."
