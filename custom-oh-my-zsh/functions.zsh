@@ -19,7 +19,7 @@ function old() {
 
 function cdlc() {
 	cd "$@"
-	/home/jonathan/.gem/ruby/2.4.0/bin/colorls | tail -n +2
+	/home/jonathan/.gem/ruby/2.4.0/bin/colorls -sd | tail -n +2
 }
 alias cd="cdlc"
 
@@ -100,5 +100,5 @@ searchcss() {
 	grep -r -i -n --color="always" --include=\*.{css,less,scss,sass} --exclude=\*.min.css "$1" .
 }
 searchphp() {
-	grep -r -i -n --color="always" --include="*.php" "$1" .
+	grep -r -i -n --color="always" --include=\*.{php,phtml} "$1" .
 }
