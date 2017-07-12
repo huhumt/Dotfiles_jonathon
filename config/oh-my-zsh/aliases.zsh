@@ -108,7 +108,7 @@ alias radio4="$AUDIO http://a.files.bbci.co.uk/media/live/manifesto/audio/simulc
 alias classic="$AUDIO http://icy-e-bab-04-cr.sharp-stream.com/absoluteradio.mp3"
 alias absolute="$AUDIO http://network.absoluteradio.co.uk/core/audio/mp3/live.pls?service=vrbb"
 
-alias bs="curl -s http://cbsg.sourceforge.net/cgi-bin/live | grep -Eo '^<li>.*</li>' | sed s,\\</\\\\?li\\>,,g | shuf -n 1 | cowsay"
+alias bs="curl -s http://cbsg.sourceforge.net/cgi-bin/live | grep -Eo '^<li>.*</li>' | sed -r -e 's/<\/?li>//g' | shuf -n 1 | cowsay"
 
 alias jq="jq -C"
 
