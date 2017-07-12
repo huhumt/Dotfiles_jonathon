@@ -42,9 +42,20 @@ POWERLEVEL9K_CUSTOM_DIR_FOREGROUND="white"
 # POWERLEVEL9K_LEFT_SEGMENT_SEPARATOR="\ue0c0"
 # POWERLEVEL9K_RIGHT_SEGMENT_SEPARATOR="\ue0c2"
 
+function Capslock(){
+	x=$(xset -q | grep Caps)
+	x=${x:22:1}
+	if [[ $x == "n" ]]; then
+
+		echo ""
+	fi
+}
+POWERLEVEL9K_CUSTOM_CAPS="Capslock"
+POWERLEVEL9K_CUSTOM_CAPS_BACKGROUND="red"
+POWERLEVEL9K_CUSTOM_CAPS_FOREGROUND="white"
 
 # Left Prompt
-POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(custom_dir rbenv vcs)
+POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(custom_dir rbenv vcs custom_caps)
 
 # Right Prompt
 POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS=(status root_indicator time)
