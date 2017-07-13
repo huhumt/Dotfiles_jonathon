@@ -6,8 +6,11 @@ function my_dir(){
 	wpPluginsIcon=".p."
 	wpThemesIcon=".t."
 	siteIcon=" "
+	wpSiteIcon=" "
+	magentoSiteIcon=" "
 	dropboxIcon=" "
-	seperator=""
+	seperator="  "
+	root=" "
 	# Gets the path.
 	local current_path="$(print -P "%~")"
 
@@ -20,18 +23,35 @@ function my_dir(){
 	# Replace wp-content/plugins with plugin icon if in plugin
 	# current_path=$(echo $current_path | sed -r -e "s/wp\-content\/plugins/$wpPluginsIcon/")
 
-	# If in a site folder, replace home/Sites/<site-name>/public_html with siteIcon <site-name>
-	current_path=$(echo $current_path | sed -r -e "s/$homeIcon\/Sites\/([a-z_\-]*)\/public_html/$siteIcon\1/")
+	#This is used for checking if wp or magento
+	local ph=${PWD%/public_html*}/public_html
+	# If in a site folder and a wp site, replace home/Sites/<site-name>/public_html with siteIcon <site-name>
+	if [[ -d $ph ]]; then
+		local icon=$siteIcon
+		if [[ -e "$ph/wp-config.php" ]]; then #If WordPress
+			icon=$wpSiteIcon
+			current_path=$(echo $current_path | sed -r -e "s/$homeIcon\/Sites\/([a-z_\-]*)\/public_html/$wpSiteIcon\1/")
+			
+			# Change wp-content in sub folders
+			current_path=$(echo $current_path | sed -r -e "s/wp\-content\//wpc\//")
+
+		elif [[ -d "$ph/pub/opt/magento" ]]; then #If magento
+			icon=$magentoSiteIcon
+		fi
+		current_path=$(echo $current_path | sed -r -e "s/$homeIcon\/Sites\/([a-z_\-]*)\/public_html/$icon\1/")
+	fi
+
 
 	# Replace Dropbox with icon
 	current_path=$(echo $current_path | sed -r -e "s/$homeIcon\/Dropbox/$dropboxIcon/")
 	
-	# Change wp-content in sub folders
-	current_path=$(echo $current_path | sed -r -e "s/wp\-content\//wpc\//")
 
+	# Set the root
+	current_path=$(echo $current_path | sed -r -e "s/^\//$root/g")
+	
 	# Set the seperator
 	current_path=$(echo $current_path | sed -r -e "s/\//$seperator/g")
-	
+
 	echo $current_path
 
 }

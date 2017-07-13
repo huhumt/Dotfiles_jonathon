@@ -43,6 +43,8 @@ ln -s -f $phpcgi /opt/lampp/bin/php-cgi
 ln -s -f $phpconfig /opt/lampp/bin/php-config
 ln -s -f $phpize /opt/lampp/bin/phpize
 
+# Also need to change /opt/lampp/modules/libphp7.so if 7.x.  
+
 $lampp startapache
 echo
 echo "Now on PHP ${phpexe##*-}"

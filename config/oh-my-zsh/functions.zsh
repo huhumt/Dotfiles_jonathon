@@ -77,7 +77,7 @@ function themes() {
 		if [ -d $themes ]; then
 			cdlc $themes
 		else
-			echo " Can't find plugins folder "
+			echo " Can't find theme folder "
 		fi
 	else
 		echo " Can't find public_html folder."
