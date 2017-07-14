@@ -63,7 +63,7 @@ POWERLEVEL9K_CUSTOM_DIR_FOREGROUND="white"
 # POWERLEVEL9K_RIGHT_SEGMENT_SEPARATOR="\ue0c2"
 
 function Capslock(){
-	x=$(xset -q | grep Caps)
+	x=$(xset -q | grep Caps) 2> /dev/null || exit 0
 	x=${x:22:1}
 	if [[ $x == "n" ]]; then
 
@@ -75,7 +75,9 @@ POWERLEVEL9K_CUSTOM_CAPS_BACKGROUND="red"
 POWERLEVEL9K_CUSTOM_CAPS_FOREGROUND="white"
 
 # Left Prompt
-POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(custom_dir rbenv vcs custom_caps)
+if [[ "$(basename "/"$(ps -f -p $(cat /proc/$(echo $$)/stat | cut -d \  -f 4) | tail -1 | sed 's/^.* //'))" != "$(echo $USER)" ]]; then
+	POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(custom_dir rbenv vcs custom_caps)
+fi
 
 # Right Prompt
 POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS=(status root_indicator time)
