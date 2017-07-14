@@ -3,6 +3,7 @@ alias folder-perms='find . -type d -not -path "./.git/*" -not -path "./.git" -ex
 alias file-perms='find . -type f -not -path "./.git/*" -not -path "./.git" -exec chmod 664 {} \;'
 alias wp-perms='folder-perms; file-perms'
 alias magentoPerms='cd ${PWD%/public_html*}/public_html;sudo chown -R jonathan:http .; folder-perms; file-perms; chmod +x bin/magento; cd -'
+alias upgr='magento setup:upgrade && magento system:di:compile && magentoPerms'
                        #
 # Make ls add Indicator#s to file names and colour the output
 alias ls='ls -F --color=auto'
