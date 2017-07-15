@@ -2,7 +2,7 @@ export LANG="en_GB.UTF-8"
 export TERMINAL=/usr/bin/konsole
 export TERM=xterm-256color
 export PATH=~/.bin:$PATH:/opt/lampp/bin:.
-export EDITOR='vim --servername jab2870'
+export EDITOR='vim'
 export CDPATH=.:~:~/Sites
 
 #Ruby things
