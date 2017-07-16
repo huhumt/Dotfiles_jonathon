@@ -1,0 +1,61 @@
+# Folder hooks
+folder-hook 'account.jonathan' 'source ~/.mutt/accounts/account.jonathan.conf'
+	#I will put other accounts here
+
+# Default account
+source ~/.mutt/accounts/account.jonathan.conf
+
+#Default Editor
+set editor = "$EDITOR"
+
+set ssl_starttls = yes
+set ssl_force_tls = yes
+set imap_check_subscribed
+set mail_check = 120
+set mailcap_path = ~/.mutt/mailcap
+set timeout = 300
+set imap_keepalive = 300
+set move = no
+set include
+set sort = 'threads'
+set sort_aux = 'reverse-last-date-received'
+set auto_tag = yes
+
+set date_format="%m/%d %I:%M"
+set index_format="%2C %Z %d %-15.15F %s (%-4.4c)"
+
+#ignore "Authentication-Results:"
+#ignore "DomainKey-Signature:"
+#ignore "DKIM-Signature:"
+hdr_order Date From To Cc
+
+alternative_order text/plain text/html *
+auto_view text/html
+
+mono bold bold
+mono underline underline
+mono indicator reverse
+color index yellow default '.*'
+color index_author red default '.*'
+color index_number blue default
+color index_subject cyan default '.s'
+color index_size green default
+color normal default default
+color body brightred default [\-\.+_a-zA-Z0-9]+@[\-\.a-zA-Z0-9]+
+color body brightblue default (https?|ftp)://[\-\.,/%~_:?&=\#a-zA-Z0-9]+
+
+source ~/.mutt/muttcol
+
+bind editor <Tab> complete-query
+bind editor ^T complete
+bind editor <space> noop
+bind index G last-entry
+bind index g noop
+bind index gg first-entry
+bind index d half-down
+bind index u half-up
+bind index D delete-message
+bind index U undelete-message
+bind index F search 
+bind index R group-reply
+# }}}
