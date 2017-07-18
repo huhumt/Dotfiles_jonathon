@@ -1,5 +1,5 @@
 export LANG="en_GB.UTF-8"
-export TERMINAL=/usr/bin/konsole
+export TERMINAL=/usr/bin/termite
 export TERM=xterm-256color
 export PATH=~/.bin:$PATH:/opt/lampp/bin:.
 export EDITOR='vim'
@@ -11,4 +11,4 @@ GEM_PATH=$GEM_HOME
 export PATH=$PATH:$GEM_HOME/bin
 export GEM_HOME=$(ruby -e 'print Gem.user_dir')
 
-echo -e "Please don't sabotage my computer while I'm away \n\nTo turn on the print server, run the command 'cups'\n\nTo update 3d party plugins, run command 'u3p'" | /usr/bin/cowsay -f tux -W 80
+echo -e "Please don't sabotage my computer while I'm away \n\nTo turn on the print server, run the command 'cups'\n\nTo update 3d party plugins, run command 'u3p'\n\nTo turn on my servers, run command 'sudo lampp start'" | /usr/bin/cowsay -f tux -W 80
