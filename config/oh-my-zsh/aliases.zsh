@@ -88,13 +88,8 @@ alias vrc='$EDITOR ~/.vimrc'
 
 # Go to my .vim folder
 alias .v='cd ~/.vim/'
-# Go to my dotfiles folder
-#if [[ $(hostname) == "jonathansnuc" ]]; then
-#	#Please don't judge - This is a reminant from first days of version controlling dotfiles
-#	alias df='cd ~/Downloads/laptopConfig/'
-#else
-	alias df='cd ~/.dotfiles'
-#fi
+
+alias df='cd ~/.dotfiles'
 
 #Make vim start in server mode
 alias vim='vim --servername jab2870'
