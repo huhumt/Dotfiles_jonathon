@@ -102,7 +102,7 @@ AUDIO=mpv
 alias radio2="$AUDIO http://a.files.bbci.co.uk/media/live/manifesto/audio/simulcast/hls/uk/sbr_med/llnw/bbc_radio_two.m3u8"
 alias radio4="$AUDIO http://a.files.bbci.co.uk/media/live/manifesto/audio/simulcast/hls/uk/sbr_med/llnw/bbc_radio_fourfm.m3u8"
 alias classic="$AUDIO http://icy-e-bab-04-cr.sharp-stream.com/absoluteradio.mp3"
-alias absolute="$AUDIO http://network.absoluteradio.co.uk/core/audio/mp3/live.pls?service=vrbb"
+alias absolute="$AUDIO 'http://network.absoluteradio.co.uk/core/audio/mp3/live.pls?service=vrbb'"
 
 alias bs="curl -s http://cbsg.sourceforge.net/cgi-bin/live | grep -Eo '^<li>.*</li>' | sed -r -e 's/<\/?li>//g' | shuf -n 1 | cowsay"
 
