@@ -1,4 +1,5 @@
-\documentclass[$if(fontsize)$$fontsize$$else$12pt$endif$,$if(papersize)$$papersize$$else$a4$endif$paper,$for(classoption)$$classoption$$sep$,$endfor$]{letter}
+\documentclass[$if(fontsize)$$fontsize$$else$12pt$endif$,stdletter,orderfromtodate,sigleft,$if(papersize)$$papersize$$else$a4$endif$paper,dateleft,addrfromemail,addrfromphone]{newlfm}
+
 $if(fontfamily)$
 \usepackage[$for(fontfamilyoptions)$$fontfamilyoptions$$sep$,$endfor$]{$fontfamily$}
 $else$
@@ -10,7 +11,6 @@ $if(linestretch)$
 $endif$
 \usepackage{amssymb,amsmath}
 \usepackage{ifxetex,ifluatex}
-\usepackage{fixltx2e} % provides \textsubscript
 \ifnum 0\ifxetex 1\fi\ifluatex 1\fi=0 % if pdftex
   \usepackage[$if(fontenc)$$fontenc$$else$T1$endif$]{fontenc}
   \usepackage[utf8]{inputenc}
@@ -54,15 +54,9 @@ $endif$
 \usepackage{microtype}
 \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
 }{}
-\usepackage{geometry}
-\geometry{
-	paper=$if(papersize)$$papersize$$else$a4$endif$paper, % Change to letterpaper for US letter
-	top=2cm, % Top margin
-	bottom=1.5cm, % Bottom margin
-	left=2.5cm, % Left margin
-	right=2.5cm, % Right margin
-	%showframe, % Uncomment to show how the type block is set on the page
-}
+$if(geometry)$
+\usepackage[$for(geometry)$$geometry$$sep$,$endfor$]{geometry}
+$endif$
 \usepackage[unicode=true]{hyperref}
 $if(colorlinks)$
 \PassOptionsToPackage{usenames,dvipsnames}{color} % color is loaded by hyperref
@@ -188,44 +182,40 @@ $endif$
 \def\fps@figure{htbp}
 \makeatother
 
-$if(signature)$
-\usepackage{graphicx,grffile}
-\signature{$if(signature-before)$\vspace*{$signature-before$}$endif$\includegraphics{$signature$}$if(author)$\\$if(signature-after)$\vspace*{$signature-after$}$endif$$for(author)$$author$$sep$\\$endfor$$endif$}
-$else$
-$if(author)$
-\signature{$for(author)$$author$$sep$\\$endfor$}
-$else$
-\signature{Jonathan Hodgson}
-$endif$
-$endif$
+
 
 $if(date)$
 \date{$date$}
+$else$
+\date{\today}
 $endif$
 
-$if(email)$
+
+
+\newlfmP{dateskipbefore=20pt}
+\newlfmP{sigsize=20pt}
+\newlfmP{sigskipbefore=50pt}
+ 
+\newlfmP{Headlinewd=0pt,Footlinewd=0pt}
+ 
+\namefrom{$if(from-name)$$from-name$$else$Jonathan Hodgson$endif$}
+\addrfrom{$if(return-address)$$for(return-address)$$return-address$$sep$\\$endfor$$else$***REMOVED***$endif$}
+\phonefrom{$if(phone-from)$$phone-from$$else$***REMOVED***$endif$}
+\emailfrom{$if(email-from)$$email-from$$else$jonathan@lunarweb.co.uk$endif$}
+ 
+\nameto{$if(to-name)$$to-name$$else$Please enter a name for the top line of the to address in the variable to-name$endif$}
+\addrto{$if(to-address)$$for(to-address)$$to-address$$sep$\\$endfor$$else$Add a to address in variable to-address$endif$ }
+
 $if(subject)$
-\newcommand{\email}{\href{mailto:$email$?subject=Re: $subject$}{$email$}}
-$else$
-\newcommand{\email}{\href{mailto:$email$}{$email$}}
+\regarding{$subject$}
 $endif$
-$else$
-$if(subject)$
-\newcommand{\email}{\href{mailto:jonathan@lunarweb.co.uk?subject=Re: $subject$}{jonathan@lunarweb.co.uk}}
-$else$
-\newcommand{\email}{\href{mailto:jonathan@lunarweb.co.uk}{jonathan@lunarweb.co.uk}}
-$endif$
-$endif$
+
+\greetto{$if(greeting)$$greeting$$else$Dear Sir or Madam$endif$}
+\closeline{$if(closeline)$$closeline$$else$Yours Faithfully$endif$}
 
 $for(header-includes)$
 $header-includes$
 $endfor$
-$if(return-address)$
-\address{$for(return-address)$$return-address$$sep$\\$endfor$}
-$else$
-\address{***REMOVED***, ***REMOVED***,\\***REMOVED***,\\***REMOVED***,\\***REMOVED***,\\ ***REMOVED*** \\ Tel: \href{tel:***REMOVED***}{***REMOVED***} \\ Email: \email}
-$endif$
-
 
 $if(blockquote)$
 \usepackage{mdframed} % color is loaded by mdframed
@@ -241,7 +231,6 @@ $if(letterhead)$
 \usepackage{wallpaper}
 \ThisULCornerWallPaper{1}{$letterhead$}
 $endif$
-\usepackage{blindtext}
 
 \begin{document}
 
@@ -258,47 +247,13 @@ $endif$
 \tableofcontents
 }
 $endif$
-$if(address)$
-\begin{letter}{$for(address)$$address$$sep$\\$endfor$}
-$else$
-\begin{letter}{You need to specify address}
-$endif$
 
-$if(opening)$
-\opening{$opening$}
-$else$
-\opening{Dear Sir or Madam}
-$endif$
-
-$if(subject)$
-\vspace{0.5cm}
-{\large\bf Re: $subject$}
-\vspace{0.5cm}
-$endif$
+\begin{newlfm}
 
 $body$
 
-$if(closing-indentation)$
-\longindentation=$closing-indentation$
-$else$
-\longindentation=1cm
-$endif$
-$if(closing)$
-\closing{$closing$}
-$else$
-\closing{Yours faithfully,}
-$endif$
-$if(encl)$
-\encl{$for(encl)$$encl$$sep$\\$endfor$}
-$endif$
-$if(cc)$
-\cc{$for(cc)$$cc$$sep$\\$endfor$}
-$endif$
-$if(ps)$
-\ps{$ps$}
-$endif$
 
-\end{letter}
+\end{newlfm}
 
 $if(natbib)$
 $if(bibliography)$
