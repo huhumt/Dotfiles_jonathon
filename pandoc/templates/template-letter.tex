@@ -286,7 +286,11 @@ $endif$
 $if(closing)$
 \closing{$closing$}
 $else$
+$if(opening)$
+\closing{Yours sincerely,}
+$else$
 \closing{Yours faithfully,}
+$endif$
 $endif$
 $if(encl)$
 \encl{$for(encl)$$encl$$sep$\\$endfor$}
