@@ -23,6 +23,21 @@ function cdlc() {
 }
 alias cd="cdlc"
 
+function createLetter(){
+	if [ "$1" ]; then
+		if [ "$2" ]; then
+			newFile="$2"
+		else
+			newFile="$1"
+			newFile="${newFile%.*}.pdf"
+		fi
+		pandoc --template template-letter.tex $1 -o $newFile
+	else
+		echo "Oops. You need to suply a file"
+		return 1
+	fi
+}
+
 #Takes you to the aquarius theme
 function aquarius() {
 	public_html=${PWD%/public_html*}/public_html
@@ -101,4 +116,7 @@ searchcss() {
 }
 searchphp() {
 	grep -r -i -n --color="always" --include=\*.{php,phtml} "$1" .
+}
+searchhtml() {
+	grep -r -i -n --color="always" --include=\*.{html,htm} "$1" .
 }
