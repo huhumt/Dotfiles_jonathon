@@ -1,0 +1,241 @@
+#!/usr/bin/node
+
+let fs = require('fs'),
+	path = require('path'),
+	args = process.argv.slice(2),
+	input = "-", // - will reperesent stdin
+	output = "-", // - will represent stdout
+	delimiter = ",";
+let Reset = "\x1b[0m",
+Bright = "\x1b[1m",
+Dim = "\x1b[2m",
+Underscore = "\x1b[4m",
+Blink = "\x1b[5m",
+Reverse = "\x1b[7m",
+Hidden = "\x1b[8m",
+	
+FgBlack = "\x1b[30m",
+FgRed = "\x1b[31m",
+FgGreen = "\x1b[32m",
+FgYellow = "\x1b[33m",
+FgBlue = "\x1b[34m",
+FgMagenta = "\x1b[35m",
+FgCyan = "\x1b[36m",
+FgWhite = "\x1b[37m",
+	
+BgBlack = "\x1b[40m",
+BgRed = "\x1b[41m",
+BgGreen = "\x1b[42m",
+BgYellow = "\x1b[43m",
+BgBlue = "\x1b[44m",
+BgMagenta = "\x1b[45m",
+BgCyan = "\x1b[46m",
+BgWhite = "\x1b[47m";
+
+if( args[0] == "-h" || args[0] == "--help" ){
+	console.log(FgGreen + "Aquarius Redirects (beta)" + Reset);
+	console.log();
+	console.log("This takes a csv file from stdinput or a given filename as the first parameter");
+	console.log();
+	console.log(FgGreen + "Example:" + Reset);
+	console.log("aquarius-redirects test.csv \t\t\t This will take each line of a csv file and turn it into a redirect");
+	console.log("cat test.csv | aquarius-redirects\t\t This is equivilent to the above");
+	console.log("echo \"/test/, /test-2/\" | aquarius-redirects\t This will create a redirect from /test/ to /test-2/");
+	console.log();
+	console.log();
+	console.log();
+	console.log(FgGreen + "The CSV File" + Reset);
+	console.log();
+	console.log("Each row in the CSV file should respond to a redirect.");
+	console.log("\t 1. From URL");
+	console.log("\t 2. To URL");
+	console.log("\t 3. Redirect Type");
+	console.log("\t 4. Exact ");
+	console.log();
+	console.log(FgGreen + "E.g." + Reset);
+	console.log("/page-1/                    |  /page-2/                |       |        ");
+	console.log("/about-us/meet-the-team/    |  /meet-the-team/         |       |        ");
+	console.log("/about-us/meet-the-team/*/  |  /meet-the-team/*/       |       |  true  ");
+	console.log("//google.com/page-1/        |  /page-2/                |       |        ");
+	console.log("//google.com/page-1/        |  //google.co.uk/page-2/  |  302  |  true  ");
+	console.log("//google.com/*/             |  //google.co.uk/*/       |       |        ");
+	console.log();
+	console.log(FgGreen + "From URL" + Reset);
+	console.log("This is the URL that should be redirected away from");
+	console.log("It can optionally contain a * symbol do denote a wildcard expresion");
+	console.log("For exmaple, /about-us/*/ will redirect from any child page of /about-us/");
+	console.log("");
+	console.log(FgGreen + "To URL" + Reset);
+	console.log("This is the URL that should be redirected to");
+	console.log("It can optionally contain an * symbol if you contained one in the From URL");
+	console.log("For exmaple, /about-us/*/ in From and /about/*/ in To will redirect all child pages of about us to the corresponding page under about");
+	console.log("");
+	console.log(FgGreen + "Redirect Type" + Reset);
+	console.log("This is the redirect type");
+	console.log("This is optional and contains the responce code that will be sent with the redirection request.");
+	console.log("The default is 301 which is a permenant redirect. You might want to make this 302 which implies a temporary redirect");
+	console.log("");
+	console.log(FgGreen + "Exact" + Reset);
+	console.log("This denotes whether the trailing slash should be optional on the from URL");
+	console.log("This defualts to false");
+	console.log("If true, the From url /about-us != /about-us/ ");
+	
+
+	process.exit(0);
+}
+
+if(args[0] != undefined && args[0] != ""){
+	input = args[0];
+}
+
+if(input == "-" ) { // We are reading from stdin
+	process.stdin.setEncoding('utf-8');
+	let contents = "";
+	process.stdin.on("readable", () => {
+		let back = process.stdin.read();
+		if (back != null){
+			contents = contents + back;
+		}
+	});
+	process.stdin.on("end", () => {
+		doRedirects(contents);
+	});
+	//console.error("I haven't implemented stdin yet");
+	//process.exit(1);
+} else {
+
+	fs.readFile(input, {encoding: 'utf-8'}, function(err,data){
+		if (!err) {
+			doRedirects(data)
+		} else {
+			console.log(err);
+			process.exit(1);
+		}
+	});
+}
+
+function doRedirects(data){
+	let lines = data.split("\n");
+	for (let i = 0; i < lines.length; i++){
+		lines[i] = lines[i].split(",");
+		for (let j = 0; j < lines[i].length; j++){
+			lines[i][j] = lines[i][j].replace(/^\s*/g,"");
+			lines[i][j] = lines[i][j].replace(/\s*$/g,"");
+		}
+		if (lines[i].length > 1){
+			let from = lines[i][0],
+				to = lines[i][1],
+				type = lines[i][2] || 301,
+				exact = lines[i][3] || false;
+			let redirect = individualRedirect(from,to,type,exact);
+			process.stdout.write("###Redirect from "+from+" to "+to+"###\n");
+			process.stdout.write(redirect+"\n");
+			process.stdout.write("\n");
+		}
+	}
+}
+
+function individualRedirect(from, to, type, exact){
+	var ret = "";
+	if(!from){
+		throw new Error( "You must have a from url" );
+	}
+	if(!to){
+		throw new Error( "You must have a to url" );
+	}
+	if(!type){
+		type = 301;
+	}
+	if(!exact){
+		exact = false;
+	}
+	if(typeof exact == "string" && exact.toLowerCase() != "true"){
+		exact = false;
+	}
+	from = splitURL_(from);
+	if(from.domain != ""){
+		ret += "RewriteCond %{HTTP_HOST} ^" + escape_(from.domain) + "$\n";
+	}
+	for (var i in from.queries){
+		ret += "RewriteCond %{QUERY_STRING} (^|&)" + i + ((from.queries[i] !== undefined)?("\=" + from.queries[i]):"") + "($|&)\n";
+	}
+	ret += "RewriteRule " + doFrom_(from.path,exact) + " " + doTo_(to) + " " + doRewrite_(type);
+	return ret;
+}
+
+function doFrom_(from,exact){
+	if(from[0]=="/"){
+		from = "^" + from.substring(1,from.length);
+	}
+	if(!exact){
+		if(from[from.length-1]=="/"){
+			from = from+"?";
+		} else {
+			from = from + "\/?";
+		}
+	}
+	from = escape_(from);
+	return from + "$";
+}
+
+function escape_(url){
+	return url.replace(/\//g,"\\\/")
+		.replace(/\-/g,"\\\-")
+		.replace(/\./g,"\\\.")
+		.replace(/\*/g,"(.*?)");
+}
+
+function doTo_(to){
+	if(to[0]!="/" && to.indexOf("//")==-1){
+		to = "/"+to;
+	}
+	to = to
+		.replace(/\*/g,"$1");
+	return to;
+}
+
+function doRewrite_(type){
+	return "[L,R="+type+"]";
+}
+
+function splitURL_(url){
+	ret = {
+		protocol:"",
+		domain:"",
+		path:"",
+		queries:{}
+	};
+
+	var p=url.indexOf("//");
+	if(p!=-1){
+		//Gets the protocol
+		ret.protocol = url.substring(0,p-1);
+		//Removes up to and including the protocol
+		url = url.substring(p+2)
+
+		var d = url.indexOf("/");
+		if(d!=-1){
+			//gets the domain
+			ret.domain = url.substring(0,d);
+			url=url.substring(d);
+		} else {
+			ret.domain = url;
+			url = "";
+		}
+	}
+
+	var q=url.indexOf("?");
+	if(q!=-1){
+		queries = url.substring(q+1).split("&");
+		for (var i = 0; i<queries.length; i++){
+			ret.queries[queries[i].split("=")[0]] = queries[i].split("=")[1];
+		}
+
+		url = url.substring(0,q);
+	}
+
+	ret.path=url;
+
+
+	return ret;
+}
