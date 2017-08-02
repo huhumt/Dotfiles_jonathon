@@ -113,3 +113,6 @@ alias debugBuild='node --inspect-brk /usr/bin/grunt build'
 alias lc="colorls -r"
 
 alias open="$TERMINAL & disown"
+
+# Fix Typos
+alias cim="vim"
