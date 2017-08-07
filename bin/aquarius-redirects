@@ -189,8 +189,10 @@ function doTo_(to){
 	if(to[0]!="/" && to.indexOf("//")==-1){
 		to = "/"+to;
 	}
-	to = to
-		.replace(/\*/g,"$1");
+	to = to.replace(/\*/g,"$1");
+	if(to.indexOf(" ") != -1){
+		to = '"' + to + '"';
+	}
 	return to;
 }
 
