@@ -2,15 +2,15 @@
 
 # Custom dir command
 function my_dir(){
-	homeIcon=" "
+	homeIcon=""
 	wpPluginsIcon=".p."
 	wpThemesIcon=".t."
-	siteIcon=" "
-	wpSiteIcon=" "
-	magentoSiteIcon=" "
-	dropboxIcon=" "
-	seperator="  "
-	root=" "
+	siteIcon=""
+	wpSiteIcon=""
+	magentoSiteIcon=""
+	dropboxIcon=""
+	seperator=" "
+	root=""
 	# Gets the path.
 	local current_path="$(print -P "%~")"
 
