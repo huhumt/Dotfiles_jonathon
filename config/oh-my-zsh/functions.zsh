@@ -23,6 +23,11 @@ function cdlc() {
 }
 alias cd="cdlc"
 
+function mkcd() {
+	mkdir -p "$1"
+	cd "$1"
+}
+
 function createLetter(){
 	if [ "$1" ]; then
 		if [ "$2" ]; then

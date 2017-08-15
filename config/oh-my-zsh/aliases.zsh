@@ -97,6 +97,9 @@ alias vim='vim --servername jab2870'
 # moon phase
 alias moonphase='weather moon'
 
+#Get arch news
+alias archNews='w3m https://www.archlinux.org/ | sed -n "/Latest News/,/Older News/ p" | head -n -1 | less'
+
 #Radio Stations
 AUDIO=mpv
 alias radio2="$AUDIO http://a.files.bbci.co.uk/media/live/manifesto/audio/simulcast/hls/uk/sbr_med/llnw/bbc_radio_two.m3u8"
