@@ -1,0 +1,8 @@
+#!/usr/bin/bash
+markup=$(curl https://www.packtpub.com/packt/offers/free-learning 2> /dev/null | sed 's/"\/\//"https:\/\//g')
+#img=$(echo "$markup" | sed -n "/dotd-main-book-image/,$ p" | head | sed -n "/<img/ p")
+#img=$(echo "$markup" | sed -n "/dotd-main-book-image/,$ p" | head | sed -n "/<img/ p" | sed -nr "s/.*<img.*?src=[\"|'](.*?)[\"|'].*/\3/p")
+img=$(echo "$markup" | sed -n "/dotd-main-book-image/,$ p" | head | sed -n "/<img/ p" | sed -nr 's/.*?<img src="([^"]*)".*img.*/\1/p')
+curl "$img" > /tmp/freeBook 2> /dev/null
+imgcat /tmp/freeBook
+rm /tmp/freeBook
