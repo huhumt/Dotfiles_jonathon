@@ -89,3 +89,4 @@ if [ -e "$HOME/.smartcd_config" ]; then
 	[ -r "$HOME/.smartcd_config" ] && ( [ -n $BASH_VERSION ] || [ -n $ZSH_VERSION ] ) && source ~/.smartcd_config
 fi
 
+export TERM=xterm-256color
