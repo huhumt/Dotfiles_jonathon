@@ -5,7 +5,7 @@ if [ $1 ]; then
 			echo "Add entrys to your hosts file"
 			echo ""
 			echo -e "addhost domain.com\t\t\t\tadds domain.com to your hosts and points to local machine"
-			echo -e "addhost (alex|aaron|jonathan) domain.com\tadds domain.com to your hosts and points to persons machine"
+			echo -e "addhost (alex|aaron|jonathan|vps01|vps02) domain.com\tadds domain.com to your hosts and points to persons machine"
 			;;
 		alex)
 			echo -e "10.0.1.201\t$2" | sudo tee -a /etc/hosts
@@ -15,6 +15,12 @@ if [ $1 ]; then
 			;;
 		jonathan)
 			echo -e "10.0.1.203\t$2" | sudo tee -a /etc/hosts
+			;;
+		vps01)
+			echo -e "130.185.147.131\t$2" | sudo tee -a /etc/hosts
+			;;
+		vps02)
+			echo -e "130.185.147.137\t$2" | sudo tee -a /etc/hosts
 			;;
 		*)
 			echo -e "127.0.0.1\t$1" | sudo tee -a /etc/hosts
