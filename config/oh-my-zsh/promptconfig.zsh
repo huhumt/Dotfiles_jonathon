@@ -10,7 +10,7 @@ function my_dir(){
 	magentoSiteIcon=" "
 	dropboxIcon=""
 	seperator="  "
-	root=""
+	root="$seperator"
 	# Gets the path.
 	local current_path="$(print -P "%~")"
 
@@ -34,7 +34,7 @@ function my_dir(){
 			# Change wp-content in sub folders
 			current_path=$(echo $current_path | sed -r -e "s/wp\-content\//wpc\//")
 
-		elif [[ -d "$ph/pub/opt/magento" ]]; then #If magento
+		elif [[ -e "$ph/bin/magento" ]]; then #If magento
 			icon=$magentoSiteIcon
 		fi
 		current_path=$(echo $current_path | sed -r -e "s/$homeIcon\/Sites\/([a-z_\-]*)\/public_html/$icon\1.local/")
@@ -50,6 +50,9 @@ function my_dir(){
 	
 	# Set the seperator
 	current_path=$(echo $current_path | sed -r -e "s/\//$seperator/g")
+
+	# If seperator is at the end, remove it (this should only be the case if in root directory)
+	current_path=$(echo $current_path | sed -r -e "s/$seperator\$//g")
 
 	echo $current_path
 
