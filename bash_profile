@@ -25,3 +25,5 @@ complete -o default -o nospace -W "$(/usr/bin/env ruby -ne 'puts $_.split(/[,\s]
 
 #echo -e "Please don't sabotage my computer while I'm away \n\nTo turn on the print server, run the command 'cups'\n\nTo update 3d party plugins, run command 'u3p'" | /usr/bin/cowsay -f tux -W 80
 
+
+[ -r "$HOME/.smartcd_config" ] && ( [ -n $BASH_VERSION ] || [ -n $ZSH_VERSION ] ) && source ~/.smartcd_config
