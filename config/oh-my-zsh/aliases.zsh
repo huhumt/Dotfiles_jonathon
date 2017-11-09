@@ -117,5 +117,8 @@ alias lc="colorls -r"
 
 alias open="$TERMINAL & disown"
 
+#audiable to mp3
+alias aa2mp3='ffmpeg -f concat -safe 0 -i <(for f in *.aa; do echo "file '"'"'$(pwd)/$f'"'"'";done) output.mp3'
+
 # Fix Typos
 alias cim="vim"
