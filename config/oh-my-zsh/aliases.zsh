@@ -46,6 +46,8 @@ alias ch='git checkout'
 alias push='git push '
 alias pull='git pull '
 alias bb='git open'
+alias merge='git merge'
+alias mg='git merge'
 
 # Always make grep ouput color
 alias grep="grep --color=auto"
