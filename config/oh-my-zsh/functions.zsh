@@ -49,7 +49,11 @@ function aquarius() {
 	if [ -d $public_html ]; then
 		theme=$public_html/wp-content/themes
 		if [ -d $theme ]; then
-			cdlc $theme/aquarius
+			if [ -d "$theme/aquarius" ]; then
+				cdlc $theme/aquarius
+			else 
+				 cdlc $theme/theme_aquarius
+			 fi
 		else
 			echo " Can't find theme folder "
 		fi
@@ -64,7 +68,7 @@ function theme() {
 	if [ -d $public_html ]; then
 		theme=$public_html/wp-content/themes
 		if [ -d $theme ]; then
-			child=$(ls -d $theme/*/ | grep -v "$theme\/aquarius" | grep -v "$theme\/twenty*" | grep -v "$theme\/barelycorporate" -m 1)
+			child=$(ls -d $theme/*/ | grep -v "$theme\/theme-aquarius" | grep -v "$theme\/aquarius" | grep -v "$theme\/twenty*" | grep -v "$theme\/barelycorporate" -m 1)
 			cdlc $child
 		else
 			echo " Can't find theme folder "
