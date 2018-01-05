@@ -15,6 +15,8 @@
 	detach = "!git checkout $(git rev-parse HEAD)"
 	undo = reset --soft HEAD^
 
+	random-commit = "!git commit -m \"$(w3m whatthecommit.com | head -n 1)\""
+
 [filter "lfs"]
 	process = git-lfs filter-process
 	required = true
