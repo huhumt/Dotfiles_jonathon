@@ -17,6 +17,7 @@ commits=(
 "Reinventing the wheel. Again."
 "This is not the commit message you are looking for"
 "Batman! (this commit has no parents)"
+"In the beginning, the code was without form and was void()…"
 )
 
 # Seed random generator
@@ -26,4 +27,4 @@ RANDOM=$$$(date +%s)
 selectedexpression=${commits[$RANDOM % ${#commits[@]} ]}
 
 # Write to Shell
-git commit -m "$selectedexpression"
+git commit --allow-empty -m "$selectedexpression"
