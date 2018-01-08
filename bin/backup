@@ -25,3 +25,5 @@ rsync --archive --one-file-system --hard-links --human-readable --inplace\
 	--exclude-from=./backupExcludes\
 	--link-dest=${LATEST}\
 	~/Documents officeServerJH:/mnt/TimeMachine/Backup-JH/backups/${TODAY}/ --verbose
+
+#At some point, add ability to delete old backups
