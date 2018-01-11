@@ -38,7 +38,7 @@ alias cls='clear; screenfetch'
 #An alias for my standard less configuration
 #I don't set it to lessc because sometimes I don't use this config and I always forget how to ignore an alias
 #alias myless='lessc --clean-css --source-map-basepath=/home/jonathan/Sites/charts/public_html --source-map --autoprefix="last 3 versions, ie >= 9" styles.less styles.min.css'
-alias myless='lessc --clean-css --source-map --autoprefix="last 3 versions, ie >= 9" styles.less styles.min.css'
+alias myless='lessc --clean-css --source-map --autoprefix="last 3 versions, ie >= 11" styles.less styles.min.css'
 
 # Git shortcuts
 alias status='git status '

@@ -1,0 +1,30 @@
+#!/usr/bin/bash
+
+# What should the initial commit be for a repo?
+# 
+# Idea came after reading this blog post: https://blog.no-panic.at/2014/10/20/funny-initial-git-commit-messages/
+
+commits=(
+"This is where it all begins..."
+"Commit committed"
+"Version control is awful"
+"COMMIT ALL THE FILES!"
+"The same thing we do every night, Pinky - try to take over the world!"
+"Lock S-foils in attack position"
+"This commit is a lie"
+"I'll explain when you're older!"
+"Here be Dragons"
+"Reinventing the wheel. Again."
+"This is not the commit message you are looking for"
+"Batman! (this commit has no parents)"
+"In the beginning, the code was without form and was void()…"
+)
+
+# Seed random generator
+RANDOM=$$$(date +%s)
+
+# Get random expression...
+selectedexpression=${commits[$RANDOM % ${#commits[@]} ]}
+
+# Write to Shell
+git commit --allow-empty -m "$selectedexpression"
