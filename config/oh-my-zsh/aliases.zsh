@@ -11,6 +11,8 @@ alias ls='ls -F --color=auto'
 # Make tree add indicators and color
 alias tree='tree -F -C'
 
+alias msfconsole="msfconsole --quiet -x \"db_connect msf@msf\""
+
 #Start cups
 alias cups='sudo systemctl start org.cups.cupsd.service'
 
