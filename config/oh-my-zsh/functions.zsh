@@ -19,9 +19,9 @@ function old() {
 
 function cdlc() {
 	cd "$@"
-	/home/jonathan/.gem/ruby/2.4.0/bin/colorls -sd | tail -n +2
+	/home/jonathan/.gem/ruby/2.4.0/bin/colorls --sd | tail -n +2
 }
-alias cd="cdlc"
+#alias cd="cdlc"
 
 function mkcd() {
 	mkdir -p "$1"
