@@ -1,0 +1,3 @@
+#!/usr/bin/sh
+echo $(whoami)
+#systemctl start org.cups.cupsd.service

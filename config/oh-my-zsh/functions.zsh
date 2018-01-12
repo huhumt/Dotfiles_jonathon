@@ -78,6 +78,38 @@ function theme() {
 	fi
 }
 
+#Takes you to the js folder child theme
+function js() {
+	public_html=${PWD%/public_html*}/public_html
+	if [ -d $public_html ]; then
+		theme=$public_html/wp-content/themes
+		if [ -d $theme ]; then
+			child=$(ls -d $theme/*/ | grep -v "$theme\/theme-aquarius" | grep -v "$theme\/aquarius" | grep -v "$theme\/twenty*" | grep -v "$theme\/barelycorporate" -m 1)
+			cdlc $child/js/
+		else
+			echo " Can't find theme folder "
+		fi
+	else
+		echo " Can't find public_html folder."
+	fi
+}
+
+#Takes you to the css folder child theme
+function css() {
+	public_html=${PWD%/public_html*}/public_html
+	if [ -d $public_html ]; then
+		theme=$public_html/wp-content/themes
+		if [ -d $theme ]; then
+			child=$(ls -d $theme/*/ | grep -v "$theme\/theme-aquarius" | grep -v "$theme\/aquarius" | grep -v "$theme\/twenty*" | grep -v "$theme\/barelycorporate" -m 1)
+			cdlc $child/css/
+		else
+			echo " Can't find theme folder "
+		fi
+	else
+		echo " Can't find public_html folder."
+	fi
+}
+
 #Takes you to the plugin directory
 function plugins() {
 	public_html=${PWD%/public_html*}/public_html
