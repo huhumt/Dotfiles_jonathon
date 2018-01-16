@@ -33,6 +33,10 @@ function my_dir(){
 			
 			# Change wp-content in sub folders
 			current_path=$(echo $current_path | sed -r -e "s/wp\-content\//wpc\//")
+			
+			if [[ $(tput cols) -lt 100 ]]; then
+				current_path=$(echo $current_path | sed -r -e "s/wpc\/themes\///")
+			fi
 
 		elif [[ -e "$ph/bin/magento" ]]; then #If magento
 			icon=$magentoSiteIcon
