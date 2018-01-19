@@ -43,17 +43,17 @@ function createLetter(){
 	fi
 }
 
-#Takes you to the aquarius theme
-function aquarius() {
+#Takes you to the parent theme
+function ptheme() {
 	public_html=${PWD%/public_html*}/public_html
 	if [ -d $public_html ]; then
-		theme=$public_html/wp-content/themes
+		theme=$(dirname $(wp --path="$public_html" theme path $(wp --path="$public_html" theme list | grep "parent" | awk '{print $1}')))
 		if [ -d $theme ]; then
-			if [ -d "$theme/aquarius" ]; then
-				cdlc $theme/aquarius
+			if [ -d "$theme" ]; then
+				cd $theme
 			else 
-				 cdlc $theme/theme_aquarius
-			 fi
+				echo " Can't find theme folder "
+			fi
 		else
 			echo " Can't find theme folder "
 		fi
@@ -66,10 +66,9 @@ function aquarius() {
 function theme() {
 	public_html=${PWD%/public_html*}/public_html
 	if [ -d $public_html ]; then
-		theme=$public_html/wp-content/themes
+		theme=$(dirname $(wp --path="$public_html" theme path $(wp --path="$public_html" theme list | grep "active" | grep -v "inactive" | awk '{print $1}')))
 		if [ -d $theme ]; then
-			child=$(ls -d $theme/*/ | grep -v "$theme\/theme-aquarius" | grep -v "$theme\/aquarius" | grep -v "$theme\/twenty*" | grep -v "$theme\/barelycorporate" -m 1)
-			cdlc $child
+			cd $theme
 		else
 			echo " Can't find theme folder "
 		fi
@@ -82,10 +81,14 @@ function theme() {
 function js() {
 	public_html=${PWD%/public_html*}/public_html
 	if [ -d $public_html ]; then
-		theme=$public_html/wp-content/themes
+		theme=$(dirname $(wp --path="$public_html" theme path $(wp --path="$public_html" theme list | grep "active" | grep -v "inactive" | awk '{print $1}')))
 		if [ -d $theme ]; then
-			child=$(ls -d $theme/*/ | grep -v "$theme\/theme-aquarius" | grep -v "$theme\/aquarius" | grep -v "$theme\/twenty*" | grep -v "$theme\/barelycorporate" -m 1)
-			cdlc $child/js/
+			if [ -d "$theme/js" ]; then
+				cd "$theme/js"
+			else
+				echo "Can't find a JS folder. Here is the theme"
+				cd "$theme"
+			fi
 		else
 			echo " Can't find theme folder "
 		fi
@@ -98,10 +101,14 @@ function js() {
 function css() {
 	public_html=${PWD%/public_html*}/public_html
 	if [ -d $public_html ]; then
-		theme=$public_html/wp-content/themes
+		theme=$(dirname $(wp --path="$public_html" theme path $(wp --path="$public_html" theme list | grep "active" | grep -v "inactive" | awk '{print $1}')))
 		if [ -d $theme ]; then
-			child=$(ls -d $theme/*/ | grep -v "$theme\/theme-aquarius" | grep -v "$theme\/aquarius" | grep -v "$theme\/twenty*" | grep -v "$theme\/barelycorporate" -m 1)
-			cdlc $child/css/
+			if [ -d "$theme/css" ]; then
+				cd "$theme/css"
+			else
+				echo "Can't find a CSS folder. Here is the theme"
+				cd "$theme"
+			fi
 		else
 			echo " Can't find theme folder "
 		fi
@@ -114,12 +121,7 @@ function css() {
 function plugins() {
 	public_html=${PWD%/public_html*}/public_html
 	if [ -d $public_html ]; then
-		plugins=$public_html/wp-content/plugins
-		if [ -d $plugins ]; then
-			cdlc $plugins
-		else
-			echo " Can't find plugins folder "
-		fi
+		cd $(wp --path="$public_html" plugin path)
 	else
 		echo " Can't find public_html folder."
 	fi
@@ -129,12 +131,7 @@ function plugins() {
 function themes() {
 	public_html=${PWD%/public_html*}/public_html
 	if [ -d $public_html ]; then
-		themes=$public_html/wp-content/themes
-		if [ -d $themes ]; then
-			cdlc $themes
-		else
-			echo " Can't find theme folder "
-		fi
+		cd $(wp --path="$public_html" theme path)
 	else
 		echo " Can't find public_html folder."
 	fi
