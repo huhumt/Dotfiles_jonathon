@@ -17,15 +17,11 @@ while test $# -gt 0; do
 			echo -e "Aquarius Plugin installer"
 			echo -e "Adds submodules for commonly used plugins"
 			echo -e "You can string multiple plugins together"
-			echo -e "e.g. aquariusPlugin yoast db-migrate blocks"
+			echo -e "e.g. aquarius-plugin blocks clients"
 			echo ""
 			echo -e "-h, --help \t\t\t\t Show this help text"
 			echo -e "-r, --remove \t\t\t\t Remove any plugins after this flag"
-			echo ""
-			echo -e "yoast \t\t\t\t\t install yoast"
-			echo -e "db-migrate \t\t\t\t install db-migrate"
-			echo -e "cf7 \t\t\t\t\t install cf7"
-			echo -e "woo, woocommerce\t\t\t install woocommerce"
+			echo -e "-s, --ssh \t\t\t\t Adds the ssh version for the submodule url"
 			echo ""
 			echo -e "blocks, aquarius-blocks \t\t install aquarius blocks"
 			echo -e "clients, aquarius-clients \t\t install aquarius clients"
@@ -46,58 +42,9 @@ while test $# -gt 0; do
 			ssh=true
 			shift
 			;;
-		yoast)
-			if [ "$remove" = true ]; then
-				echo "attempting to remove yoast"
-				git-delete-submodule "wp-content/plugins/wordpress-seo"
-			else
-				echo "attempting to add yoast"
-				if [ "$ssh" = true ]; then
-					git submodule git@bitbucket.org:fellowshipproductionsltd/wordpress-seo.git wp-content/plugins/wordpress-seo
-				else
-					git submodule add https://bitbucket.org/fellowshipproductionsltd/wordpress-seo.git wp-content/plugins/wordpress-seo
-				fi
-			fi
-			shift
-			;;
-		db-migrate)
-			if [ "$remove" = true ]; then
-				git-delete-submodule "wp-content/plugins/wp-migrate-db"
-			else
-				if [ "$ssh" = true ]; then
-					git submodule add git@bitbucket.org:fellowshipproductionsltd/wp-migrate-db.git wp-content/plugins/wp-migrate-db
-				else
-					git submodule add https://bitbucket.org/fellowshipproductionsltd/wp-migrate-db.git wp-content/plugins/wp-migrate-db
-				fi
-			fi
-			shift
-			;;
-		cf7)
-			if [ "$remove" = true ]; then
-				git-delete-submodule "wp-content/plugins/contact-form-7"
-			else
-				if [ "$ssh" = true ]; then
-					git submodule add git@bitbucket.org:fellowshipproductionsltd/contact-form-7.git wp-content/plugins/contact-form-7
-				else
-					git submodule add https://bitbucket.org/fellowshipproductionsltd/contact-form-7.git wp-content/plugins/contact-form-7
-				fi
-			fi
-			shift
-			;;
-		woocommerce|woo)
-			if [ "$remove" = true ]; then
-				git-delete-submodule "wp-content/plugins/woocommerce"
-			else
-				if [ "$ssh" = true ]; then
-					git submodule add git@bitbucket.org:fellowshipproductionsltd/woocommerce.git wp-content/plugins/woocommerce
-				else
-					git submodule add https://bitbucket.org/fellowshipproductionsltd/woocommerce.git wp-content/plugins/woocommerce
-				fi
-			fi
-			shift
-			;;
 		aquarius-blocks|blocks)
 			if [ "$remove" = true ]; then
+				npm remove wp-content/plugins/aquarius-blocks
 				git-delete-submodule "wp-content/plugins/aquarius-blocks"
 			else
 				if [ "$ssh" = true ]; then
@@ -105,11 +52,13 @@ while test $# -gt 0; do
 				else
 					git submodule add https://bitbucket.org/fellowshipproductionsltd/aquarius-blocks.git wp-content/plugins/aquarius-blocks
 				fi
+				npm install --save wp-content/plugins/aquarius-blocks
 			fi
 			shift
 			;;
 		aquarius-clients|clients)
 			if [ "$remove" = true ]; then
+				npm remove wp-content/plugins/aquarius-clients
 				git-delete-submodule "wp-content/plugins/aquarius-clients"
 			else
 				if [ "$ssh" = true ]; then
@@ -117,11 +66,13 @@ while test $# -gt 0; do
 				else
 					git submodule add https://bitbucket.org/fellowshipproductionsltd/aquarius-clients.git wp-content/plugins/aquarius-clients
 				fi
+				npm install --save wp-content/plugins/aquarius-clients
 			fi
 			shift
 			;;
 		aquarius-news|news)
 			if [ "$remove" = true ]; then
+				npm remove wp-content/plugins/aquarius-news
 				git-delete-submodule "wp-content/plugins/aquarius-news"
 			else
 				if [ "$ssh" = true ]; then
@@ -129,11 +80,13 @@ while test $# -gt 0; do
 				else
 					git submodule add https://bitbucket.org/fellowshipproductionsltd/aquarius-news.git wp-content/plugins/aquarius-news
 				fi
+				npm install --save wp-content/plugins/aquarius-news
 			fi
 			shift
 			;;
 		aquarius-people|people)
 			if [ "$remove" = true ]; then
+				npm remove wp-content/plugins/aquarius-people
 				git-delete-submodule "wp-content/plugins/aquarius-people"
 			else
 				if [ "$ssh" = true ]; then
@@ -141,11 +94,13 @@ while test $# -gt 0; do
 				else
 					git submodule add https://bitbucket.org/fellowshipproductionsltd/aquarius-people.git wp-content/plugins/aquarius-people
 				fi
+				npm install --save wp-content/plugins/aquarius-people
 			fi
 			shift
 			;;
 		aquarius-permissions|permissions)
 			if [ "$remove" = true ]; then
+				npm remove wp-content/mu-plugins/aquarius-permissions
 				git-delete-submodule "wp-content/mu-plugins/aquarius-permissions"
 			else
 				if [ "$ssh" = true ]; then
@@ -153,11 +108,13 @@ while test $# -gt 0; do
 				else
 					git submodule add https://bitbucket.org/fellowshipproductionsltd/aquarius-permissions.git wp-content/mu-plugins/aquarius-permissions
 				fi
+				npm install --save wp-content/mu-plugins/aquarius-permissions
 			fi
 			shift
 			;;
 		aquarius-slider|slider)
 			if [ "$remove" = true ]; then
+				npm remove wp-content/plugins/aquarius-slider
 				git-delete-submodule "wp-content/plugins/aquarius-slider"
 			else
 				if [ "$ssh" = true ]; then
@@ -165,11 +122,13 @@ while test $# -gt 0; do
 				else
 					git submodule add https://bitbucket.org/fellowshipproductionsltd/aquarius-slider.git wp-content/plugins/aquarius-slider
 				fi
+				npm install --save wp-content/plugins/aquarius-slider
 			fi
 			shift
 			;;
 		aquarius-snippets|snippets)
 			if [ "$remove" = true ]; then
+				npm remove wp-content/plugins/aquarius-snippets
 				git-delete-submodule "wp-content/plugins/aquarius-snippets"
 			else
 				if [ "$ssh" = true ]; then
@@ -177,11 +136,13 @@ while test $# -gt 0; do
 				else
 					git submodule add https://bitbucket.org/fellowshipproductionsltd/aquarius-snippets.git wp-content/plugins/aquarius-snippets
 				fi
+				npm install --save wp-content/plugins/aquarius-snippets
 			fi
 			shift
 			;;
 		aquarius-widgets|widgets)
 			if [ "$remove" = true ]; then
+				npm remove wp-content/plugins/aquarius-widgets
 				git-delete-submodule "wp-content/plugins/aquarius-widgets"
 			else
 				if [ "$ssh" = true ]; then
@@ -189,6 +150,7 @@ while test $# -gt 0; do
 				else
 					git submodule add https://bitbucket.org/fellowshipproductionsltd/aquarius-widgets.git wp-content/plugins/aquarius-widgets
 				fi
+				npm install --save wp-content/plugins/aquarius-widgets
 			fi
 			shift
 			;;
