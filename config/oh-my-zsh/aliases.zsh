@@ -131,7 +131,7 @@ alias vin="vim"
 alias vi="vim"
 
 #Servers Memory
-alias servermem='toilet -w 200 "VPS 01" && ssh shires free -h && toilet -w 200 "VPS 02" && ssh abc free -h && toilet -w 200 "VPS 03" && ssh cdc2 free -h && toilet -w 200 "Freightliner" && ssh freightliner free && toilet -w 200 "NHS" && ssh nhs free -h'
+alias servermem='toilet -w 200 "VPS 01" && ssh shires free -h && toilet -w 200 "VPS 02" && ssh abc free -h && toilet -w 200 "VPS 03" && ssh cdc2 free -h && toilet -w 200 "Freightliner" && ssh freightliner free -h && toilet -w 200 "NHS" && ssh nhs free -h'
 
 ###########################################
 #                                         #
