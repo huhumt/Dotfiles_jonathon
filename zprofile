@@ -1,5 +1,5 @@
 export LANG="en_GB.UTF-8"
-export TERMINAL=/usr/bin/termite
+export TERMINAL=/usr/local/bin/st
 export TERM=xterm-256color
 export PATH=~/.bin:$PATH:/opt/lampp/bin:.
 export EDITOR='vim'

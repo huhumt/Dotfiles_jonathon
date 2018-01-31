@@ -47,7 +47,12 @@ function createLetter(){
 function ptheme() {
 	public_html=${PWD%/public_html*}/public_html
 	if [ -d $public_html ]; then
-		theme=$(dirname $(wp --path="$public_html" theme path $(wp --path="$public_html" theme list | grep "parent" | awk '{print $1}')))
+		if [ -d $public_html/wp ]; then
+			wpPath=$public_html/wp;
+		else
+			wpPath=$public_html;
+		fi
+		theme=$(dirname $(wp --path="$wpPath" theme path $(wp --path="$wpPath" theme list | grep "parent" | awk '{print $1}')))
 		if [ -d $theme ]; then
 			if [ -d "$theme" ]; then
 				cd $theme
@@ -66,7 +71,12 @@ function ptheme() {
 function theme() {
 	public_html=${PWD%/public_html*}/public_html
 	if [ -d $public_html ]; then
-		theme=$(dirname $(wp --path="$public_html" theme path $(wp --path="$public_html" theme list | grep "active" | grep -v "inactive" | awk '{print $1}')))
+		if [ -d $public_html/wp ]; then
+			wpPath=$public_html/wp;
+		else
+			wpPath=$public_html;
+		fi
+		theme=$(dirname $(wp --path="$wpPath" theme path $(wp --path="$wpPath" theme list | grep "active" | grep -v "inactive" | awk '{print $1}')))
 		if [ -d $theme ]; then
 			cd $theme
 		else
@@ -81,7 +91,12 @@ function theme() {
 function js() {
 	public_html=${PWD%/public_html*}/public_html
 	if [ -d $public_html ]; then
-		theme=$(dirname $(wp --path="$public_html" theme path $(wp --path="$public_html" theme list | grep "active" | grep -v "inactive" | awk '{print $1}')))
+		if [ -d $public_html/wp ]; then
+			wpPath=$public_html/wp;
+		else
+			wpPath=$public_html;
+		fi
+		theme=$(dirname $(wp --path="$wpPath" theme path $(wp --path="$wpPath" theme list | grep "active" | grep -v "inactive" | awk '{print $1}')))
 		if [ -d $theme ]; then
 			if [ -d "$theme/js" ]; then
 				cd "$theme/js"
@@ -101,7 +116,12 @@ function js() {
 function css() {
 	public_html=${PWD%/public_html*}/public_html
 	if [ -d $public_html ]; then
-		theme=$(dirname $(wp --path="$public_html" theme path $(wp --path="$public_html" theme list | grep "active" | grep -v "inactive" | awk '{print $1}')))
+		if [ -d $public_html/wp ]; then
+			wpPath=$public_html/wp;
+		else
+			wpPath=$public_html;
+		fi
+		theme=$(dirname $(wp --path="$wpPath" theme path $(wp --path="$wpPath" theme list | grep "active" | grep -v "inactive" | awk '{print $1}')))
 		if [ -d $theme ]; then
 			if [ -d "$theme/css" ]; then
 				cd "$theme/css"
@@ -121,7 +141,12 @@ function css() {
 function plugins() {
 	public_html=${PWD%/public_html*}/public_html
 	if [ -d $public_html ]; then
-		cd $(wp --path="$public_html" plugin path)
+		if [ -d $public_html/wp ]; then
+			wpPath=$public_html/wp;
+		else
+			wpPath=$public_html;
+		fi
+		cd $(wp --path="$wpPath" plugin path)
 	else
 		echo " Can't find public_html folder."
 	fi
@@ -131,7 +156,12 @@ function plugins() {
 function themes() {
 	public_html=${PWD%/public_html*}/public_html
 	if [ -d $public_html ]; then
-		cd $(wp --path="$public_html" theme path)
+		if [ -d $public_html/wp ]; then
+			wpPath=$public_html/wp;
+		else
+			wpPath=$public_html;
+		fi
+		cd $(wp --path="$wpPath" theme path)
 	else
 		echo " Can't find public_html folder."
 	fi

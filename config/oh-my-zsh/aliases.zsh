@@ -33,7 +33,7 @@ alias mkdir='mkdir -p'
 alias perms='wp rewrite flush'
 
 #Clear terminal and screenfetch
-alias cls='clear; screenfetch'
+alias cls='clear; neofetch'
 
 #An alias for my standard less configuration
 #I don't set it to lessc because sometimes I don't use this config and I always forget how to ignore an alias
