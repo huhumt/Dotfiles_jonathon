@@ -10,6 +10,7 @@ function my_dir(){
 	magentoSiteIcon=" "
 	dropboxIcon=""
 	seperator="  "
+	seperatorDual="  "
 	root="$seperator"
 	# Gets the path.
 	local current_path="$(print -P "%~")"
@@ -33,6 +34,10 @@ function my_dir(){
 			
 			# Change wp-content in sub folders
 			current_path=$(echo $current_path | sed -r -e "s/wp\-content\//wpc\//")
+			
+			if [[ $(tput cols) -lt 100 ]]; then
+				current_path=$(echo $current_path | sed -r -e "s/wpc\/themes\//\//")
+			fi
 
 		elif [[ -e "$ph/bin/magento" ]]; then #If magento
 			icon=$magentoSiteIcon
@@ -49,6 +54,9 @@ function my_dir(){
 	# Set the root
 	current_path=$(echo $current_path | sed -r -e "s/^\//$root/g")
 	
+	# Set the dual seperator
+	current_path=$(echo $current_path | sed -r -e "s/\/\//$seperatorDual/g")
+
 	# Set the seperator
 	current_path=$(echo $current_path | sed -r -e "s/\//$seperator/g")
 

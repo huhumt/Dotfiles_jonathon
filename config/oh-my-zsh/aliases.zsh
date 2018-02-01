@@ -33,7 +33,7 @@ alias mkdir='mkdir -p'
 alias perms='wp rewrite flush'
 
 #Clear terminal and screenfetch
-alias cls='clear; screenfetch'
+alias cls='clear; neofetch'
 
 #An alias for my standard less configuration
 #I don't set it to lessc because sometimes I don't use this config and I always forget how to ignore an alias
@@ -128,7 +128,28 @@ alias aa2mp3='ffmpeg -f concat -safe 0 -i <(for f in *.aa; do echo "file '"'"'$(
 alias cim="vim"
 alias vom="vim"
 alias vin="vim"
+alias vi="vim"
 
 #Servers Memory
-alias servermem='toilet -w 200 "VPS 01" && ssh shires free -h && toilet -w 200 "VPS 02" && ssh abc free -h && toilet -w 200 "VPS 03" && ssh cdc2 free -h && toilet -w 200 "Freightliner" && ssh freightliner free && toilet -w 200 "NHS" && ssh nhs free -h'
+alias servermem='toilet -w 200 "VPS 01" && ssh shires free -h && toilet -w 200 "VPS 02" && ssh abc free -h && toilet -w 200 "VPS 03" && ssh cdc2 free -h && toilet -w 200 "Freightliner" && ssh freightliner free -h && toilet -w 200 "NHS" && ssh nhs free -h'
 
+###########################################
+#                                         #
+#             Suffex Aliases              #
+#                                         #
+###########################################
+
+alias -s html=$EDITOR
+alias -s htm=$EDITOR
+
+alias -s php=$EDITOR
+
+alias -s less=$EDITOR
+alias -s css=$EDITOR
+
+alias -s js=$EDITOR
+alias -s es6=$EDITOR
+
+alias -s gitignore=$EDITOR
+
+alias -s json=$EDITOR

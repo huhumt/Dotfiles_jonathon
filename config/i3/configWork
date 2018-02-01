@@ -43,7 +43,8 @@ floating_modifier $mod
 # start a terminal
 # bindsym $mod+Return exec xfce4-terminal
 # bindsym $mod+Return exec konsole
-bindsym $mod+Return exec termite
+# bindsym $mod+Return exec termite
+bindsym $mod+Return exec /usr/local/bin/st
 
 # kill focused window
 bindsym $mod+q kill
@@ -187,6 +188,10 @@ mode "resize" {
         bindsym j resize grow height 10 px or 10 ppt
         bindsym k resize shrink height 10 px or 10 ppt
         bindsym l resize grow width 10 px or 10 ppt
+        bindsym $mod+h resize shrink width 2 px or 2 ppt
+        bindsym $mod+j resize grow height 2 px or 2 ppt
+        bindsym $mod+k resize shrink height 2 px or 2 ppt
+        bindsym $mod+l resize grow width 2 px or 2 ppt
 
         # same bindings, but for the arrow keys
         bindsym Left resize shrink width 10 px or 10 ppt
