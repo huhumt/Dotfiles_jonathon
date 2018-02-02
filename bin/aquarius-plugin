@@ -4,7 +4,7 @@
 remove=false
 
 # default to https plugins
-ssh=false
+ssh=true
 
 # Cd to public html foder
 cd ${PWD%/public_html*}/public_html
@@ -40,6 +40,10 @@ while test $# -gt 0; do
 			;;
 		-s|--ssh)
 			ssh=true
+			shift
+			;;
+		--no-ssh)
+			ssh=false
 			shift
 			;;
 		aquarius-blocks|blocks)
@@ -109,6 +113,20 @@ while test $# -gt 0; do
 					git submodule add https://bitbucket.org/fellowshipproductionsltd/aquarius-permissions.git wp-content/mu-plugins/aquarius-permissions
 				fi
 				npm install --save wp-content/mu-plugins/aquarius-permissions
+			fi
+			shift
+			;;
+		aquarius-projects|projects)
+			if [ "$remove" = true ]; then
+				npm remove wp-content/plugins/aquarius-slider
+				git-delete-submodule "wp-content/plugins/aquarius-projects"
+			else
+				if [ "$ssh" = true ]; then
+					git submodule add git@bitbucket.org:fellowshipproductionsltd/aquarius-projects.git wp-content/plugins/aquarius-projects
+				else
+					git submodule add https://bitbucket.org/fellowshipproductionsltd/aquarius-projects.git wp-content/plugins/aquarius-projects
+				fi
+				npm install --save wp-content/plugins/aquarius-projects
 			fi
 			shift
 			;;

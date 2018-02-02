@@ -37,6 +37,7 @@ function my_dir(){
 			
 			if [[ $(tput cols) -lt 100 ]]; then
 				current_path=$(echo $current_path | sed -r -e "s/wpc\/themes\//\//")
+				current_path=$(echo $current_path | sed -r -e "s/wpc\/plugins\//\//")
 			fi
 
 		elif [[ -e "$ph/bin/magento" ]]; then #If magento

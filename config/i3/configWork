@@ -164,8 +164,8 @@ bindsym $mod+control+l move workspace to output right
 
 
 #assign programs to workspaces
-assign [class="chromium"] $workspace1
-assign [class="skypeforlinux"] $workspace10
+#assign [class="chromium"] $workspace1
+#assign [class="skypeforlinux"] $workspace10
 
 #make applications open in floating mode
 for_window [class="Galculator"] floating enable
