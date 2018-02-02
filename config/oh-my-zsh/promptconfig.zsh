@@ -43,7 +43,7 @@ function my_dir(){
 		elif [[ -e "$ph/bin/magento" ]]; then #If magento
 			icon=$magentoSiteIcon
 		fi
-		current_path=$(echo $current_path | sed -r -e "s/$homeIcon\/Sites\/([a-z_\-]*)\/public_html/$icon\1.local.jh/")
+		current_path=$(echo $current_path | sed -r -e "s/$homeIcon\/Sites\/([a-z_\-]*)\/public_html/$icon\1/")
 	fi
 
 
