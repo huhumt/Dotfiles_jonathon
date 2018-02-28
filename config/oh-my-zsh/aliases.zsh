@@ -62,6 +62,9 @@ alias s="cd ~/Sites"
 alias documents="cd ~/Documents/"
 alias d="cd ~/Documents/"
 
+# Shortcuts to hack the box folder
+alias htb="cd ~/Documents/htb/"
+
 # Shortcuts to documents folder
 alias db="cd ~/Dropbox/"
 
