@@ -1,0 +1,6 @@
+plugin=$(wp plugin list 2> /dev/null | grep available | head -n 1 | awk '{print $1}')
+echo "$plugin"
+versions=$(wp plugin update $plugin 2> /dev/null | tail -n 2 | head -n 1 | awk '{print $2 "->" $3}')
+echo "$versions"
+git add .
+git commit -m "Update $plugin $version"
