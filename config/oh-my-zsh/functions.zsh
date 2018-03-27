@@ -188,3 +188,29 @@ searchphp() {
 searchhtml() {
 	grep -r -i -n --color="always" --include=\*.{html,htm} "$1" .
 }
+
+png() {
+    pngcrush -brute "$1"{,.} && du -b "$1"{,.}
+}
+gif() {
+    gifsicle -O "$1" -o "$1." && du -b "$1"{,.}
+}
+jpeg() {
+    jpegtran "$1" > "$1." && du -b "$1"{,.}
+}
+# Just for easy access in history
+mpng() {
+    mv "$1"{.,}
+}
+mgif() {
+    newsize=$(wc -c <"$1.")
+    oldsize=$(wc -c <"$1")
+    if [ $oldsize -gt $newsize ] ; then
+        mv "$1"{.,}
+    else
+        rm "$1."
+    fi  
+}
+mjpeg() {
+    mv "$1"{.,}
+}

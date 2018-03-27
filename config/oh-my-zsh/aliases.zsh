@@ -11,6 +11,9 @@ alias ls='ls -F --color=auto'
 # Make tree add indicators and color
 alias tree='tree -F -C'
 
+# Make qmv open on 1 column mode
+alias qmv='qmv -f do'
+
 alias msfconsole="msfconsole --quiet -x \"db_connect msf@msf\""
 
 #Start cups
