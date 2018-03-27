@@ -127,6 +127,10 @@ function doRedirects(data){
 				to = lines[i][1],
 				type = lines[i][2] || 301,
 				exact = lines[i][3] || false;
+			if( from == to ){
+				process.stdout.write("### No need to redirect " + from + "to itself ###\n\n");
+				continue;
+			}
 			let redirect = individualRedirect(from,to,type,exact);
 			process.stdout.write("###Redirect from "+from+" to "+to+"###\n");
 			process.stdout.write(redirect+"\n");
