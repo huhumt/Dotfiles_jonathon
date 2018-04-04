@@ -6,6 +6,23 @@ function big-new-chromium () {
 	chromium-snapshot-bin --force-device-scale-factor=$1
 }
 
+# make xclip work as I would expect. Copy to clipboard if piped data. Paste from otherwise
+function xclip(){
+if command -v /usr/bin/xclip 1>/dev/null; then
+	if [[ -p /dev/stdin ]] ; then
+		# stdin is a pipe
+		# stdin -> clipboard
+		/usr/bin/xclip -i -selection clipboard
+	else
+		# stdin is not a pipe
+		# clipboard -> stdout
+		/usr/bin/xclip -o -selection clipboard
+	fi
+else
+	echo "Remember to install xclip"
+fi
+}
+
 #Swap two files
 function swap() {
 	mv $1 $1._tmp;
