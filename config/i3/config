@@ -341,7 +341,7 @@ mode "$mode_gaps_outer" {
 #exec --no-startup-id redshift-gtk
 #exec_always feh --bg-fill /home/jonathan/Pictures/Wallpapers/blueConky/dfCXBel.jpg
 exec --no-startup-id compton -f -i 0.95
-exec --no-startup-id albert
+exec_always --no-startup-id albert
 #exec --no-startup-id nm-applet
 #exec --no-startup-id blueman-applet
 exec --no-startup-id xfce4-clipman
