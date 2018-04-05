@@ -3,4 +3,4 @@ echo "$plugin"
 versions=$(wp plugin update $plugin 2> /dev/null | tail -n 2 | head -n 1 | awk '{print $2 "->" $3}')
 echo "$versions"
 git add .
-git commit -m "Update $plugin $version"
+git commit -m "Update $plugin $versions"
