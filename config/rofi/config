@@ -1,2 +1,3 @@
 rofi.theme: /usr/share/rofi/themes/solarized_alternate.rasi
 rofi.font: Noto\ 16
+rofi.show-icons: True

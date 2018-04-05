@@ -51,9 +51,15 @@ bindsym $mod+q kill
 
 # start dmenu (a program launcher)
 #bindsym $mod+d exec dmenu_run
-bindsym $mod+d exec albert toggle
+#bindsym $mod+d exec albert toggle
 bindsym XF86Search exec dmenu_run
 #bindsym $mod+z exec xfce4-appfinder
+
+# Start Rofi as program launcher
+bindsym $mod+d exec rofi -show drun
+
+#Start Rofi as emoji finder
+bindsym $mod+u exec ~/.dotfiles/config/rofi/scripts/rofi-emoji
 
 #kill i3
 bindsym $mod+Shift+x exec killall i3
