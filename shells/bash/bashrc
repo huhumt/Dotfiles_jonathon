@@ -230,7 +230,7 @@ export GIT_PS1_SHOWUPSTREAM="auto"
 source /usr/share/git/completion/git-completion.bash
 source /usr/share/git/completion/git-prompt.sh
 
-source $HOME/.dotfiles/t-completion.sh
+source $HOME/.dotfiles/shells/bash/t-completion.sh
 
 
 ############################################
@@ -343,7 +343,7 @@ fi)'$Color_Off'\$ '
 #   fi)"; \
 # fi)\[\033[0m\]\$ '
 function _update_ps1() {
-    export PS1="$(~/.config/powerline-shell/powerline-shell.py $? 2> /dev/null)"
+    export PS1="$(~/.dotfiles/shells/bash/powerline-shell/powerline-shell.py $? 2> /dev/null)"
 }
 
 if [ "$TERM" != "linux" ]; then

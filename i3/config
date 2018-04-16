@@ -58,7 +58,7 @@ bindsym $mod+q kill
 bindsym $mod+d exec rofi -show drun
 
 #Start Rofi as emoji finder
-bindsym $mod+u exec ~/.dotfiles/config/rofi/scripts/rofi-emoji
+bindsym $mod+u exec ~/.dotfiles/rofi/scripts/rofi-emoji
 
 
 #kill i3
@@ -268,17 +268,17 @@ bindsym ctrl+Print exec xfce4-screenshooter -w
 bindsym Shift+Print exec xfce4-screenshooter -r
 
 
-bindsym $mod+x exec --no-startup-id ~/.config/i3/i3exit logout
+bindsym $mod+x exec --no-startup-id ~/.dotfiles/i3/i3exit logout
 
 
 set $mode_system System (l) lock, (e) logout, (s) suspend, (h) hibernate, (r) reboot, (Shift+s) shutdown
 mode "$mode_system" {
-    bindsym l exec --no-startup-id ~/.config/i3/i3exit lock, mode "default"
-    bindsym e exec --no-startup-id ~/.config/i3/i3exit logout, mode "default"
-    bindsym s exec --no-startup-id ~/.config/i3/i3exit suspend, mode "default"
-    bindsym h exec --no-startup-id ~/.config/i3/i3exit hibernate, mode "default"
-    bindsym r exec  --no-startup-id~/.config/i3/i3exit reboot, mode "default"
-    bindsym Shift+s exec --no-startup-id ~/.config/i3/i3exit shutdown, mode "default"
+    bindsym l exec --no-startup-id ~/.dotfiles/i3/i3exit lock, mode "default"
+    bindsym e exec --no-startup-id ~/.dotfiles/i3/i3exit logout, mode "default"
+    bindsym s exec --no-startup-id ~/.dotfiles/i3/i3exit suspend, mode "default"
+    bindsym h exec --no-startup-id ~/.dotfiles/i3/i3exit hibernate, mode "default"
+    bindsym r exec --no-startup-id ~/.dotfiles/i3/i3exit reboot, mode "default"
+    bindsym Shift+s exec --no-startup-id ~/.dotfiles/i3/i3exit shutdown, mode "default"
 
     # back to normal: Enter or Escape
     bindsym Return mode "default"
