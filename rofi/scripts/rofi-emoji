@@ -21,7 +21,7 @@
 #
 
 # Where to save the emojis file.
-UNICODE_FILE="/home/jonathan/.dotfiles/config/rofi/scripts/unicode.txt"
+UNICODE_FILE="$HOME/.dotfiles/rofi/scripts/unicode.txt"
 
 # Urls of emoji to download.
 # You can remove what you don't need.
