@@ -3,6 +3,7 @@
 # Please see http://i3wm.org/docs/userguide.html for a complete reference!
 
 set $mod Mod4
+set $alt Mod1
 
 set $base00 #101218
 set $base01 #1f222d
@@ -255,6 +256,9 @@ bindsym $mod+Shift+q exec qutebrowser
 bindsym XF86AudioRaiseVolume exec --no-startup-id pactl set-sink-volume 0 +5% #increase sound volume
 bindsym XF86AudioLowerVolume exec --no-startup-id pactl set-sink-volume 0 -5% #decrease sound volume
 bindsym XF86AudioMute exec --no-startup-id pactl set-sink-mute 0 toggle # mute sound
+
+bindsym Alt_L+button4 exec --no-startup-id pactl set-sink-volume 0 +5% #increase sound volume
+bindsym Alt_L+button5 exec --no-startup-id pactl set-sink-volume 0 -5% #decrease sound volume
 
 # Sreen brightness controls
 #bindsym XF86MonBrightnessUp exec xbacklight -inc 20 # increase screen brightness
