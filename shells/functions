@@ -187,6 +187,7 @@ function themes() {
 	fi
 }
 
+#This function toggles debug in wp-config
 function debugToggle(){
 	public_html=${PWD%/public_html*}/public_html
 	if [ -d $public_html ]; then

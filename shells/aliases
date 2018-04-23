@@ -78,7 +78,7 @@ alias ~="cd ~/"
 #Goes up to the public_html folder
 alias ph='cd ${PWD%/public_html*}/public_html'
 
-#Goes up to the public_html folder
+#Edit wp-config.php using $EDITOR
 alias conf='$EDITOR ${PWD%/public_html*}/public_html/wp-config.php'
 
 # Quit the terminal using :q (The same as Vi/Vim)
