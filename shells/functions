@@ -34,11 +34,14 @@ function old() {
 	mv "$1" "$1.old"
 }
 
-function cdlc() {
+function cdls() {
 	cd "$@"
+	if [ ! $TMUX ]; then
+		pwd > ~/.current-folder
+	fi
 	ls
 }
-alias cd="cdlc"
+alias cd="cdls"
 
 function mkcd() {
 	mkdir -p "$1"
@@ -181,6 +184,16 @@ function themes() {
 		cd $(wp --path="$wpPath" theme path)
 	else
 		echo " Can't find public_html folder."
+	fi
+}
+
+function debugToggle(){
+	public_html=${PWD%/public_html*}/public_html
+	if [ -d $public_html ]; then
+		current=$(egrep "'WP_DEBUG'" "$public_html/wp-config.php" | egrep -o "(true|false)")
+		[[ $current == true ]] && newvalue=false || newvalue=true
+		sed -i "s/'WP_DEBUG'.*/'WP_DEBUG', $newvalue\)\;/g" "$public_html/wp-config.php"
+		echo "WP_DEBUG is now $newvalue";
 	fi
 }
 
