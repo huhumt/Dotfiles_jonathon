@@ -78,6 +78,9 @@ alias ~="cd ~/"
 #Goes up to the public_html folder
 alias ph='cd ${PWD%/public_html*}/public_html'
 
+#Goes up to the public_html folder
+alias conf='$EDITOR ${PWD%/public_html*}/public_html/wp-config.php'
+
 # Quit the terminal using :q (The same as Vi/Vim)
 alias :q='exit;'
 
@@ -139,4 +142,5 @@ alias v="vim"
 
 #Servers Memory
 alias servermem='toilet -w 200 "VPS 01" && ssh shires free -h && toilet -w 200 "VPS 02" && ssh abc free -h && toilet -w 200 "VPS 03" && ssh cdc2 free -h && toilet -w 200 "Freightliner" && ssh freightliner free -h && toilet -w 200 "NHS" && ssh nhs free -h'
+
 
