@@ -34,14 +34,25 @@ function old() {
 	mv "$1" "$1.old"
 }
 
-function cdls() {
-	cd "$@"
-	if [ ! $TMUX ]; then
-		pwd > ~/.current-folder
+function mycd() {
+	cd "$@" 2> /dev/null
+	if [ $? = 0 ]; then
+		# If we get here cd was successful
+		if [ ! $TMUX ]; then
+			pwd > ~/.current-folder
+		fi
+		ls
+	else
+		# If we get here, cd was not successful
+		if [ -f "$1" ]; then
+			vim "$1"
+		else
+			echo "Can't cd"
+			exit 1
+		fi
 	fi
-	ls
 }
-alias cd="cdls"
+alias cd="mycd"
 
 function mkcd() {
 	mkdir -p "$1"
