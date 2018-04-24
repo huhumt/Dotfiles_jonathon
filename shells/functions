@@ -45,7 +45,7 @@ function mycd() {
 	else
 		# If we get here, cd was not successful
 		if [ -f "$1" ]; then
-			vim "$1"
+			$EDITOR "$1"
 		else
 			echo "Can't cd"
 			exit 1
