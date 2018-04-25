@@ -63,7 +63,7 @@ bindsym $mod+d exec rofi -show drun
 bindsym $mod+Shift+d exec rofi -show ssh
 
 #Start Rofi as emoji finder
-bindsym $mod+u exec ~/.dotfiles/config/rofi/scripts/rofi-emoji
+bindsym $mod+u exec ~/.dotfiles/rofi/scripts/rofi-emoji
 
 #kill i3
 bindsym $mod+Shift+x exec killall i3
