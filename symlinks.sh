@@ -42,6 +42,9 @@ myLink $HOME/.dotfiles/git/gitconfig $HOME/.gitconfig
 mkdir -p $HOME/.config/i3
 myLink $HOME/.dotfiles/i3/config $HOME/.config/i3/config
 
+#i3blocks
+myLink $HOME/.dotfiles/i3/i3blocks.conf $HOME/.i3blocks.conf
+
 #vim
 myLink $HOME/.dotfiles/vim $HOME/.vim
 myLink $HOME/.dotfiles/vim/.vimrc $HOME/.vimrc
