@@ -92,6 +92,5 @@ TRAPWINCH(){
 }
 
 if [ -f ~/.current-folder ] && [ ! $TMUX ]; then
-	cd "$(cat ~/.current-folder)"
-	clear
+	\cd "$(cat ~/.current-folder)"
 fi
