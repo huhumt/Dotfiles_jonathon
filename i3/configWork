@@ -69,12 +69,13 @@ bindsym $mod+u exec ~/.dotfiles/rofi/scripts/rofi-emoji
 bindsym $mod+Shift+x exec killall i3
 
 
-bindsym --release Caps_Lock exec pkill -SIGRTMIN+11 i3blocks
+# Send signals to i3 blocks and zsh to tell them that capslock has been pushed
+# The message to zsh is technically a "window change" which causes zsh to re-draw the prompt
+# https://unix.stackexchange.com/questions/440184/update-zsh-ps1-propt-on-keypress
+bindsym --release Caps_Lock exec pkill -SIGRTMIN+11 i3blocks && pkill -SIGWINCH zsh
+
+#Send a message to i3blocks to say that numlock has been pushed
 bindsym --release Num_Lock  exec pkill -SIGRTMIN+11 i3blocks
-
-
-for_window [class="xfce4-appfinder"] floating enable
-
 
 
 # There also is the (new) i3-dmenu-desktop which only displays applications
@@ -263,8 +264,8 @@ bindsym XF86AudioRaiseVolume exec --no-startup-id pactl set-sink-volume 0 +5%  &
 bindsym XF86AudioLowerVolume exec --no-startup-id pactl set-sink-volume 0 -5%  && pkill -SIGRTMIN+10 i3blocks #decrease sound volume
 bindsym XF86AudioMute exec --no-startup-id pactl set-sink-mute 0 toggle  && pkill -SIGRTMIN+10 i3blocks # mute sound
 
-bindsym --whole-window $alt+button4 exec --no-startup-id pactl set-sink-volume 0 +5% && pkill -SIGRTMIN+10 i3blocks #increase sound volume
-bindsym --whole-window $alt+button5 exec --no-startup-id pactl set-sink-volume 0 -5% && pkill -SIGRTMIN+10 i3blocks #decrease sound volume
+bindsym --whole-window $alt+button4 exec --no-startup-id pactl set-sink-volume 0 -5% && pkill -SIGRTMIN+10 i3blocks #decrease sound volume
+bindsym --whole-window $alt+button5 exec --no-startup-id pactl set-sink-volume 0 +5% && pkill -SIGRTMIN+10 i3blocks #increase sound volume
 
 # Sreen brightness controls
 #bindsym XF86MonBrightnessUp exec xbacklight -inc 20 # increase screen brightness

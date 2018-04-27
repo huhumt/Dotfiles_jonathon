@@ -1,0 +1,2 @@
+#"pkill -u $USER -SIGWINCH zsh"
+#    Caps_Lock
