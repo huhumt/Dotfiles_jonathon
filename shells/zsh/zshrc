@@ -87,7 +87,10 @@ source $ZSH/oh-my-zsh.sh
 
 source ~/.dotfiles/shells/zsh/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 
+TRAPWINCH(){
+	zle && {zle reset-prompt; zle -R}
+}
+
 if [ -f ~/.current-folder ] && [ ! $TMUX ]; then
-	cd "$(cat ~/.current-folder)"
-	clear
+	\cd "$(cat ~/.current-folder)"
 fi

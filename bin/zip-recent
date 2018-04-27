@@ -1,0 +1,45 @@
+#!/usr/bin/sh
+
+# A script to create a zip archive of any recentally modified files
+
+
+# Set the defaults
+mtime="7"
+filename=""
+
+while [ $1 ]; do
+	case $1 in
+		-h|--help)
+			echo "Zips recentally modified files"
+			echo ""
+			echo -e "Use this to create a zip archive of recentally modified files"
+			echo -e "Usage: zip-recent [options] filename"
+			echo ""
+			echo -e "Options"
+			echo -e "\t-mtime\t\tThe number of days that should be considered recent [default=$mtime]"
+			exit 0
+			;;
+		-mtime)
+			shift
+			mtime="$1"
+			shift
+			;;
+		*)
+			filename="$1"
+			shift
+			;;
+	esac
+done
+
+if [ "$filename" = "" ]; then
+	echo "You need to enter a filename"
+	exit 1
+fi
+
+# Make sure the filename ends with .zip
+filename="${filename%\.zip}.zip"
+
+
+find . -type f -mtime -$mtime -exec zip $filename {} \;
+
+
