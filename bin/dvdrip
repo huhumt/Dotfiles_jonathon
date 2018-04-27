@@ -2,6 +2,9 @@
 # coding=utf-8
 
 """
+
+based on this: https://github.com/xenomachina/dvdrip
+
 Rip DVDs quickly and easily from the commandline.
 
 Features:
