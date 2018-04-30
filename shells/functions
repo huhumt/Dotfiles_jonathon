@@ -48,7 +48,6 @@ function mycd() {
 			$EDITOR "$1"
 		else
 			echo "Can't cd"
-			exit 1
 		fi
 	fi
 }
