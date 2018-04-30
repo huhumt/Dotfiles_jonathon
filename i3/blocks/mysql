@@ -1,0 +1,16 @@
+#!/usr/bin/sh
+
+LAMPP='/opt/lampp/lampp'
+STATUS=$($LAMPP status 2> /dev/null)
+
+MYSQL=$(echo "$STATUS" | grep -i mysql | grep -io not > /dev/null && echo "down" || echo "up")
+
+if [ "$MYSQL" = "up" ]; then
+	COLOUR="#00FF00"
+else
+	COLOUR="#FF0000"
+fi
+
+echo "MySQL"
+echo ""
+echo "$COLOUR"
