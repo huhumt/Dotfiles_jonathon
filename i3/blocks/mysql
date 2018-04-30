@@ -5,11 +5,14 @@ STATUS=$($LAMPP status 2> /dev/null)
 
 MYSQL=$(echo "$STATUS" | grep -i mysql | grep -io not > /dev/null && echo "down" || echo "up")
 
+COLOUR=""
+
 function toggleMysql(){
 	if [ $MYSQL = "up" ]; then
 		gksudo $LAMPP stopmysql
 	else
 		gksudo $LAMPP startmysql
+		COLOUR="#FF8000"
 	fi
 }
 
@@ -30,6 +33,14 @@ if [ "$MYSQL" = "up" ]; then
 	COLOUR="#00FF00"
 else
 	COLOUR="#FF0000"
+fi
+
+if [ -z "$COLOUR" ]; then
+	if [ "$APACHE" = "up" ]; then
+		COLOUR="#00FF00"
+	else
+		COLOUR="#FF0000"
+	fi
 fi
 
 echo "MySQL"

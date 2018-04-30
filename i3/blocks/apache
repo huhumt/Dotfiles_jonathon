@@ -5,11 +5,14 @@ STATUS=$($LAMPP status 2> /dev/null)
 
 APACHE=$(echo "$STATUS" | grep -i apache | grep -io not > /dev/null && echo "down" || echo "up")
 
+COLOUR=""
+
 function toggleApache(){
 	if [ $APACHE = "up" ]; then
-		gksudo $LAMPP stopapache
+		gksudo $LAMPP stopapache > /dev/null
 	else
-		gksudo $LAMPP startapache
+		gksudo $LAMPP startapache > /dev/null
+		COLOUR="#FF8000"
 	fi
 }
 
@@ -26,10 +29,12 @@ case $BLOCK_BUTTON in
 	3) toggleAll ;;
 esac
 
-if [ "$APACHE" = "up" ]; then
-	COLOUR="#00FF00"
-else
-	COLOUR="#FF0000"
+if [ -z "$COLOUR" ]; then
+	if [ "$APACHE" = "up" ]; then
+		COLOUR="#00FF00"
+	else
+		COLOUR="#FF0000"
+	fi
 fi
 
 echo "Apache"
