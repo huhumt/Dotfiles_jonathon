@@ -5,6 +5,27 @@ STATUS=$($LAMPP status 2> /dev/null)
 
 PROFTP=$(echo "$STATUS" | grep -i proftp | grep -io not > /dev/null && echo "down" || echo "up")
 
+function toggleProftp(){
+	if [ $PROFTP = "up" ]; then
+		gksudo $LAMPP stopftp
+	else
+		gksudo $LAMPP startftp
+	fi
+}
+
+function toggleAll(){
+	if [ $PROFTP = "up" ]; then
+		gksudo $LAMPP stop
+	else
+		gksudo $LAMPP start
+	fi
+}
+
+case $BLOCK_BUTTON in
+	1) toggleProftp ;;
+	3) toggleAll ;;
+esac
+
 if [ "$PROFTP" = "up" ]; then
 	COLOUR="#00FF00"
 else

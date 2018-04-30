@@ -5,6 +5,27 @@ STATUS=$($LAMPP status 2> /dev/null)
 
 MYSQL=$(echo "$STATUS" | grep -i mysql | grep -io not > /dev/null && echo "down" || echo "up")
 
+function toggleMysql(){
+	if [ $MYSQL = "up" ]; then
+		gksudo $LAMPP stopmysql
+	else
+		gksudo $LAMPP startmysql
+	fi
+}
+
+function toggleAll(){
+	if [ $MYSQL = "up" ]; then
+		gksudo $LAMPP stop
+	else
+		gksudo $LAMPP start
+	fi
+}
+
+case $BLOCK_BUTTON in
+	1) toggleMysql ;;
+	3) toggleAll ;;
+esac
+
 if [ "$MYSQL" = "up" ]; then
 	COLOUR="#00FF00"
 else

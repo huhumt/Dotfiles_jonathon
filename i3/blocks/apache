@@ -5,6 +5,27 @@ STATUS=$($LAMPP status 2> /dev/null)
 
 APACHE=$(echo "$STATUS" | grep -i apache | grep -io not > /dev/null && echo "down" || echo "up")
 
+function toggleApache(){
+	if [ $APACHE = "up" ]; then
+		gksudo $LAMPP stopapache
+	else
+		gksudo $LAMPP startapache
+	fi
+}
+
+function toggleAll(){
+	if [ $APACHE = "up" ]; then
+		gksudo $LAMPP stop
+	else
+		gksudo $LAMPP start
+	fi
+}
+
+case $BLOCK_BUTTON in
+	1) toggleApache ;;
+	3) toggleAll ;;
+esac
+
 if [ "$APACHE" = "up" ]; then
 	COLOUR="#00FF00"
 else
