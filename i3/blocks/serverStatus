@@ -1,0 +1,48 @@
+#!/usr/bin/bash
+
+
+
+SCRIPTPATH="$( cd "$(dirname "$0")" ; pwd -P )"
+source $SCRIPTPATH/servers.private
+
+checkAllSites(){
+	eval server=( \${$1[@]} )
+	for site in ${server[@]}; do
+		printf "%-35s | %s \n" "$site" "$(checkURL $site)"
+	done
+}
+
+# This function takes 1 parameter, the name of an array in which to check a random URL
+checkRandomSite(){
+	#The server variable will be equal to whichever server array we are looking at
+	eval server=( \${$1[@]} )
+	random=$(( ( RANDOM % (${#server[@]} - 1) )  + 1 ))
+	urlToCheck=${server[$random]}
+	echo $urlToCheck
+	echo $(checkURL $urlToCheck)
+}
+
+checkURL(){
+	responce=$(curl -s --head -w %{http_code} $1 -L -o /dev/null --connect-timeout 60)
+	echo $responce
+}
+
+if [ ! -z "$1" ]; then
+	if [ -z "$2" ]; then
+		checked=$(eval checkRandomSite $1)
+		checked=(${checked// / })
+		#echo ${checked[0]}
+		#echo ${checked[1]}
+		echo $1
+		echo ""
+		if [ "${checked[1]}" = "200" ]; then
+			echo "#00FF00"
+		else
+			echo "#FF8000"
+		fi
+	elif [ "$2" = "all" ]; then
+		checkAllSites $1
+	fi
+else
+	echo Please specify a server name
+fi
