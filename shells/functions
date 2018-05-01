@@ -38,9 +38,9 @@ function mycd() {
 	cd "$@" 2> /dev/null
 	if [ $? = 0 ]; then
 		# If we get here cd was successful
-		if [ ! $TMUX ]; then
-			pwd > ~/.current-folder
-		fi
+		#if [ ! $TMUX ]; then
+		#	pwd > ~/.current-folder
+		#fi
 		ls
 	else
 		# If we get here, cd was not successful

@@ -91,6 +91,6 @@ TRAPWINCH(){
 	zle && {zle reset-prompt; zle -R}
 }
 
-if [ -f ~/.current-folder ] && [ ! $TMUX ]; then
-	\cd "$(cat ~/.current-folder)"
-fi
+#if [ -f ~/.current-folder ] && [ ! $TMUX ]; then
+#	\cd "$(cat ~/.current-folder)"
+#fi

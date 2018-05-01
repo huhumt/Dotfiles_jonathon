@@ -45,7 +45,8 @@ floating_modifier $mod
 # bindsym $mod+Return exec xfce4-terminal
 # bindsym $mod+Return exec konsole
 # bindsym $mod+Return exec termite
-bindsym $mod+Return exec /usr/local/bin/st
+# bindsym $mod+Return exec /usr/local/bin/st
+bindsym $mod+Return exec ~/.dotfiles/bin/i3-shell
 
 # kill focused window
 bindsym $mod+q kill
