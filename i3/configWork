@@ -237,6 +237,7 @@ bindsym $mod+r mode "resize"
 bar {
         #status_command i3status
         status_command i3blocks
+		output primary
         tray_output primary
         colors {
               separator $base03
