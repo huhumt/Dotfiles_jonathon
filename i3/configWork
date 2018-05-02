@@ -399,7 +399,8 @@ exec --no-startup-id xfce4-clipman
 #exec_always --no-startup-id killall conky
 #exec_always --no-startup-id sleep 1s; killall -9 conky
 exec --no-startup-id xrandr --output DP-1 --primary --mode 2560x1440 --pos 1440x0 --rotate normal --output HDMI-1 --mode 1440x900 --pos 0x0 --rotate normal --output HDMI-2 --off
-exec_always --no-startup-id /usr/lib/xfce4/notifyd/xfce4-notifyd
+#exec_always --no-startup-id /usr/lib/xfce4/notifyd/xfce4-notifyd
+exec_always --no-startup-id /usr/bin/dunst
 #exec --no-startup-id sh ~/.fehbg
 exec --no-startup-id nitrogen --restore
 exec_always --no-startup-id sh "/home/jonathan/.config/conky/conky-startup.sh"
