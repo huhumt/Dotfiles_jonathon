@@ -15,7 +15,13 @@ else
 	colour="#FF8000"
 fi
 
-ret="<span foreground='$colour'>$($COMMAND metadata title)</span>"
-ret="$ret - $($COMMAND metadata artist)"
+title=$($COMMAND metadata title | sed "s/\&/\&amp;/g")
+artist=$($COMMAND metadata artist | sed "s/\&/\&amp;/g")
+
+
+ret="<span foreground='$colour'>$title</span>"
+ret="$ret - $artist"
+
+
 
 echo "$ret";
