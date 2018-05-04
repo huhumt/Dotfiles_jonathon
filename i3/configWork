@@ -69,6 +69,9 @@ bindsym $mod+u exec ~/.dotfiles/rofi/scripts/rofi-emoji
 #kill i3
 bindsym $mod+Shift+x exec killall i3
 
+# Rename Current Workspace
+bindsym $mod+m exec man -k . | awk '{ print $1 " " $2 }' | rofi -dmenu -p man: | awk '{ print $2 " " $1 }' | tr -d '()' | xargs st -e man
+
 
 # Send signals to i3 blocks and zsh to tell them that capslock has been pushed
 # The message to zsh is technically a "window change" which causes zsh to re-draw the prompt
