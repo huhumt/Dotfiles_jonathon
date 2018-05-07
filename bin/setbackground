@@ -1,0 +1,6 @@
+#!/usr/bin/bash
+
+rngback -fg "#404552" -bg "#5294e2" 3840 2160 30 15 -o ~/background.jpg
+
+feh --bg-fill ~/background.jpg
+
