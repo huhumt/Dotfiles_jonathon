@@ -18,10 +18,12 @@ fi
 title=$($COMMAND metadata title | sed "s/\&/\&amp;/g")
 artist=$($COMMAND metadata artist | sed "s/\&/\&amp;/g")
 
+if [ "$title" != "(null)" ]; then
+	ret="<span foreground='$colour'>$title</span>"
+	ret="$ret - $artist"
 
-ret="<span foreground='$colour'>$title</span>"
-ret="$ret - $artist"
+	echo "$ret";
+fi
 
 
 
-echo "$ret";
