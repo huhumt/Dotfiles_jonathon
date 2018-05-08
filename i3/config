@@ -235,6 +235,7 @@ bindsym $mod+r mode "resize"
 # finds out, if available)
 bar {
         #status_command i3status
+		#status_command i3blocks -c ./i3blocks-secondary.conf
 		status_command i3blocks
         #tray_output primary
         colors {
@@ -359,21 +360,8 @@ mode "$mode_gaps_outer" {
 
 
 
-#exec --no-startup-id redshift-gtk
-#exec_always feh --bg-fill /home/jonathan/Pictures/Wallpapers/blueConky/dfCXBel.jpg
+exec_always --no-startup-id setbackground
 exec --no-startup-id compton -f -i 0.95
 exec_always --no-startup-id albert
-#exec --no-startup-id nm-applet
-#exec --no-startup-id blueman-applet
 exec --no-startup-id xfce4-clipman
-#exec --no-startup-id xfce4-power-manager
-#exec_always --no-startup-id /usr/lib/kdeconnectd
-#exec_always --no-startup-id indicator-kdeconnect
-#exec_always --no-startup-id killall conky
-#exec_always --no-startup-id sleep 1s; killall -9 conky
-#exec --no-startup-id sh /home/jonathan/.conky/conky-startup.sh
-#exec_always --no-startup-id sleep 2s; conky -c "/home/jonathan/.conky/BibleVerse/bibleGateway"
-#exec_always --no-startup-id sleep 2s; conky -c "/home/jonathan/.conky/MyBlue/MyBlue"
-#exec_always --no-startup-id cd /home/jonathan/.conky/Octupi_Arch
-#exec_always --no-startup-id sleep 2s; conky -c "co_main"
 exec setxkbmap gb
