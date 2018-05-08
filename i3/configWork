@@ -69,8 +69,8 @@ bindsym $mod+u exec ~/.dotfiles/rofi/scripts/rofi-emoji
 #kill i3
 bindsym $mod+Shift+x exec killall i3
 
-# Rename Current Workspace
-bindsym $mod+m exec man -k . | awk '{ print $1 " " $2 }' | rofi -dmenu -p man: | awk '{ print $2 " " $1 }' | tr -d '()' | xargs st -e man
+# Man page lookup
+bindsym $mod+m exec man -k . | awk '{ print $1 " " $2 }' | rofi -dmenu -p man | awk '{ print $2 " " $1 }' | tr -d '()' | xargs st -e man
 
 
 # Send signals to i3 blocks and zsh to tell them that capslock has been pushed
@@ -80,7 +80,6 @@ bindsym --release Caps_Lock exec pkill -SIGRTMIN+11 i3blocks && pkill -SIGWINCH 
 
 #Send a message to i3blocks to say that numlock has been pushed
 bindsym --release Num_Lock  exec pkill -SIGRTMIN+11 i3blocks
-
 
 # There also is the (new) i3-dmenu-desktop which only displays applications
 # shipping a .desktop file. It is a wrapper around dmenu, so you need that
@@ -177,8 +176,6 @@ bindsym $mod+Shift+0 move container to workspace $workspace10, workspace $worksp
 # move workspace to left/right
 bindsym $mod+control+Left move workspace to output left
 bindsym $mod+control+Right move workspace to output right
-
-
 bindsym $mod+control+h move workspace to output left
 bindsym $mod+control+l move workspace to output right
 
@@ -271,9 +268,6 @@ bar {
             }
 }
 
-#Use xfce4 panel instead of i3's
-#exec --no-startup-id xfce4-panel --disable-wm-check
-
 bindsym $mod+c exec chromium-snapshot-bin, workspace $workspace1
 bindsym $mod+Shift+c exec google-chrome-stable --force-device-scale-factor=2, workspace $workspace1
 bindsym control+mod1+f exec thunar
@@ -288,10 +282,6 @@ bindsym XF86AudioMute exec --no-startup-id pactl set-sink-mute 0 toggle  && pkil
 
 bindsym --whole-window $alt+button4 exec --no-startup-id pactl set-sink-volume 0 -5% && pkill -SIGRTMIN+10 i3blocks #decrease sound volume
 bindsym --whole-window $alt+button5 exec --no-startup-id pactl set-sink-volume 0 +5% && pkill -SIGRTMIN+10 i3blocks #increase sound volume
-
-# Sreen brightness controls
-#bindsym XF86MonBrightnessUp exec xbacklight -inc 20 # increase screen brightness
-#bindsym XF86MonBrightnessDown exec xbacklight -dec 20 # decrease screen brightness
 
 # Touchpad controls
 #bindsym XF86TouchpadToggle exec /some/path/toggletouchpad.sh # toggle touchpad
@@ -313,23 +303,7 @@ bindsym Shift+Print exec xfce4-screenshooter -r
 
 bindsym $mod+x exec --no-startup-id ~/.config/i3/i3exit logout
 
-
-#set $mode_system System (l) lock, (e) logout, (s) suspend, (h) hibernate, (r) reboot, (Shift+s) shutdown
-#mode "$mode_system" {
-#    bindsym l exec --no-startup-id ~/.config/i3/i3exit lock, mode "default"
-#    bindsym e exec --no-startup-id ~/.config/i3/i3exit logout, mode "default"
-#    bindsym s exec --no-startup-id ~/.config/i3/i3exit suspend, mode "default"
-#    bindsym h exec --no-startup-id ~/.config/i3/i3exit hibernate, mode "default"
-#    bindsym r exec  --no-startup-id~/.config/i3/i3exit reboot, mode "default"
-#    bindsym Shift+s exec --no-startup-id ~/.config/i3/i3exit shutdown, mode "default"
-#
-#    # back to normal: Enter or Escape
-#    bindsym Return mode "default"
-#    bindsym Escape mode "default"
-#}
-#bindsym ctrl+shift+l mode "$mode_system"
 bindsym ctrl+shift+l exec --no-startup-id ~/.config/rofi/scripts/rofi-shutdown
-#bindsym ctrl+l exec "~/.config/i3/i3exit lock"
 
 ##################################################
 #                                                #
@@ -345,8 +319,9 @@ smart_gaps on
 set $mode_gaps Gaps: (o) outer, (i) inner, (d) default
 set $mode_gaps_outer Outer Gaps: +|-|0 (local), Shift + +|-|0 (global)
 set $mode_gaps_inner Inner Gaps: +|-|0 (local), Shift + +|-|0 (global)
-bindsym $mod+Shift+g mode "$mode_gaps"
 
+
+bindsym $mod+Shift+g mode "$mode_gaps"
 mode "$mode_gaps" {
         bindsym o			mode "$mode_gaps_outer"
         bindsym i			mode "$mode_gaps_inner"
@@ -385,29 +360,12 @@ mode "$mode_gaps_outer" {
         bindsym Escape mode "default"
 }
 
-
-
-
-#exec --no-startup-id redshift-gtk
 exec --no-startup-id redshift
-#exec --no-startup-id pasystray
-#exec feh --bg-scale /home/jonathan/Pictures/Wallpapers/blueConky/ram_memory_chip-wallpaper-3554x1999.jpg
 exec --no-startup-id compton -f -i 0.95
 exec_always --no-startup-id /usr/lib/kdeconnectd
 exec_always --no-startup-id indicator-kdeconnect
-#exec --no-startup-id nm-applet
-#exec --no-startup-id blueman-applet
 exec --no-startup-id xfce4-clipman
-#exec --no-startup-id xfce4-power-manager
-#exec_always --no-startup-id killall conky
-#exec_always --no-startup-id sleep 1s; killall -9 conky
 exec --no-startup-id xrandr --output DP-1 --primary --mode 2560x1440 --pos 1440x0 --rotate normal --output HDMI-1 --mode 1440x900 --pos 0x0 --rotate normal --output HDMI-2 --off
-#exec_always --no-startup-id /usr/lib/xfce4/notifyd/xfce4-notifyd
 exec_always --no-startup-id /usr/bin/dunst
-#exec --no-startup-id sh ~/.fehbg
 #exec --no-startup-id nitrogen --restore
 exec_always --no-startup-id setbackground
-exec_always --no-startup-id sh "/home/jonathan/.config/conky/conky-startup.sh"
-#exec --no-startup-id conky -c "/home/jonathan/.config/conky/BibleVerse/bibleGateway"
-#exec --no-startup-id conky -c "/home/jonathan/.config/conky/MyBlue/MyBlue"
-#exec_always --no-startup-id albert
