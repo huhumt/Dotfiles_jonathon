@@ -73,6 +73,21 @@ function createLetter(){
 	fi
 }
 
+function createFPLreport(){
+	if [ "$1" ]; then
+		if [ "$2" ]; then
+			newFile="$2"
+		else
+			newFile="$1"
+			newFile="${newFile%.*}.pdf"
+		fi
+		pandoc --template fellowship.latex --pdf-engine=xelatex $1 -o $newFile
+	else
+		echo "Oops. You need to suply a file"
+		return 1
+	fi
+}
+
 #Takes you to the parent theme
 function ptheme() {
 	public_html=${PWD%/public_html*}/public_html

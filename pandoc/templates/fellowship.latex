@@ -1,0 +1,237 @@
+\PassOptionsToPackage{unicode=true}{hyperref} % options for packages loaded elsewhere
+\PassOptionsToPackage{hyphens}{url}
+$if(colorlinks)$
+\PassOptionsToPackage{dvipsnames,svgnames*,x11names*}{xcolor}
+$endif$$if(dir)$$if(latex-dir-rtl)$
+\PassOptionsToPackage{RTLdocument}{bidi}
+$endif$$endif$%
+\documentclass[12pt,a4paper]{article}
+\usepackage{amssymb,amsmath}
+\usepackage{ifxetex,ifluatex}
+\usepackage{fixltx2e} % provides \textsubscript
+$if(colorlinks)$
+\usepackage{xcolor}
+$endif$
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\usepackage{xcolor}
+\definecolor{fplgreen}{HTML}{769A8C}
+\usepackage{sectsty}
+\sectionfont{\color{fplgreen}}
+\subsectionfont{\color{fplgreen}}
+\subsubsectionfont{\color{fplgreen}}
+
+\makeatletter
+\let\oldquote\quote
+\def\quote{\@ifnextchar[\quote@i \quote@ii}
+\def\quote@i[#1]{\oldquote[#1]\itshape}
+\def\quote@ii{\oldquote\itshape}
+\makeatother
+
+
+%\usepackage[document]{ragged2e}
+\usepackage{ragged2e}
+\justifying
+
+
+\usepackage{hyperref}
+\hypersetup{
+$if(title-meta)$
+            pdftitle={$title-meta$},
+$endif$
+$if(author-meta)$
+            pdfauthor={$author-meta$},
+$endif$
+$if(subject)$
+            pdfsubject={$subject$},
+$endif$
+$if(keywords)$
+            pdfkeywords={$for(keywords)$$keywords$$sep$, $endfor$},
+$endif$
+$if(colorlinks)$
+            colorlinks=true,
+            linkcolor=$if(linkcolor)$$linkcolor$$else$fplgreen$endif$,
+            citecolor=$if(citecolor)$$citecolor$$else$fplgreen$endif$,
+            urlcolor=$if(urlcolor)$$urlcolor$$else$fplgreen$endif$,
+$else$
+            pdfborder={0 0 0},
+$endif$
+            breaklinks=true}
+\urlstyle{same}  % don't use monospace font for urls
+\usepackage{ifxetex}
+\ifxetex
+   \usepackage{fontspec}
+   \setmainfont[
+	BoldFont={AvenirNextLTProBold}, 
+   ]{Avenir LT Std}
+\fi
+\makeatletter
+\setlength{\parskip}{1em}
+\renewcommand{\@seccntformat}[1]{}
+\makeatother
+
+
+\usepackage{indentfirst}
+\setlength{\parindent}{0pt}
+\usepackage{geometry}
+\geometry{
+	paper=$if(papersize)$$papersize$$else$a4$endif$paper, % Change to a4
+	top=3cm, % Top margin
+	bottom=0cm, % Bottom margin
+	left=2cm, % Left margin
+	right=2cm, % Right margin
+	includefoot
+	%showframe, % Uncomment to show how the type block is set on the page
+}
+$if(tables)$
+\usepackage{longtable,booktabs}
+$endif$
+\usepackage{graphicx,grffile}
+\makeatletter
+\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
+\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
+\makeatother
+% Scale images if necessary, so that they will not overflow the page
+% margins by default, and it is still possible to overwrite the defaults
+% using explicit options in \includegraphics[width, height, ...]{}
+\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+$if(strikeout)$
+\usepackage[normalem]{ulem}
+% avoid problems with \sout in headers with hyperref:
+\pdfstringdefDisableCommands{\renewcommand{\sout}{}}
+$endif$
+
+% set default figure placement to htbp
+\makeatletter
+\def\fps@figure{htbp}
+\makeatother
+
+
+% https://tex.stackexchange.com/questions/34040/graphics-logo-in-headers
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\fancyhf{}
+\lhead{\includegraphics{~/.dotfiles/pandoc/templates/logo.jpg}}
+\rhead{}
+\chead{}
+\renewcommand{\headrulewidth}{0pt}
+\setlength{\headheight}{80pt}    % round to the point
+\setlength{\footskip}{54pt}
+\addtolength{\topmargin}{-4\baselineskip}
+\addtolength{\textheight}{-96pt}
+
+\fancyfoot{}
+%\fancyheadoffset[LE, RO]{1cm}
+%\fancyhead[c]{%
+%This is a test} 
+%\fancyhead[L]{%
+%\small\sffamily\sc \makebox[1cm]{\{\thepage\}}\leftmark}
+
+\usepackage{moresize}
+\fancyfoot[C]{%
+	\vspace{3.5em}
+	\centerline{%
+		\colorbox{fplgreen}{\parbox[b][0.5cm][t]{\paperwidth}{~}}%
+	}
+}
+\fancyfoot[L]{%
+	{\vspace{0.5cm}\parbox{0.8\textwidth}{\tiny Registered Office: Greenwood House, Greenwood Court, Skyliner Way, Bury Saint Edmunds IP32 7GY\\[0.1cm]
+	Registered in England and Wales. Company Registration Number: 4479565}}
+}
+\fancyfoot[R]{%
+	\hspace{1cm}\parbox{0.3\textwidth}{%
+		\begin{center}
+			\scriptsize
+			\textcolor{fplgreen}{\textbf{Fellowship Productions Limited}}\\[0.1cm]
+			Fosters Barn\\
+			Shimpling Road - Hartest\\
+			Bury St Edmunds\\
+			***REMOVED*** IP29 4ET\\[0.1cm]
+			\textcolor{fplgreen}{\textbf{T:}} \href{tel:+441284830888}{\color{black}{01284 830888}}\\
+			\textcolor{fplgreen}{\textbf{E:}} \href{mailto:info@fellowshipproductions.co.uk}{\color{black}{info@fellowshipproductions.co.uk}}\\
+			\textcolor{fplgreen}{\textbf{W:}} \href{https://www.fellowshipproductions.co.uk}{\color{black}{www.fellowshipproductions.co.uk}}\\
+		\end{center}
+	}
+}
+
+\righthyphenmin=5
+\lefthyphenmin=5
+
+\begin{document}
+$if(title)$
+$if(beamer)$
+\frame{\titlepage}
+$else$
+\maketitle
+$endif$
+$if(abstract)$
+\begin{abstract}
+$abstract$
+
+\end{abstract}
+$endif$
+$endif$
+
+$for(include-before)$
+$include-before$
+
+$endfor$
+$if(toc)$
+$if(beamer)$
+\begin{frame}
+\tableofcontents[hideallsubsections]
+\end{frame}
+$else$
+{
+$if(colorlinks)$
+\hypersetup{linkcolor=$if(toccolor)$$toccolor$$else$$endif$}
+$endif$
+\setcounter{tocdepth}{$toc-depth$}
+\tableofcontents
+}
+$endif$
+$endif$
+$if(lot)$
+\listoftables
+$endif$
+$if(lof)$
+\listoffigures
+$endif$
+$body$
+
+$if(natbib)$
+$if(bibliography)$
+$if(biblio-title)$
+$if(book-class)$
+\renewcommand\bibname{$biblio-title$}
+$else$
+\renewcommand\refname{$biblio-title$}
+$endif$
+$endif$
+$if(beamer)$
+\begin{frame}[allowframebreaks]{$biblio-title$}
+\bibliographytrue
+$endif$
+\bibliography{$for(bibliography)$$bibliography$$sep$,$endfor$}
+$if(beamer)$
+\end{frame}
+$endif$
+
+$endif$
+$endif$
+$if(biblatex)$
+$if(beamer)$
+\begin{frame}[allowframebreaks]{$biblio-title$}
+\bibliographytrue
+\printbibliography[heading=none]
+\end{frame}
+$else$
+\printbibliography$if(biblio-title)$[title=$biblio-title$]$endif$
+$endif$
+
+$endif$
+$for(include-after)$
+$include-after$
+
+$endfor$
+\end{document}
