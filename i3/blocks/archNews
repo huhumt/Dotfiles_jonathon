@@ -1,0 +1,34 @@
+#!/usr/bin/sh
+
+# This shows the most recent part news article in the arch news rss feed
+# Left-clicking will open the web page in the browser
+# Right clicking will dismiss the feed by putting the title in the ~/.archNewsDismiss file
+# Deleting / changing this file will un-dismiss the news item
+
+title=$(rsstail -u https://www.archlinux.org/feeds/news/ -n 1 -1 | sed -e "s/^Title: //")
+
+dismissed=""
+if [ -f ~/.archNewsDismiss ]; then
+	dismissed=$(head -n 1 ~/.archNewsDismiss)
+fi
+
+case $BLOCK_BUTTON in
+	1)
+		url=$(rsstail -u https://www.archlinux.org/feeds/news/ -l -n 1 -1 | tail -n 1 | sed -e "s/^Link: //")
+		case $( uname -s ) in
+		  Darwin)  open=open;;
+		  MINGW*)  open=start;;
+		  CYGWIN*) open=cygstart;;
+		  MSYS*)   open="powershell.exe –NoProfile Start";;
+		  *)       open=${BROWSER:-xdg-open};;
+		esac
+		$open $url > /dev/null
+		;;
+	3)
+		echo $title > ~/.archNewsDismiss
+		dismissed=$title
+esac
+
+if [ "$dismissed" != "$title" ]; then
+	echo $title
+fi
