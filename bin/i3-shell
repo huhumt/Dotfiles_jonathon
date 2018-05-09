@@ -1,7 +1,7 @@
 #!/bin/bash
 # i3 thread: https://faq.i3wm.org/question/150/how-to-launch-a-terminal-from-here/?answer=152#post-id-152
 
-# I stole this from here: https://gist.github.com/viking/5851049
+# I stole this from here: https://gist.github.com/viking/5851049 and modified it slightly
 
 CMD=$TERMINAL
 CWD=''
@@ -23,7 +23,7 @@ if [ -n "$PID" ]; then
   fi
 fi
 if [ -n "$CWD" ]; then
-  cd $CWD && $CMD
+  cd "$CWD" && $CMD
 else
   $CMD
 fi
