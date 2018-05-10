@@ -1,0 +1,25 @@
+#!/usr/bin/sh
+
+partition=$1
+
+if [ ! -n "$partition" ]; then
+	partition="/"
+fi
+
+
+line=$(/usr/bin/df -h $partition | sed -n 2p)
+
+used=$(echo $line | awk -F ' ' '{print $3}')
+total=$(echo $line | awk -F ' ' '{print $2}')
+percent=$(echo $line | awk -F ' ' '{print $5}' | sed 's/[^0-9]//')
+
+
+
+echo "$used/$total $percent%"
+echo "$used/$total"
+
+if [ "$percent" -gt 80 ]; then
+	echo "#FF8000"
+elif [ "$percent" -gt 90 ]; then
+	echo "#FF0000"
+fi
