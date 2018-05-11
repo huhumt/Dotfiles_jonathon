@@ -15,8 +15,8 @@ percent=$(echo $line | awk -F ' ' '{print $5}' | sed 's/[^0-9]//')
 
 
 
-echo "$used/$total $percent%"
-echo "$used/$total"
+echo "$percent%"
+echo "$percent%"
 
 if [ "$percent" -gt 80 ]; then
 	echo "#FF8000"
