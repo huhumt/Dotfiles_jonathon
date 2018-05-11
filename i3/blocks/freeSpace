@@ -14,9 +14,14 @@ total=$(echo $line | awk -F ' ' '{print $2}')
 percent=$(echo $line | awk -F ' ' '{print $5}' | sed 's/[^0-9]//')
 
 
+if [ "$BLOCK_BUTTON" = "1" ]; then
+	echo "$used/$total"
+	echo "$used/$total"
+else
+	echo "$percent%"
+	echo "$percent%"
+fi
 
-echo "$percent%"
-echo "$percent%"
 
 if [ "$percent" -gt 80 ]; then
 	echo "#FF8000"
