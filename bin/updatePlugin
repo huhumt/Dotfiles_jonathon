@@ -1,5 +1,9 @@
 #!/usr/bin/sh
-plugin=$(wp plugin list 2> /dev/null | grep available | head -n 1 | awk '{print $1}')
+if [ -n "$1" ]; then
+	plugin=$(wp plugin list 2> /dev/null | grep available | grep $1 | head -n 1 | awk '{print $1}')
+else
+	plugin=$(wp plugin list 2> /dev/null | grep available | head -n 1 | awk '{print $1}')
+fi
 echo "$plugin"
 versions=$(wp plugin update $plugin 2> /dev/null | tail -n 2 | head -n 1 | awk '{print $2 "->" $3}')
 echo "$versions"
