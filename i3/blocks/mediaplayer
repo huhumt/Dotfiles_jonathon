@@ -20,7 +20,9 @@ artist=$($COMMAND metadata artist | sed "s/\&/\&amp;/g")
 
 if [ "$title" != "(null)" ]; then
 	ret="<span foreground='$colour'>$title</span>"
-	ret="$ret - $artist"
+	if [ -n "$artist" ]; then
+		ret="$ret - $artist"
+	fi
 
 	echo "$ret";
 fi
