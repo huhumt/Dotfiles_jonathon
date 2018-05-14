@@ -1,4 +1,5 @@
 [[ -f ~/.Xmodmap ]] && xmodmap ~/.Xmodmap
+xset r rate 200 70
 export QT_QPA_PLATFORMTHEME=qt5ct
 export `gnome-keyring-daemon -d`
 eval $(/usr/bin/gnome-keyring-daemon --start --components=gpg,pkcs11,secrets,ssh)
