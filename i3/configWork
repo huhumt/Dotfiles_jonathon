@@ -365,7 +365,8 @@ exec --no-startup-id compton -f -i 0.95
 exec_always --no-startup-id /usr/lib/kdeconnectd
 exec_always --no-startup-id indicator-kdeconnect
 exec --no-startup-id xfce4-clipman
-exec --no-startup-id xrandr --output DP-1 --primary --mode 2560x1440 --pos 1440x0 --rotate normal --output HDMI-1 --mode 1440x900 --pos 0x0 --rotate normal --output HDMI-2 --off
+exec --no-startup-id xrandr --output DP-1 --primary --mode 2560x1440 --pos 1920x0 --rotate normal --output HDMI-1 --mode 1920x1080 --pos 0x0 --rotate normal --output HDMI-2 --off
+exec --no-startup-id signal-desktop --start-in-tray
 exec_always --no-startup-id /usr/bin/dunst
 #exec --no-startup-id nitrogen --restore
 exec_always --no-startup-id setbackground
