@@ -1,0 +1,118 @@
+#!/usr/bin/sh
+
+# This script will create a new wordpress instilation ready for aquarius
+
+echo '                                                                             '
+echo '   mm                                 "                           mmm   mmmm '
+echo '   ##    mmmm  m   m   mmm    m mm  mmm    m   m   mmm          m"   " m"  "m'
+echo '  #  #  #" "#  #   #  "   #   #"  "   #    #   #  #   "         #   mm #    #'
+echo '  #mm#  #   #  #   #  m"""#   #       #    #   #   """m         #    # #    #'
+echo ' #    # "#m##  "mm"#  "mm"#   #     mm#mm  "mm"#  "mmm"          "mmm"  #mm# '
+echo '            #                                                                '
+echo '            "                                                                '
+
+REPO=""
+SSH="TRUE"
+
+function help(){
+	echo -e "Aquarius Go is for setting up new sites."
+	echo -e ""
+	echo -e "-h, --help\t\tShow this help text"
+	echo -e "-c\t\t\tCheck Compatibility"
+}
+
+function checkCompatibility(){
+	compat="TRUE"
+	if ! command -v curl > /dev/null; then
+		COMPAT="FALSE"
+		echo "curl is not installed"
+		echo "https://curl.haxx.se/download.html"
+		echo ""
+	fi
+	if ! command -v jq > /dev/null; then
+		COMPAT="FALSE"
+		echo "jq is not installed"
+		echo "https://stedolan.github.io/jq/download/"
+		echo ""
+	fi
+
+	if [ "$compat" = "TRUE" ]; then
+		echo "Good news, you appear to be compatible"
+	else
+		echo "Looks like you might need to install some programs"
+	fi
+}
+
+function setRepo(){
+
+	if [ -n "$1" ]; then
+
+		if [ "$SSH" = "TRUE" ]; then
+			REPO="git@bitbucket.org:fellowshipproductionsltd/$1.git"
+		else
+			REPO="https://bitbucket.org/fellowshipproductionsltd/$1.git"
+		fi
+	else
+		REPO=""
+	fi
+}
+
+function setupBitbucket(){
+
+	#1st argument is email if present
+	if [ -n "$1" ]; then
+		email="$1"
+	else
+		# If not, prompt for email
+		echo -e "Please enter your bitbucket email address"
+		read email
+	fi
+
+	# Ask fot the name of the repo to create
+	echo -e "Please enter the name of the repository you want to create"
+	echo -e "It should not contain spaces"
+	read name
+	echo "You chose $name"
+
+	#Check to see if there is already a repository there
+	type=$(curl -X GET -s -u $email https://api.bitbucket.org/2.0/repositories/fellowshipproductionsltd/$name | jq ".type" | sed 's/"//g')
+
+	#If there is no repository
+	if [ "$type" = "error" ]; then
+		# create the new repository
+		echo "Creating repository"
+		curl -X POST -v -u $email -H "Content-Type: application/json" https://api.bitbucket.org/2.0/repositories/fellowshipproductionsltd/$name -d '{"scm": "git", "is_private":"true", "fork_policy": "no_public_forks"}'
+		setRepo "$name"
+	else
+		# That repository already exists
+		echo That repositorty already exists
+		setupBitbucket "$email"
+	fi
+
+}
+
+function default(){
+	echo -en "Would you like to setup a new bitbucket repo? [Y/n] "
+	read choice
+	choice=$(echo -e $choice | tr '[:upper:]' '[:lower:]' | head -c 1)
+	if [ ! "$choice" = "n" ]; then
+		setupBitbucket
+	fi
+}
+
+#if [ -n "$1" ]; then
+	case "$1" in
+		"-h" | "--help")
+			help
+			exit 0
+			;;
+		"-c")
+			checkCompatibility
+			exit 0
+			;;
+		*)
+			default
+			exit 0
+	esac
+#fi
+
