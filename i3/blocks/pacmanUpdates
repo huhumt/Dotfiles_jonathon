@@ -1,0 +1,19 @@
+#!/usr/bin/sh
+
+if ! command -v checkupdates > /dev/null; then
+	echo "You need to install checkupdates";
+	echo "";
+	echo "#FF0000"
+else
+	count=$(checkupdates | wc -l)
+	if [ "$count" = "0" ]; then
+		count=""
+	fi
+	echo $count
+	echo $count
+	if [ "$count" -gt "5" ]; then
+		echo "#FFOOOO"
+	else
+		echo "#FF8000"
+	fi
+fi
