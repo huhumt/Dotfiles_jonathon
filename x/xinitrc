@@ -8,4 +8,4 @@ dbus-update-activation-environment --systemd DISPLAY
 #exec xrdb .Xresources
 xbindkeys
 exec i3 -V >> ~/i3log-$(date + '%F-%k-%M-%S') 2>&1
-exec sh /home/jonathan/.conky/conky-startup.sh
+#exec sh /home/jonathan/.conky/conky-startup.sh
