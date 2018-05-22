@@ -1,13 +1,14 @@
 #!/usr/bin/sh
 
-count=$(ssh homeServer checkupdates | wc -l)
+count=$(ssh homeServer -t checkupdates | wc -l)
 if [ "$count" = "0" ]; then
-	count=""
-fi
-echo $count
-echo $count
-if [ "$count" -gt "5" ]; then
-	echo "#FFOOOO"
+	echo ""
 else
-	echo "#FF8000"
+	echo $count
+	echo $count
+	if [ "$count" -gt "5" ]; then
+		echo "#FFOOOO"
+	else
+		echo "#FF8000"
+	fi
 fi
