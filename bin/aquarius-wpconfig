@@ -24,108 +24,54 @@ if [ -f "$DIR/wp-config.php" ]; then
 		return 1
 	fi
 fi
-echo "Creating new file"
-echo "<?php" > "$DIR/wp-config.php"
 
-if [ ! $dbname ]; then
-	echo -e "Please enter the database name \c"
-	read dbname
-fi
-echo "define('DB_NAME','$dbname');" >> "$DIR/wp-config.php"
+echo "Downloading sample"
 
-if [ ! $dbuser ]; then
-	echo -e "Please enter the database username \c"
-	read dbuser
-fi
-echo "define('DB_USER','$dbuser');" >> "$DIR/wp-config.php"
+curl "https://raw.githubusercontent.com/WordPress/WordPress/master/wp-config-sample.php" -o wp-config.php
 
-if [ ! $dbpass ]; then
-	echo -e "Please enter the database password \c"
-	read dbpass
-fi
-echo "define('DB_PASSWORD','$dbpass');" >> "$DIR/wp-config.php"
 
-if [ ! $dbhost ]; then
-	echo -e "Please enter the database host \c"
-	read dbhost
-fi
-echo "define('DB_HOST','$dbhost');" >> "$DIR/wp-config.php"
+echo "Downloading Salts"
+curl "https://api.wordpress.org/secret-key/1.1/salt/" -sSo salts
+csplit wp-config.php '/AUTH_KEY/' '/NONCE_SALT/+1'
+cat xx00 salts xx02 | tr -d '\r' > wp-config.php
+rm salts xx00 xx01 xx02
 
-#Here are the defaults that we won't change
-echo "define('DB_CHARSET','utf-8');" >> "$DIR/wp-config.php"
-echo "define('DB_COLLATE','');" >> "$DIR/wp-config.php"
 
-echo -e "Would you like to download new salts [Y/n] \c"
-read input;
+echo -e "Please enter the database name \c"
+read DBNAME
+wp config set 'DB_NAME' "$DBNAME" > /dev/null
+
+wp config set 'DB_USER' "root" > /dev/null
+wp config set 'DB_PASSWORD' "root" > /dev/null
+wp config set 'DB_HOST' "localhost" > /dev/null
+
+
+echo -e "Would you like to have debug on? [y/N] \c"
+read input
 input=$(echo -e $input | tr '[:upper:]' '[:lower:]' | head -c 1)
-if [ "$input" == "n" ]; then
-	salts=false
+if [ "$input" == "y" ]; then
+	debug=true
 else
-	salts=true
-fi
-
-
-#generate the salts
-if $salts; then
-	echo -e "Getting new salts\n"
-	curl -l https://api.wordpress.org/secret-key/1.1/salt/ >> "$DIR/wp-config.php"
-else
-	echo "define('AUTH_KEY','put your unique phrase here');" >> "$DIR/wp-config.php"
-	echo "define('SECURE_AUTH_KEY','put your unique phrase here');" >> "$DIR/wp-config.php"
-	echo "define('LOGGED_IN_KEY','put your unique phrase here');" >> "$DIR/wp-config.php"
-	echo "define('NONCE_KEY','put your unique phrase here');" >> "$DIR/wp-config.php"
-	echo "define('AUTH_SALT','put your unique phrase here');" >> "$DIR/wp-config.php"
-	echo "define('SECURE_AUTH_SALT','put your unique phrase here');" >> "$DIR/wp-config.php"
-	echo "define('LOGGED_IN_SALT','put your unique phrase here');" >> "$DIR/wp-config.php"
-	echo "define('NONCE_SALT','put your unique phrase here');" >> "$DIR/wp-config.php"
-fi
-
-
-echo "\$table_prefix = 'wp_';" >> "$DIR/wp-config.php"
-
-if [ ! $debug ]; then
-	if [ "$defaults" == "true" ]; then
-		debug=false
-		echo -e "By default, debug is off"
-		echo -e "To change, run with flag -d or --debug [user]"
-		echo -e "For more options, run with flag --help\n"
-	else
-		echo -e "Would you like to have debug on? [y/N] \c"
-		read input
-		input=$(echo -e $input | tr '[:upper:]' '[:lower:]' | head -c 1)
-		if [ "$input" == "y" ]; then
-			debug=true
-		else
-			debug=false
-		fi
-	fi
+	debug=false
 fi
 
 
 if [[ "$debug" == "true" ]] ; then
-	echo "define('WP_DEBUG',true);" >> "$DIR/wp-config.php"
-	echo "define('SAVEQUERIES',true);" >> "$DIR/wp-config.php"
+	wp config set 'WP_DEBUG' 'true' --raw --type=constant > /dev/null
+	wp config set 'SAVEQUERIES' 'true' --raw --type=constant > /dev/null
 else
-	echo "define('WP_DEBUG',false);" >> "$DIR/wp-config.php"
-	echo "define('SAVEQUERIES',false);" >> "$DIR/wp-config.php"
+	wp config set 'WP_DEBUG' 'false' --raw --type=constant > /dev/null
+	wp config set 'SAVEQUERIES' 'false' --raw --type=constant > /dev/null
 fi
 
-echo -e "Will you be running wordpress from a wp subdirectory? [Y/n] \c"
-read input
-input=$(echo -e $input | tr '[:upper:]' '[:lower:]' | head -c 1)
-if [[ $input == 'n' ]]; then
-	subdirectory="false"
-else
-	subdirectory="true"
-fi
 
 # If wordpress is installed in a sub-directory, add redirects
-if [[ "$subdirectory" == "true" ]]; then
-	echo "define( 'WP_CONTENT_DIR', dirname( __FILE__ ) . '/wp-content' );" >> "$DIR/wp-config.php"
-	echo "define( 'WP_CONTENT_URL', 'http://' . \$_SERVER['HTTP_HOST'] . '/wp-content' );" >> "$DIR/wp-config.php"
-fi
-echo "if ( !defined('ABSPATH') )" >> "$DIR/wp-config.php"
-echo "    define('ABSPATH',dirname(__FILE__) . '/'); " >> "$DIR/wp-config.php"
-
-echo "require_once(ABSPATH . 'wp-settings.php');" >> "$DIR/wp-config.php"
-
+#if [[ "$subdirectory" == "true" ]]; then
+#	echo "define( 'WP_CONTENT_DIR', dirname( __FILE__ ) . '/wp-content' );" >> "$DIR/wp-config.php"
+#	echo "define( 'WP_CONTENT_URL', 'http://' . \$_SERVER['HTTP_HOST'] . '/wp-content' );" >> "$DIR/wp-config.php"
+#fi
+#echo "if ( !defined('ABSPATH') )" >> "$DIR/wp-config.php"
+#echo "    define('ABSPATH',dirname(__FILE__) . '/'); " >> "$DIR/wp-config.php"
+#
+#echo "require_once(ABSPATH . 'wp-settings.php');" >> "$DIR/wp-config.php"
+#
