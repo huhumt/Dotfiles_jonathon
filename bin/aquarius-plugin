@@ -9,6 +9,11 @@ ssh=true
 # Cd to public html foder
 cd ${PWD%/public_html*}/public_html
 
+function doWebpack(){
+	line="$1:\t{path: path.resolve(plugins,'aquarius-$1')},"
+	sed -i "/const aquariusPlugins/a $line" webpack/variables.js
+}
+
 # Loop through arguments passed
 while test $# -gt 0; do
 	case "$1" in
@@ -57,6 +62,7 @@ while test $# -gt 0; do
 					git submodule add https://bitbucket.org/fellowshipproductionsltd/aquarius-blocks.git wp-content/plugins/aquarius-blocks
 				fi
 				npm install --save wp-content/plugins/aquarius-blocks
+				doWebpack blocks
 			fi
 			shift
 			;;
@@ -71,6 +77,7 @@ while test $# -gt 0; do
 					git submodule add https://bitbucket.org/fellowshipproductionsltd/aquarius-clients.git wp-content/plugins/aquarius-clients
 				fi
 				npm install --save wp-content/plugins/aquarius-clients
+				doWebpack clients
 			fi
 			shift
 			;;
@@ -85,6 +92,7 @@ while test $# -gt 0; do
 					git submodule add https://bitbucket.org/fellowshipproductionsltd/aquarius-news.git wp-content/plugins/aquarius-news
 				fi
 				npm install --save wp-content/plugins/aquarius-news
+				doWebpack news
 			fi
 			shift
 			;;
@@ -99,6 +107,7 @@ while test $# -gt 0; do
 					git submodule add https://bitbucket.org/fellowshipproductionsltd/aquarius-people.git wp-content/plugins/aquarius-people
 				fi
 				npm install --save wp-content/plugins/aquarius-people
+				doWebpack people
 			fi
 			shift
 			;;
@@ -127,6 +136,7 @@ while test $# -gt 0; do
 					git submodule add https://bitbucket.org/fellowshipproductionsltd/aquarius-projects.git wp-content/plugins/aquarius-projects
 				fi
 				npm install --save wp-content/plugins/aquarius-projects
+				doWebpack projects
 			fi
 			shift
 			;;
@@ -155,6 +165,7 @@ while test $# -gt 0; do
 					git submodule add https://bitbucket.org/fellowshipproductionsltd/aquarius-snippets.git wp-content/plugins/aquarius-snippets
 				fi
 				npm install --save wp-content/plugins/aquarius-snippets
+				doWebpack snippets
 			fi
 			shift
 			;;
@@ -169,6 +180,7 @@ while test $# -gt 0; do
 					git submodule add https://bitbucket.org/fellowshipproductionsltd/aquarius-widgets.git wp-content/plugins/aquarius-widgets
 				fi
 				npm install --save wp-content/plugins/aquarius-widgets
+				doWebpack widgets
 			fi
 			shift
 			;;
