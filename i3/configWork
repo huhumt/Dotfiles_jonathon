@@ -312,8 +312,8 @@ bindsym ctrl+shift+l exec --no-startup-id ~/.config/rofi/scripts/rofi-shutdown
 ##################################################
 
 for_window [class="^.*"] border pixel 0
-gaps outer 0
-gaps inner 10
+gaps outer -2
+gaps inner 5
 smart_gaps on
 
 set $mode_gaps Gaps: (o) outer, (i) inner, (d) default
