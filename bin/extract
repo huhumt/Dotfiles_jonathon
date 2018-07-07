@@ -31,6 +31,14 @@ if [ -f $1 ] ; then
 				gunzip $1
 			fi
 			;;
+		*.rar)
+			if [ "$2" ]; then
+				#tar xvf $1 -C $2
+				echo "Look into how to unrar into directory"
+			else
+				unrar x $1
+			fi
+			;;
 		*.tar)
 			if [ "$2" ]; then
 				tar xvf $1 -C $2
