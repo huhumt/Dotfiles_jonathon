@@ -50,7 +50,6 @@ function my_dir(){
 
 	# Replace Dropbox with icon
 	current_path=$(echo $current_path | sed -r -e "s/$homeIcon\/Dropbox/$dropboxIcon/")
-	
 
 	# Set the root
 	current_path=$(echo $current_path | sed -r -e "s/^\//$root/g")
@@ -88,8 +87,8 @@ POWERLEVEL9K_CUSTOM_CAPS_FOREGROUND="white"
 
 # Left Prompt
 if [[ "$(basename "/"$(ps -f -p $(cat /proc/$(echo $$)/stat | cut -d \  -f 4) | tail -1 | sed 's/^.* //'))" != "$(echo $USER)" ]]; then
-	POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(custom_dir rbenv vcs custom_caps)
+	POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(custom_dir vcs custom_caps)
 fi
 
 # Right Prompt
-POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS=(status root_indicator time)
+POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS=(status root_indicator)
