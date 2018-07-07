@@ -1,0 +1,10 @@
+#!/usr/bin/env sh
+
+echo "$1"
+echo "$1"
+curl "$1" 2> /dev/null | grep -q "$2"
+if [ $? -eq 0 ]; then
+	echo "#00FF00"
+else
+	echo "#FF8000"
+fi

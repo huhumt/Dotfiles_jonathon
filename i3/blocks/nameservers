@@ -1,0 +1,18 @@
+#!/usr/bin/sh
+
+#drill ns racingblue.com | sed -ne '/ANSWER SECTION/,/AUTHORITY SECTION/ p'
+
+case $BLOCK_BUTTON in
+	1)
+		echo "HI"
+		echo "HI"
+		echo ""
+		exit 0
+		;;
+esac
+
+NAMESERVERS=$(drill ns "$1" | sed -ne '/ANSWER SECTION/,/AUTHORITY SECTION/ p' | head -n -2 | tail -n +2 | awk '{ print $5" " }' | xargs echo)
+
+echo "$NAMESERVERS"
+echo "$NAMESERVERS"
+echo ""
