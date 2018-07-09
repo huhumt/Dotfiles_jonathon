@@ -270,6 +270,7 @@ bar {
 
 bindsym $mod+c exec chromium-snapshot-bin, workspace $workspace1
 bindsym $mod+Shift+c exec google-chrome-stable --force-device-scale-factor=2, workspace $workspace1
+bindsym $mod+b exec dbeaver
 bindsym control+mod1+f exec thunar
 bindsym XF86Mail exec thunderbird
 bindsym $mod+z exec zeal
