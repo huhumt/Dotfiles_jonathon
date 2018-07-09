@@ -1,0 +1,33 @@
+#!/usr/bin/sh
+
+
+case $BLOCK_BUTTON in
+	1)
+		echo "HI"
+		echo "HI"
+		echo ""
+		exit 0
+		;;
+esac
+
+LOOKUP="a"
+if [ ! -z "$2" ]; then
+	LOOKUP="$2"
+fi
+
+COLOR=""
+
+NAMESERVERS=$(drill "$LOOKUP" "$1" | sed -ne '/ANSWER SECTION/,/AUTHORITY SECTION/ p' | head -n -2 | tail -n +2 | awk '{ print $5" " }' | xargs echo)
+
+if [ ! -z "$3" ]; then
+	if [ "$NAMESERVERS" = "$3" ]; then
+		COLOR="#00FF00"
+	else
+		COLOR="#FF8000"
+	fi
+fi
+
+echo "$NAMESERVERS"
+echo "$NAMESERVERS"
+echo "$COLOR"
+
