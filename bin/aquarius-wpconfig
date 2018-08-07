@@ -25,9 +25,13 @@ if [ -f "$DIR/wp-config.php" ]; then
 	fi
 fi
 
-echo "Downloading sample"
+if [ ! -f "$DIR/wp-config-sample.php" ]; then
+    echo "File not found!"
+	echo "Downloading sample"
+	curl "https://raw.githubusercontent.com/WordPress/WordPress/master/wp-config-sample.php" -o wp-config.php
+fi
 
-curl "https://raw.githubusercontent.com/WordPress/WordPress/master/wp-config-sample.php" -o wp-config.php
+cp wp-config-sample.php wp-config.php
 
 
 echo "Downloading Salts"
@@ -45,6 +49,7 @@ wp config set 'DB_USER' "root" > /dev/null
 wp config set 'DB_PASSWORD' "root" > /dev/null
 wp config set 'DB_HOST' "localhost" > /dev/null
 
+wp config set 'JQUERY' "/wp-includes/js/jquery/jquery.js" --type=constant > /dev/null
 
 echo -e "Would you like to have debug on? [y/N] \c"
 read input
