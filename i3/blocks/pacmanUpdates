@@ -7,10 +7,13 @@ if ! command -v checkupdates > /dev/null; then
 else
 	count=$(checkupdates | wc -l)
 	if [ "$count" = "0" ]; then
-		count=""
+		echo ""
+		echo ""
+		echo ""
+		exit 0
 	fi
-	echo $count
-	echo $count
+	echo "$label $count"
+	echo "$label $count"
 	if [ "$count" -gt "5" ]; then
 		echo "#FFOOOO"
 	else

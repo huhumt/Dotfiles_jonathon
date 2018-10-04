@@ -1,7 +1,8 @@
 #!/usr/bin/sh
 
 
-COMMAND="playerctl --player=$BLOCK_INSTANCE"
+#COMMAND="playerctl --player=$BLOCK_INSTANCE"
+COMMAND="playerctl"
 
 case $BLOCK_BUTTON in
 	1) $COMMAND previous ;;

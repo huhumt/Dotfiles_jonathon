@@ -18,8 +18,8 @@ if [ "$BLOCK_BUTTON" = "1" ]; then
 	echo "$used/$total"
 	echo "$used/$total"
 else
-	echo "$percent%"
-	echo "$percent%"
+	echo "$label $percent%"
+	echo "$label $percent%"
 fi
 
 
