@@ -112,8 +112,7 @@ function ptheme() {
 	fi
 }
 
-#Takes you to the child theme
-function theme() {
+function get_theme() {
 	public_html=${PWD%/public_html*}/public_html
 	if [ -d $public_html ]; then
 		if [ -d $public_html/wp ]; then
@@ -123,62 +122,36 @@ function theme() {
 		fi
 		theme=$(dirname $(wp --path="$wpPath" theme path $(wp --path="$wpPath" theme list | grep "active" | grep -v "inactive" | awk '{print $1}')))
 		if [ -d $theme ]; then
-			cd $theme
+			echo $theme
 		else
-			echo " Can't find theme folder "
+			echo ""
 		fi
 	else
-		echo " Can't find public_html folder."
+		echo ""
+	fi
+}
+
+#Takes you to the child theme
+function theme() {
+	ctheme=$(get_theme)
+	if [ ! -z "$ctheme" ]; then
+		cd $ctheme
 	fi
 }
 
 #Takes you to the js folder child theme
 function js() {
-	public_html=${PWD%/public_html*}/public_html
-	if [ -d $public_html ]; then
-		if [ -d $public_html/wp ]; then
-			wpPath=$public_html/wp;
-		else
-			wpPath=$public_html;
-		fi
-		theme=$(dirname $(wp --path="$wpPath" theme path $(wp --path="$wpPath" theme list | grep "active" | grep -v "inactive" | awk '{print $1}')))
-		if [ -d $theme ]; then
-			if [ -d "$theme/js" ]; then
-				cd "$theme/js"
-			else
-				echo "Can't find a JS folder. Here is the theme"
-				cd "$theme"
-			fi
-		else
-			echo " Can't find theme folder "
-		fi
-	else
-		echo " Can't find public_html folder."
+	ctheme=$(get_theme)
+	if [ ! -z "$ctheme" ]; then
+		cd $ctheme/js
 	fi
 }
 
 #Takes you to the css folder child theme
 function css() {
-	public_html=${PWD%/public_html*}/public_html
-	if [ -d $public_html ]; then
-		if [ -d $public_html/wp ]; then
-			wpPath=$public_html/wp;
-		else
-			wpPath=$public_html;
-		fi
-		theme=$(dirname $(wp --path="$wpPath" theme path $(wp --path="$wpPath" theme list | grep "active" | grep -v "inactive" | awk '{print $1}')))
-		if [ -d $theme ]; then
-			if [ -d "$theme/css" ]; then
-				cd "$theme/css"
-			else
-				echo "Can't find a CSS folder. Here is the theme"
-				cd "$theme"
-			fi
-		else
-			echo " Can't find theme folder "
-		fi
-	else
-		echo " Can't find public_html folder."
+	ctheme=$(get_theme)
+	if [ ! -z "$ctheme" ]; then
+		cd $ctheme/css
 	fi
 }
 
@@ -192,6 +165,40 @@ function plugins() {
 			wpPath=$public_html;
 		fi
 		cd $(wp --path="$wpPath" plugin path)
+	else
+		echo " Can't find public_html folder."
+	fi
+}
+
+#Copies a woo tepmplate file to the theme
+function woocp() {
+	public_html=${PWD%/public_html*}/public_html
+	if [ -d $public_html ]; then
+		if [ -d $public_html/wp ]; then
+			wpPath=$public_html/wp;
+		else
+			wpPath=$public_html;
+		fi
+		woocommerce=$(dirname $(wp --path="$wpPath" plugin path woocommerce))
+		themes=$(dirname $(wp --path="$wpPath" theme path ))
+		if [ -d "$woocommerce" ]; then
+			#If we are here, we know what the woocommerce path is.
+			# If in WOO directory, we want to copy to the theme directory. If we are not in Woo directory, copy to the current directory
+			case $PWD/ in
+				$woocommerce/*)
+					theme=$(get_theme)
+					#if [[ $PWD = $woocommerce/templates
+					;;
+				$themes/*)
+					echo "in themes dir"
+					;;
+				*)
+					echo "soewhere else"
+					;;
+			esac
+		else
+			echo "Can't find woocommerce"
+		fi;
 	else
 		echo " Can't find public_html folder."
 	fi
