@@ -1,0 +1,27 @@
+#!/usr/bin/env bash
+# Purpose: batch image resizer
+
+# absolute path to image folder
+FOLDER="$PWD"
+
+# max height
+WIDTH=${1:-"999999"}
+
+# max width
+HEIGHT=${2:-"999999"}
+
+echo "Width: $WIDTH";
+echo "Height: $HEIGHT";
+
+#resize png or jpg to either height or width, keeps proportions using imagemagick
+#find ${PWD} -iname '*.jpg' -o -iname '*.png' -exec echo convert \{} -verbose -resize $WIDTHx$HEIGHT\> \{}.new.jpg \;
+find ${PWD} \( -iname "*.jpg" -o -iname "*.png" \) -exec convert {} -verbose -resize "$WIDTH"x"$HEIGHT" \{}.new \;
+
+#resize png to either height or width, keeps proportions using imagemagick
+#find ${FOLDER} -iname '*.png' -exec convert \{} -verbose -resize $WIDTHx$HEIGHT\> \{} \;
+
+#resize jpg only to either height or width, keeps proportions using imagemagick
+#find ${FOLDER} -iname '*.jpg' -exec convert \{} -verbose -resize $WIDTHx$HEIGHT\> \{} \;
+
+# alternative
+#mogrify -path ${FOLDER} -resize ${WIDTH}x${HEIGHT}% *.png -verbose
