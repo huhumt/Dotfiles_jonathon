@@ -1,6 +1,8 @@
-if(window.location.host.indexOf(".local") != -1){
+console.log( "yay" );
+if(window.location.host.indexOf(".local.jh") == -1){
+console.log( "I get here" );
 	var xhr = new XMLHttpRequest();
-	xhr.open('GET', 'https://dotjs.local/' + window.location.host.replace(/^www\./, '') + '.js');
+	xhr.open('GET', 'https://dotjs.local.jh/' + window.location.host.replace(/^www\./, '') + '.js');
 
 	xhr.onreadystatechange = function() {
 		if(xhr.readyState == 4) {
@@ -11,7 +13,7 @@ if(window.location.host.indexOf(".local") != -1){
 				return;
 			} else if(xhr.status == 404) {
 				var defaultXHR = new XMLHttpRequest();
-				defaultXHR.open('GET', 'https://dotjs.local/default.js');
+				defaultXHR.open('GET', 'https://dotjs.local.jh/default.js');
 				defaultXHR.onreadystatechange = function() {
 					if (defaultXHR.readyState == 4 && defaultXHR.status == 200){
 						var script = document.createElement('script');
