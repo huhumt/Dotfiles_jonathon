@@ -4,8 +4,8 @@ count=$(ssh homeServer -t checkupdates | wc -l)
 if [ "$count" = "0" ]; then
 	echo ""
 else
-	echo $count
-	echo $count
+	echo "$label $count"
+	echo "$label $count"
 	if [ "$count" -gt "5" ]; then
 		echo "#FFOOOO"
 	else
