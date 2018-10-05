@@ -94,3 +94,8 @@ TRAPWINCH(){
 #if [ -f ~/.current-folder ] && [ ! $TMUX ]; then
 #	\cd "$(cat ~/.current-folder)"
 #fi
+
+#[ -z "$TMUX"  ] && { exec tmux new-session && exit;}
+#if [[ ! $TERM =~ screen ]]; then
+#    exec tmux
+#fi
