@@ -34,6 +34,7 @@ myLink $HOME/.dotfiles/shells/bash/bashrc $HOME/.bashrc
 
 #X
 myLink $HOME/.dotfiles/x/xinitrc $HOME/.xinitrc
+myLink /home/jonathan/.dotfiles/x/xmodmap $HOME/.Xmodmap
 
 #Git
 myLink $HOME/.dotfiles/git/gitconfig $HOME/.gitconfig
@@ -44,6 +45,9 @@ myLink $HOME/.dotfiles/i3/config $HOME/.config/i3/config
 
 #i3blocks
 myLink $HOME/.dotfiles/i3/i3blocks.conf $HOME/.i3blocks.conf
+
+#dunst
+myLink $HOME/.dotfiles/dunst $HOME/.config/dunst
 
 #vim
 myLink $HOME/.dotfiles/vim $HOME/.vim

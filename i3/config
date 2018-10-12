@@ -364,6 +364,7 @@ mode "$mode_gaps_outer" {
 
 exec_always --no-startup-id setbackground
 exec --no-startup-id compton -f -i 0.95
-exec_always --no-startup-id albert
+#exec_always --no-startup-id albert
+exec_always --no-startup-id /usr/bin/dunst
 exec --no-startup-id xfce4-clipman
 exec setxkbmap gb
