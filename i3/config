@@ -255,8 +255,8 @@ bar {
 #Use xfce4 panel instead of i3's
 #exec --no-startup-id xfce4-panel --disable-wm-check
 
-bindsym $mod+c exec chromium, workspace $workspace1
-bindsym $mod+Shift+c exec chromium --force-device-scale-factor=2, workspace $workspace1
+bindsym $mod+c exec chromium-snapshot-bin, workspace $workspace1
+bindsym $mod+Shift+c exec chromium-snapshot-bin --force-device-scale-factor=2, workspace $workspace1
 bindsym control+mod1+f exec thunar
 bindsym $mod+z exec zeal
 
@@ -274,8 +274,8 @@ bindsym XF86MonBrightnessDown exec xbacklight -dec 20 # decrease screen brightne
 bindsym XF86TouchpadToggle exec /some/path/toggletouchpad.sh # toggle touchpad
 
 # Media player controls
-bindsym XF86AudioPlay exec playerctl play
-bindsym XF86AudioPause exec playerctl pause
+bindsym XF86AudioPlay exec playerctl play-pause
+bindsym XF86AudioPause exec playerctl play-pause
 bindsym XF86AudioNext exec playerctl next
 bindsym XF86AudioPrev exec playerctl previous
 
