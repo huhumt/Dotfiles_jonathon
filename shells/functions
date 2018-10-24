@@ -90,7 +90,7 @@ function createFPLreport(){
 
 #Takes you to the parent theme
 function ptheme() {
-	public_html=${PWD%/public_html*}/public_html
+	public_html=${${PWD%/public_html*}%/wiki*}/public_html
 	if [ -d $public_html ]; then
 		if [ -d $public_html/wp ]; then
 			wpPath=$public_html/wp;
@@ -113,7 +113,7 @@ function ptheme() {
 }
 
 function get_theme() {
-	public_html=${PWD%/public_html*}/public_html
+	public_html=${${PWD%/public_html*}%/wiki*}/public_html
 	if [ -d $public_html ]; then
 		if [ -d $public_html/wp ]; then
 			wpPath=$public_html/wp;
@@ -157,7 +157,7 @@ function css() {
 
 #Takes you to the plugin directory
 function plugins() {
-	public_html=${PWD%/public_html*}/public_html
+	public_html=${${PWD%/public_html*}%/wiki*}/public_html
 	if [ -d $public_html ]; then
 		if [ -d $public_html/wp ]; then
 			wpPath=$public_html/wp;
@@ -165,6 +165,36 @@ function plugins() {
 			wpPath=$public_html;
 		fi
 		cd $(wp --path="$wpPath" plugin path)
+	else
+		echo " Can't find public_html folder."
+	fi
+}
+
+#Takes you to the woocommece plugin directory
+function woo() {
+	public_html=${${PWD%/public_html*}%/wiki*}/public_html
+	if [ -d $public_html ]; then
+		if [ -d $public_html/wp ]; then
+			wpPath=$public_html/wp;
+		else
+			wpPath=$public_html;
+		fi
+		cd $(dirname $(wp --path="$wpPath" plugin path woocommerce))
+	else
+		echo " Can't find public_html folder."
+	fi
+}
+
+#Takes you to the woocommerce templates plugin directory
+function wooTemplates() {
+	public_html=${${PWD%/public_html*}%/wiki*}/public_html
+	if [ -d $public_html ]; then
+		if [ -d $public_html/wp ]; then
+			wpPath=$public_html/wp;
+		else
+			wpPath=$public_html;
+		fi
+		cd $(dirname $(wp --path="$wpPath" plugin path woocommerce))/templates
 	else
 		echo " Can't find public_html folder."
 	fi
@@ -206,7 +236,7 @@ function woocp() {
 
 #Takes you to the theme directory
 function themes() {
-	public_html=${PWD%/public_html*}/public_html
+	public_html=${${PWD%/public_html*}%/wiki*}/public_html
 	if [ -d $public_html ]; then
 		if [ -d $public_html/wp ]; then
 			wpPath=$public_html/wp;
@@ -216,6 +246,13 @@ function themes() {
 		cd $(wp --path="$wpPath" theme path)
 	else
 		echo " Can't find public_html folder."
+	fi
+}
+
+function todo() {
+	wikidir=${${PWD%/public_html*}%/wiki*}/wiki
+	if [ -d "$wikidir" ]; then
+		$EDITOR "$wikidir/ToDo.md"
 	fi
 }
 

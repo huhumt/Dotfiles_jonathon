@@ -76,7 +76,8 @@ alias home="cd ~/"
 alias ~="cd ~/"
 
 #Goes up to the public_html folder
-alias ph='cd ${PWD%/public_html*}/public_html'
+alias ph='cd ${${PWD%/public_html*}%/wiki*}/public_html'
+alias wiki='cd ${${PWD%/public_html*}%/wiki*}/wiki'
 
 #Edit wp-config.php using $EDITOR
 alias conf='$EDITOR ${PWD%/public_html*}/public_html/wp-config.php'
