@@ -1,6 +1,4 @@
-console.log( "yay" );
 if(window.location.host.indexOf(".local.jh") == -1){
-console.log( "I get here" );
 	var xhr = new XMLHttpRequest();
 	xhr.open('GET', 'https://dotjs.local.jh/' + window.location.host.replace(/^www\./, '') + '.js');
 
