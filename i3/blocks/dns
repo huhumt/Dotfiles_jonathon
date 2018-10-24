@@ -27,7 +27,7 @@ if [ ! -z "$3" ]; then
 	fi
 fi
 
-echo "$NAMESERVERS"
+echo "$label $NAMESERVERS"
 echo "$NAMESERVERS"
 echo "$COLOR"
 
