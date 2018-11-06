@@ -8,7 +8,7 @@ source $SCRIPTPATH/servers.private
 checkAllSites(){
 	eval server=( \${$1[@]} )
 	for site in ${server[@]}; do
-		printf "%-35s | %s \n" "$site" "$(checkURL $site)"
+		printf "%-35s | %s \n" "$site" "$(checkURL $site $1)"
 	done
 }
 
@@ -19,11 +19,14 @@ checkRandomSite(){
 	random=$(( ( RANDOM % (${#server[@]} - 1) )  + 1 ))
 	urlToCheck=${server[$random]}
 	echo $urlToCheck
-	echo $(checkURL $urlToCheck)
+	echo $(checkURL $urlToCheck $1)
 }
 
 checkURL(){
-	responce=$(curl -s --head -w %{http_code} $1 -L -o /dev/null --connect-timeout 60)
+	responce=$(curl -s --head -w %{http_code} $1 -L -o /dev/null --connect-timeout 10)
+	if [ "$responce" != 200 ]; then
+		pgrep -x dunst && notify-send -u critical "$1 is down" "<b>Server:</b> $2\n<b>Responce:</b> $responce"
+	fi
 	echo $responce
 }
 
@@ -39,6 +42,7 @@ if [ ! -z "$1" ]; then
 			echo "#00FF00"
 		else
 			echo "#FF8000"
+
 		fi
 	elif [ "$2" = "all" ]; then
 		checkAllSites $1
