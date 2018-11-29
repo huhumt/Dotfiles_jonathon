@@ -25,7 +25,7 @@ checkRandomSite(){
 checkURL(){
 	responce=$(curl -s --head -w %{http_code} $1 -L -o /dev/null --connect-timeout 10)
 	if [ "$responce" != 200 ]; then
-		pgrep -x dunst && notify-send -u critical "$1 is down" "<b>Server:</b> $2\n<b>Responce:</b> $responce"
+		pgrep -x dunst && notify-send -u critical "$1 is down" "<b>Server:</b> $2\n<b>Responce:</b> $responce" & disown
 	fi
 	echo $responce
 }
