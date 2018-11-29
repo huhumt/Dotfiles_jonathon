@@ -70,7 +70,7 @@ bindsym $mod+u exec ~/.dotfiles/rofi/scripts/rofi-emoji
 bindsym $mod+Shift+x exec killall i3
 
 # Man page lookup
-bindsym $mod+m exec man -k . | awk '{ print $1 " " $2 }' | rofi -dmenu -p man | awk '{ print $2 " " $1 }' | tr -d '()' | xargs st -e man
+bindsym $mod+m exec man -k . | awk '{ print $1 " " $2 }' | rofi -dmenu -p man | awk '{ print $2 " " $1 }' | tr -d '()' | xargs man -t | ps2pdf - - | zathura -
 
 
 # Send signals to i3 blocks and zsh to tell them that capslock has been pushed
