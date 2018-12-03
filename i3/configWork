@@ -70,8 +70,10 @@ bindsym $mod+u exec ~/.dotfiles/rofi/scripts/rofi-emoji
 bindsym $mod+Shift+x exec killall i3
 
 # Man page lookup
-bindsym $mod+m exec man -k . | awk '{ print $1 " " $2 }' | rofi -dmenu -p man | awk '{ print $2 " " $1 }' | tr -d '()' | xargs man -t | ps2pdf - - | zathura -
+bindsym $mod+m exec man -k . | awk '{ print $1 " " $2 }' | rofi -dmenu -p man -matching regex | awk '{ print $2 " " $1 }' | tr -d '()' | xargs man -t | ps2pdf - - | zathura -
 
+# TLDR page lookup
+bindsym $mod+Shift+m exec "/usr/bin/tldr --list-all | sed 's/, /\\n/g' | rofi -dmenu -p ';TLDR' -matching regex | xargs tldr -m | pandoc -f markdown -t ms | groff -ms - -T pdf | zathura -"
 
 # Send signals to i3 blocks and zsh to tell them that capslock has been pushed
 # The message to zsh is technically a "window change" which causes zsh to re-draw the prompt
@@ -239,6 +241,7 @@ bar {
         status_command i3blocks
 		output primary
         tray_output primary
+		position top
         colors {
               separator $base03
               background $base01
@@ -256,6 +259,7 @@ bar {
         status_command i3blocks -c ~/.dotfiles/i3/i3blocks-secondary.conf
 		output HDMI-1
 		tray_output none
+		position top
         colors {
               separator $base03
               background $base01
