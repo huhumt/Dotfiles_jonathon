@@ -59,6 +59,9 @@ bindsym $mod+q kill
 # Start Rofi as program launcher
 bindsym $mod+d exec rofi -show drun
 
+# Start Rofi as ssh launcher
+bindsym $mod+Shift+d exec rofi -show ssh
+
 #Start Rofi as emoji finder
 bindsym $mod+u exec ~/.dotfiles/rofi/scripts/rofi-emoji
 
