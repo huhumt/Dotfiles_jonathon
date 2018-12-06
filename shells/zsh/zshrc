@@ -99,3 +99,5 @@ TRAPWINCH(){
 #if [[ ! $TERM =~ screen ]]; then
 #    exec tmux
 #fi
+#
+tldr --linux -r

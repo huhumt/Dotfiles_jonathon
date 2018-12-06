@@ -1,0 +1,10 @@
+#!/usr/bin/env sh
+folder="$HOME/.local/share/Zeal/Zeal/docsets/WordPress.docset/Contents/Resources/Documents/developer.wordpress.org/reference/"
+file=$(find "$folder" -name "index.html" -not -path "*/page/*" -not -path "*/since/*" |
+	awk -F '/' '{print "(" $(NF-2) ") " $(NF-1)}' |
+	rofi -dmenu |
+	tr -d '()' |
+	awk  '{print $1 "/" $2 "/index.html"}')
+#file=$(find "$folder" -name "index.html" -not -path "*/methods/*" )
+#echo "$file"
+echo "$folder$file" | xargs qutebrowser
