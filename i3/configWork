@@ -140,7 +140,7 @@ bindsym $mod+space focus mode_toggle
 bindsym $mod+a focus parent
 
 # focus the child container
-bindsym $mod+Shift+a focus child
+#bindsym $mod+Shift+a focus child
 
 
 #set workspace names
@@ -201,30 +201,30 @@ bindsym $mod+Shift+r restart
 
 # resize window (you can also use the mouse for that)
 mode "resize" {
-        # These bindings trigger as soon as you enter the resize mode
+	# These bindings trigger as soon as you enter the resize mode
 
-        # Pressing left will shrink the window’s width.
-        # Pressing right will grow the window’s width.
-        # Pressing up will shrink the window’s height.
-        # Pressing down will grow the window’s height.
-        bindsym h resize shrink width 10 px or 10 ppt
-        bindsym j resize grow height 10 px or 10 ppt
-        bindsym k resize shrink height 10 px or 10 ppt
-        bindsym l resize grow width 10 px or 10 ppt
-        bindsym $mod+h resize shrink width 2 px or 2 ppt
-        bindsym $mod+j resize grow height 2 px or 2 ppt
-        bindsym $mod+k resize shrink height 2 px or 2 ppt
-        bindsym $mod+l resize grow width 2 px or 2 ppt
+	# Pressing left will shrink the window’s width.
+	# Pressing right will grow the window’s width.
+	# Pressing up will shrink the window’s height.
+	# Pressing down will grow the window’s height.
+	bindsym h resize shrink width 10 px or 10 ppt
+	bindsym j resize grow height 10 px or 10 ppt
+	bindsym k resize shrink height 10 px or 10 ppt
+	bindsym l resize grow width 10 px or 10 ppt
+	bindsym $mod+h resize shrink width 2 px or 2 ppt
+	bindsym $mod+j resize grow height 2 px or 2 ppt
+	bindsym $mod+k resize shrink height 2 px or 2 ppt
+	bindsym $mod+l resize grow width 2 px or 2 ppt
 
-        # same bindings, but for the arrow keys
-        bindsym Left resize shrink width 10 px or 10 ppt
-        bindsym Down resize grow height 10 px or 10 ppt
-        bindsym Up resize shrink height 10 px or 10 ppt
-        bindsym Right resize grow width 10 px or 10 ppt
+	# same bindings, but for the arrow keys
+	bindsym Left resize shrink width 10 px or 10 ppt
+	bindsym Down resize grow height 10 px or 10 ppt
+	bindsym Up resize shrink height 10 px or 10 ppt
+	bindsym Right resize grow width 10 px or 10 ppt
 
-        # back to normal: Enter or Escape
-        bindsym Return mode "default"
-        bindsym Escape mode "default"
+	# back to normal: Enter or Escape
+	bindsym Return mode "default"
+	bindsym Escape mode "default"
 }
 
 bindsym $mod+r mode "resize"
@@ -241,39 +241,39 @@ bindsym $mod+r mode "resize"
 # Start i3bar to display a workspace bar (plus the system information i3status
 # finds out, if available)
 bar {
-        #status_command i3status
-        status_command i3blocks
-		output primary
-        tray_output primary
-		position top
-        colors {
-              separator $base03
-              background $base01
-              statusline $base05
-        #                        border  background text
-              focused_workspace  $base01 $base01    $base07
-              active_workspace   $base01 $base02    $base03
-              inactive_workspace $base01 $base01    $base03
-              urgent_workspace   $base01 $base01    $base08
-            }
+	#status_command i3status
+	status_command i3blocks
+	output primary
+	tray_output primary
+	position top
+	colors {
+		separator $base03
+		background $base01
+		statusline $base05
+		#                  border  background text
+		focused_workspace  $base01 $base01    $base07
+		active_workspace   $base01 $base02    $base03
+		inactive_workspace $base01 $base01    $base03
+		urgent_workspace   $base01 $base01    $base08
+	}
 }
 
 bar {
-        #status_command i3status
-        status_command i3blocks -c ~/.dotfiles/i3/i3blocks-secondary.conf
-		output HDMI-1
-		tray_output none
-		position top
-        colors {
-              separator $base03
-              background $base01
-              statusline $base05
-        #                        border  background text
-              focused_workspace  $base01 $base01    $base07
-              active_workspace   $base01 $base02    $base03
-              inactive_workspace $base01 $base01    $base03
-              urgent_workspace   $base01 $base01    $base08
-            }
+	#status_command i3status
+	status_command i3blocks -c ~/.dotfiles/i3/i3blocks-secondary.conf
+	output HDMI-1
+	tray_output none
+	position top
+    colors {
+		separator $base03
+		background $base01
+		statusline $base05
+		#                  border  background text
+		focused_workspace  $base01 $base01    $base07
+		active_workspace   $base01 $base02    $base03
+		inactive_workspace $base01 $base01    $base03
+		urgent_workspace   $base01 $base01    $base08
+	}
 }
 
 bindsym $mod+c exec chromium-snapshot-bin, workspace $workspace1
@@ -289,6 +289,7 @@ bindsym XF86AudioRaiseVolume exec --no-startup-id pactl set-sink-volume 0 +5%  &
 bindsym XF86AudioLowerVolume exec --no-startup-id pactl set-sink-volume 0 -5%  && pkill -SIGRTMIN+10 i3blocks #decrease sound volume
 bindsym XF86AudioMute exec --no-startup-id pactl set-sink-mute 0 toggle  && pkill -SIGRTMIN+10 i3blocks # mute sound
 
+#Alt + scroll for volume
 bindsym --whole-window $alt+button4 exec --no-startup-id pactl set-sink-volume 0 -5% && pkill -SIGRTMIN+10 i3blocks #decrease sound volume
 bindsym --whole-window $alt+button5 exec --no-startup-id pactl set-sink-volume 0 +5% && pkill -SIGRTMIN+10 i3blocks #increase sound volume
 
@@ -297,9 +298,9 @@ bindsym --whole-window $alt+button5 exec --no-startup-id pactl set-sink-volume 0
 
 # Media player controls
 bindsym XF86AudioPlay exec playerctl play-pause
-#bindsym XF86AudioPause exec playerctl pause
-#bindsym XF86AudioNext exec playerctl next
-#bindsym XF86AudioPrev exec playerctl previous
+bindsym XF86AudioPause exec playerctl pause
+bindsym XF86AudioNext exec playerctl next
+bindsym XF86AudioPrev exec playerctl previous
 
 #calculator button
 bindsym XF86Calculator exec galculator
@@ -332,41 +333,41 @@ set $mode_gaps_inner Inner Gaps: +|-|0 (local), Shift + +|-|0 (global)
 
 bindsym $mod+Shift+g mode "$mode_gaps"
 mode "$mode_gaps" {
-        bindsym o			mode "$mode_gaps_outer"
-        bindsym i			mode "$mode_gaps_inner"
-		bindsym d			gaps inner current set 10; gaps outer current set 0
-		bindsym Shift+d		gaps inner all set 10; gaps outer all set 0
-        bindsym Return mode "default"
-        bindsym Escape mode "default"
+	bindsym o			mode "$mode_gaps_outer"
+	bindsym i			mode "$mode_gaps_inner"
+	bindsym d			gaps inner current set 10; gaps outer current set 0
+	bindsym Shift+d		gaps inner all set 10; gaps outer all set 0
+	bindsym Return mode "default"
+	bindsym Escape mode "default"
 }
 
 mode "$mode_gaps_inner" {
-        bindsym plus  gaps inner current plus 5
-        bindsym minus gaps inner current minus 5
-        bindsym 0     gaps inner current set 0
-		bindsym d			gaps inner current set 10
+	bindsym plus  gaps inner current plus 5
+	bindsym minus gaps inner current minus 5
+	bindsym 0     gaps inner current set 0
+	bindsym d			gaps inner current set 10
 
-        bindsym Shift+plus  gaps inner all plus 5
-        bindsym Shift+minus gaps inner all minus 5
-        bindsym Shift+0     gaps inner all set 0
-		bindsym Shift+d		gaps inner all set 10
+	bindsym Shift+plus  gaps inner all plus 5
+	bindsym Shift+minus gaps inner all minus 5
+	bindsym Shift+0     gaps inner all set 0
+	bindsym Shift+d		gaps inner all set 10
 
-        bindsym Return mode "default"
-        bindsym Escape mode "default"
+	bindsym Return mode "default"
+	bindsym Escape mode "default"
 }
 mode "$mode_gaps_outer" {
-        bindsym plus  gaps outer current plus 5
-        bindsym minus gaps outer current minus 5
-        bindsym 0     gaps outer current set 0
-		bindsym d			gaps outer current set 0
+	bindsym plus  gaps outer current plus 5
+	bindsym minus gaps outer current minus 5
+	bindsym 0     gaps outer current set 0
+	bindsym d			gaps outer current set 0
 
-        bindsym Shift+plus  gaps outer all plus 5
-        bindsym Shift+minus gaps outer all minus 5
-        bindsym Shift+0     gaps outer all set 0
-		bindsym Shift+d		gaps outer all set 0
+	bindsym Shift+plus  gaps outer all plus 5
+	bindsym Shift+minus gaps outer all minus 5
+	bindsym Shift+0     gaps outer all set 0
+	bindsym Shift+d		gaps outer all set 0
 
-        bindsym Return mode "default"
-        bindsym Escape mode "default"
+	bindsym Return mode "default"
+	bindsym Escape mode "default"
 }
 
 exec --no-startup-id redshift
