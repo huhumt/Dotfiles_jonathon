@@ -27,7 +27,17 @@ textype() { \
 	biber --input-directory "$dir" "$base" &&
 	$command --output-directory="$dir" "$base" &&
 	$command --output-directory="$dir" "$base"
-	}
+}
+
+mdtype(){ \
+	command=${2:-"default"}
+	echo "$command"
+	case "$command" in
+		"fplreport") pandoc "$file" --template fellowship.latex --pdf-engine=xelatex -o "${base}.pdf" ;;
+		"letter") pandoc "$file" --template template-letter.tex -o "${base}.pdf" ;;
+		*) pandoc "$file" -o "$base".pdf ;;
+	esac
+}
 
 shebangtest() {
 	case "$shebang" in
@@ -42,7 +52,8 @@ case "$file" in
 	*\.rmd) echo "require(rmarkdown); render('$file')" | R -q --vanilla ;;
 	*\.tex|*\.latex) textype "$file" ;;
 	#*\.md) pandoc "$file" --pdf-engine=xelatex -o "$base".pdf ;;
-	*\.md) pandoc "$file" -o "$base".pdf ;;
+	#*\.md) pandoc "$file" -o "$base".pdf ;;
+	*\.md) mdtype "$file" "$2" ;;
 	*config.h) make && sudo make install ;;
         *\.c) cc "$file" -o "$base" && "$base" ;;
 	*\.py) python "$file" ;;
