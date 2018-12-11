@@ -1,0 +1,14 @@
+#!/usr/bin/sh
+
+
+socket="${SOCKET:-/tmp/mpvsocket}"
+
+#case $BLOCK_BUTTON in
+#	1) $COMMAND previous ;;
+#	3) $COMMAND next ;;
+#esac
+
+
+echo '{ "command": ["get_property_string", "filtered-metadata"] }' | socat - /tmp/mpvsocket | jq '.data' | sed 's/"{\\"icy-title\\":\\"//g' | sed 's/\\"}"//g'
+echo ""
+echo "#00FF00"

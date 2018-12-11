@@ -10,16 +10,16 @@ case $BLOCK_BUTTON in
 esac
 
 
-if [ "$($COMMAND status)" = "Playing" ]; then
+if [ "$($COMMAND status 2> /dev/null )" = "Playing" ]; then
 	colour="#00FF00"
 else
 	colour="#FF8000"
 fi
 
-title=$($COMMAND metadata title | sed "s/\&/\&amp;/g")
-artist=$($COMMAND metadata artist | sed "s/\&/\&amp;/g")
+title=$($COMMAND metadata title 2> /dev/null | sed "s/\&/\&amp;/g")
+artist=$($COMMAND metadata artist 2> /dev/null | sed "s/\&/\&amp;/g")
 
-if [ "$title" != "(null)" ]; then
+if [ "$title" != "" ]; then
 	ret="<span foreground='$colour'>$title</span>"
 	if [ -n "$artist" ]; then
 		ret="$ret - $artist"
@@ -27,6 +27,4 @@ if [ "$title" != "(null)" ]; then
 
 	echo "$ret";
 fi
-
-
 
