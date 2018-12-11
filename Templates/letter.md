@@ -7,13 +7,14 @@ address:
 # return-address # From Address. You can use \email for auto configured email
 # cc
 # ps
-encl:
-- cv
-- another letter
-opening: Dear Bob,
+#encl:
+#- cv
+#- another letter
+#opening: Dear Bob,
 # closing
 subject: My Subject
 # colorlinks: true
+#numbersections: true
 ...
 
 This is my letter

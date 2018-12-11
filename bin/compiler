@@ -29,19 +29,13 @@ textype() { \
 	$command --output-directory="$dir" "$base"
 }
 
-mdtype() {\
-	type="${2:-default}"
-	
-	case "$type" in
-		"letter")
-			pandoc --template template-letter.tex "$file" -o "${base}.pdf"
-			;;
-		"fplreport")
-			pandoc --template fellowship.latex --pdf-engine=xelatex "$file" -o "${base}.pdf"
-			;;
-		*)
-			pandoc "$file" -o "${base}.pdf"
-			;;
+mdtype(){ \
+	command=${2:-"default"}
+	echo "$command"
+	case "$command" in
+		"fplreport") pandoc "$file" --template fellowship.latex --pdf-engine=xelatex -o "${base}.pdf" ;;
+		"letter") pandoc "$file" --template template-letter.tex -o "${base}.pdf" ;;
+		*) pandoc "$file" -o "$base".pdf ;;
 	esac
 }
 
