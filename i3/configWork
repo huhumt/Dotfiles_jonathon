@@ -70,13 +70,15 @@ bindsym $mod+u exec ~/.dotfiles/rofi/scripts/rofi-emoji
 bindsym $mod+Shift+x exec killall i3
 
 # Man page lookup
-bindsym $mod+m exec man -k . | awk '{ print $1 " " $2 }' | rofi -dmenu -p man -matching regex | awk '{ print $2 " " $1 }' | tr -d '()' | xargs man -t | ps2pdf - - | zathura -
+bindsym $mod+m exec man -k . | awk '{ print $1 " " $2 }' | rofi -dmenu -p man -matching regex | awk '{ print $2 " " $1 }' | tr -d '()' | xargs -r man -t | ps2pdf - - | zathura -
 
 # TLDR page lookup
-bindsym $mod+Shift+m exec "/usr/bin/tldr --list-all | sed 's/, /\\n/g' | rofi -dmenu -p ';TLDR' -matching regex | xargs tldr -m | pandoc -f markdown -t ms | groff -ms - -T pdf | zathura -"
+bindsym $mod+Shift+m exec "/usr/bin/tldr --list-all | sed 's/, /\\n/g' | rofi -dmenu -p 'TL;DR' -matching regex | xargs -r tldr -m | pandoc -f markdown -t ms | groff -ms - -T pdf | zathura -"
 
 # WP Lookup
 bindsym $mod+Shift+w exec wpLookup
+
+bindsym $mod+Shift+s exec cat ~/.dotfiles/rofi/scripts/http-status-codes | rofi -i -dmenu -p 'HTTP Status Code' | awk '{ print "https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/"$1 }' | xargs -r qutebrowser
 
 
 # Send signals to i3 blocks and zsh to tell them that capslock has been pushed
@@ -378,5 +380,5 @@ exec --no-startup-id xfce4-clipman
 exec --no-startup-id xrandr --output DP-1 --primary --mode 2560x1440 --pos 1920x0 --rotate normal --output HDMI-1 --mode 1920x1080 --pos 0x0 --rotate normal --output HDMI-2 --off
 exec --no-startup-id signal-desktop --start-in-tray
 exec_always --no-startup-id /usr/bin/dunst
-#exec --no-startup-id nitrogen --restore
-exec_always --no-startup-id setbackground
+exec --no-startup-id nitrogen --restore
+#exec_always --no-startup-id setbackground
