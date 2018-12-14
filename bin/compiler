@@ -57,6 +57,7 @@ case "$file" in
 	*config.h) make && sudo make install ;;
         *\.c) cc "$file" -o "$base" && "$base" ;;
 	*\.py) python "$file" ;;
+	*\.js) cat "$file" | minify --js > "${base}.min.js" ;;
 	#*\.go) go run "$file" ;;
 	#*) shebangtest ;;
 esac
