@@ -57,6 +57,11 @@ if [ "$preview_images" = "True" ]; then
         # unsupported types.
 		image/svg+xml)
             inkscape -e "${cached//.png}" "$path"  && exit 6;;
+        image/vnd.adobe.photoshop)
+			#echo $cached
+			convert "$path" -background white -flatten "$cached"
+			exit 6
+			;;
         image/*)
             exit 7;;
         # Image preview for video, disabled by default.:
@@ -112,6 +117,7 @@ case "$mimetype" in
             pygmentize_format=terminal
             highlight_format=ansi
         fi
+        bat --style="numbers" --color always "$path" && { dump | trim; exit 5; }
         try safepipe highlight --out-format=${highlight_format} "$path" && { dump | trim; exit 5; }
         try safepipe pygmentize -f ${pygmentize_format} "$path" && { dump | trim; exit 5; }
         exit 2;;
