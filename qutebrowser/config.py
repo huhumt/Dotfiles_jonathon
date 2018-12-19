@@ -49,12 +49,34 @@ c.tabs.max_width = 20
 # Type: QtFont
 c.fonts.tabs = '8pt monospace'
 
+
+##  mmmm                              #              mmmm  #                      m                    m
+## #"   "  mmm    mmm    m mm   mmm   # mm          #"   " # mm    mmm    m mm  mm#mm   mmm   m   m  mm#mm   mmm
+## "#mmm  #"  #  "   #   #"  " #"  "  #"  #         "#mmm  #"  #  #" "#   #"  "   #    #"  "  #   #    #    #   "
+##     "# #""""  m"""#   #     #      #   #             "# #   #  #   #   #       #    #      #   #    #     """m
+## "mmm#" "#mm"  "mm"#   #     "#mm"  #   #         "mmm#" #   #  "#m#"   #       "mm  "#mm"  "mm"#    "mm  "mmm"
+
+# Google
 c.url.searchengines['goog'] = 'https://google.com/search?q={}'
+# Arch User Repository
 c.url.searchengines['aur'] = 'https://aur.archlinux.org/packages/?O=0&K={}'
+# Arch Wiki
 c.url.searchengines['aw'] = 'https://wiki.archlinux.org/?search={}'
+# Wordpress
 c.url.searchengines['wps'] = 'https://developer.wordpress.org/?s={}'
+# Wordpress - Only functions
 c.url.searchengines['wpf'] = 'https://developer.wordpress.org/?s={}&post_type%5B%5D=wp-parser-function'
+# Wordpress - Only hooks
 c.url.searchengines['wph'] = 'https://developer.wordpress.org/?s={}&post_type%5B%5D=wp-parser-hook'
+# Wordpress - Only classes
 c.url.searchengines['wpc'] = 'https://developer.wordpress.org/?s={}&post_type%5B%5D=wp-parser-class'
+# Wordpress - Only methods
 c.url.searchengines['wpm'] = 'https://developer.wordpress.org/?s={}&post_type%5B%5D=wp-parser-method'
+# PHP.net
 c.url.searchengines['phps'] = 'https://secure.php.net/manual-lookup.php?pattern={}&scope=quickref'
+# Can I Use
+c.url.searchengines['ciu'] = 'https://caniuse.com/#search={}'
+# Mozzila Developer Network web docs
+c.url.searchengines['mdn'] = 'https://developer.mozilla.org/en-US/search?q={}'
+# GitHub
+c.url.searchengines['gh'] = 'https://github.com/search?q={}'
