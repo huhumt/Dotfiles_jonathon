@@ -35,9 +35,8 @@ alias mkdir='mkdir -p'
 # Shortcut for rewriting wp permalinks
 alias perms='wp rewrite flush'
 
-#Clear terminal and screenfetch
-#alias cls='clear; neofetch'
-alias cls='clear; weather moon'
+#Clear terminal and try to get moon phase. If it takes longer than .5 seconds then it will show neofetch
+alias cls='clear; timeout 0.5s weather moon || neofetch'
 
 #An alias for my standard less configuration
 #I don't set it to lessc because sometimes I don't use this config and I always forget how to ignore an alias
