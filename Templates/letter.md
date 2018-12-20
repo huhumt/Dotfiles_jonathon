@@ -12,9 +12,10 @@ address:
 #- another letter
 #opening: Dear Bob,
 # closing
-subject: My Subject
+#subject: My Subject
 # colorlinks: true
-#numbersections: true
+# date: 1st January 2018
+# numbersections: true
 ...
 
 This is my letter
