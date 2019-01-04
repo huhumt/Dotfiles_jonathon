@@ -1,0 +1,39 @@
+#!/usr/bin/env sh
+
+function format0to9 {
+	cat - |
+		sed -E '/\$mod(\+Shift)?\+[1-9]/d' |\
+		#sed -nE '/\$mod(\+Shift)?\+0/p' |\
+		sed -E '/\$mod(\+Shift)?\+0/ { s/0/[1-9,0]/; s/10/[1-10]/g}'
+}
+
+function formatExec {
+	while read line; do
+		if echo "$line" | grep -q "exec"; then
+			echo "Do Stuff $line"
+
+		else
+			echo "$line"
+		fi
+	done;
+}
+
+cat $HOME/.dotfiles/i3/configWork |\
+	#Gets lines that start with bindsym
+	sed -e "/^#/d" -ne "/^bindsym/p" | \
+	#Remove things we dont want to show
+	sed 's/\(bindsym \|--whole-window \|--no-startup-id \|--release \)//g' | \
+	#Hopefully self explanitory
+	sort |\
+	#Makes Formats [0-9]
+	format0to9 |\
+	formatExec |\
+	#Formats simple markdown
+	awk '{print "# "$1 "\n"; $1=""; print $0 "\n" }' |\
+	#Converts markdown to groff ms
+	pandoc -f markdown -t ms |\
+	#Converts groff to pdf
+	groff -ms - -T pdf |\
+	#Opens PDF
+	zathura -
+

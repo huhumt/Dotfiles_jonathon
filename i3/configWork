@@ -79,6 +79,9 @@ bindsym $mod+Shift+m exec "/usr/bin/tldr --list-all | sed 's/, /\\n/g' | rofi -d
 # WP Lookup
 bindsym $mod+Shift+w exec wpLookup
 
+# Config Help
+bindsym $mod+F1 exec showI3Help
+
 bindsym $mod+Shift+s exec cat ~/.dotfiles/rofi/scripts/http-status-codes | rofi -i -dmenu -p 'HTTP Status Code' | awk '{ print "https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/"$1 }' | xargs -r qutebrowser
 
 
