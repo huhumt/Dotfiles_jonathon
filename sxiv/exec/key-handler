@@ -1,0 +1,18 @@
+#!/bin/sh
+while read file
+do
+	case "$1" in
+		"greater" )
+			convert -rotate 90 "$file" "$file" ;;
+		"less")
+			convert -rotate 270 "$file" "$file" ;;
+		"y")
+			echo -n "$file" | xclip -selection clipboard ;;
+		"g")
+			gimp "$file" & disown ;;
+		"G")
+			optirun gimp "$file" & disown ;;
+		*	)
+			notify-send "$1"
+	esac
+done
