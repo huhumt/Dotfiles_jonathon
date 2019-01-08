@@ -1,0 +1,3 @@
+#!/usr/bin/env sh
+
+vim --servername jab2870 -c 'startinsert'

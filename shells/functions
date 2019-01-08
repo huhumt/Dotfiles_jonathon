@@ -81,7 +81,7 @@ function createFPLreport(){
 			newFile="$1"
 			newFile="${newFile%.*}.pdf"
 		fi
-		pandoc --template fellowship.latex --pdf-engine=xelatex $1 -o $newFile
+		pandoc --template fellowship.latex --listings --highlight-style=pygments --pdf-engine=xelatex $1 -o $newFile
 	else
 		echo "Oops. You need to suply a file"
 		return 1

@@ -117,7 +117,7 @@ case "$mimetype" in
             pygmentize_format=terminal
             highlight_format=ansi
         fi
-        bat --style="numbers" --color always "$path" && { dump | trim; exit 5; }
+        bat --style="numbers" --color always --line-range :$maxln "$path" && { dump | trim; exit 5; }
         try safepipe highlight --out-format=${highlight_format} "$path" && { dump | trim; exit 5; }
         try safepipe pygmentize -f ${pygmentize_format} "$path" && { dump | trim; exit 5; }
         exit 2;;

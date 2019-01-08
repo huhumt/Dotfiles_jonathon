@@ -1,2 +1,2 @@
 #!/usr/bin/bash
-echo "$@" | curl -F-=\<- qrenco.de
+echo "$@" | qrencode -s 50 -o /tmp/qrcode && sxiv -f /tmp/qrcode && rm /tmp/qrcode

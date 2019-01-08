@@ -143,11 +143,10 @@ bindsym $mod+Shift+space floating toggle
 bindsym $mod+space focus mode_toggle
 
 # focus the parent container
-bindsym $mod+a focus parent
+#bindsym $mod+Shift+a focus parent
 
-# focus the child container
-#bindsym $mod+Shift+a focus child
-
+bindsym $mod+a exec --no-startup-id ddspawn dropdowncalc -f mono:pixelsize=24
+bindsym $mod+shift+a exec --no-startup-id ddspawn dropdownnotepad
 
 #set workspace names
 set $workspace1 "1: Browser "
@@ -375,6 +374,16 @@ mode "$mode_gaps_outer" {
 	bindsym Return mode "default"
 	bindsym Escape mode "default"
 }
+
+# General dropdown window traits. The order can matter.
+for_window [instance="dropdown_*"] floating enable
+for_window [instance="dropdown_*"] move scratchpad
+for_window [instance="dropdown_*"] sticky enable
+for_window [instance="dropdown_*"] scratchpad show
+for_window [instance="dropdown_*"] resize set 1200 600
+for_window [instance="dropdown_*"] border pixel 20
+for_window [instance="dropdown_*"] move position center
+
 
 exec --no-startup-id redshift
 exec --no-startup-id compton -f -i 0.95

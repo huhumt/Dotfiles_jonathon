@@ -23,6 +23,14 @@ config.bind(',m', 'spawn --detach mpv {url}')
 # ,M hints and oens choice with mpv
 config.bind(',M', 'hint links spawn --detach mpv {hint-url}')
 
+# Opens a url with zathura - this is only really useful if the url is a pdf
+config.bind(',z', 'hint links spawn --detach zathura {hint-url}')
+
+# Shows QR code for current page
+config.bind(',q', 'spawn --detach qrcode {url}')
+# Shows QR code for chosen link
+config.bind(',Q', 'hint links spawn --detach qrcode {hint-url}')
+
 # Position of the tab bar.
 # Type: Position
 # Valid values:
