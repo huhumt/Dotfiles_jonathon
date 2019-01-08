@@ -147,3 +147,7 @@ alias servermem='toilet -w 200 "VPS 01" && ssh shires free -h && toilet -w 200 "
 
 # Updates time using ntp
 alias updateTime="sudo ntpd -qg"
+
+# Keyboard - reset
+# Sometimes, if I turn the screens off, the keyboard resets itself to defaults. Not sure why but this will put my keyboard back to how I like it
+alias kb="xmodmap ~/.Xmodmap; xset r rate 200 70; xcape"

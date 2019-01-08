@@ -23,6 +23,11 @@ config.bind(',m', 'spawn --detach mpv {url}')
 # ,M hints and oens choice with mpv
 config.bind(',M', 'hint links spawn --detach mpv {hint-url}')
 
+config.bind(',z', 'hint links spawn --detach zathura {hint-url}')
+
+config.bind(',q', 'spawn --detach qrcode {url}')
+config.bind(',Q', 'hint links spawn --detach qrcode {hint-url}')
+
 # Position of the tab bar.
 # Type: Position
 # Valid values:

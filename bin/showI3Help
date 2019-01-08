@@ -7,13 +7,13 @@ function format0to9 {
 		sed -E '/\$mod(\+Shift)?\+0/ { s/0/[1-9,0]/; s/10/[1-10]/g}'
 }
 
-function formatExec {
+function formatLine {
 	while read line; do
 		if echo "$line" | grep -q "exec"; then
-			echo "Do Stuff $line"
-
+			echo "$line" |\
+				awk '{print "# "$1 "\n"; $1=$2=""; print " Runs the shell command: \n\n```bash\n" $0 "\n```\n" }'
 		else
-			echo "$line"
+			echo "$line" | awk '{print "# "$1 "\n"; $1=""; print $0 "\n" }'
 		fi
 	done;
 }
@@ -27,13 +27,14 @@ cat $HOME/.dotfiles/i3/configWork |\
 	sort |\
 	#Makes Formats [0-9]
 	format0to9 |\
-	formatExec |\
-	#Formats simple markdown
-	awk '{print "# "$1 "\n"; $1=""; print $0 "\n" }' |\
+	#Goes through each line and turns it into simple markdown
+	formatLine |\
 	#Converts markdown to groff ms
-	pandoc -f markdown -t ms |\
+	#pandoc -f markdown -t ms |\
+	pandoc -f markdown -t latex -o ~/test.pdf
 	#Converts groff to pdf
-	groff -ms - -T pdf |\
+	#groff -ms - -T pdf > ~/test.pdf
+	#groff -ms - -T pdf |\
 	#Opens PDF
-	zathura -
+	#zathura -
 

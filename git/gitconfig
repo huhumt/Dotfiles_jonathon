@@ -2,7 +2,7 @@
 	email = jonathan@lunarweb.co.uk
 	name = Jonathan Hodgson
 [core]
-	editor = vim
+	editor = vim -c 'startinsert'
 	excludesfile = ~/.dotfiles/git/global_gitignore
 [status]
 	submoduleSummary = true
