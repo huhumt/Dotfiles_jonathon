@@ -9,6 +9,6 @@ socket="${SOCKET:-/tmp/mpvsocket}"
 #esac
 
 
-echo '{ "command": ["get_property_string", "filtered-metadata"] }' | socat - /tmp/mpvsocket | jq '.data' | sed 's/"{\\"icy-title\\":\\"//g' | sed 's/\\"}"//g'
+echo '{ "command": ["get_property_string", "filtered-metadata"] }' | socat - "${socket}" | jq '.data' | sed 's/"{\\"icy-title\\":\\"//g' | sed 's/\\"}"//g'
 echo ""
 echo "#00FF00"
