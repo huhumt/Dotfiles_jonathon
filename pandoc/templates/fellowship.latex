@@ -183,6 +183,8 @@ $if(title-meta)$
 $endif$
 $if(author-meta)$
             pdfauthor={$author-meta$},
+$else$
+            pdfauthor={Fellowship Productions Ltd},
 $endif$
 $if(subject)$
             pdfsubject={$subject$},
@@ -191,6 +193,7 @@ $if(keywords)$
             pdfkeywords={$for(keywords)$$keywords$$sep$, $endfor$},
 $endif$
             pdfproducer={Fellowship PDF Creator},
+            pdfcreator={Fellowship PDF Creator},
 $if(colorlinks)$
             colorlinks=true,
             linkcolor=$if(linkcolor)$$linkcolor$$else$fplgreen$endif$,
@@ -416,8 +419,12 @@ $endif$
 \righthyphenmin=5
 \lefthyphenmin=5
 
+\usepackage{framed}
 
-
+\let\oldquote\quote
+\let\oldendquote\endquote
+\def\quote{\leftbar \oldquote}
+\def\endquote{\oldendquote\endleftbar}
 
 
 \begin{document}
