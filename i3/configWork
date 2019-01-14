@@ -247,7 +247,8 @@ bindsym $mod+r mode "resize"
 # finds out, if available)
 bar {
 	#status_command i3status
-	status_command i3blocks
+	status_command i3blocks -c ~/.dotfiles/i3/i3blocks.conf
+	output eDP1
 	output primary
 	tray_output primary
 	position top
@@ -320,6 +321,8 @@ bindsym $mod+x exec --no-startup-id ~/.config/i3/i3exit logout
 
 bindsym ctrl+shift+l exec --no-startup-id ~/.config/rofi/scripts/rofi-shutdown
 
+bindsym $mod+Shift+Insert exec --no-startup-id rofi -modi "clipboard:greenclip print" -show clipboard -run-command '{cmd}'
+
 ##################################################
 #                                                #
 #                   i3 Gaps                      #
@@ -389,9 +392,11 @@ exec --no-startup-id redshift
 exec --no-startup-id compton -f -i 0.95
 exec_always --no-startup-id /usr/lib/kdeconnectd
 exec_always --no-startup-id indicator-kdeconnect
-exec --no-startup-id xfce4-clipman
+#exec --no-startup-id xfce4-clipman
 exec --no-startup-id xrandr --output DP-1 --primary --mode 2560x1440 --pos 1920x0 --rotate normal --output HDMI-1 --mode 1920x1080 --pos 0x0 --rotate normal --output HDMI-2 --off
-exec --no-startup-id signal-desktop --start-in-tray
+exec --no-startup-id xrandr --output HDMI2 --off --output HDMI1 --off --output DP1 --off --output eDP1 --primary --mode 1920x1080 --pos 0x0 --rotate normal --output VIRTUAL1 --off
+#exec --no-startup-id signal-desktop --start-in-tray
 exec_always --no-startup-id /usr/bin/dunst
+exec --no-startup-id greenclip daemon && notify-send "Install Greenclip"
 exec --no-startup-id nitrogen --restore
 #exec_always --no-startup-id setbackground
