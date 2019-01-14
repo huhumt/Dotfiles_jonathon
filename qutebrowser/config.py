@@ -40,6 +40,8 @@ config.bind(',Q', 'hint links spawn --detach qrcode {hint-url}')
 #   - right
 c.tabs.position = 'left'
 
+c.tabs.show = 'switching'
+
 # Width (in pixels or as percentage of the window) of the tab bar if
 # it's vertical.
 # Type: PercOrInt
