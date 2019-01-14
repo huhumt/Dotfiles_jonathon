@@ -421,10 +421,30 @@ $endif$
 
 \usepackage{framed}
 
-\let\oldquote\quote
-\let\oldendquote\endquote
-\def\quote{\leftbar \oldquote}
-\def\endquote{\oldendquote\endleftbar}
+% \let\oldquote\quote
+% \let\oldendquote\endquote
+% \def\quote{\leftbar \oldquote}
+% \def\endquote{\oldendquote\endleftbar}
+
+\newlength{\leftbarwidth}
+\setlength{\leftbarwidth}{3pt}
+\newlength{\leftbarsep}
+\setlength{\leftbarsep}{5pt}
+
+\newcommand*{\leftbarcolorcmd}{\color{leftbarcolor}}% as a command to be more flexible
+\colorlet{leftbarcolor}{fplgreen}
+
+\renewenvironment{leftbar}{%
+    \def\FrameCommand{{\leftbarcolorcmd{\vrule width \leftbarwidth\relax\hspace {\leftbarsep}}}}%
+    \MakeFramed {\advance \hsize -\width \FrameRestore }%
+}{%
+    \endMakeFramed
+}
+
+\renewenvironment{quote}
+{\vspace{7pt} \leftbar\list{}{\rightmargin\leftmargin}%
+\item\vspace{-5pt}\relax}
+	{\endlist\endleftbar}
 
 
 \begin{document}
