@@ -276,17 +276,25 @@ function debugToggle(){
 #These search functions use grep to search all sub-folders of the current working directory
 searchjs() {
 	# This will search through .js and .es6 files but won't search minified files
-	grep -r -i -n --color="always" --include=\*.{js,es6} --exclude=\*.min.js "$1" .
+	grep -r -i -n --color="always" --include=\*.{js,es6} --exclude=\*.min.js "$1" . | tee /tmp/lastSearch
 }
 searchcss() {
 	# This will search through .css and .less files but won't search minified files
-	grep -r -i -n --color="always" --include=\*.{css,less,scss,sass} --exclude=\*.min.css "$1" .
+	grep -r -i -n --color="always" --include=\*.{css,less,scss,sass} --exclude=\*.min.css "$1" . | tee /tmp/lastSearch
 }
 searchphp() {
-	grep -r -i -n --color="always" --include=\*.{php,phtml} "$1" .
+	grep -r -i -n --color="always" --include=\*.{php,phtml} "$1" . | tee /tmp/lastSearch
 }
 searchhtml() {
-	grep -r -i -n --color="always" --include=\*.{html,htm} "$1" .
+	grep -r -i -n --color="always" --include=\*.{html,htm} "$1" . | tee /tmp/lastSearch
+}
+
+ops() {
+	responce=$(cat /tmp/lastSearch | slmenu -b -l $(tput lines) | sed 's/\x1B\[[0-9;]\+[A-Za-z]//g')
+	echo "responce"
+	file=$(echo "$responce" | awk -F ':' '{print $1}')
+	line=$(echo "$responce" | awk -F ':' '{print $2}')
+	vim +${line} ${file}
 }
 
 png() {
