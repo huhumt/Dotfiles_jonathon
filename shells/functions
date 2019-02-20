@@ -113,7 +113,7 @@ function ptheme() {
 }
 
 function get_theme() {
-	public_html=${${PWD%/public_html*}%/wiki*}/public_html
+	public_html="${${PWD%/public_html*}%/wiki*}/public_html"
 	if [ -d $public_html ]; then
 		if [ -d $public_html/wp ]; then
 			wpPath=$public_html/wp;

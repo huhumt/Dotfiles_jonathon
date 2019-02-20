@@ -22,11 +22,11 @@ cd "$dir" || exit
 textype() { \
 	command="pdflatex"
 	( sed 5q "$file" | grep -i -q 'xelatex' ) && command="xelatex"
-	$command --output-directory="$dir" "$base" &&
-	grep -i addbibresource "$file" >/dev/null &&
-	biber --input-directory "$dir" "$base" &&
-	$command --output-directory="$dir" "$base" &&
-	$command --output-directory="$dir" "$base"
+	$command --output-directory="$dir" "$file"
+	#grep -i addbibresource "$file" >/dev/null &&
+	#biber --input-directory "$dir" "$base" &&
+	#$command --output-directory="$dir" "$base" &&
+	#$command --output-directory="$dir" "$base"
 }
 
 mdtype(){ \

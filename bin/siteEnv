@@ -1,0 +1,25 @@
+#!/usr/bin/env zsh
+
+source "$HOME/.dotfiles/shells/functions"
+sitesDir="$HOME/Sites/"
+
+chosen="$(ls -d ${sitesDir}*/ | sed "s+$sitesDir++g; s/\/$//" | rofi -dmenu -i -p "Site")"
+
+siteDir="${sitesDir}${chosen}/"
+
+cd "$siteDir"
+
+theme
+
+setsid "$TERMINAL" &
+setsid "$TERMINAL" &
+setsid "$TERMINAL" &
+sleep 1
+
+i3-msg "move down"
+i3-msg "resize shrink height"
+i3-msg "resize shrink height"
+i3-msg "resize shrink height"
+i3-msg "split horizontal"
+
+setsid "$TERMINAL" &

@@ -284,14 +284,19 @@ class DVD:
             pprint(task.title.info)
             print('-' * 78)
 
-        audio_tracks = task.title.info['audio tracks'].keys()
+        english_audio = {k: v for k, v in task.title.info['audio tracks'].items() if 'english' in v.lower() }
+        english_subs = {k: v for k, v in task.title.info['subtitle tracks'].items() if 'english' in v.lower() }
+        #audio_tracks = task.title.info['audio tracks'].keys()
+        audio_tracks = english_audio.keys()
         audio_encoders = ['faac'] * len(audio_tracks)
-        subtitles = task.title.info['subtitle tracks'].keys()
+        #subtitles = task.title.info['subtitle tracks'].keys()
+        subtitles = english_subs.keys()
 
         args = [
             HANDBRAKE,
             '--title', str(task.title.number),
-            '--preset', "High Profile",
+            '--preset', "Very Fast 1080p30",
+            '--vfr',
             '--encoder', 'x264',
             '--audio', ','.join(audio_tracks),
             '--aencoder', ','.join(audio_encoders),
@@ -315,6 +320,7 @@ class DVD:
             print(' '.join(('\n  ' + a)
                 if a.startswith('-') else a for a in args))
             print('-' * 78)
+        pprint( args )
         if not dry_run:
             if verbose:
                 subprocess.call(args)
@@ -535,9 +541,13 @@ SubtitleTrack = namedtuple('SubtitleTrack',
 def ParseSubtitleTracks(d):
     for number, info in sorted(((int(n), info) for (n, info) in d.items())):
         m = SUB_TRACK_REGEX.match(info)
-        assert m, 'UNMATCHED %r' % info
-        name, iso639_2, extras = m.groups()
-        yield SubtitleTrack(number, name, iso639_2, extras)
+        if( m ):
+            assert m, 'UNMATCHED %r' % info
+            name, iso639_2, extras = m.groups()
+            yield SubtitleTrack(number, name, iso639_2, extras)
+        else:
+            yield SubtitleTrack(number, info, '', '')
+
 
 def RenderBar(start, length, total, width):
     end = start + length
