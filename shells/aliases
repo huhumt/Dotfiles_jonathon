@@ -154,3 +154,5 @@ alias kb="xmodmap ~/.Xmodmap; xset r rate 200 70; xcape"
 
 alias colemak="setxkbmap -layout gb,gb -variant \"colemak,\" -option grp:shifts_toggle"
 alias qwerty="setxkbmap -layout gb"
+
+alias ol="open-local"
