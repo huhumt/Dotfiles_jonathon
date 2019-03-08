@@ -23,3 +23,5 @@ i3-msg "resize shrink height"
 i3-msg "split horizontal"
 
 setsid "$TERMINAL" &
+
+open-local
