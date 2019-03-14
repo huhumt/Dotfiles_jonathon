@@ -271,6 +271,10 @@ bindsym $mod+u exec ~/.dotfiles/rofi/scripts/rofi-emoji
 # WP Lookup
 bindsym $mod+Shift+w exec wpLookup
 
+# Y {{{2
+# Opens Zeal
+bindsym $mod+y exec open-youtube
+
 # Z {{{2
 # Opens Zeal
 bindsym $mod+z exec zeal
@@ -293,6 +297,8 @@ bar {
 	output primary
 	output DP-1
 	tray_output primary
+	tray_output DP-1
+
 	position top
 	colors {
 		separator $base03
