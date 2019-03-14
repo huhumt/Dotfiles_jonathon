@@ -1,0 +1,12 @@
+#!/bin/bash
+
+url="$1"
+
+if [ -z "$url" ]; then
+	url=$(rofi -dmenu -p 'URL')
+fi
+
+code=$(youtube-dl "$url" -F | sed -n '/format code/,$ p' | tail -n +2 | rofi -dmenu | awk '{print $1}')
+
+mpv "$url" --ytdl-format="$code"
+
