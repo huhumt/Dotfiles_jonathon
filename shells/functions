@@ -97,7 +97,8 @@ function ptheme() {
 		else
 			wpPath=$public_html;
 		fi
-		theme=$(dirname $(wp --path="$wpPath" theme path $(wp --path="$wpPath" theme list | grep "parent" | awk '{print $1}')))
+		domain="$(basename $(dirname $public_html ) ).local.jh"
+		theme=$(dirname $(wp --path="$wpPath" --url="$domain" theme path $(wp --path="$wpPath" --url="$domain" theme list 2> /dev/null  | grep "parent" | awk '{print $1}') 2> /dev/null ))
 		if [ -d $theme ]; then
 			if [ -d "$theme" ]; then
 				cd $theme
@@ -120,7 +121,8 @@ function get_theme() {
 		else
 			wpPath=$public_html;
 		fi
-		theme=$(dirname $(wp --path="$wpPath" theme path $(wp --path="$wpPath" theme list | grep "active" | grep -v "inactive" | awk '{print $1}')))
+		domain="$(basename $(dirname $public_html ) ).local.jh"
+		theme=$(dirname $(wp --path="$wpPath" --url="$domain" theme path $(wp --path="$wpPath" --url="$domain" theme list 2> /dev/null | grep "active" | grep -v "inactive" | awk '{print $1}') 2> /dev/null ))
 		if [ -d $theme ]; then
 			echo $theme
 		else
