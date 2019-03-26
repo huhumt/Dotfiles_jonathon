@@ -1,4 +1,4 @@
-\documentclass[$if(fontsize)$$fontsize$$else$12pt$endif$,$if(papersize)$$papersize$$else$a4$endif$paper,$for(classoption)$$classoption$$sep$,$endfor$]{letter}
+\documentclass[$if(fontsize)$$fontsize$$else$12pt$endif$,$if(papersize)$$papersize$$else$a4paper$endif$,$for(classoption)$$classoption$$sep$,$endfor$]{letter}
 $if(fontfamily)$
 \usepackage[$for(fontfamilyoptions)$$fontfamilyoptions$$sep$,$endfor$]{$fontfamily$}
 $else$
@@ -56,7 +56,7 @@ $endif$
 }{}
 \usepackage{geometry}
 \geometry{
-	paper=$if(papersize)$$papersize$$else$a4$endif$paper, % Change to letterpaper for US letter
+	paper=$if(papersize)$$papersize$$else$a4paper$endif$, % Change to letterpaper for US letter
 	top=2cm, % Top margin
 	bottom=1.5cm, % Bottom margin
 	left=2.5cm, % Left margin
