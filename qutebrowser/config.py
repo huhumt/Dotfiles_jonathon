@@ -19,9 +19,9 @@ config.set('content.javascript.enabled', True, 'chrome://*/*')
 config.set('content.javascript.enabled', True, 'qute://*/*')
 
 # ,m opens page with mpv
-config.bind(',m', 'spawn --detach mpv {url}')
+config.bind(',m', 'spawn --detach open-youtube {url}')
 # ,M hints and oens choice with mpv
-config.bind(',M', 'hint links spawn --detach mpv {hint-url}')
+config.bind(',M', 'hint links spawn --detach open-youtube {hint-url}')
 
 # Opens a url with zathura - this is only really useful if the url is a pdf
 config.bind(',z', 'hint links spawn --detach zathura {hint-url}')
