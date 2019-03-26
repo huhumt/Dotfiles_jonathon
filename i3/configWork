@@ -243,6 +243,11 @@ bindsym $mod+d exec rofi -show drun
 # Start Rofi as ssh launcher
 bindsym $mod+Shift+d exec rofi -show ssh
 
+
+# E {{{2
+# Generates reverse shells
+bindsym $mod+Shift+e exec ~/.dotfiles/rofi/scripts/rofi-reverse-shells
+
 # F {{{2
 bindsym control+mod1+f exec thunar
 

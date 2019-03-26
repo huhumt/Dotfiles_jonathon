@@ -1,0 +1,64 @@
+#!/usr/bin/env bash
+#
+#   Use rofi to pick a reverse shell
+#
+#   Requirements:
+#     rofi, xsel, rsg (git@github.com:mthbernardes/rsg.git)
+#
+
+SHELLS='/home/jonathan/GitRepos/rsg/shells.txt'
+
+function notify() {
+	if [ "$(command -v notify-send)" ]; then
+		notify-send "$1" "$2"
+	fi
+}
+
+function getIP(){
+	ip route |
+		grep -oe 'src [^ ]* ' | # Get in the form 'src ipaddress'
+		awk '{print $2}' | # Get the ip
+		sort -u | # Get the unique ones
+		rofi -dmenu -i -p "IP Address"
+}
+
+function getPort() {
+	rofi -dmenu -p "Port"
+}
+
+function getReverseShell() {
+	ip="$1"
+	port="$2"
+	cat "$SHELLS" |
+		sed "s/\[IPADDR\]/$ip/g" |
+		sed "s/\[PORT\]/$port/g" |
+		rofi -dmenu -i -p "Reverse Shell" |
+		cut -d'|' -f2-
+}
+
+function display() {
+	ip=$(getIP)
+	port=$(getPort)
+	reverseShell=$(getReverseShell $ip $port)
+
+
+	#reverseShell=$( echo "$reverseShell" | sed "s/\[IPADDR\]/$ip/g" | sed "s/\[PORT\]/$port/g" )
+	
+	echo -n "$reverseShell" | /usr/bin/xclip -i -selection clipboard
+	#emoji=$(cat "$UNICODE_FILE" | grep -v '^[[:space:]]*$')
+	#line=$(echo "$emoji" | rofi -dmenu -i -p Unicode -kb-custom-1 Ctrl+c $@)
+	#exit_code=$?
+
+	#line=($line)
+
+	#if [ $exit_code == 0 ]; then
+	#	xdotool type --clearmodifiers "${line[0]}"
+	#elif [ $exit_code == 10 ]; then
+	#	echo -n "${line[0]}" | /usr/bin/xclip -i -selection clipboard
+
+	#fi
+}
+
+
+# display displays :)
+display
