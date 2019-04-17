@@ -1,15 +1,21 @@
 #!/usr/bin/env zsh
 
+
 source "$HOME/.dotfiles/shells/functions"
 sitesDir="$HOME/Sites/"
 
+
 chosen="$(ls -d ${sitesDir}*/ | sed "s+$sitesDir++g; s/\/$//" | rofi -dmenu -i -p "Site")"
 
+open="$(echo -n "Yes\nNo" | rofi -dmenu -i -p "Open the local site")"
+
 siteDir="${sitesDir}${chosen}/"
+
 
 cd "$siteDir"
 
 theme
+
 
 setsid "$TERMINAL" &
 setsid "$TERMINAL" &
@@ -24,4 +30,6 @@ i3-msg "split horizontal"
 
 setsid "$TERMINAL" &
 
-open-local
+if [ "$open" = "Yes" ]; then
+	open-local
+fi
