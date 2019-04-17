@@ -1,2 +1,5 @@
 *.private
 qutebrowser/qsettings/
+qutebrowser/bookmarks/
+pandoc/templates/assets/fonts/
+bin/aquarius-go
