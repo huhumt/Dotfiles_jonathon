@@ -6074,6 +6074,7 @@ z latin small letter z
   hair space
 ‐ hyphen
 ‑ non-breaking hyphen
+  non-breaking space
 ‒ figure dash
 – en dash
 — em dash
