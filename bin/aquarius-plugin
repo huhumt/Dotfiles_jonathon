@@ -30,6 +30,7 @@ while test $# -gt 0; do
 			echo ""
 			echo -e "blocks, aquarius-blocks \t\t install aquarius blocks"
 			echo -e "clients, aquarius-clients \t\t install aquarius clients"
+			echo -e "locations, aquarius-locations \t\t install aquarius locations"
 			echo -e "news, aquarius-news \t\t\t install aquarius news"
 			echo -e "people, aquarius-people \t\t install aquarius people"
 			echo -e "permissions, aquarius-permissions \t install aquarius permissions into mu-plugins"
@@ -78,6 +79,21 @@ while test $# -gt 0; do
 				fi
 				npm install --save wp-content/plugins/aquarius-clients
 				doWebpack clients
+			fi
+			shift
+			;;
+		aquarius-locations|locations)
+			if [ "$remove" = true ]; then
+				npm remove wp-content/plugins/aquarius-locations
+				git-delete-submodule "wp-content/plugins/aquarius-locations"
+			else
+				if [ "$ssh" = true ]; then
+					git submodule add git@bitbucket.org:fellowshipproductionsltd/aquarius-locations.git wp-content/plugins/aquarius-locations
+				else
+					git submodule add https://bitbucket.org/fellowshipproductionsltd/aquarius-locations.git wp-content/plugins/aquarius-locations
+				fi
+				npm install --save wp-content/plugins/aquarius-locations
+				doWebpack locations
 			fi
 			shift
 			;;

@@ -1,0 +1,14 @@
+#!/usr/bin/env python
+import fontforge as ff
+import sys
+
+args = sys.argv[1:]
+
+if args[0] == '--help':
+	print("otf2ttf <font>")
+else:
+	otf = args[0]
+	ttf = otf.replace('otf','ttf')
+	print( otf + ' => ' + ttf )
+	f = ff.open( otf )
+	f.generate( ttf )
