@@ -1,0 +1,49 @@
+#!/bin/bash
+
+# Creates a gif using a list of files from stdin
+tmpdir="/tmp/sxiv-gif/"
+rm -rf "$tmpdir"
+mkdir -p "$tmpdir"
+
+framerate="prompt"
+format="gif"
+extension=""
+
+while [[ $# -gt 0 ]]; do
+	case "$1" in
+		"-r"|"--framerate")
+			framerate="$2"
+			shift
+			shift
+			;;
+		"--mp4")
+			format="mp4"
+			shift
+			;;
+	esac
+done
+
+if [[ "$framerate" == "prompt" ]]; then
+	framerate=$(echo -e "0.25\n0.5\n0.75\n1\n2\n5\n10" | rofi -dmenu -p Timeout)
+fi
+
+i=1
+while read file; do
+	extension="${file##*.}"
+	number=$(printf "%03d" $i)
+	echo "$number"
+	cp "$file" "${tmpdir}file${number}.${extension}"
+	i=$((i+1))
+done
+
+case "$format" in
+	"mp4")
+		ffmpeg -f image2 -framerate "$framerate" -i "${tmpdir}file%03d.${extension}" -crf 0 "${tmpdir}out.${format}"
+		;;
+	*)
+		ffmpeg -f image2 -framerate "$framerate" -i "${tmpdir}file%03d.${extension}" "${tmpdir}out.${format}"
+esac
+
+mv "${tmpdir}out.${format}" "$HOME/Desktop/"
+
+notify-send "Done"

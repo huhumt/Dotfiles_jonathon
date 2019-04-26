@@ -1,18 +1,44 @@
 #!/bin/sh
-while read file
-do
-	case "$1" in
-		"greater" )
-			convert -rotate 90 "$file" "$file" ;;
-		"less")
-			convert -rotate 270 "$file" "$file" ;;
-		"y")
-			echo -n "$file" | xclip -selection clipboard ;;
-		"g")
-			gimp "$file" & disown ;;
-		"G")
-			optirun gimp "$file" & disown ;;
-		*	)
-			notify-send "$1"
-	esac
-done
+
+# This file is run from the sxiv when ctrl+x is pushed and then another key combination
+#
+# The file names are passed to stdin (1 per line)
+#
+# The key combination pushed after ctrl+x is sent as the first argument
+#
+# I have organised this script so when ctrl is pushed, a single command is run using all of the selected images
+#		e.g. creating a gif out of all selected images
+#
+# If ctrl is not pushed, the command is run on each image individually
+#		e.g. rotating images or opening them in gimp
+
+
+case "$1" in
+	"C-g")
+		cat | createGif ;;
+	"C-v")
+		cat | createGif --mp4 ;;
+	"C-"*)
+		# If none of the above were used and ctrl was pushed, send a notificaton with the key combination
+		notify-send "$1" ;;
+	*)
+		# If the above key combinations were not pushed, loop through each of the images and check the combinations below
+		while read file
+		do
+			case "$1" in
+				"greater" )
+					convert -rotate 90 "$file" "$file" ;;
+				"less")
+					convert -rotate 270 "$file" "$file" ;;
+				"y")
+					echo -n "$file" | xclip -selection clipboard ;;
+				"g")
+					gimp "$file" & disown ;;
+				"G")
+					optirun gimp "$file" & disown ;;
+				*)
+					# If none of the above were used, send a notificaton with the key combination
+					notify-send "$1"
+			esac
+		done
+esac
