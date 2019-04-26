@@ -1,53 +1,20 @@
-#!/usr/bin/bash
-line=$(php --version | grep "PHP" -m 1)
-libphp="/opt/lampp/modules/libphp7.1.so"
-case "$1" in
-	5)
-		file="/opt/lampp/etc/extra/httpd-xampp-php5.conf"
-		phpexe=$(ls /opt/lampp/bin/php-5.*)
-		phpcgi=$(ls /opt/lampp/bin/php-cgi-5.*)
-		phpconfig=$(ls /opt/lampp/bin/php-config-5.*)
-		phpize=$(ls /opt/lampp/bin/phpize-5.*)
-		;;
-	7 | 7.1)
-		file="/opt/lampp/etc/extra/httpd-xampp-php7.conf"
-		phpexe=$(ls /opt/lampp/bin/php-7.1.*)
-		phpcgi=$(ls /opt/lampp/bin/php-cgi-7.1.*)
-		phpconfig=$(ls /opt/lampp/bin/php-config-7.1.*)
-		phpize=$(ls /opt/lampp/bin/phpize-7.1.*)
-		;;
-	7.0)
-		file="/opt/lampp/etc/extra/httpd-xampp-php7.conf"
-		phpexe=$(ls /opt/lampp/bin/php-7.0.*)
-		phpcgi=$(ls /opt/lampp/bin/php-cgi-7.0.*)
-		phpconfig=$(ls /opt/lampp/bin/php-config-7.0.*)
-		phpize=$(ls /opt/lampp/bin/phpize-7.0.*)
-		libphp="/opt/lampp/modules/libphp7.0.so"
-		;;
-	*)
-		echo "Please specify the version you want"
-		exit 1
-		;;
-esac
-		
-lampp='/opt/lampp/lampp'
-echo $phpexe
-if [ "$(id -u)" != "0" ]; then
-	echo "Sorry, you are not root."
-	exit 1
+#!/bin/bash
+
+DOCKER_CONFIG_DIRECTORY="/home/jonathan/.dotfiles/docker/web/"
+
+if [ ! -z "$1" ]; then
+
+	version="$1"
+
+	if [ "$(whoami)" == "root" ]; then
+		cd "$DOCKER_CONFIG_DIRECTORY"
+		docker-compose down
+		sed "s/%version%/$version/" php/Dockerfile.sample > php/Dockerfile
+		docker-compose up --build -d
+	else
+		gksudo $0 "$version"
+	fi
+else
+	version="$(echo -e "5.6\n7.0\n7.1\n7.2\n7.3" | rofi -dmenu -p "PHP Version")"
+	$0 "$version"
 fi
-
-
-$lampp stopapache
-ln -s -f $file /opt/lampp/etc/extra/httpd-xampp.conf
-ln -s -f $phpexe /opt/lampp/bin/php
-ln -s -f $phpcgi /opt/lampp/bin/php-cgi
-ln -s -f $phpconfig /opt/lampp/bin/php-config
-ln -s -f $phpize /opt/lampp/bin/phpize
-ln -s -f $libphp /opt/lampp/modules/libphp7.so
-
-
-$lampp startapache
-echo
-echo "Now on PHP ${phpexe##*-}"
-exit 0
