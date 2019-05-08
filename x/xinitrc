@@ -1,6 +1,7 @@
 [[ -f ~/.Xmodmap ]] && xmodmap ~/.Xmodmap
 xset r rate 200 70
 export QT_QPA_PLATFORMTHEME=qt5ct
+export _JAVA_OPTIONS='-Dawt.useSystemAAFontSettings=on -Dswing.aatext=true -Dswing.defaultlaf=com.sun.java.swing.plaf.gtk.GTKLookAndFeel -Dswing.crossplatformlaf=com.sun.java.swing.plaf.gtk.GTKLookAndFeel'
 export `gnome-keyring-daemon -d`
 eval $(/usr/bin/gnome-keyring-daemon --start --components=gpg,pkcs11,secrets,ssh)
 export $(gnome-keyring-daemon --start --components=pkcs11,secrets,ssh,gpg)
