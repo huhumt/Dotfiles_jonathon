@@ -1,0 +1,32 @@
+\documentclass{article}
+\usepackage{pbox}
+\usepackage{geometry}
+\geometry{
+	left= 0.15in,
+	right= 0.15in,
+	top= 0.15in,
+	paperwidth=220mm,
+	paperheight=110mm
+}
+\setlength\parskip{0pt}
+\setlength\parindent{0pt}
+\pagestyle{empty}
+
+\begin{document}
+\scriptsize
+FROM-NAME\\
+FROM-STREET ADDRESS\\
+FROM-CITY, STATE, \ ZIP
+
+\vspace{1.0in}\large
+\setlength\parindent{0pt}
+
+\begin{center}
+	\pbox{0.4\textwidth}{
+TO-NAME\\
+TO-STREET ADDRESS\\
+TO-CITY, STATE, \ ZIP
+}
+\end{center}
+
+\end{document}
