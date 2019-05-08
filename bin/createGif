@@ -36,9 +36,12 @@ while read file; do
 	i=$((i+1))
 done
 
+notify-send "Generating $format from images"
+
 case "$format" in
 	"mp4")
-		ffmpeg -f image2 -framerate "$framerate" -i "${tmpdir}file%03d.${extension}" -crf 0 "${tmpdir}out.${format}"
+		# Not entierly sure what all of these mean but they make it work in most browsers
+		ffmpeg -f image2 -framerate "$framerate" -i "${tmpdir}file%03d.${extension}" -pix_fmt yuv420p -vcodec libx264 -y -vf "pad=ceil(iw/2)*2:ceil(ih/2)*2" "${tmpdir}out.${format}"
 		;;
 	*)
 		ffmpeg -f image2 -framerate "$framerate" -i "${tmpdir}file%03d.${extension}" "${tmpdir}out.${format}"
@@ -46,4 +49,4 @@ esac
 
 mv "${tmpdir}out.${format}" "$HOME/Desktop/"
 
-notify-send "Done"
+notify-send "Done" "File in $HOME/Desktop/out.${format}"
