@@ -1,0 +1,19 @@
+#!/bin/bash
+
+# A simple wrapper around scrot
+#
+# When run, the screenshot will be added to she clipboard
+
+case $1 in
+	"window")
+		file=$(scrot -u '/tmp/%F_%T_$wx$h.png' -e 'echo /tmp/%F_%T_$wx$h.png')
+		;;
+	"select")
+		file=$(sleep 0.2; scrot -s '/tmp/%F_%T_$wx$h.png' -e 'echo /tmp/%F_%T_$wx$h.png')
+		;;
+	*)
+		file=$(scrot '/tmp/%F_%T_$wx$h.png' -e 'echo /tmp/%F_%T_$wx$h.png')
+		;;
+esac
+
+xclip -selection clipboard -target image/png -i "$file"

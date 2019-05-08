@@ -1,5 +1,5 @@
 [user]
-	email = jonathan@lunarweb.co.uk
+	email = git@jonathanh.co.uk
 	name = Jonathan Hodgson
 [core]
 	editor = vim -c 'startinsert'
