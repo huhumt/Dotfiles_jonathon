@@ -1,501 +1,592 @@
-body, .homepage-section, .homepage-footer, .homepage-teams, #content .aui-sidebar + .aui-page-header, table.aui > tbody > tr, .aui-page-panel-content, table.bb-list tr:hover .labels, table.bb-list tr .labels
-  {
+/*bitbucket.org dark css theme*/
+
+body, aside {
+	background: #222 !important;
+	background-color: #222 !important;
+	color: #bbb !important;
+}
+h1, h2, h3, h4, h5, span {
+	background-color: transparent !important;
+	color: #FFC963 !important;
+}
+ul, ol, li, tr, th, td, tbody, table {
+	background-color: transparent !important;
+	color: #bbb !important;
+}
+p {
+	background-color: transparent !important;
+	color: #bbb !important;	
+}
+a {
+	background-color: transparent !important;
+	color: #50AFFC !important;
+}
+code {
+	background-color: #1E1E1E !important;
+}
+pre, .pre {
+	background-color: #1E1E1E !important;
+	color: #888 !important;
+}
+div {
+	background-color: #2B2B2B !important;
+	background: transparent !important;
+	color: #bbb !important;
+}
+
+.aui-button {
+	background: -webkit-linear-gradient(top,rgb(111, 111, 111) 0,rgb(44, 44, 44) 100%) !important;
+}
+
+body {
+    background: url("http://i.imgur.com/7Prf6.jpg") #222
+        top left repeat-y fixed !important;
+    color: #8a8 !important;
+}
+
+#footer {
+    background: rgba( 0,0,0, 0.5 ) !important;
+    border-top: 1px solid #444 !important;
+    position: relative;
+}
+
+.hero,
+.features,
+.pricing .users,
+header.subhead.row {
+    background: rgba( 0,0,0, 0.1 ) !important;
+}
+
+nav#dashboard-tabs,
+nav#repo-tabs,
+.aui-navbar {
+    background-color: rgba( 80,80,80, 0.1 ) !important;
+    border-top: 1px solid #000 !important;
+    border-bottom: 1px solid #000 !important;
+}
+
+.aui-lozenge,
+.bb-list .branch,
+.aui-badge {
+    color: #ccc !important;
+    background-color: #444 !important;
+}
+
+.aui-lozenge.selected {
+    background: #aca !important;
+    color: #222 !important;
+}
+
+.dialog-title,
+.bb-list .branch a,
+.aui-navbar a {
+    color: #888 !important;
+}
+
+.aui-header {
+    background: rgba( 80,80,80, 0.2 ) !important;
+    border-bottom: 1px solid #000 !important;
+}
+
+.aui-nav-vertical a,
+.aui-dropdown2.aui-style-default a,
+.aui-header a {
+    color: #8a8 !important;
+}
+
+nav#dashboard-tabs a:hover,
+nav#repo-tabs a:hover, 
+.aui-nav a:focus,
+.aui-nav-vertical a:hover,
+.aui-nav-vertical .active,
+.aui-dropdown2.aui-style-default a:hover,
+.aui-header a:hover,
+.aui-dropdown2.aui-style-default .active,
+.aui-header .active {
+    background: #242 !important;
+    background: -moz-linear-gradient( top, #242, #353 ) !important;
+}
+
+.aui-dropdown2.aui-style-default {
+    background: rgba( 30,30,30, 0.96 ) !important;
+    border: 1px solid #000 !important;
+}
+
+.aui-style-default .aui-dropdown2-section + .aui-dropdown2-section {
+    border-top: 1px solid #000 !important;
+}
+
+.clone-url input,
+.aui-header .aui-quicksearch input {
+    background: #444 !important;
+    color: #aaa !important;
+}
+
+input.user-or-email,
+.clone-url input {
+    border-color: #000 !important;
+}
+
+.clone-url input::-moz-selection,
+.aui-header .aui-quicksearch input::-moz-selection {
+    background-color: #000 !important;
+}
+
+.filter-control a,
+.aui-button, a.aui-button,
+.aui-button:focus, a.aui-button:hover {
+    background: -moz-linear-gradient(
+        center top , 
+        rgb(30, 30, 30) 0%, 
+        rgb(40, 40, 40) 100%
+    ) repeat scroll 0% 0% transparent !important;
+    border-color: #000 !important;
+    color: #888 !important;
+    text-shadow: 0px 1px 0px #000 !important;
+}
+
+.filter-control a:hover,
+.filter-control li[aria-pressed="true"] a {
+    color: #444 !important;
+    background: #888 !important;
+}
+
+.chzn-drop,
+.chzn-container, 
+.chzn-single,
+.aui-inline-dialog .contents {
+    background: rgba( 30,30,30, 0.9 ) !important;
+    border-color: #000 !important;
+}
+
+input[type="url"], input[type="email"], input[type="password"], 
+input[type="text"], input[type="search"], textarea {
+    background: rgba( 0,0,0, 0.4 ) !important;
+}
+
+form.aui .text, form.aui .password, form.aui .textarea, 
+form.aui .select, form.aui .multi-select {
+    box-shadow: 0px 1px 3px rgb( 80,80,80 ) inset !important;
+    border-color: #000 !important;
+    color: #8a8 !important;
+}
+
+fieldset label {
+    color: #888 !important;
+}
+
+a.repo .slug {
+    font-weight: bold !important;
+    color: #597 !important;
+}
+
+a {
+    color: #486 !important;
+}
+
+.stash,
+.pricing,
+.tourSection,
+.login-box,
+.workflow-box,
+.toolbar,
+.linenos,
+.readme.file code,
+.readme.file pre,
+#wiki-content pre,
+#wiki-content code,
+.docutils.literal,
+.literal-block,
+.plaintext,
+.markItUpHeader,
+#user-actions,
+.user-list ol,
+.bb-list .form,
+.bb-list > tbody > tr,
+.repo-links-list tr,
+#active-sessions tr,
+#inactive-sessions tr,
+#ssh-keys tr,
+#group-access tr,
+#user-access tr,
+.clone-url,
+#invite-repo-box,
+.newsfeed-banner,
+#share-dialog,
+.dialog-page-body,
+.invite-users-box {
+    background: rgba( 80,80,80, 0.4) !important;
+    border-color: #000 !important;
+    color: #8a8 !important;
+}
+
+#share-dialog {
+    background: rgba( 40,40,40, 0.9) !important;
+}
+
+#repo-content {
+    background: rgba( 80,80,80, 0.2) !important;
+    border-left: 1px solid #000 !important;
+    border-right: 1px solid #000 !important;
+    margin-left: -1px !important;
+    margin-right: -1px !important;
+}
+
+.tabbed-filter-widget .tabbed-filter {
+    background: rgba( 80,80,80, 0.2 ) !important;
+    border-color: #000 !important;
+}
+
+.iterable-item,
+.tabbed-filter-widget.filter-list {
+    background: rgba( 80,80,80, 0.2 ) !important;
+}
+
+.aui th {
+    border-bottom: 1px solid #000 !important;
+}
+
+.bb-list > tbody > tr:first-child {
+    border-top: 1px solid #000 !important;
+}
+
+#providers a,
+.pricing .users,
+#pricing-row,
+.features,
+.features ul li,
+.features ul,
+.questions,
+.hero,
+.cta,
+.featuredItem,
+.login-box .form-container,
+.workflow-box .form-container,
+.openSource,
+.file-source,
+#wiki-content,
+.literal-block,
+.issue-attrs,
+#issue-main-content,
+#id_new_comment,
+#issues h1,
+.main,
+.markItUpEditor,
+.markItUpButton.separator,
+.textarea-preview,
+#account-admin-header,
+#notification-body,
+#notification-header,
+.profile-header,
+.aui h2,
+.bb-list.form,
+.aui-item,
+.aui-nav,
+.chzn-single div,
+.avatar-view,
+#pjax-main,
+#add-download,
+#tag-downloads .empty,
+.aui-lozenge,
+.bb-list .branch,
+.bb-list .branch-header,
+#commits .filter-box input,
+#commit-filter input,
+#source-path h1,
+.iterable-item,
+.aui-badge,
+#repo-activity, #invite-repo-box,
+.clone-url,
+.stats,
+.dialog-title,
+.dialog-button-panel,
+.metadata,
+.newsfeed,
+.newsfeed .commit,
+.newsfeed .commit .changeset,
+.newsfeed .news-item,
+.newsfeed .news-item p.additional-info,
+.repo-filter-widget,
+a.help-link,
+.commit-metadata,
+#general-comments h1,
+#commit-summary h1,
+.refract-container,
+.aui-tabs.horizontal-tabs > .tabs-menu,
+.fancybox-skin .diffract-sbsdiff,
+.fancybox-skin .diffract .scrollable-file-pane-lines,
+.tabbed-filter-widget .handle,
+.tabbed-filter-widget input.filter-box {
+    border-color: #000 !important;
+}
+
+.refract-container .line-numbers,
+.refract-container .line-numbers-skipped,
+.bb-udiff .heading {
+    background: rgba( 0,0,0, 0.5 ) !important;
+    border-color: #000 !important;
+}
+
+.refract-container .line-numbers {
+    color: #080 !important;
+}
+
+.fancybox-skin .diffract pre, 
+.refract-container pre.source {
+/*    font-family: Ubuntu Mono, Monospace, Courier New !important; */
+    color: #666 !important;
+}
+
+.commit-files-summary .lines-removed,
+.commit-files-summary .lines-added,
+.refract-container .deletion pre.source del,
+.refract-container .addition pre.source ins {
+    border-radius: 4px !important;
+}
+
+.fancybox-skin .diffract pre.addition,
+.refract-container .addition pre.source {
+    color: #8a8 !important;
+    background: rgba( 44,66,44, 0.5 ) !important;
+}
+
+.fancybox-skin .diffract pre.change ins,
+.commit-files-summary .lines-added,
+.refract-container .addition pre.source ins {
+    color: #bfb !important;
+    background-color: #484 !important;
+}
+
+.fancybox-skin .diffract pre.deletion,
+.refract-container .deletion pre.source {
+    color: #a88 !important;
+    background: rgba( 66,44,44, 0.5 ) !important;
+}
+
+.fancybox-skin .diffract pre.change del,
+.commit-files-summary .lines-removed,
+.refract-container .deletion pre.source del {
+    color: #fbb !important;
+    background-color: #a66 !important;
+}
+
+.skipped-container .ellipsis {
+    border: 1px solid #000 !important;
+    box-shadow: 0px 0px 0px 2px rgb(0,0,0) !important;
+    color: #aaa !important;
+    background: rgba( 0,0,0, 1.0 ) !important;
+}
+
+.fancybox-skin .diffract pre.change {
+    color: #888 !important;
+    background: rgba( 66,66,66, 0.5 ) !important;
+}
+
+.fancybox-skin {
+    background: rgba( 40,40,40, 0.9 ) !important;
+    color: #888 !important;
+}
+
+.fancybox-skin .diffract .page {
+    border-color: #000 !important;
+    background: #222 !important;
+}
+
+.fancybox-skin .diffract pre,
+.fancybox-skin .diffract pre.change,
+.fancybox-skin .diffract pre.change del,
+.fancybox-skin .diffract pre.change ins,
+.fancybox-skin .diffract pre.adddition {
+    border-top: 0px solid #000 !important;
+    padding-top: 1px !important;
+}
+ol.clearfix {
+    background: none !important;
+}
+
+.changeset-hash {
+    border: 1px solid #000 !important;
+    padding: 1px 5px 1px 5px !important;
+    border-radius: 4px !important;
+}
+
+.aui-tabs.tabs-menu.menu-item,
+.aui-tabs.tabs-menu,
+.aui-tabs a {
+    border-color: #000 !important;
+    background: #222 !important;
+}
+
+.aui-tabs .menu-item:first-child a,
+.aui-tabs .menu-item:last-child a {
+    border-radius: 0px !important;
+}
+
+.chzn-single b {
+    background-color: rgba( 0,0,0, 0.9 ) !important;
+}
+
+.aui-tabs .active-tab a,
+.aui-tabs a:active,
+.aui-tabs a:focus {
+    background: rgba( 0,0,0, 0.9 ) !important;
+}
+
+#footer-logo,
+#wiki-content,
+.profile-header,
+.bb-list thead,
+.bb-list thead .branch-header,
+.iterable-item:hover,
+.aui-navbar a:hover,
+a.help-link:hover {
+    background-color: rgba( 0,0,0, 0.3 ) !important;
+}
+
+.iterable-item {
+    color: #8a8 !important;
+}
+
+.bb-list .fade-left,
+.bb-list .fade-left:before {
+    background: none !important;
+}
+
+.bb-list thead a {
+    color: #444 !important;
+}
+
+.newsfeed .news-item .icon
+{
     background-color: #222 !important;
-    background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGQAAABkAgMAAAANjH3HAAAACVBMVEUaGhohISElJSUh9lebAAAB20lEQVRIx4XWuZXDMAwE0C0SAQtggIIYoAAEU+aKOHhYojTrYP2+QfOW/5QIJOih/q8HwF/pb3EX+UPIveYcQGgEHiu9hI+ihEc5Jz5KBIlRRRaJ1JtoSAl5Hw96hLB1/up1tnIXOck5jZQy+3iU2hAOKSH1JvwxHsp+5TLF5MOl1/MQXsVs1miXc+KDbYydyMeUgpPQreZ7fWidbNhkXNJSeAhc6qHmHD8AYovunYyEACWEbyIhNeB9fRrH3hFi0bGPLuEW7xCNaohw1vAlS805nfsrTspclB/hVdoqusg53eH7FWot+wjYpOViX8KbFFKTwlnzvj65P9H/vD0/hibYBGhPwlPO8TmxRsaxsNnrUmUXpNhirlJMPr6Hqq9k5Xn/8iYQHYIuQsWFC6Z87IOxLxHphSY4SpuiU87xJnJr5axfeRd+lnMExXpEWPpuZ1v7qZdNBOjiHzDREHX5fs5Zz9p6X0vVKbKKchlSl5rv+3p//FJ/PYvoKryI8vs+2G9lzRmnEKkh+BU8yDk515jDj/HAswu7CCz6U/Mxb/PnC9N41ndpU4hUU7JGk/C9PmP/M2xZYdvBW2PObyf1IUiIzoHmHW9yTncliYs9A9tVNppdShfgQaTLMf+j3X723tLeHgAAAABJRU5ErkJggg==) !important;
-    background-clip: border-box !important;
-    background-origin: padding-box !important;
-    background-attachment: scroll !important;
-    background-repeat: repeat !important;
-    background-size: auto !important;
-    background-position: left top !important;
-    
-    color: #FAFAFA;
-  }
-  
-  input[type="email"], input[type="password"], input[type="text"], input[type="url"], input[type="search"], textarea, .select2-choices
-  {
-    background: #333 !important;
-    color: #FAFAFA !important;
-  }
-  
-  .marketing-hero, .pipelines-testimonial, .marketing-section--alternate, #plans .pricing > div, #plans .stash
-  {
-    background: #1C1C1C;
-  }
-  
-  #plans .features, #plans .pricing .users
-  {
-    background: #131313;
-  }
-  
-  .featured-integrations
-  {
-    background: #3C3C3C;
-  }
-  
-  .marketing-footer
-  {
-    background: #161616;
-  }
-  
-  .aui-message-banner.warning
-  {
-    background: #131313;
-  }
-  
-  .diff-container
-  {
-    background: #1C1C1C;
-    color: #FAFAFA;
-  }
-  
-  .refract-container .addition pre.source
-  {
-    color: #FAFAFA;
-    background: #030;
-    opacity: 1;
-  }
-  
-  .aui-dialog2-content
-  {
-    background: #161616 !important;
-  }
-  
-  .aui-dialog2-header, .aui-dialog2-footer
-  {
-    background: #0A0A0A !important;
-  }
-  
-  .refract-container .addition pre.source ins
-  {
-    color: #FAFAFA;
-    background: #252;
-  }
-  
-  .refract-container .deletion pre.source del
-  {
-    background: #700;
-  }
-  
-  .refract-container .deletion pre.source
-  {
-    background: #400;
-    opacity: 1;
-    color: #FAFAFA;
-  }
-  
-  .refract-container.word-diff:not(.disable-word-diff) .addition pre.source ins, .refract-container.word-diff:not(.disable-word-diff) .deletion pre.source del
-  {
-    color: #0A0A0A;
-  }
-  
-  .homepage-cross-sells-description, .footer-list a, h1, h2, h3, h4, h5, h6, .aui-dropdown2.aui-style-default a, form.aui .radio > label, form.aui .checkbox > label, .aui-nav-heading, .repo-sidebar .entity-name, h1:first-child, h2:first-child, h3:first-child, h4:first-child, h5:first-child, h6:first-child, .filter-search input, .aui-navgroup-horizontal .aui-nav > .aui-nav-selected a, #dashboard .dashboard-item .text, form.aui label, form.aui legend, .aui-navgroup-vertical .aui-nav .aui-nav-selected > a, .aui-dialog h2.dialog-title, .newsfeed .news-item-description a, .refract-content-container .source, .marketing-grid--description, .integration--description, .integration-atl--description, #repo-overview #repo-stats .stats li a:hover, .compare-widget .compare-widget-form .repo-title .repo-owner
-  {
-    color: #FAFAFA;
-  }
-  
-  .filter-container .filter-label, .repository-list--byline, #profile-header #user-profile h1 .username, .newsfeed .news-item time, .newsfeed .news-item-info a, #repo-overview #repo-stats .stats li a, .compare-widget .compare-widget-form .metadata
-  {
-    color: #CCCCCC;
-  }
-  
-  #repo-overview .repo-metadata > dt
-  {
-    color: #999999;
-  }
-  
-  .workflow-box
-  {
-    background: #1C1C1C;
-  }
-  
-  #footer-logo
-  {
-    background: #1C1C1C;
-    border: solid white 1px;
-    height: 30px;
-  }
-  
-  #wiki-content h1,#wiki-content h2,#wiki-content h3,#wiki-content h4,#wiki-content h5,#wiki-content h6{
-	  color:#FAFAFA;
-  }
-  .wiki-content pre
-  {
-    background: #1C1C1C;
-    border: solid white 1px;
-  }
+    border-color: #000 !important;
+}
 
-  #wiki-edit .buttons-container {
-	  background-color: transparent;
-  }
-  
-  .aui-select2-drop .select2-search input
-  {
-    background: #131313;
-  }
-  
-  .bb-content-container-footer, .bb-content-container-header
-  {
-    background: #131313;
-  }
-  
-  .highlighttable .highlight pre a.highlighted, .highlighttable .highlight pre a:target
-  {
-    background: #0A0A0A;    
-  }
-  
-  .CodeMirror-gutters
-  {
-    background: #161616;
-  }
-  
-  .CodeMirror, .CodeMirror-scroll
-  {
-    background: #1C1C1C;
-    color: #FAFAFA;
-  }
-  
-  .CodeMirror-cursor
-  {
-    border-color: #FAFAFA;
-  }
-  
-  .codehilite .c
-  {
-    color: #CCCCCC;
-  }
-  
-  .codehilite .nb
-  {
-    color: #FAFAFA;
-  }
-  
-  .codehilite .nc
-  {
-    color: #3572B0;
-  }
-  
-  .codehilite .nt
-  {
-    color: #3572B0;
-  }
-  
-  code, .refract-container .line-numbers-skipped
-  {
-    background: #0A0A0A;
-  }
-  
-  .refract-container .line-numbers
-  {
-    width: 67px;
-  }
+.newsfeed .news-item .icon:after
+{
+    background-color: rgba(0,0,0, 0) !important;
+    border-color: rgba(0,0,0, 0) !important;
+}
 
-  .refract-container .line-numbers::before, .refract-container .line-numbers::after {
-    width: 33px;
-  }
-  
-  .refract-container .gutter
-  {
-    border: none;
-  }
-  
-  .refract-container .last.line-numbers-skipped
-  {
-    border: solid white 1px;
-    width: 95px;
-    height: 17px;
-  }
-  
-  .refract-container .comment-thread-container, .refract-container .comment-thread-container .comments-list
-  {
-    background-color: inherit;
-  }
+.news-item .icon:after {
+    background-image: url('data:image/png;base64,\
+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\
+ICJxQsbW/gFKZSJzOvvOIAAAAABJRU5ErkJggg==') !important;
+}
 
-  .refract-container .comment-thread-container
-  {
-    margin-top: 2px;
-  }
-  
-  #issue-view #issues-comments-container li.issue-comment:target
-  {
-    background: #0A0A0A;
-  }
+#repo-overview #repo-stats .stats > li.branches > a {
+    background-image: url('data:image/png;base64,\
+iVBORw0KGgoAAAANSUhEUgAAACgAAAAgCAYAAABgrToAAAAAAXNSR0IArs4c6QAAAAZiS0dEAP8A\
+/wD/oL2nkwAAAAlwSFlzAAALEwAACxMBAJqcGAAAAuVJREFUWMPtl0FIlEEUx/9v9tvdyNA8pOIK\
+GxKUIS0YaYTkYSkvVijWRekSBpUdgujaNZAwKLp0kVBEFDU8e5DWtd2lS5TkRWpbD0kUQZHutzOv\
+w7eupt+6862fdnGuM/PmN2/mvf97wP7YH/930B6dw8WeTTs8pJCt3J7DwRCE4Yc0V/Az+U6bgZzC\
+Nd0dgvB4AQAqk0bsWXc+ewwAgcYOBJu7IAxvdpoh0yuYe3LNNUAGgMZbA/AdKgcJz/oEM1hmMPu4\
+3RYw0NiBo+evQ3iMLUZl+g+i/VcLcgjd990MBwBEBPIYaOodtL1UsLnLFg4AhNePmrOdBc/VAmy6\
+8xIg+6VEBGH47I3ngbP2CdScaXcHECRA5H7Ab36RogGXEpNgVvYflBlKmrZzSma2tfv1/bQ7gKnY\
+GJSZtgdUErGnXbbBl4qP57+YklicfuEKIAFAtL9zi6dYSXyZG8m7MRkZQvrXD1u4VHzCVSXJ5cFQ\
+dx9KA3VgJRHpu6KVqJsfTOX+8PfFt/gw+lCbQTfN0Jqh5fkZMKuN/4u2O6ThxnMADGaF5fkZR3AA\
+YDiNPGWuAsxgJbW8bvgPAsxQMoOFqT7HEiscp4ZsbiMSBeGOXbwNX0k5mBmp+HhRBYoTQAYAX8lh\
+Ky+uJ2G2W1cb7kFVqBUgAksTychQUblSOA2SivqwpR4eA8cv3d88n4W7ieqGNoAEWCkkoyNFl3eG\
+LlxtuAfVpy//oyhH6loA0Nrfsp61tRdVpy5Y0sgKS4lJpGJjRauNdpBUN7RtkTsiQsXJFhwoq4Rc\
+/Y2yYMhaQwRWEkuJSXyaGdhRcawFWBvu2VY3SwMnsrKnrIg1V5GMjmz0HO2qByvrw4X/QbY2TMXH\
+8fn1oGtthRagRs7Dt4VZfHz1yPV+R69YSEzkFX2rajE3wpGbzZge4JsxS0HyeDcZGd61LtFRsXDu\
+3iiE159rflTGRHJ22JVgcK2a2ese26lR3iuw/eHW+Au3YRIaeXby5gAAAABJRU5ErkJggg==\
+') !important;
+}
 
-  .bb-udiff .heading
-  {
-    background: #0A0A0A;
-  }
-  
-  form.aui .text, .aui-button, a.aui-button, .aui-dropdown2.aui-style-default, body.onboarding .onboarding-content, form.aui .textarea, form.aui .password, .file-history-widget a:hover, .aui-select2-container .select2-choices .select2-search-choice
-  {
-    background: #1C1C1C;
-    color: #FAFAFA;
-  }
-  
-  .file-history-widget a
-  {
-    background: #0A0A0A;
-    color: #FAFAFA;
-  }
-  
-  .file-source-container .toolbar + #fileview-container .file-source
-  {
-    background: #161616;
-  }
-  
-  .aui-button:hover, .aui-button.aui-dropdown2-trigger.active, .aui-sidebar .aui-sidebar-footer > .aui-sidebar-toggle:hover, .aui-sidebar.aui-is-hover .aui-sidebar-footer > .aui-sidebar-toggle
-  {
-    background: #0A0A0A;
-    color: #FAFAFA;
-  }
-  
-  .file-source-container .toolbar
-  {
-    background: #0A0A0A;
-  }
-  
-  .highlighttable td.linenos
-  {
-    background: #0A0A0A;
-  }
-  
-  .highlighttable td.linenos a, #source-container .changeset-info .timestamp
-  {
-    color: #FAFAFA;
-  }
-  
-  .nt
-  {
-    color: #3572B0;
-  }
-  
-  .aui-button.aui-dropdown2-trigger:not(.aui-dropdown2-trigger-arrowless)::after, .aui-icon-dropdown, .marketing-grid--image
-  {
-    filter: invert(100%);
-  }
-  
-  form.aui fieldset.big-radio-buttons input.radio:checked + label, .aui-navgroup-vertical .aui-nav > li > a:hover, .aui-select2-container.select2-container .select2-choice:hover, .aui-select2-container.select2-container.select2-container-active .select2-choice, form.aui .aui-select2-container, .aui-select2-container.select2-container .select2-choice, .aui-select2-container.select2-container a.select2-choice, .help-link:hover, .aui-tabs > .tabs-menu .menu-item.active-tab a:focus, .aui-tabs > .tabs-menu .menu-item.active-tab a:hover, .aui-tabs > .tabs-menu .menu-item.active-tab a, .aui-tabs > .tabs-menu .menu-item.active-tab a:link
-  {
-    background-color: #1C1C1C;
-    color: #FAFAFA;
-  }
-  
-  form.aui fieldset.big-radio-buttons input.radio:hover + label, .aui-tabs > .tabs-menu .menu-item a:hover, .aui-tabs > .tabs-menu .menu-item a:link
-  {
-    background-color: #0A0A0A;
-    color: #FAFAFA;
-  }
-  
-  .aui-sidebar .aui-navgroup-vertical .aui-nav .aui-nav-selected a
-  {
-    background-color: #0A0A0A;
-    color: #FAFAFA;
-    border-top: solid white 1px;
-    border-bottom: solid white 1px;
-    padding-top: 4px;
-    padding-bottom: 4px;
-  }
-  
-  .aui-navgroup-vertical .aui-nav > li > a:hover, #repo-getting-started .getting-started-choice:hover, #repo-getting-started .getting-started-choice:hover, #repo-getting-started .getting-started-choice:focus, .aui-navgroup-vertical .aui-nav > li > a:focus, .aui-navgroup-vertical .aui-nav > li > a:hover
-  {
-    background-color: #161616;
-    color: #FAFAFA;
-    border-top: solid black 1px;
-    border-bottom: solid black 1px;
-    padding-top: 4px;
-    padding-bottom: 4px;
-  }
-  
-  .aui-navgroup-vertical .aui-nav > li > a
-  {
-    padding-top: 5px;
-    padding-bottom: 5px;
-  }
-  
-  .aui-select2-container.select2-container .select2-choice::after
-  {
-    border-top-color: #CCCCCC;
-  }
-  
-  .filter-status > li[aria-pressed="true"] a, .filter-status > li[aria-pressed="true"] a:hover, a.aui-button.aui-button-light, .aui-dialog .dialog-button-panel, .aui-dialog h2.dialog-title
-  {
-    background-color: #1C1C1C;
-    color: #FAFAFA;
-    border: solid white 1px;
-  }
-  
-  .filter-status > li a:hover, #content .bb-patch .heading .filename, .refract-content-container .line-numbers, .add-line-comment, .aui-sidebar .aui-sidebar-wrapper, .aui-navgroup-horizontal, .aui-inline-dialog .aui-inline-dialog-contents, .aui-inline-dialog .contents, .blank-slate-banner, .aui-button-subtle.aui-button:hover, .aui-dialog .dialog-page-body
-  {
-    background-color: #0A0A0A;
-    color: #FAFAFA;
-    border: solid white 1px;
-  }
-  
-  .aui-buttons .aui-button:not(.aui-button-primary)
-  {
-    background-color: #1C1C1C;
-    color: #FAFAFA;
-  }
-  
-  .aui-buttons .aui-button:hover:not(.aui-button-primary)
-  {
-    background-color: #0A0A0A;
-    color: #FAFAFA;
-  }
-  
-  .aui-navgroup-horizontal .aui-nav > li a:hover
-  {
-    background-color: #0A0A0A;
-    color: #FAFAFA;
-  }
-  
-  .aui-page-panel
-  {
-    background: #1C1C1C;
-  }
-  
-  .aui-dropdown2.aui-style-default a, .aui-dropdown2.aui-style-default .aui-dropdown2-section > strong
-  {
-    background-color: #205081;
-    color: #FAFAFA;
-  }
-  
-  #repo-clone-dialog .sourcetree-callout
-  {
-    background-image: linear-gradient(to bottom, #1C1C1C, #0A0A0A);
-    background-color: rgb(28, 28, 28);
-  }
-  
-  #profile .blank-slate.no-following
-  {
-    background: none;
-  }
-  
-  .participants ol li
-  {
-    background: transparent;
-  }
-  
-  #pull-request-diff-header .main dt, #repo-content .view-pullrequest #pull-request-header .pull-request-self-link
-  {
-    color: #CCCCCC;
-  }
-  
-  .sortable-table--column-header
-  {
-    background: transparent;
-    color: #CCCCCC;
-  }
-  
-  .sortable-table--column-header:hover
-  {
-    background: transparent;
-    color: #FAFAFA;
-  }
-  
-  .sortable-table--column-header[aria-sort="ascending"], .sortable-table--column-header[aria-sort="descending"]
-  {
-    background: transparent;
-    color: #FAFAFA;
-  }
-  
-  .sortable-table--column-header[data-initial-sort-direction="ascending"]:hover::after
-  {
-    border-bottom-color: #FAFAFA;
-  }
-  
-  .sortable-table--column-header[data-initial-sort-direction="descending"]:hover::after
-  {
-    border-top-color: #FAFAFA;
-  }
-  
-  .sortable-table--column-header[aria-sort="ascending"]::after
-  {
-    border-bottom-color: #CCCCCC;
-  }
-  
-  .sortable-table--column-header[aria-sort="descending"]::after
-  {
-    border-top-color: #CCCCCC;
-  }
-  
-  .aui-select2-container.select2-container a.select2-choice
-  {
-    text-shadow: none;
-  }
-  
-  .filter-bar .aui-select2-container.select2-container.filter-bar-async.select2-dropdown-open .select2-choice
-  {
-    background: #0A0A0A;
-    color: #FAFAFA !important;
-  }
-  
-  .filter-bar .aui-button[aria-pressed="true"]
-  {
-    background: #0A0A0A;
-    color: #FAFAFA;
-  }
-  
-  .filter-bar .aui-button[aria-pressed="true"]:focus, .filter-bar .aui-button[aria-pressed="true"]:hover
-  {
-    background: #131313;
-    color: #FAFAFA;
-  }
-  
-  #issues-count, .aui-badge
-  {
-    background: #161616;
-    color: #FAFAFA;
-  }
-  
-  .markItUpHeader
-  {
-    background: #161616;
-  }
-  
-  .markItUpButton
-  {
-    background: #0A0A0A !important;
-    text-shadow: none !important;
-  }
-  
-  .markItUpHeader .markItUpButton a
-  {
-    color: #FAFAFA !important;
-  }
-  
-  .textarea-preview.previewing .preview-container
-  {
-    background: #1C1C1C;
-  }
-  
-  table.bb-list .bb-list-item--highlight
-  {
-    background: #161616 !important;
-  }
-  
-  .author .unmapped-user
-  {
-    color: #FAFAFA !important;
-  }
-  
-  aui-inline-dialog .aui-inline-dialog-contents
-  {
-    background: #131313 !important;
-  }
-  
-  /*Messages*/
-  #notification-content table.bb-list tbody tr td
-  {
-    background: #1C1C1C !important;
-  }
-  
-  #notification-content table.bb-list tbody tr.read td
-  {
-    background: #131313 !important;
-  }
-  
-  #notification-content table.bb-list tbody tr.selected td
-  {
-    background: #0A0A0A !important;
-  }
+#repo-overview #repo-stats .stats > li.forks > a {
+    background-image: url('data:image/png;base64,\
+iVBORw0KGgoAAAANSUhEUgAAACgAAAAgCAYAAABgrToAAAAAAXNSR0IArs4c6QAAAAZiS0dEAP8A\
+/wD/oL2nkwAAAAlwSFlzAAALEwAACxMBAJqcGAAAAxxJREFUWMPtlz1P21AUht97fe18FNsJcaQ6\
+X7QsJUOHDggoS8sfaAdSqazlP/Uf0AGG7h2roqBuXUIrdYCQBKlBJHHVEH/dDiFQJ3FiIIk6cEbr\
+Sve557znnNfAfdzHffxfQSnjobkEp5TxQOdnDSgqGjJrb6DmniIcezgWlM0aUBBEKKknmH/0DO1G\
+DeWDXRjVQ+7aNpkpIKWMi6oGgYqe7+GYDiEURSiWgqQmQZiI4y87vpBkWmBRVUd6+TUkWfNmkImQ\
+5CQo64K7joVWpdSDRD8kmRZYJKZ3M9SXQQAgfbe6joXm0Tf8/PQe7cYpBcAnWmJKGZfTS8isFRBV\
+r8FI0OfzKTZJD25hfQtyOg8ieMFc20KnVYfrWpfnRYQU7brEdrfE5YM9dH7XB3DZneEyS8itb0FO\
+5a8uBQDHMWE2z3DRrOLk60eYxhkAIKTqWNzYRnRev4I73v8Ao1rCsCZhN+lAT1UIQUjWkF3dhJLO\
+gwqiJ2tG5RDlg120z2uwjDpcx6aXmne4a8G1LLSqo+H8AIkka1h8sY1wXMcoIV2Vqw+uLyse0XMA\
+3DbRqo2H880gESWE4zqi2kJwoQ+HI4NnTBiV7/j14/PQsRIEkBPOb6XJjlG/3Ay+WeFWq45ycRdW\
+uwHXscc+fwq7mNx5tEwNsNc0cmoJlA03AV2zUICc9j8ztklc20L7vAYQMjIfRBAhKQkIgtR9LROh\
+pPPIrW/57VfSMwsPElkc7e+MNAq+9aCUcUnRQJg0spCSnEB2pQAllQcVRc/qalVKKBf30DHq6Gma\
+E4JITMfjl9sIK1p3zPjs4CCCGS9ggblyOo/c87eDkH0bZGA0MXGsUZiIWaAC43I6j+zqJsJqCpJ6\
+XfJAo2kWboYKjEuyhnA81d0sujebQSCn6mZcxyYXjVNiGnX32DGRXSkgEtc9vu+2I2fyhvWfbGaW\
+X0GSk74aDLJ9CKYThArMleTBSRCJ6VjceIfQXBIdo46LZhXl4t7N3MwEgvfKPlQR5h+0aiWUix63\
+M9ufJj91ubYJ48RjFmjwxTezH3eNU4H9P1B3ac6/LwO7m/G8z24AAAAASUVORK5CYII=\
+') !important;
+}
+
+#repo-overview #repo-stats .stats > li.followers > a {
+    background-image: url('data:image/png;base64,\
+iVBORw0KGgoAAAANSUhEUgAAACgAAAAgCAYAAABgrToAAAAAAXNSR0IArs4c6QAAAAZiS0dEAP8A\
+/wD/oL2nkwAAAAlwSFlzAAALEwAACxMBAJqcGAAAAtVJREFUWMPtWL1y00AY3DvdSTZYdgxyEf+k\
+TcIMHQwJoeIFoEgKeDEa+hTJGzAwVJmkpcApAoU9kTNYGNsyGFnSicKxYyey45MEpMhX2vOd9r7d\
+21sJuOFFklyMUhbwnAGFcvjChduxIIQX6xksSXB6aQ3lzR1oGQNOp4Gv79+i3z4jAIL/DpBnDZQ3\
+d5ArPwRl6vnqavyNJwVQUTi0jAHKVBACUKZC0w1QxsSNAHi5NN1A+dELaBkjltZpUvobTotf/MY4\
+VN2ITTNNSn+lxy+h6QWQyVkRcjM0qCjDaRGFTy+u8Ng6ZItSOPK3sEotLU/RO6nDysY26gAG3Wao\
+1Vznl0TW30InyDhUvRAKUvguBt0mfM8N7R3YFupHe7DNYwjvKkgWyd/Cdjpjq1Th0JaKM/vS94b/\
+fXn3JtTUF6KYBAAhJLLm5/UFQUwNut0hBYRxZJfXQTlPxCeF58LpWvjdMVE/2oPTsxB2JS40E6oM\
+dVh5soN0fnmm3mTAdU+rqB/tof+jAde2IPyIh2QSpKobSOWLqGxsR5rm1NQO92GbVQjPo/PChKyq\
+CFWY0EtrWNl6LQVSZmpxjDoQvkfs02PUD/fh9JrXinys5V8dfKt+hG0ew2mf0UXARb5JhO8Rx7Yg\
+ZnhbqF3dyaGwugU1nfv7Vx2lLEhl7ksdFMo41Ix8eIgEcGY4uBakfEaMBHBWOBCei36rgZ9WDf1W\
+44oEomREFoXey9nv8il17O/joDB50qNkRFmARAuhdwSudrA79janbYqa72Ll6StkS+vjDY1odtqm\
+CAsH8SlmKtTzCfr+AP1WA536p0lwBEAgPI/Y56C7p1UI141Es/xbnTfAoGdByxbQOzuZa7zC94ht\
+VoPawS4qG9tI5Yrgd+VsRjqfjO7lwoPnaH7+MMpxc68rqrCA6wbS+SKM1WeTfYl+OJh6oJYxAqow\
+mRdyErHvn382Ibit27qoP2ZXVrn0aeDSAAAAAElFTkSuQmCC\
+') !important;
+}
+
+#repo-overview #repo-stats .stats > li.tags > a {
+    background-image: url('data:image/png;base64,\
+iVBORw0KGgoAAAANSUhEUgAAACgAAAAgCAYAAABgrToAAAAAAXNSR0IArs4c6QAAAAZiS0dEAP8A\
+/wD/oL2nkwAAAAlwSFlzAAALEwAACxMBAJqcGAAAA9dJREFUWMPtl79v20YUx788HkkpECVbZdrI\
+vwKkGeKhc21katGt6FRnyZylf0Xk/BNdMtdAkwIt0K1I0aVGnAIdArRWkzZAJFlUa0qRSMkij+Rd\
+B0mWZEkUaffH4i/AhXx37/PevXu8Ay51qUtFSjr7ghAqlJwBmShTxiH34bctcB5I/wsgIVToq7ew\
+tn0HWsaYMmaOhcrBIzi1EnjQh4wK6J8IjJ6Fu377LvTVTUjytMN0fgUA8Md3n6PXqkuEUB4V0FBe\
+28SrJw/Ra9UlAOJcgErWwNr2HeirmyB0djYkWYGqGwBVJ8bk1t4DGbybJVlRoC2vwOtYfJj5pIAS\
+oSq0jHEKF4YMzGlABAEkSqHqb0GWVUAazC8EyNXr0DIGZEWdGANgZA9AzVzF+tYOyiGDUyuJJJB0\
+MkWjccxu4NX3D+G260jlruHGh/eQWirMSGt/DA98OEclVA6+AgCsv/8psoPVIFRBdnUTG7fvovzj\
+F4kgybwPPPThtkycWGW4LRM89OdOIgTgDTaQXX4Ou/wclYNH8Bxr5EgeQeort0AoFRcCJLKC1HIB\
+aWMDqeUCiKzEawqS6D/THexckHTeB003cOODe+BhACJTaLoxXgFTq6zpBta3dlAZvFvf2oGmG5GQ\
+cZb7FFD4DMw5RjpXAFH6dZNeLkQkSwKMjZFjqiC7sombH33WDzBrzO0GSSCHSyxYx0L1p2/gjtVN\
+UhGqIJ0vIJ0vzIVLutxktCkC4jZrOLFeo9c0EYZs7sSaboBQyoXP0GvWIu0vCilP7FzfLTpmCbZZ\
+Qir7DtRMHhKRzzTdFFK5t+G2TLjtOuzqL5H2C7cVkaFm8kgtFeC2TPjdZlFwvjsTUAi+G7idB6xj\
+3XdbdaSWrk05HZ+w16yi1yjDax/3++UM+4tCzpxJcL7rd5vFOJBuywTrWGCOhXn2SSC1jAG7+isC\
+t/MgulEHgeTUDlHe34N9dAge+JH1AwBR9rE0Y5tEhpk4k875M8kDH/bRISpPv8RJowzBeXEh4H8F\
+OYQr7+/BqR1ivCfGCi8u5LB+/BOb+N3m/TiQUXCRNZi0JiUBSJJ8+g9eZB8HLhFgpFMRwn1Tgfnz\
+12Ddxmm5D+0r+3twzN/Ax5p5HLjEgBNOx45Toeug9fs+nPpLhL5HpuzNF6g9ewyvWQVEGBsu8jSz\
+AJK4TZN3j1+DBwys/Rf+fPEMAfM/GZy1Ji9Nvkec+kv+pvQDwne34XsnqDx9vBBu5rUz9n+UUKFm\
+DUhUhQgYmB19a5NV9WNFvfKtcmUJoe/BtY/Bw3//+iqNPbFULBbJRRJzqaT6G8x+nSey7hTtAAAA\
+AElFTkSuQmCC\
+') !important;
+}
