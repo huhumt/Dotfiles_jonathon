@@ -1,0 +1,54 @@
+#!/usr/bin/env zsh
+
+function get_children(){
+	local parentid=${1:-0}
+	local depth=${2:-0}
+	wp --url="$domain" --post_type="$post_type" --post_parent="$parentid" --format="csv" post list | tail -n +2 | sort | while read line; do
+		newid=$(echo "$line" | awk -F ',' '{print $1}')
+		pagename=$(echo "$line" | awk -F ',' '{print $2}')
+		slug=$(echo "$line" | awk -F ',' '{print $3}')
+
+		echo -n "$pagename$seperator" | tr -d '"'
+		for i in $(seq 0 $depth); do
+			echo -n "$seperator"
+		done
+		echo "$slug/"
+		get_children "$newid" "$((depth+1))"
+
+	done
+}
+
+seperator="§"
+public_html="${${PWD%/public_html*}%/wiki*}/public_html"
+if [ -d $public_html ]
+then
+	if [ -d $public_html/wp ]
+	then
+		wpPath=$public_html/wp
+	else
+		wpPath=$public_html
+	fi
+
+	domain="$(basename $(dirname $public_html ) ).local.jh"
+	post_type="post"
+
+	while [[ $# -gt 0 ]]; do
+		case "$1" in
+			"--domain")
+				domain="$2"
+				shift
+				shift
+				;;
+			"--post_type")
+				post_type="$2"
+				shift
+				shift
+				;;
+		esac
+	done
+
+	get_children
+
+
+fi
+
