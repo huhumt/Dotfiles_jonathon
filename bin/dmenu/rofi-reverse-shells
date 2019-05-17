@@ -1,12 +1,12 @@
 #!/usr/bin/env bash
 #
-#   Use rofi to pick a reverse shell
+#   Use dmenu to pick a reverse shell
 #
 #   Requirements:
-#     rofi, xsel, rsg (git@github.com:mthbernardes/rsg.git)
+#     dmenu, xsel
 #
 
-SHELLS='/home/jonathan/GitRepos/rsg/shells.txt'
+SHELLS="$(dirname $0)/shells.txt"
 
 function notify() {
 	if [ "$(command -v notify-send)" ]; then
@@ -41,22 +41,7 @@ function display() {
 	port=$(getPort)
 	reverseShell=$(getReverseShell $ip $port)
 
-
-	#reverseShell=$( echo "$reverseShell" | sed "s/\[IPADDR\]/$ip/g" | sed "s/\[PORT\]/$port/g" )
-	
 	echo -n "$reverseShell" | /usr/bin/xclip -i -selection clipboard
-	#emoji=$(cat "$UNICODE_FILE" | grep -v '^[[:space:]]*$')
-	#line=$(echo "$emoji" | rofi -dmenu -i -p Unicode -kb-custom-1 Ctrl+c $@)
-	#exit_code=$?
-
-	#line=($line)
-
-	#if [ $exit_code == 0 ]; then
-	#	xdotool type --clearmodifiers "${line[0]}"
-	#elif [ $exit_code == 10 ]; then
-	#	echo -n "${line[0]}" | /usr/bin/xclip -i -selection clipboard
-
-	#fi
 }
 
 

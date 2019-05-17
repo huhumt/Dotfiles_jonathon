@@ -1,0 +1,52 @@
+#!/usr/bin/env zsh
+
+# Small script that echos the path of a wordpress theme
+#
+# By default it will echo the path of the active theme. If an argument is given, it will grep the list of themes with the argment and return the path for the first
+#
+# It assumes that the wordpress is in a folder called public_html or public_html/wp. It should be run from inside this directory
+#
+# It can also be run inside a wiki directory if public_html is a sibling of wiki
+#
+# @author jab2870
+# @requires wp
+
+# Gets the public html folder from any sub folder or the wiki folder
+public_html="${${PWD%/public_html*}%/wiki*}/public_html"
+# Checks the public_html directory exists
+if [ -d $public_html ]; then
+
+	# Checks to see if wp is in a subdirectory called wp
+	if [ -d $public_html/wp ]; then
+		wpPath=$public_html/wp;
+	else
+		wpPath=$public_html;
+	fi
+
+	# This assumes the domain for the site. It should be changed according to your setup
+		# It assumes here that the domain is the same as public_html folder with .local.jh appended
+		# This is needed if using a multisite setup
+	domain="$(basename $(dirname $public_html ) ).local.jh"
+
+	# If we have an argument
+	if [ ! -z "$1" ]; then
+		# Try and find the theme containing the argument and return it's path
+		theme=$(dirname $(wp --path="$wpPath" --url="$domain" theme path $(wp --path="$wpPath" --url="$domain" theme list 2> /dev/null | grep "$1" | head -n 1 |  awk '{print $1}') 2> /dev/null ))
+	else
+		# Otherwise, get the active plugin
+		theme=$(dirname $(wp --path="$wpPath" --url="$domain" theme path $(wp --path="$wpPath" --url="$domain" theme list 2> /dev/null | grep "active" | grep -v "inactive" | awk '{print $1}') 2> /dev/null ))
+	fi
+
+	# If we have an answer
+	if [ -d $theme ]; then
+		# Echo it
+		echo $theme
+	else
+		# Otherwise we can fail
+		>&2 echo "cannot find theme"
+		exit 2
+	fi
+else
+	>&2 echo "Cannot find public_html"
+	exit 1
+fi

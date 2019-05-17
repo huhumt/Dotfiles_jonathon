@@ -12,4 +12,9 @@ GEM_PATH=$GEM_HOME
 export PATH=$PATH:$GEM_HOME/bin
 export GEM_HOME=$(ruby -e 'print Gem.user_dir')
 
+# Adds sub folders in by .bin directory to the PATH
+for d in ~/.bin/*/; do
+    PATH+=":$d"
+done
+
 #echo -e "Please don't sabotage my computer while I'm away \n\nTo turn on the print server, run the command 'cups'" | /usr/bin/cowsay -f tux -W 80

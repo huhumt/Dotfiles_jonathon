@@ -7,7 +7,7 @@ function big-new-chromium () {
 }
 
 # make xclip work as I would expect. Copy to clipboard if piped data. Paste from otherwise
-function xclip(){
+function clip(){
 if command -v /usr/bin/xclip 1>/dev/null; then
 	if [[ -p /dev/stdin ]] ; then
 		# stdin is a pipe
@@ -113,36 +113,13 @@ function ptheme() {
 	fi
 }
 
-function get_theme() {
-	public_html="${${PWD%/public_html*}%/wiki*}/public_html"
-	if [ -d $public_html ]; then
-		if [ -d $public_html/wp ]; then
-			wpPath=$public_html/wp;
-		else
-			wpPath=$public_html;
-		fi
-		domain="$(basename $(dirname $public_html ) ).local.jh"
-		if [ ! -z "$1" ]; then
-			theme=$(dirname $(wp --path="$wpPath" --url="$domain" theme path $(wp --path="$wpPath" --url="$domain" theme list 2> /dev/null | grep "$1" | head -n 1 |  awk '{print $1}') 2> /dev/null ))
-		else
-			theme=$(dirname $(wp --path="$wpPath" --url="$domain" theme path $(wp --path="$wpPath" --url="$domain" theme list 2> /dev/null | grep "active" | grep -v "inactive" | awk '{print $1}') 2> /dev/null ))
-		fi
-		if [ -d $theme ]; then
-			echo $theme
-		else
-			echo ""
-		fi
-	else
-		echo ""
-	fi
-}
 
 #Takes you to the child theme
 function theme() {
 	if [ ! -z "$1" ]; then
-		ctheme=$(get_theme "$1")
+		ctheme=$(getthemepath "$1" 2> /dev/null)
 	else
-		ctheme=$(get_theme)
+		ctheme=$(getthemepath 2> /dev/null)
 	fi
 	if [ ! -z "$ctheme" ]; then
 		cd $ctheme
@@ -151,7 +128,7 @@ function theme() {
 
 #Takes you to the js folder child theme
 function js() {
-	ctheme=$(get_theme)
+	ctheme=$(getthemepath)
 	if [ ! -z "$ctheme" ]; then
 		cd $ctheme/js
 	fi
@@ -159,7 +136,7 @@ function js() {
 
 #Takes you to the css folder child theme
 function css() {
-	ctheme=$(get_theme)
+	ctheme=$(getthemepath)
 	if [ ! -z "$ctheme" ]; then
 		cd $ctheme/css
 	fi
@@ -210,40 +187,6 @@ function wooTemplates() {
 	fi
 }
 
-#Copies a woo tepmplate file to the theme
-function woocp() {
-	public_html=${PWD%/public_html*}/public_html
-	if [ -d $public_html ]; then
-		if [ -d $public_html/wp ]; then
-			wpPath=$public_html/wp;
-		else
-			wpPath=$public_html;
-		fi
-		woocommerce=$(dirname $(wp --path="$wpPath" plugin path woocommerce))
-		themes=$(dirname $(wp --path="$wpPath" theme path ))
-		if [ -d "$woocommerce" ]; then
-			#If we are here, we know what the woocommerce path is.
-			# If in WOO directory, we want to copy to the theme directory. If we are not in Woo directory, copy to the current directory
-			case $PWD/ in
-				$woocommerce/*)
-					theme=$(get_theme)
-					#if [[ $PWD = $woocommerce/templates
-					;;
-				$themes/*)
-					echo "in themes dir"
-					;;
-				*)
-					echo "soewhere else"
-					;;
-			esac
-		else
-			echo "Can't find woocommerce"
-		fi;
-	else
-		echo " Can't find public_html folder."
-	fi
-}
-
 #Takes you to the theme directory
 function themes() {
 	public_html=${${PWD%/public_html*}%/wiki*}/public_html
@@ -277,58 +220,12 @@ function debugToggle(){
 	fi
 }
 
-########################################
-##                                    ##
-##         Search Functions           ##
-##                                    ##
-########################################
-
-#These search functions use grep to search all sub-folders of the current working directory
-searchjs() {
-	# This will search through .js and .es6 files but won't search minified files
-	grep -r -i -n --color="always" --include=\*.{js,es6} --exclude=\*.min.js "$1" . | tee /tmp/lastSearch
-}
-searchcss() {
-	# This will search through .css and .less files but won't search minified files
-	grep -r -i -n --color="always" --include=\*.{css,less,scss,sass} --exclude=\*.min.css "$1" . | tee /tmp/lastSearch
-}
-searchphp() {
-	grep -r -i -n --color="always" --include=\*.{php,phtml} "$1" . | tee /tmp/lastSearch
-}
-searchhtml() {
-	grep -r -i -n --color="always" --include=\*.{html,htm} "$1" . | tee /tmp/lastSearch
+# Adds sub folders in by .bin directory to the PATH if they are not already in it
+function updatePath(){
+	for d in ~/.bin/*/; do
+		if [[ :$PATH: != *:"$d":* ]] ; then
+			PATH+=":$d"
+		fi
+	done
 }
 
-ops() {
-	responce=$(cat /tmp/lastSearch | slmenu -b -l $(tput lines) | sed 's/\x1B\[[0-9;]\+[A-Za-z]//g')
-	echo "responce"
-	file=$(echo "$responce" | awk -F ':' '{print $1}')
-	line=$(echo "$responce" | awk -F ':' '{print $2}')
-	vim +${line} ${file}
-}
-
-png() {
-    pngcrush -brute "$1"{,.} && du -b "$1"{,.}
-}
-gif() {
-    gifsicle -O "$1" -o "$1." && du -b "$1"{,.}
-}
-jpeg() {
-    jpegtran "$1" > "$1." && du -b "$1"{,.}
-}
-# Just for easy access in history
-mpng() {
-    mv "$1"{.,}
-}
-mgif() {
-    newsize=$(wc -c <"$1.")
-    oldsize=$(wc -c <"$1")
-    if [ $oldsize -gt $newsize ] ; then
-        mv "$1"{.,}
-    else
-        rm "$1."
-    fi  
-}
-mjpeg() {
-    mv "$1"{.,}
-}
