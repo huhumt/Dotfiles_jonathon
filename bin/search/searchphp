@@ -1,0 +1,29 @@
+#!/usr/bin/env bash
+
+after=0
+before=0
+search=''
+if [ $# == 0 ]; then
+	echo "Usage: $0 [-A <after>] [-B <before>] query"
+	exit 1
+fi
+while [ $# != 0 ]; do
+	case "$1" in
+		-A)
+			after="$2"
+			shift
+			shift
+			;;
+		-B)
+			before="$2"
+			shift
+			shift
+			;;
+		*)
+			search="$search $1"
+			shift
+			;;
+	esac
+done
+
+grep -r -i -n --color="always" --include=\*.{php,phtml} -A "$after" -B "$before" "$search" .
