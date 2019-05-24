@@ -26,4 +26,6 @@ while [ $# != 0 ]; do
 	esac
 done
 
-grep -r -i -n --color="always" --include=\*.{php,phtml} -A "$after" -B "$before" "$search" .
+#echo grep -r -i -n --color="always" --include="*.{php,phtml}" -A "$after" -B "$before" "$search" .
+grep -r -i -n --color="always" --include=\*.php -A $after -B $before $search .
+
