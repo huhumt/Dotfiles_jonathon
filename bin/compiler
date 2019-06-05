@@ -53,7 +53,7 @@ case "$file" in
 	*\.tex|*\.latex) textype "$file" ;;
 	#*\.md) pandoc "$file" --pdf-engine=xelatex -o "$base".pdf ;;
 	#*\.md) pandoc "$file" -o "$base".pdf ;;
-	*\.md) mdtype "$file" "$2" ;;
+	/tmp/neomutt*|*\.md) mdtype "$file" "$2" ;;
 	*config.h) make && sudo make install ;;
         *\.c) cc "$file" -o "$base" && "$base" ;;
 	*\.py) python "$file" ;;
