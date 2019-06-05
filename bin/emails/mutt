@@ -1,0 +1,9 @@
+#!/usr/bin/env sh
+
+#Start proton mail bridge if not running
+if [ ! $(pgrep -f protonmail-br) ]; then
+	setsid protonmail-bridge --no-window &
+	sleep 5
+fi
+
+neomutt

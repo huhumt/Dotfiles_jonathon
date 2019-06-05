@@ -1,0 +1,14 @@
+#!/usr/bin/env sh
+
+# A simple script to adjust the volume
+# Requires pulse and amixer
+
+case "$1" in
+	"up")
+		amixer -q -D default sset Master 5%+ unmute
+		;;
+	"down")
+		amixer -q -D default sset Master 5%- unmute
+esac
+
+command -v notify-send && notify-send "Volume" "$(amixer -D default sget Master | grep -o '\[.*\%' | tr -d '[')"

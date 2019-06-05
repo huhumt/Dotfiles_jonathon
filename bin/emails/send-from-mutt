@@ -1,0 +1,4 @@
+#!/bin/sh
+
+EMAIL=$(pass Email/protonmail | grep BridgeUsername | cut -d':' -f2)
+~/.bin/emails/MIMEmbellish | msmtp --user "$EMAIL" "$@"

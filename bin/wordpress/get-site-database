@@ -63,3 +63,6 @@ wp search-replace --all-tables --url="${localDomains[0]}" "$sshFolderPath" "$pub
 
 # Removes the db.dump that we created
 rm "$public_html"/db.dump
+
+#Makes sure everything in the uploads folder on the server is also on the local
+rsync -ruh --progress "${sshKey}:${sshFolder}/wp-content/uploads/" "${public_html}/wp-content/uploads
