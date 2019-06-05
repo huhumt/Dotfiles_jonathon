@@ -18,32 +18,48 @@ if [ -z "$sshKey" ]; then
 	exit 1
 fi
 
+# This command exits with a non-zero exit code if not a multisite
+wp site list 2>/dev/null >/dev/null
+if [ $? -eq 0 ]; then
+	multisite="true"
+else
+	multisite="false"
+fi
+
 # Finds the local public_html folder
 public_html="${PWD%/public_html*}/public_html"
 # Gets the folder that we should Copy from
 sshFolder="$(ssh "$sshKey" ls | grep "$sshFolder")"
 # gets the fell path of the folder for the path replace later on
 sshFolderPath="$(ssh "$sshKey" "cd $sshFolder; pwd")"
-# Gets an array of domains on the remote server
-remoteDomains=($(ssh "$sshKey" "cd $sshFolder; wp site list 2> /dev/null" | cut -f 2 | tail -n +2 | sed -E "s/https?:\/\///g" | sed -E "s/\/$//g"))
-# Gets an array of domains on the local server
-localDomains=($(wp site list 2> /dev/null | cut -f 2 | tail -n +2 | sed -E "s/https?:\/\///g" | sed -E "s/\/$//g"))
+if [ "$multisite" == "true" ]; then
+	# Gets an array of domains on the remote server
+	remoteDomains=($(ssh "$sshKey" "cd $sshFolder; wp site list 2> /dev/null" | cut -f 2 | tail -n +2 | sed -E "s/https?:\/\///g" | sed -E "s/\/$//g"))
+	# Gets an array of domains on the local server
+	localDomains=($(wp site list 2> /dev/null | cut -f 2 | tail -n +2 | sed -E "s/https?:\/\///g" | sed -E "s/\/$//g"))
+else
+	# puts the site url in an array
+	remoteDomains=($(ssh "$sshKey" "cd $sshFolder; wp option get siteurl 2> /dev/null" | sed -E "s/https?:\/\///g" | sed -E "s/\/$//g"))
+	# Gets an array of domains on the local server
+	localDomains=($(wp option get siteurl 2> /dev/null | sed -E "s/https?:\/\///g" | sed -E "s/\/$//g"))
+fi
 
+echo "Downloading database"
 # Dumps the database into our public_html folder
 ssh "$sshKey" "cd $sshFolder; wp db export -" > "$public_html"/db.dump
 
 # Imports the new database
-wp db import "$public_html"/db.dump
+wp db import "$public_html"/db.dump 2> /dev/null > /dev/null
 
 # Loops through the domains and does a search and replace
 for (( i = 0; i < ${#remoteDomains[@]}; i++ )); do
 	echo "${remoteDomains[$i]} -> ${localDomains[$i]}"
-	wp search-replace --all-tables --url="${remoteDomains[$i]}" "${remoteDomains[$i]}" "${localDomains[$i]}" 2> /dev/null
+	wp search-replace --all-tables --url="${remoteDomains[$i]}" "${remoteDomains[$i]}" "${localDomains[$i]}" 2> /dev/null > /dev/null
 done
 
 # Searches and replaces the paths
 echo "$sshFolderPath -> $public_html"
-wp search-replace --all-tables --url="${localDomains[0]}" "$sshFolderPath" "$public_html" 2> /dev/null
+wp search-replace --all-tables --url="${localDomains[0]}" "$sshFolderPath" "$public_html" 2> /dev/null > /dev/null
 
 # Removes the db.dump that we created
 rm "$public_html"/db.dump
