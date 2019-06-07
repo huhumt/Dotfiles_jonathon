@@ -26,4 +26,4 @@ while [ $# != 0 ]; do
 	esac
 done
 
-grep -r -i -n --color="always" --include=\*.{css,less,scss,sass} --exclude=\*.min.css -A "$after" -B "$before" "$search" .
+grep -r -i -n --color="always" --include=\*.{css,less,scss,sass} --exclude=\*.min.css -A $after -B $before $search .

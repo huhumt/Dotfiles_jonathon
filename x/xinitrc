@@ -1,5 +1,5 @@
 # Make keyboard layout coleemak but pushing both shifts will toggle to qwerty
-setxkbmap -layout gb,gb -variant "colemak," -option grp:shifts_toggle
+# setxkbmap -layout gb,gb -variant "colemak," -option grp:shifts_toggle
 # Make key firing much faster
 xset r rate 200 70
 # Need this for making qt applications use gtk theme ( I think )

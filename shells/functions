@@ -50,6 +50,7 @@ function mycd() {
 			echo "Can't cd"
 		fi
 	fi
+	updatePath
 }
 alias cd="mycd"
 
@@ -221,11 +222,19 @@ function debugToggle(){
 }
 
 # Adds sub folders in by .bin directory to the PATH if they are not already in it
+# Also adds .bin to the path adjacent to any public_html folder
 function updatePath(){
+	# Reset the path
+	PATH=$(echo $PATH | sed -E "s/:\/home\/jonathan\/\.bin\/.*//g")
 	for d in ~/.bin/*/; do
 		if [[ :$PATH: != *:"$d":* ]] ; then
 			PATH+=":$d"
 		fi
 	done
+	public_html=${PWD%/public_html*}/public_html
+	if [ -d $public_html ]; then
+		PATH+=":${PWD%/public_html*}/.bin"
+	fi
+
 }
 
