@@ -63,6 +63,15 @@ $endif$
 \renewcommand{\@seccntformat}[1]{}
 \makeatother
 
+\usepackage{float}
+\let\origfigure\figure
+\let\endorigfigure\endfigure
+\renewenvironment{figure}[1][2] {
+    \expandafter\origfigure\expandafter[H]
+} {
+    \endorigfigure
+}
+
 $if(mathfont)$
 $if(mathspec)$
   \ifxetex
