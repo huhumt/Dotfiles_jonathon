@@ -11,6 +11,7 @@
 	lol = log --graph --pretty=format:\"%C(yellow)%h %C(blue)%cd %C(green)%cn %C(white) - %s\" --date=format:\"%d/%m/%Y %H:%M:%S\"
 	#lola = log --graph --decorate --pretty=oneline --abbrev-commit --all
 	lola = log --graph --pretty=format:\"%C(yellow)%h %C(blue)%cd %C(green)%cn %C(white) - %s\" --date=format:\"%d/%m/%Y %H:%M:%S\" --all
+	lolame = log --graph --pretty=format:\"%C(yellow)%h %C(blue)%cd %C(green)%cn %C(white) - %s\" --date=format:\"%d/%m/%Y %H:%M:%S\" --all --author=Jonathan
 	ilog = recall
 	detach = "!git checkout $(git rev-parse HEAD)"
 	undo = reset --soft HEAD^
