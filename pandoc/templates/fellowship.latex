@@ -121,18 +121,25 @@ $if(verbatim-in-note)$
 \usepackage{fancyvrb}
 $endif$
 \usepackage{fancyhdr}
+
+
+\usepackage{tocloft}
+\renewcommand{\cftsecleader}{\cftdotfill{\cftdotsep}}
+
+
+
 \usepackage{xcolor}
 \definecolor{fplteal}{HTML}{00bfb3}
-\definecolor{fplgreen}{HTML}{cedc00}
+\definecolor{fplgreen}{HTML}{a8ad00}
 \definecolor{fplyellow}{HTML}{ffd100}
 \definecolor{fplpink}{HTML}{e8927c}
 \definecolor{fplgrey}{HTML}{d1e0d7}
 \usepackage{sectsty}
 \colorlet{primary}{fplteal}
-\sectionfont{\color{primary}\sffamily}
+\sectionfont{\fontsize{12}{15}\color{primary}\sffamily\MakeUppercase}
+\renewcommand{\cfttoctitlefont}{\fontsize{12}{15}\bfseries\color{primary}\sffamily\MakeUppercase}
 \subsectionfont{\sffamily}
 \subsubsectionfont{\color{primary}\sffamily}
-
 
 \usepackage{hyperref} \hypersetup{
 $if(title-meta)$
@@ -445,6 +452,8 @@ $endif$
 $if(lof)$
 \listoffigures
 $endif$
+
+
 $body$
 
 $if(natbib)$
