@@ -1,5 +1,7 @@
 #!/bin/bash
 
+# Prints the number of commits between branches and a main branch (master by defaunt)
+
 mainBranch="${1-master}"
 
 
