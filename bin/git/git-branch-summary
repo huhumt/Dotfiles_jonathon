@@ -1,0 +1,24 @@
+#!/bin/bash
+
+mainBranch="${1-master}"
+
+
+for branch in $(git branch -a); do
+
+	if [ "$branch" = "$mainBranch" ]; then
+		continue;
+	fi
+
+	masterInFront=$(git log --oneline "$branch".."$mainBranch" | wc -l)
+	branchInFront=$(git log --oneline "$mainBranch".."$branch" | wc -l)
+
+	if [ "$masterInFront" = "0" ] && [ "$branchInFront" = "0" ]; then
+		echo "$mainBranch and $branch are in sync"
+	else
+		echo "$mainBranch is $masterInFront commits in front of $branch"
+		echo "$branch is $branchInFront commits in front of $mainBranch"
+	fi
+
+	echo ""
+
+done
