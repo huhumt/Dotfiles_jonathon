@@ -5,7 +5,7 @@
 mainBranch="${1-master}"
 
 
-for branch in $(git branch -a); do
+for branch in $(git branch -a --format "%(refname:short)"); do
 
 	if [ "$branch" = "$mainBranch" ]; then
 		continue;
