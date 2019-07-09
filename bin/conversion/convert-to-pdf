@@ -9,3 +9,4 @@ cd "$dir" || exit
 case "$file" in
 	*\.doc|*\.docx) libreoffice --convert-to pdf "$file" ;;
 	*) echo "Don't know how to convert $file"
+esac
