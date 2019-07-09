@@ -20,3 +20,5 @@ alias -s es6=$EDITOR
 alias -s gitignore=$EDITOR
 
 alias -s json=$EDITOR
+
+unalias gf
