@@ -84,6 +84,7 @@ alias conf='$EDITOR ${PWD%/public_html*}/public_html/wp-config.php'
 
 # Quit the terminal using :q (The same as Vi/Vim)
 alias :q='exit;'
+alias q='exit;'
 
 # Not sure why and how but this makes sudo work with my aliases
 alias sudo='sudo '
@@ -156,3 +157,5 @@ alias colemak="setxkbmap -layout gb,gb -variant \"colemak,\" -option grp:shifts_
 alias qwerty="setxkbmap -layout gb"
 
 alias ol="open-local"
+
+alias globalip="drill myip.opendns.com @resolver1.opendns.com | sed -n '/ANSWER SECTION/,/AUTHORITY SECTION/ p' | sed -n '2 p' | awk '{print \$5}'"
