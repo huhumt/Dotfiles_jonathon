@@ -1,0 +1,19 @@
+#!/bin/bash
+
+toplevel=$(git rev-parse --show-toplevel 2> /dev/null)
+if [ ! -d "${toplevel}/.git" ]; then
+	echo "Can't find .git folder"
+	exit
+fi
+
+gitFolder="${toplevel}/.git"
+{
+	find $gitFolder/objects/pack/ -name "*.idx" | while read i; do
+		git show-index < "$i" | awk '{print $2}';
+	done
+	
+	find $gitFolder/objects/ -type f | grep -v '/pack/' | awk -F'/' '{print $(NF-1)$NF}'
+} | while read o; do
+	git cat-file -p $o
+done
+
