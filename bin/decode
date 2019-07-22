@@ -1,0 +1,41 @@
+#!/usr/bin/env bash
+
+##Helper Functions
+
+urldecode() {
+	# urldecode <string>
+	local url_encoded="${1//+/ }"
+	printf '%b' "${url_encoded//%/\\x}"
+}
+
+string="$1"
+if [ -z "$string" ]; then
+	string="$(cat)"
+fi
+
+# Base 64
+decoded=$(echo -n "$string" | base64 -d 2> /dev/null)
+# Check to see if base64 decode was successfull, only print if it was
+if [ $? -eq 0 ] && [ "$decoded" != "$string" ]; then
+	echo -en "Base64\t"
+	echo "$decoded"
+fi
+
+#URL
+decoded=$(urldecode "$string")
+if [ "$decoded" != "$string" ]; then
+	echo -en "URL\t"
+	echo "$decoded"
+fi
+
+#Hex
+decoded=$(echo -n "$string" | xxd -r -p)
+if [ ! -z "$decoded" ] && [ "$decoded" != "$string" ]; then
+	echo -en "HEX\t"
+	echo $decoded
+fi
+
+# Binary
+echo -en "
+for i in $string; do
+	echo "ibase=2;$i" | bc

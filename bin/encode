@@ -1,0 +1,88 @@
+#!/usr/bin/env bash
+
+##Helper Functions
+
+urlencodespecial() {
+	# urlencode <string>
+	old_lc_collate=$LC_COLLATE
+	LC_COLLATE=C
+	local length="${#1}"
+	for (( i = 0; i < length; i++ )); do
+		local c="${1:i:1}"
+		case $c in
+			[a-zA-Z0-9.~_-]) printf "$c" ;;
+			*) printf '%%%02X' "'$c" ;;
+		esac
+	done
+	LC_COLLATE=$old_lc_collate
+}
+
+urlencodeall() {
+	# urlencode <string>
+	old_lc_collate=$LC_COLLATE
+	LC_COLLATE=C
+	local length="${#1}"
+	for (( i = 0; i < length; i++ )); do
+		local c="${1:i:1}"
+		printf '%%%02X' "'$c"
+	done
+	LC_COLLATE=$old_lc_collate
+}
+
+
+string="$1"
+if [ -z "$string" ]; then
+	string="$(cat)"
+fi
+
+# Base 64
+echo -en "Base64\t"
+echo "$string" | base64 --wrap=0
+echo ""
+
+#URL
+echo -en "URL\t"
+urlencodespecial "$string"
+echo ""
+
+#URL All
+echo -en "URL All\t"
+urlencodeall "$string"
+echo ""
+
+#Hex Encode
+echo -en "Hex\t"
+hex=$( echo -n "$string" | xxd -ps | sed 's/\([A-Fa-f0-9][A-Fa-f0-9]\)/\1 /g' | sed 's/ $//')
+echo "$hex"
+
+#Hex Encode With 0x
+echo -en "Hex\t"
+echo -n "0x$hex" | sed -e 's/ / 0x/g'
+echo
+
+#Decimal
+echo -en "Decimal\t"
+#for i in $(echo -n "$hex" ); do
+for i in $hex; do
+	echo "ibase=16;$i" | bc
+	echo
+done | tr '\n' ' '
+echo
+
+#Octal
+echo -en "Octal\t"
+for i in $hex; do
+	echo "ibase=16;obase=8;$i" | bc
+done | tr '\n' ' '
+echo
+
+#Binary
+echo -en "Binary\t"
+for i in $hex; do
+	echo "ibase=16;obase=2;$i" | bc | awk '{printf "%08d", $1}'
+	echo
+done | tr '\n' ' '
+echo
+
+
+
