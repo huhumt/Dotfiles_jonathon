@@ -1,7 +1,7 @@
 *.private
 qutebrowser/qsettings/
 qutebrowser/bookmarks/
-pandoc/templates/assets/fonts/
+pandoc/.pandoc/templates/assets/fonts/
 bin/aquarius-go
 mutt/msmtprc
 mutt/accounts/*
