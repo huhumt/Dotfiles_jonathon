@@ -1,0 +1,72 @@
+#!/usr/bin/env bash
+
+# Script to get a summary of the weather from darksky
+# Uses: https://www.latlong.net/convert-address-to-lat-long.html to get the coordinates from a location name
+# Uses https://darksky.net/dev/docs for the forcast
+# You will need to use your own api key, I have put mine in darksky.private
+# requires jq, curl, bash, sed (with -E option)
+# I have made it show informatio I am interested in
+# Eventually, it would be nice to use this to create a graphical output like wttr.in
+
+initial=$@
+place=${initial// /+}
+if [ -z "$place" ]; then
+	place="Bury+St+Edmunds"
+fi
+
+coordinates=$( curl 'https://www.latlong.net/_spm4.php' \
+	-H 'dnt: 1' \
+	-H 'x-requested-with: XMLHttpRequest' \
+	-H 'accept: */*' \
+	--data 'c1='"$place"'&action=gpcm&cp=' -s )
+
+if [ -z "$coordinates" ]; then
+	echo "Can't find coordinates"
+	exit 2
+fi
+
+# This file sets the variable $secret to my api key
+source "$(dirname $0)/darksky.private"
+
+url="https://api.darksky.net/forecast/$secret/$coordinates?units=uk2"
+
+function convertDate(){
+	timestamp=$(echo "$1" | grep -Eo '[0-9]{10}')
+	formatted=$(date -d @"$timestamp")
+	echo $1 | sed "s/$timestamp/\"$formatted\"/" | sed -E 's/^([^:]+)/"\1"/'
+}
+
+jqstatement='{
+	summary: [
+		.currently.summary,
+		.minutely.summary,
+		.hourly.summary,
+		.daily.summary
+	],
+	forcast: [
+		.daily.data[] | {
+			time: .time,
+			summary: .summary,
+			sunrise: .sunriseTime,
+			sunset: .sunsetTime,
+			temperatureHigh: {
+				temperature: .temperatureHigh,
+				time: .temperatureHighTime
+			},
+			temperatureLow: {
+				temperature: .temperatureLow,
+				time: .temperatureLowTime
+			},
+			pricipitation:{
+				type: .precipType,
+				probability: .precipProbability
+			}
+		}
+	],
+	alerts: .alerts
+}'
+
+
+export -f convertDate
+curl -s $url | jq "$jqstatement" | sed -E "s/(.*)([0-9]{10})(.*)/convertDate \"&\"/eg" | jq
+
