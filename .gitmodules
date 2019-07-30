@@ -14,5 +14,5 @@
 	path = shells/zsh/oh-my-zsh/plugins/zsh-better-npm-completion
 	url = https://github.com/lukechilds/zsh-better-npm-completion
 [submodule "dwm"]
-	path = dwm
+	path = NOSTOW/dwm
 	url = git@github.com:Jab2870/dwm.git
