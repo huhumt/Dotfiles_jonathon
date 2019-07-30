@@ -1,9 +1,11 @@
-# My Configuration
+# My Dotfiles
 
-This is a configuration that is for my Arch Linux machines with DWM as my window manager. I have recently move to my fork of DWM from i3 so there are also i3 configuration files in this repo.
+Use as you wish. Any code / scripts I have borrowed from other places should be credited in comments in the file. I currently use a [fork of DWM](https://github.com/Jab2870/dwm) as my window manager on Arch Linux, however, I don't think there is anything that is Arch specific.
 
-Anyone is free to use this as they wish under the terms of the MIT licence unless otherwise specified. See the licence file in the root of this repository for details.
+My primary editor is vim, who's config is in a submodule because I often need to deploy my vim configuration but don't need to download all of my dotfiles.
 
-Most of this should be self explanatory.
+I use [GNU Stow](https://www.gnu.org/software/stow/) to deploy my dotfiles. There is a helper script in the root of this directory called stow.sh that runs the necessary stow commands.
 
-I have my vim configuration as a submodule because I often need it by itself
+The folder `LEGACY` is for things that I no longer use but might be of interest if you are the sort of person who likes looking at other people's dotfiles.
+
+The folder `NOSTOW` is for things that I don't manage with stow. This includes a submodule for my DWM fork and configuration files that live outside my home directory.
