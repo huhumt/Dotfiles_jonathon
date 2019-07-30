@@ -10,6 +10,7 @@ tostow=(
 	"ranger"
 	"rofi"
 	"sxiv"
+	"templates"
 	"vim"
 	"zathura"
 )
