@@ -12,6 +12,7 @@ tostow=(
 	"sxiv"
 	"templates"
 	"vim"
+	"x"
 	"zathura"
 )
 
