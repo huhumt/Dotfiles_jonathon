@@ -1,14 +1,17 @@
 #!/usr/bin/env sh
 
-tostow=( 
-	"vim"
+tostow=(
 	"bin"
-	"ranger"
-	"qutebrowser"
-	"zathura"
-	"sxiv"
-	"rofi"
+	"browserOverides"
 	"dunst"
+	"git"
+	"pandoc"
+	"qutebrowser"
+	"ranger"
+	"rofi"
+	"sxiv"
+	"vim"
+	"zathura"
 )
 
 SCRIPT_DIR="$( cd "$( dirname "$0" )" && pwd )"
