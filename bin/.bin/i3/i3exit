@@ -1,6 +1,6 @@
 #!/bin/sh
 lock() {
-    ~/.dotfiles/i3/fadeLockScreen
+    ~/.bin/i3/fadeLockScreen
     #i3lock
 }
 
