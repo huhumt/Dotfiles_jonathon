@@ -4,7 +4,7 @@ Use as you wish. Any code / scripts I have borrowed from other places should be 
 
 My primary editor is vim, who's config is in a submodule because I often need to deploy my vim configuration but don't need to download all of my dotfiles.
 
-I use [GNU Stow](https://www.gnu.org/software/stow/) to deploy my dotfiles. There is a helper script in the root of this directory called stow.sh that runs the necessary stow commands.
+I use [GNU Stow](https://www.gnu.org/software/stow/) to deploy my dotfiles. There is a helper script in the root of this directory called install.sh that runs the necessary stow commands.
 
 The folder `LEGACY` is for things that I no longer use but might be of interest if you are the sort of person who likes looking at other people's dotfiles.
 

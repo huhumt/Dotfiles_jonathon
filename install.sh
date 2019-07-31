@@ -35,3 +35,5 @@ pacmanInstall(){
 
 	fi
 }
+
+dostow
