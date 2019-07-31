@@ -33,9 +33,9 @@ mdtype(){ \
 	command=${2:-"default"}
 	echo "$command"
 	case "$command" in
-		"fplreport") pandoc "$file" --metadata-file="$HOME/.dotfiles/pandoc/defaults.yaml" --template fellowship.latex --pdf-engine=xelatex -o "${base}.pdf" ;;
-		"letter") pandoc "$file" --metadata-file="$HOME/.dotfiles/pandoc/defaults.yaml" --template template-letter.tex -o "${base}.pdf" ;;
-		*) pandoc "$file" --metadata-file="$HOME/.dotfiles/pandoc/defaults.yaml" -o "$base".pdf ;;
+		"fplreport") pandoc "$file" --metadata-file="$HOME/.pandoc/defaults.yaml" --template fellowship.latex --pdf-engine=xelatex -o "${base}.pdf" ;;
+		"letter") pandoc "$file" --metadata-file="$HOME/.pandoc/defaults.yaml" --template template-letter.tex -o "${base}.pdf" ;;
+		*) pandoc "$file" --metadata-file="$HOME/.pandoc/defaults.yaml" -o "$base".pdf ;;
 	esac
 }
 
