@@ -3,6 +3,19 @@
 SCRIPT_DIR="$( cd "$( dirname "$0" )" && pwd )"
 cd $SCRIPT_DIR
 
+#Atts a slash if there isn't one at the end
+slashIt(){
+	local str=$1
+	case "$str" in
+		*/)
+			echo "$str"
+			;;
+		*)
+			echo "$str/"
+			;;
+	esac
+}
+
 doStow(){
 	local tostow=(
 		"bin"
@@ -18,10 +31,18 @@ doStow(){
 		"vim"
 		"x"
 		"zathura"
+		"shells/zsh"
 	)
 
 	for i in ${tostow[*]}; do
-		stow $i
+		if [ -d "$SCRIPT_DIR/$i/STOW" ]; then
+			cd "$SCRIPT_DIR/$i"
+			stow -t $HOME STOW
+		else
+			cd $(dirname $i)
+			stow -t $HOME $(basename $i)
+		fi
+		cd $SCRIPT_DIR
 	done
 }
 
@@ -31,10 +52,12 @@ pacmanInstall(){
 		"zsh"
 		"git"
 		"pandoc"
+		"stow"
 	)
 	if pacman -Qs $package > /dev/null; then
-
+		echo "Install $i"
 	fi
 }
 
-dostow
+doStow
+
