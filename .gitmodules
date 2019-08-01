@@ -16,3 +16,6 @@
 [submodule "dwm"]
 	path = NOSTOW/dwm
 	url = git@github.com:Jab2870/dwm.git
+[submodule "shells/zsh/oh-my-zsh-core"]
+	path = shells/zsh/oh-my-zsh-core
+	url = https://github.com/robbyrussell/oh-my-zsh.git
