@@ -1,1 +1,1 @@
-source ~/.dotfiles/shells/functions
+source ~/.dotfiles/shells/shared/functions

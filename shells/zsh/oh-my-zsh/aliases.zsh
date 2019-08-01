@@ -1,4 +1,4 @@
-source ~/.dotfiles/shells/aliases
+source ~/.dotfiles/shells/shared/aliases
 
 ###########################################
 #                                         #
