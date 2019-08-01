@@ -30,6 +30,7 @@ pacmanInstall(){
 		"gvim"
 		"zsh"
 		"git"
+		"pandoc"
 	)
 	if pacman -Qs $package > /dev/null; then
 
