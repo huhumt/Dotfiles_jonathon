@@ -21,14 +21,17 @@ fi
 # This command exits with a non-zero exit code if not a multisite
 wp site list 2>/dev/null >/dev/null
 if [ $? -eq 0 ]; then
+	echo "Appears to be a multisite"
 	multisite="true"
 else
+	echo "Appears not to be a multisite"
 	multisite="false"
 fi
 
 # Finds the local public_html folder
 public_html="${PWD%/public_html*}/public_html"
 # Gets the folder that we should Copy from
+echo "Getting site variables from the server"
 sshFolder="$(ssh "$sshKey" ls | grep "$sshFolder")"
 # gets the fell path of the folder for the path replace later on
 sshFolderPath="$(ssh "$sshKey" "cd $sshFolder; pwd")"
@@ -49,9 +52,11 @@ echo "Downloading database"
 ssh "$sshKey" "cd $sshFolder; wp db export -" > "$public_html"/db.dump
 
 # Imports the new database
+echo "Importing the database"
 wp db import "$public_html"/db.dump 2> /dev/null > /dev/null
 
 # Loops through the domains and does a search and replace
+echo "Performing find and replace"
 for (( i = 0; i < ${#remoteDomains[@]}; i++ )); do
 	echo "${remoteDomains[$i]} -> ${localDomains[$i]}"
 	wp search-replace --all-tables --url="${remoteDomains[$i]}" "${remoteDomains[$i]}" "${localDomains[$i]}" 2> /dev/null > /dev/null
