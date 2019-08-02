@@ -87,8 +87,10 @@ source $ZSH/oh-my-zsh.sh
 
 source ~/.dotfiles/shells/zsh/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 
-if [ -L $HOME/.dotfiles/shells/zsh/current-color-scheme ]; then
-	source $HOME/.dotfiles/shells/zsh/current-color-scheme
+if [ ! -n "$SSH_CLIENT" ] && [ ! -n "$SSH_TTY" ]; then
+	if [ -L $HOME/.dotfiles/shells/zsh/current-color-scheme ]; then
+		source $HOME/.dotfiles/shells/zsh/current-color-scheme
+	fi
 fi
 
 TRAPWINCH(){
