@@ -238,3 +238,12 @@ function updatePath(){
 
 }
 
+function ssh(){
+	if [ -L $HOME/.dotfiles/shells/zsh/ssh-color-scheme ]; then
+		source $HOME/.dotfiles/shells/zsh/ssh-color-scheme
+	fi
+	command /usr/bin/ssh "$@"
+	if [ -L $HOME/.dotfiles/shells/zsh/current-color-scheme ]; then
+		source $HOME/.dotfiles/shells/zsh/current-color-scheme
+	fi
+}
