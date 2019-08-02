@@ -1,2 +1,2 @@
-source ~/.dotfiles/shells/profile
+source ~/.dotfiles/shells/shared/profile
 
