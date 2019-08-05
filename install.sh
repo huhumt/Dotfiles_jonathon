@@ -59,5 +59,26 @@ pacmanInstall(){
 	fi
 }
 
+dwmInstall(){
+	cd NOSTOW/dwm/
+	if [ -i config.h ]; then
+		sudo rm config.h
+	fi
+	sudo make install
+	cd $SCRIPT_DIR
+}
+
+stInstall(){
+	cd NOSTOW/st/
+	if [ -i config.h ]; then
+		sudo rm config.h
+	fi
+	sudo make install
+	cd $SCRIPT_DIR
+}
+
+dwmInstall
+stInstall
+pacmanInstall
 doStow
 
