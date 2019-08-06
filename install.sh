@@ -48,14 +48,31 @@ doStow(){
 
 pacmanInstall(){
 	local packages=(
-		"gvim"
-		"zsh"
+		"arandr"
+		"bat"
+		"blueberry"
+		"dunst"
+		"gimp"
+		"gimp-plugin-resynthensizer-git"
+		"gimp-plugin-saveforweb"
 		"git"
+		"gvim"
+		"imagemagick"
+		"imagemagick-doc"
+		"inkscape"
+		"libreoffice-fresh"
+		"libreoffice-fresh-en-gb"
 		"pandoc"
+		"qutebrowser"
+		"ripgrep"
 		"stow"
+		"w3m"
+		"zathura"
+		"zsh"
 	)
 	if pacman -Qs $package > /dev/null; then
-		echo "Install $i"
+		echo "Installing $i"
+		sudo pacman -S $i
 	fi
 }
 

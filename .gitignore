@@ -5,3 +5,5 @@ pandoc/.pandoc/templates/assets/fonts/
 bin/aquarius-go
 mutt/msmtprc
 mutt/accounts/*
+/qutebrowser/.config/qutebrowser/qsettings/
+/bin/.bin/pappy
