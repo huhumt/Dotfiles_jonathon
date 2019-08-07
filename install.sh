@@ -76,6 +76,16 @@ pacmanInstall(){
 	fi
 }
 
+aurInstall(){
+	local packages=(
+		"mps-youtube-git"
+	)
+	if yay -Qs $package > /dev/null; then
+		echo "Installing $i"
+		sudo yay -S $i
+	fi
+}
+
 dwmInstall(){
 	cd NOSTOW/dwm/
 	if [ -i config.h ]; then
