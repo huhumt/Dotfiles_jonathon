@@ -1,0 +1,28 @@
+#!/usr/bin/env bash
+
+# @example
+# chmod a+x randommac.sh
+# ./randommac.sh wlp2s0
+
+# Came from here: https://gist.github.com/WebReflection/67245d3e05a04299e6cf89df22685081
+
+if [ "$1" != "" ]; then
+  if [ "$(ip link show | grep $1)" != "" ]; then
+    if [ ! -f ~/mac-address.bck ]; then
+      echo "storing original information in ~/mac-address.bck"
+      ip link show > ~/mac-address.bck
+    fi
+    sudo ip link set dev $1 down
+    sudo ip link set dev $1 address $(openssl rand -hex 6 | sed 's/\(..\)/\1:/g; s/.$//')
+    sudo ip link set dev $1 up
+  else
+    echo "unknown interface $1"
+    echo "available interfaces:"
+    ip link show | sed 's/^\([0-9]*:\s*\w*\):.*$/\1/g; s/^\s\s*.*$//g'
+    exit 1
+  fi
+else
+  echo "you need to specify an interface"
+  echo "example: $0 wlp2s0"
+  exit 1
+fi
