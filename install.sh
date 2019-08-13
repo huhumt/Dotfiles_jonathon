@@ -68,6 +68,7 @@ pacmanInstall(){
 		"stow"
 		"w3m"
 		"zathura"
+		"zathura-pdf-mupdf"
 		"zsh"
 	)
 	if pacman -Qs $package > /dev/null; then
