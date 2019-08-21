@@ -80,6 +80,7 @@ pacmanInstall(){
 aurInstall(){
 	local packages=(
 		"mps-youtube-git"
+		"ddgr"
 	)
 	if yay -Qs $package > /dev/null; then
 		echo "Installing $i"
