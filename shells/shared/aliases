@@ -159,3 +159,5 @@ alias qwerty="setxkbmap -layout gb"
 alias ol="open-local"
 
 alias globalip="drill myip.opendns.com @resolver1.opendns.com | sed -n '/ANSWER SECTION/,/AUTHORITY SECTION/ p' | sed -n '2 p' | awk '{print \$5}'"
+
+alias ddg="ddgr"
