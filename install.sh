@@ -71,10 +71,14 @@ pacmanInstall(){
 		"zathura-pdf-mupdf"
 		"zsh"
 	)
-	if pacman -Qs $package > /dev/null; then
-		echo "Installing $i"
-		sudo pacman -S $i
-	fi
+	for package in ${packages[*]}; do
+		if pacman -Qs $package > /dev/null; then
+			echo "Installing $package"
+			sudo pacman -S $package
+		else
+			echo "Already installed $package"
+		fi
+	done
 }
 
 aurInstall(){
@@ -106,8 +110,8 @@ stInstall(){
 	cd $SCRIPT_DIR
 }
 
-dwmInstall
-stInstall
+#dwmInstall
+#stInstall
 pacmanInstall
-doStow
+#doStow
 
