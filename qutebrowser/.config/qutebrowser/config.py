@@ -90,3 +90,9 @@ c.url.searchengines['ciu'] = 'https://caniuse.com/#search={}'
 c.url.searchengines['mdn'] = 'https://developer.mozilla.org/en-US/search?q={}'
 # GitHub
 c.url.searchengines['gh'] = 'https://github.com/search?q={}'
+
+
+
+
+c.aliases['burp'] = 'set content.proxy http://127.0.0.1:8080/'
+c.aliases['noburp'] = 'set content.proxy system'
