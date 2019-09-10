@@ -160,4 +160,6 @@ alias ol="open-local"
 
 alias globalip="drill myip.opendns.com @resolver1.opendns.com | sed -n '/ANSWER SECTION/,/AUTHORITY SECTION/ p' | sed -n '2 p' | awk '{print \$5}'"
 
+alias ss="cat /usr/share/exploitdb/files_exploits.csv | fzf | cut -d',' -f1 | xargs searchsploit -m"
+
 alias ddg="ddgr"
