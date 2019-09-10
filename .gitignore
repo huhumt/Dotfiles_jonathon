@@ -6,4 +6,5 @@ bin/aquarius-go
 mutt/msmtprc
 mutt/accounts/*
 /qutebrowser/.config/qutebrowser/qsettings/
+/qutebrowser/.config/qutebrowser/autoconfig.yml
 /bin/.bin/pappy
