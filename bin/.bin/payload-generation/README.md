@@ -1,6 +1,6 @@
 # Scripts for payload generation
 
-## generateImageFromPayload
+## disguiseAsImage
 
 This script is designed to disguise a payload as an image. It does this by adding the first 20 bytes of a real image to the beginning of the file and adding a file extension. This will fool most filters that, for example, might only allow images to be uploaded.
 
@@ -13,7 +13,7 @@ if( isset( $_REQUEST['jh'] ) ):
 endif;
 ```
 
-If I run `generateImageFromPayload payload.php`, the script will create a file called `payload.php.jpg`.
+If I run `disguiseAsImage payload.php`, the script will create a file called `payload.php.jpg`.
 
 ```
 .
@@ -32,5 +32,5 @@ payload.php.jpg: JPEG image data, JFIF standard 1.01, resolution (DPI), density 
 The script will, by default, generate a jpg although you can specify png or gif by adding a second argument, e.g.
 
 ```
-generateImageFromPayload payload.php png
+disguiseAsImage payload.php png
 ```
