@@ -1,0 +1,65 @@
+#!/usr/bin/env bash
+
+# This script takes a payload and disguises it as an image.
+
+SCRIPTPATH="$( cd "$(dirname "$0")" ; pwd -P )"
+CURRENT=$(pwd)
+
+PAYLOAD="$1"
+IMAGETYPE="${2:-jpg}"
+# Make sure the image type is lower case
+IMAGETYPE=$(echo "$IMAGETYPE" | tr '[:upper:]' '[:lower:]')
+
+# This function prints the usage
+function printUsage(){
+	echo "Usage: $(basename "$0") PAYLOAD TYPE"
+	echo ""
+	echo "Disguises a payload as an image"
+	echo ""
+	echo -e "PAYLOAD\t\tThe payload to use, currently only supports a file in CWD (Required)"
+	echo -e "TYPE\t\tThe type of image (jpg, png, gif) (default: jpg)"
+}
+
+function getPayload(){
+	local payload="$CURRENT/$PAYLOAD"
+	echo "$payload"
+	if [ -f "$payload" ]; then
+		exit 0
+	else
+		# Add stuff here if we want to look in another folder for payloads at some point
+		exit 1
+	fi
+}
+
+function getTemplate(){
+	local template="$SCRIPTPATH/templates/payload.$IMAGETYPE"
+	echo "$template"
+	if [ -f "$template" ]; then
+		exit 0
+	else
+		exit 1
+	fi
+}
+
+function getDestination(){
+	echo "$CURRENT/$PAYLOAD.$IMAGETYPE"
+	exit 0
+}
+
+if template=$(getTemplate); then
+	if payload=$(getPayload); then
+		# Do copy stuff
+		destination=$(getDestination)
+		cp "$template" "$destination"
+		cat "$payload" >> $destination
+	else
+		"No such payload $payload"
+		echo ""
+		printUsage
+	fi
+else
+	echo "No such template $template"
+	echo ""
+	printUsage
+	exit 1
+fi
