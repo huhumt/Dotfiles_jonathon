@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+
+IP="$1"
+
+if [ -n "$IP" ]; then
+	nmap $IP -p0- | # Get the nmap output
+		cut -d '/' -f1 | #
+		sed -n '/^[0-9]/p'
+else
+	echo "Print an ip address"
+fi
