@@ -8,9 +8,9 @@
 
 if [ "$1" != "" ]; then
   if [ "$(ip link show | grep $1)" != "" ]; then
-    if [ ! -f ~/mac-address.bck ]; then
-      echo "storing original information in ~/mac-address.bck"
-      ip link show > ~/mac-address.bck
+    if [ ! -f ~/mac-address-$1.bck ]; then
+      echo "storing original information in ~/mac-address-$1.bck"
+      ip link show > ~/mac-address-$1.bck
     fi
     sudo ip link set dev $1 down
     sudo ip link set dev $1 address $(openssl rand -hex 6 | sed 's/\(..\)/\1:/g; s/.$//')
