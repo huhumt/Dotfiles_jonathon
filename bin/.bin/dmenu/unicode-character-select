@@ -6,18 +6,8 @@
 #   Requirements:
 #     rofi, xsel, xdotool, curl, xmllint
 #
-#   Usage:
-#     1. Download all emoji
-#        $ rofi-emoji --download
-#
-#     2. Run it!
-#        $ rofi-emoji
-#
 #   Notes:
 #     * You'll need a emoji font like "Noto Emoji" or "EmojiOne".
-#     * Confirming an item will automatically paste it WITHOUT
-#       writing it to your clipboard.
-#     * Ctrl+C will copy it to your clipboard WITHOUT pasting it.
 #
 
 # Where to save the emojis file.
@@ -33,17 +23,12 @@ function notify() {
 
 function display() {
 	emoji=$(cat "$UNICODE_FILE" | grep -v '^[[:space:]]*$')
-	line=$(echo "$emoji" | dmenu -i -p Unicode -kb-custom-1 Ctrl+c $@)
+	line=$(echo "$emoji" | rofi -dmenu -i -p Unicode)
 	exit_code=$?
 
 	line=($line)
 
-	if [ $exit_code == 0 ]; then
-		xdotool type --clearmodifiers "${line[0]}"
-	elif [ $exit_code == 10 ]; then
-		echo -n "${line[0]}" | /usr/bin/xclip -i -selection clipboard
-
-	fi
+	echo -n "${line[0]}" | /usr/bin/xclip -i -selection clipboard
 }
 
 
