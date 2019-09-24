@@ -1,0 +1,20 @@
+#!/usr/bin/env bash
+
+##Helper Functions
+
+urldecode() {
+	# urldecode <string>
+	local url_encoded="${1//+/ }"
+	printf '%b' "${url_encoded//%/\\x}"
+}
+
+string="$1"
+if [ -z "$string" ]; then
+	string="$(cat)"
+fi
+
+#URL
+decoded=$(urldecode "$string")
+if [ "$decoded" != "$string" ]; then
+	echo "$decoded"
+fi
