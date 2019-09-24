@@ -23,11 +23,11 @@ alias cups='sudo systemctl start org.cups.cupsd.service'
 alias net='sudo systemctl start NetworkManager.service'
 
 # Alias lampp because I don't want to clog my PATH
-alias lampp='/opt/lampp/lampp'
-alias glampp='gksudo /opt/lampp/manager-linux-x64.run'
-alias php='/opt/lampp/bin/php'
-alias php-cgi='/opt/lampp/bin/php-cgi'
-alias php-config='/opt/lampp/bin/php-config'
+#alias lampp='/opt/lampp/lampp'
+#alias glampp='gksudo /opt/lampp/manager-linux-x64.run'
+#alias php='/opt/lampp/bin/php'
+#alias php-cgi='/opt/lampp/bin/php-cgi'
+#alias php-config='/opt/lampp/bin/php-config'
 
 #Always make all directories necesary
 alias mkdir='mkdir -p'
@@ -162,3 +162,8 @@ alias ss="cat /usr/share/exploitdb/files_exploits.csv | fzf | cut -d',' -f1 | xa
 alias ddg="ddgr"
 
 alias docker="sudo docker"
+
+alias rm="rmtrash"
+alias rmdir="rmdirtrash"
+
+alias rs="rofi-reverse-shells"
