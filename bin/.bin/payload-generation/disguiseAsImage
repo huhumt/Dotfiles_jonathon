@@ -8,8 +8,12 @@ CURRENT=$(pwd)
 PAYLOAD="$1"
 IMAGETYPE="${2:-jpg}"
 # Make sure the image type is lower case
-IMAGETYPE=$(echo "$IMAGETYPE" | tr '[:upper:]' '[:lower:]')
+IMAGETYPE=$(echo "$IMAGETYPE" | tr '[:lower:]' '[:upper:]')
 
+# Hex encoded versions of the magic bytes of images
+MAGIC_GIF='47494638396140004000e7ff0002050101070a0d'
+MAGIC_JPG='ffd8ffe000104a46494600010101012c012c0000'
+MAGIC_PNG='89504e470d0a1a0a0000000d49484452000000400a'
 # This function prints the usage
 function printUsage(){
 	echo "Usage: $(basename "$0") PAYLOAD TYPE"
@@ -31,26 +35,19 @@ function getPayload(){
 	fi
 }
 
-function getTemplate(){
-	local template="$SCRIPTPATH/templates/payload.$IMAGETYPE"
-	echo "$template"
-	if [ -f "$template" ]; then
-		exit 0
-	else
-		exit 1
-	fi
-}
-
 function getDestination(){
-	echo "$CURRENT/$PAYLOAD.$IMAGETYPE"
+	local ext=$(echo "$IMAGETYPE" | tr '[:upper:]' '[:lower:]')
+	echo "$CURRENT/$PAYLOAD.$ext"
 	exit 0
 }
 
-if template=$(getTemplate); then
+eval template="\$MAGIC_$IMAGETYPE"
+
+if [ -n "$template" ]; then
 	if payload=$(getPayload); then
 		# Do copy stuff
 		destination=$(getDestination)
-		cp "$template" "$destination"
+		echo "$template" | xxd -r -p > "$destination"
 		cat "$payload" >> $destination
 	else
 		"No such payload $payload"
