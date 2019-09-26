@@ -167,3 +167,8 @@ alias rm="rmtrash"
 alias rmdir="rmdirtrash"
 
 alias rs="rofi-reverse-shells"
+
+# Armory Aliases
+
+ARMORY="$HOME/GitRepos/armoury"
+alias surecheckImport="$JAVA_HOME/bin/java -jar $ARMORY/host_build_reviews/windows/SurecheckImport/SurecheckImport_v0.2.jar "
