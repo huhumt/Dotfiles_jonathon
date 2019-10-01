@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+
+acpi | \
+	sed 's/^.*Discharging,/🔋/' | \
+	sed 's/^.*Charging,/🔌/' | \
+	sed 's/, /\n/' | tr '\n' '\0' | xargs -0 notify-send
