@@ -4,6 +4,7 @@
 # Path to your oh-my-zsh installation.
 export ZSH=$HOME/.dotfiles/shells/zsh/oh-my-zsh-core
 
+
 # Set name of the theme to load. Optionally, if you set this to "random"
 # it'll load a random theme each time that oh-my-zsh is loaded.
 # See https://github.com/robbyrussell/oh-my-zsh/wiki/Themes
@@ -106,4 +107,17 @@ TRAPWINCH(){
 #    exec tmux
 #fi
 #
+
+local current="$(project current --path)"
+if [ -n "$current" ]; then
+	echo "yay"
+	local script="/usr/bin/script"
+	echo "'$(ps -ocommand -p $PPID  | grep -v 'COMMAND' | cut -d' ' -f1)'"
+	if [[ ! "$(ps -ocommand -p $PPID | grep -v 'COMMAND' | cut -d' ' -f1 )" == "$script" ]]; then
+		mkdir "$current/shell-logs"
+		/usr/bin/script -f "$current/shell-logs/$(date +"%d-%b-%y_%H-%M-%S")_shell.log"
+	fi
+fi
+
+clear
 tldr --linux -r

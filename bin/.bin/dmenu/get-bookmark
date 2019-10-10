@@ -1,0 +1,19 @@
+#!/usr/bin/env bash
+
+BOOKMARKS="$HOME/.surf/bookmarks/"
+
+function formatFile(){
+	keywords="$(grep -E '^keywords:' "$1" | sed 's/^keywords://')"
+	echo "$1 : $keywords" | sed 's/  / /g'
+}
+export -f formatFile
+
+if [ -d "$BOOKMARKS" ]; then
+	cd "$BOOKMARKS"
+	selection=$(find . -type f -exec bash -c 'formatFile "{}"' \; | dmenu -l 20 | sed 's/ : .*//')
+	if [ -f "$selection" ]; then
+		head -n 1 "$selection"
+	fi
+else
+	echo "$BOOKMARKS doesn't exist"
+fi

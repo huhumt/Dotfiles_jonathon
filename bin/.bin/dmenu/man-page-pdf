@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+
+man -k . |\
+	awk '{ print $1 " " $2 }' |\
+	rofi -dmenu -p man -i -matching regex |\
+	awk '{ print $2 " " $1 }' |\
+	tr -d '()' |\
+	xargs man -t |\
+	ps2pdf - - |\
+	zathura -
+
+

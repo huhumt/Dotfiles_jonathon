@@ -10,4 +10,4 @@ function append_date() {
 zle -N append_date
 
 # Bind it to ESC-i.
-bindkey "" append_date
+#bindkey "" append_date

@@ -90,9 +90,23 @@ c.url.searchengines['ciu'] = 'https://caniuse.com/#search={}'
 c.url.searchengines['mdn'] = 'https://developer.mozilla.org/en-US/search?q={}'
 # GitHub
 c.url.searchengines['gh'] = 'https://github.com/search?q={}'
+# Youtube
+c.url.searchengines['yt'] = 'https://www.youtube.com/results?search_query={}'
+# Wikipedia
+c.url.searchengines['wiki'] = 'https://en.wikipedia.org/wiki/{}'
 
 
-
+c.hints.selectors["table"] = [
+    "table"
+]
 
 c.aliases['burp'] = 'set content.proxy http://127.0.0.1:8080/'
 c.aliases['noburp'] = 'set content.proxy system'
+c.aliases['mystyles'] = 'set content.user_stylesheets ~/.local/share/qutebrowser/userstylesheets/default.css'
+c.aliases['nomystyles'] = 'set content.user_stylesheets ""'
+
+stylesheetdir='~/.local/share/qutebrowser/userstylesheets/'
+c.content.user_stylesheets = [stylesheetdir + 'default.css']
+
+#with config.pattern('*://github.com/') as p:
+#    p.content.user_stylesheets = [stylesheetdir + 'github.css']

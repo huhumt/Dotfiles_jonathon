@@ -13,11 +13,12 @@ eval $(/usr/bin/gnome-keyring-daemon --start --components=gpg,pkcs11,secrets,ssh
 export $(gnome-keyring-daemon --start --components=pkcs11,secrets,ssh,gpg)
 dbus-update-activation-environment --systemd DISPLAY
 nitrogen --restore
-#setxkbmap -layout gb,gb -variant "colemak," -option grp:shifts_toggle
+setxkbmap -layout gb,gb -variant "colemak," -option grp:shifts_toggle
 #exec compton -f -i 0.95
 #exec xrdb .Xresources
 #xbindkeys
 #exec i3 -V >> ~/i3log-$(date + '%F-%k-%M-%S') 2>&1
+#startxfce4
 while :; do
 	dwm
 done;

@@ -4,15 +4,25 @@
 #
 # When run, the screenshot will be added to she clipboard
 
+path='/tmp'
+
+#If a project is set we will put screenshots in the project's folder
+project=$(project current --path)
+if [ -n "$project" ]; then
+	path="$project/screenshots"
+	#Make the directory if it doesn't exist
+	mkdir "$path" 2> /dev/null
+fi
+
 case $1 in
 	"window")
-		file=$(scrot -u '/tmp/%F_%T_$wx$h.png' -e 'echo -n /tmp/%F_%T_$wx$h.png')
+		file=$(scrot -u "$path/%F_%T_\$wx\$h.png" -e "echo -n $path/%F_%T_\$wx\$h.png")
 		;;
 	"select")
-		file=$(sleep 0.2; scrot -s '/tmp/%F_%T_$wx$h.png' -e 'echo -n /tmp/%F_%T_$wx$h.png')
+		file=$(sleep 0.2; scrot -s "$path/%F_%T_\$wx\$h.png" -e "echo -n $path/%F_%T_\$wx\$h.png")
 		;;
 	*)
-		file=$(scrot '/tmp/%F_%T_$wx$h.png' -e 'echo -n /tmp/%F_%T_$wx$h.png')
+		file=$(scrot "$path/%F_%T_\$wx\$h.png" -e "echo -n $path/%F_%T_\$wx\$h.png")
 		;;
 esac
 

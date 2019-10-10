@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+
+
+FOLDER="$HOME/.dotfiles/bin/.bin/screenlayouts/"
+script=$(ls "$FOLDER" | sed 's/\.sh$//' | rofi -dmenu -p "Layout" )
+"${FOLDER}${script}.sh"
+

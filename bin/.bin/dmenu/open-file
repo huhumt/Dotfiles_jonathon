@@ -1,0 +1,10 @@
+#!/bin/sh
+while name=$(xsel -o | dmenu -p 'Find File') || exit
+do
+  [[ $name ]] || exit
+  list=$(sudo locate -A -e -i $name)
+  [[ $list ]] || continue
+  file=$(echo -e "$list" | dmenu -l 12 -p 'Open') || exit
+  echo -n "$file" | xsel -b -i
+  xdg-open "$file"
+done

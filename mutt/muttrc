@@ -1,5 +1,5 @@
 # vim: filetype=neomuttrc
-source "~/.config/mutt/accounts/protonmail"
+#source "~/.config/mutt/accounts/protonmail"
 
 set header_cache = ~/.cache/mutt
 

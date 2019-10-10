@@ -1,0 +1,27 @@
+#!/usr/bin/env bash
+
+if [[ "$1" = "surf-download" ]]; then
+	echo "Doing surf"
+	shift
+	# I am shifting so that the vaiable numbers here are the same as in surf
+	useragent="$1"
+	cookiefile="$2"
+	referer="$3"
+	url="$4"
+fi
+
+path="~/Downloads/"
+project=$(project current --path)
+if [ -n "$project" ]; then
+	path="$project/Downloads/"
+fi
+
+mkcd -p "$path"
+cd "$path"
+
+echo "$useragent"
+echo "$cookiefile"
+echo "$referer"
+echo "$url"
+
+curl -g -L -J -O -A "$useragent" -b "$cookiefile" -c "$cookiefile" -e "$referer" "$url"

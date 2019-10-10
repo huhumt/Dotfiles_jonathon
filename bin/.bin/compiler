@@ -12,6 +12,7 @@
 # config.h files: (For suckless utils) recompiles and installs program.
 # all others: run `sent` to show a presentation
 
+echo "$1"
 file=$(readlink -f "$1")
 dir=$(dirname "$file")
 base="${file%.*}"
@@ -35,7 +36,7 @@ mdtype(){ \
 	case "$command" in
 		"fplreport") pandoc "$file" --metadata-file="$HOME/.pandoc/defaults.yaml" --template fellowship.latex --pdf-engine=xelatex -o "${base}.pdf" ;;
 		"letter") pandoc "$file" --metadata-file="$HOME/.pandoc/defaults.yaml" --template template-letter.tex -o "${base}.pdf" ;;
-		*) pandoc "$file" --metadata-file="$HOME/.pandoc/defaults.yaml" -o "$base".pdf ;;
+		*) pandoc "$file" -f markdown+pipe_tables --metadata-file="$HOME/.pandoc/defaults.yaml" -o "$base".pdf ;;
 	esac
 }
 
@@ -45,6 +46,7 @@ shebangtest() {
 		*) sent "$file" 2>/dev/null & ;;
 	esac
 }
+
 
 case "$file" in
 	*\.ms) refer -PS -e "$file" | groff -me -ms -kejpt -T pdf > "$base".pdf ;;
@@ -58,7 +60,8 @@ case "$file" in
         *\.c) cc "$file" -o "$base" && "$base" ;;
 	*\.py) python "$file" ;;
 	*\.js) cat "$file" | minify --js > "${base}.min.js" ;;
-	*\.less) lessc --clean-css --source-map --autoprefix="last 3 versions, ie >= 11" "$file"  "${base}.min.css" ;;
+	#*\.less) lessc --clean-css --source-map --autoprefix="last 3 versions, ie >= 11" "$file"  "${base}.min.css" ;;
+	*\.less) lessc "$file" "${base}.css" ;;
 	#*\.go) go run "$file" ;;
 	#*) shebangtest ;;
 esac

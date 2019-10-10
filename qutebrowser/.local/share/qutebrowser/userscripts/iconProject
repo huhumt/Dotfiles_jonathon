@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+
+# This is a qutebrowser user script that is intendet to be run from an icon project page
+# It will put a vector version of the image on the clipboard, ready to be pasted into something like inkscape
+
+cat "$QUTE_HTML" | # This is the qutebrowser file repersenting the current page's html
+	hq '.iconPreview' attr style | # This gets the style attribute from the preview element
+	cut -d '"' -f 2 | cut -d ',' -f 2 | # Gets the base 64 out that we want
+	base64 -d | # Decodes it
+	xclip -selection clipboard -target image/svg+xml -i # Puts it on the clipboard

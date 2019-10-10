@@ -112,6 +112,6 @@ stInstall(){
 
 #dwmInstall
 #stInstall
-pacmanInstall
-#doStow
+#pacmanInstall
+doStow
 

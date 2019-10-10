@@ -11,7 +11,7 @@ function my_dir(){
 	dropboxIcon=""
 	seperator="  "
 	seperatorDual="  "
-	root="$seperator"
+	root="$seperator"
 	# Gets the path.
 	local current_path="$(print -P "%~")"
 
@@ -24,6 +24,15 @@ function my_dir(){
 	# Replace wp-content/plugins with plugin icon if in plugin
 	# current_path=$(echo $current_path | sed -r -e "s/wp\-content\/plugins/$wpPluginsIcon/")
 
+	local current_project_full="$(project current --path)"
+	local current_project_name="$(project current)"
+	if [ -n "$current_project_name" ]; then
+		if echo "$PWD" | grep -q "$current_project_full"; then
+			current_path=$(echo $PWD | sed -r -e "s#$current_project_full##" | sed -r -e 's/^\///')
+			current_path="$current_path"
+		fi
+	fi
+	#
 	#This is used for checking if wp or magento
 	local ph=${PWD%/public_html*}/public_html
 	# If in a site folder and a wp site, replace home/Sites/<site-name>/public_html with siteIcon <site-url>
@@ -90,9 +99,42 @@ POWERLEVEL9K_CUSTOM_CAPS="Capslock"
 POWERLEVEL9K_CUSTOM_CAPS_BACKGROUND="red"
 POWERLEVEL9K_CUSTOM_CAPS_FOREGROUND="white"
 
+
+function prompt_project() {
+	local segment_content state icon
+	local current_project_name="$(project current)"
+	local current_project_full="$(project current --path)"
+	local parent_process="$(ps -ocommand -p $PPID | grep -v 'COMMAND' | cut -d' ' -f1)"
+	# If there is a current project
+	if [ -n "$current_project_name" ]; then
+		segment_content="$current_project_name"
+		if [[ "$parent_process" == "/usr/bin/script" ]]; then
+			segment_content="辶$segment_content"
+		fi
+		# If in the current project
+		if echo "$PWD" | grep -q "$current_project_full"; then
+			state="INSIDE"
+		elif echo "$PWD" | grep -q "$HOME/Projects/"; then
+			state="WRONG"
+		else
+			state="OUTSIDE"
+		fi
+	fi
+
+	if [ -n "$segment_content" ]; then
+		"$1_prompt_segment" "${0}_${state}" "$2" $DEFAULT_COLOR_INVERTED $DEFAULT_COLOR "$segment_content" "$icon"
+	fi
+}
+
+
+POWERLEVEL9K_PROJECT_DEFAULT_FOREGROUND="black"
+POWERLEVEL9K_PROJECT_WRONG_BACKGROUND="red"
+POWERLEVEL9K_PROJECT_OUTSIDE_BACKGROUND="yellow"
+POWERLEVEL9K_PROJECT_INSIDE_BACKGROUND="green"
+
 # Left Prompt
 if [[ "$(basename "/"$(ps -f -p $(cat /proc/$(echo $$)/stat | cut -d \  -f 4) | tail -1 | sed 's/^.* //'))" != "$(echo $USER)" ]]; then
-	POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(custom_dir vcs custom_caps)
+	POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(project custom_dir vcs custom_caps)
 fi
 
 # Right Prompt

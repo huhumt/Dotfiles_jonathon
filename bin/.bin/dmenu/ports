@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+
+SCRIPTPATH="$( cd "$(dirname "$0")" ; pwd -P )"
+
+cat "$SCRIPTPATH/ports-common.csv" "$SCRIPTPATH/ports-uncommon.csv" | tr ',' '\t' | rofi -dmenu -i

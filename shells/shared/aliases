@@ -172,3 +172,17 @@ alias rs="rofi-reverse-shells"
 
 ARMORY="$HOME/GitRepos/armoury"
 alias surecheckImport="$JAVA_HOME/bin/java -jar $ARMORY/host_build_reviews/windows/SurecheckImport/SurecheckImport_v0.2.jar "
+
+alias rot13="tr 'A-Za-z' 'N-ZA-Mn-za-m'"
+
+# These aliases are related to projects
+# Make sqlmap put output in the current project folder
+alias sqlmap="[ -L ~/Projects/current ] && sqlmap --output-dir=\"~/Projects/current/sqlmap\""
+# Cd into the current project
+alias pp="[ -L ~/Projects/current ] && cd \$(readlink ~/Projects/current) || cd ~/Projects"
+# Automatically switch project based on current location
+alias pa="project switch --auto"
+# Change project using fzf
+alias pc="project switch --fzf"
+# Create a new project
+alias pn="project new"

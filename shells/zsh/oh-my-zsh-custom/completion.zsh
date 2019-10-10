@@ -20,3 +20,6 @@ _wp_complete() {
 	return 0
 }
 complete -o nospace -F _wp_complete wp
+
+_comp_options+=(globdots)
+
