@@ -2,15 +2,18 @@
 
 # This script sets things based on my current project and will set the symlink ~/Projects/current to the correct folder
 
+# GLOBAL VARIABLES
 PROJECTS_PATH="$HOME/Projects"
 SYMLINC="$PROJECTS_PATH/current"
 
+# Prints help text
 function print_help(){
 	echo "Manages projects"
 	echo ""
 	echo -e "Usage: $0 <command> [<args>]"
 	echo ""
 	echo -e "Commands"
+	echo -e "--------"
 	echo -e "list\t\t\tLists The available projects"
 	echo -e "switch\t\t\tSwitches the current project"
 	echo -e "\t--auto\t\tAutomatically deduce the project based on current working directory"
@@ -22,9 +25,20 @@ function print_help(){
 	echo -e "current\t\t\tPrints the current project"
 	echo -e "\t--notify\t\tUses notify send to print current project"
 	echo -e "\t--path\t\tPrints the full path rather than the name"
+	echo -e "new\t\t\tCreates a new project. Will prompt for a name if no argements are given"
+	echo -e "\t<project>\t\tCreates a new project with the name given"
+	echo -e "\t--dmenu\t\tPrompt using dmenu"
+	echo -e "\t--rofi\t\tPrompt using rofi"
+	echo -e "copy <target> <files> [..<files>]\t\tCopies files to a target in the project"
+	echo -e "\t--bin\t\tCopy to bin directory (inside \$PATH)"
+	echo -e "\t--www\t\tCopy to the www directory"
+
 	exit 0
 }
 
+# Lists the available projects
+# If the --options flag is given, it will also list --new and, if relevant, --unset.
+# This is useful foa piping it into a fuzzy finder
 function list_projects(){
 	if [[ "$1" == "--options" ]]; then
 		if [ -L "$SYMLINC" ]; then
@@ -35,6 +49,11 @@ function list_projects(){
 	find "$PROJECTS_PATH/" -maxdepth 1 -mindepth 1 -type d | xargs -L 1 basename
 }
 
+# Switches the project
+# Normally takes the first argement to be the project name
+# If first argument is --auto, it will try to set the project based on the current working directory
+# If the first argument it --unset, it will unstet the project
+# If the first argument is --fzf, --dmenu or --rofi it will use the specified tool to list options
 function switch(){
 	local switchto="$1"
 	if [[ "$1" == "--auto" ]]; then
@@ -87,6 +106,12 @@ function switch(){
 	fi
 }
 
+# Prints the name of the current project
+# If there is an index.yaml file containing a name, it will print the name
+# If not, it will fall back to the folder name
+# If --notify is th first argument, it will use notify-send to print the project name
+# If --path is the first argument, it will print the path to the current project rather than the name
+# It will return an empty string if there isn't an active project
 function get_current(){
 	if [ -L "$SYMLINC" ]; then
 		local current=$(readlink "$SYMLINC")
@@ -112,9 +137,14 @@ function get_current(){
 	fi
 }
 
+# Creates a new project
+# The first arguemnt is normally the project name
+# If there is no argument, it will prompt for the username
+# If the first argument is --rofi or --dmenu, it will prompt for the name using that tool
+# It will also create a few directories that most projects will need
 function new_project(){
 	local name="$1"
-	local default_dirs=( bin screenshots Downloads )
+	local default_dirs=( bin screenshots Downloads www )
 	if [ ! -n "$name" ]; then
 		echo -n "Project name: "
 		read name < /dev/tty
@@ -135,6 +165,12 @@ function new_project(){
 	switch "$name"
 }
 
+# A wrapper around cp for copying to places inside the current directory
+# The first argument should be one of the followind:
+#		--bin		The bin directory inside the project - This is in your path if thre is a project set
+#		--www		This www directory which is where http servers are served from
+# It will copy all folders / files given as arguments to the location
+
 function copyto(){
 	local current="$(get_current --path)"
 	if [ -n "$current" ]; then
@@ -142,13 +178,41 @@ function copyto(){
 		if [[ "$1" == "--bin" ]]; then
 			destination="$current/bin/"
 			shift
+		elif [[ "$1" == "--www" ]]; then
+			destination="$current/www/"
+			shift
 		fi
-		mkdir -p "$destination"
-		cp -r "$@" "$destination"
+		if [[ -n "$destination" ]]; then
+			mkdir -p "$destination"
+			cp -r "$@" "$destination"
+		fi
 	fi
 }
 
-
+# Sets up a python server in the www directory
+# First optional argement is the port to list on
+# Second optionl argument is the bind address to listen to
+function serve(){
+	local current="$(get_current --path)"
+	if [ ! -n "$current" ]; then
+		echo "Set current project first"
+		exit 1
+	fi
+	local www="$current/www/"
+	local port=${1:-"8000"}
+	local bind="$2"
+	if [ -d "$www" ]; then
+		echo "Creating www directory"
+	fi
+	local count=$( find "$www" -type f | wc -l)
+	if [ -n "$bind" ]; then
+		echo "Serving $count files to $bind from the $www directory"
+		python -m http.server "$port" --bind "$bind" --directory "$www"
+	else
+		echo "Serving $count files from the $www directory"
+		python -m http.server "$port" --directory "$www"
+	fi
+}
 
 if [ -n "$1" ] ; then
 	case "$1" in
@@ -175,6 +239,11 @@ if [ -n "$1" ] ; then
 		copy)
 			shift
 			copyto "$@"
+			exit 0
+			;;
+		serve)
+			shift
+			serve "$@"
 			exit 0
 			;;
 		*)
