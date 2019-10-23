@@ -1,0 +1,52 @@
+#!/usr/bin/env bash
+
+file="$1"
+# Shift the attributes so we can ignore the filename easily
+shift
+
+if [ ! -n "$file" ]; then
+	echo "You must provide an xml file"
+	exit 1
+fi
+
+
+json=$(php -r "echo json_encode(simplexml_load_file('$file'));" 2> /dev/null)
+
+if [[ "$json" == "false" ]]; then
+	echo "Please provide a valid xml file"
+	exit 1
+fi
+
+function print_basic_info(){
+	echo $json | # Echo the full json file
+		jq ' if ( .host | type ) == "object" then [ .host ] else .host end ' | # Get the hosts as an array (even if there is only one
+		#jq '.[0]'
+		jq '[ .[] | {
+			address: .address."@attributes".addr,
+			port: {
+				tcp : (try ( [ .ports.port[] | select( ."@attributes".protocol == "tcp" ) | {
+					port: ."@attributes".portid,
+					service: .service."@attributes",
+				}  ] )   catch null ),
+				udp : (try ( [ .ports.port[] | select( ."@attributes".protocol == "udp" ) | {
+					port: ."@attributes".portid,
+					service: .service."@attributes",
+				}  ] )   catch null )
+			}
+		} ]'
+ #.ports.port[] | [ . ]
+ #| [select(."@attributes".protocol)]
+}
+
+if [ -n "$1" ] ; then
+	case "$1" in
+		-h|--help)
+			#print_help
+			exit 0
+			;;
+		basic)
+			print_basic_info
+			exit 0
+			;;
+	esac
+fi

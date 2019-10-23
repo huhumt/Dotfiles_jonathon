@@ -1,0 +1,86 @@
+#!/usr/bin/env bash
+
+#(echo ;cat Posts.xml | sed -n '/PostTypeId="1"/p' | rg -o ' (Id|Title|Score|AcceptedAnswerId)="[^"]+"' | sed -E 's/^\s+//' | sed -E 's/^Id=/\nId=/'; echo) | awk -v RS="\n\n" -v ORS="\n" -F '\n' '{if (NF==4)
+#	print "(" $3 ") " $4 "\t" $2 "\t" $1
+#else
+#	print "(" $2 ") " $3 "\t" $1
+#}' | sed -E 's/Score="([^"]+)"/\1/' | sed -E 's/Title="([^"]+)"/\1/' | sort -t\( -k 2n > questions
+
+site=""
+id=""
+
+
+while [[ "$#" -gt 0 ]]; do
+	case "$1" in
+		ubuntu|askubuntu)
+			site=askubuntu
+			shift
+			;;
+		server|serverfault)
+			site=serverfault
+			shift
+			;;
+		superuser)
+			site=superuser
+			shift
+			;;
+		*)
+			id="$1"
+			shift
+			;;
+	esac
+done
+
+function print_question(){
+	local line="$1"
+	# Prints the question
+ 	local title=$(echo "$line" | rg -o ' Title="[^"]+"' | sed 's/ Title=//' | tr -d '"')
+ 	local body=$(echo "$line" | rg -o ' Body="[^"]+"' | sed 's/ Body=//' | tr -d '"')
+	echo "<h1># $title</h1>" | w3m -dump -T text/html
+	echo "$body" | w3m -dump -T text/html | pandoc -f html -t markdown
+}
+
+function print_answer(){
+	local answerID="$1"
+	local answerLine=$(rg " Id=\"$answerID\"" "$HOME/stackexchange/$site/Posts.xml" )
+ 	local body=$(echo "$answerLine" | rg -o ' Body="[^"]+"' | sed 's/ Body=//' | tr -d '"')
+
+	echo "$body" | w3m -dump -T text/html | pandoc -f html -t markdown
+
+}
+
+function print_accepted_answer(){
+	local line="$1"
+ 	local answerID=$(echo "$line" | rg -o ' AcceptedAnswerId="[^"]+"' | sed 's/ AcceptedAnswerId=//' | tr -d '"')
+	if [ -n "$answerID" ]; then
+		echo -e "\n## Accepted Answer\n"
+		print_answer "$answerID"
+	fi
+}
+
+function print_all_answers(){
+	echo -e "\n## All Answers\n"
+	count="1"
+	rg " ParentId=\"$id\"" "$HOME/stackexchange/$site/Posts.xml" | rg 'PostTypeId="2"' | while read line; do
+		echo "$line" | sed -E 's/.*\sScore="([^"]+)".*/\1/g' | xargs echo -e "\n### "
+		echo
+		echo "$line" | sed -E 's/.*\sBody="([^"]+)".*/\1/g' | w3m -dump -T text/html | pandoc -f html -t markdown
+
+	done
+
+}
+
+function display(){
+	local line=$(cat)
+	print_question "$line"
+	print_accepted_answer "$line"
+	print_all_answers
+}
+
+if [ -n "$id" ]; then
+	rg " Id=\"$id\"" "$HOME/stackexchange/$site/Posts.xml" | display | bat -pp --color=always -l md
+else
+	# The questions file is generated manually and should be sorted by score.
+	# This way, fzf will give presedence to a higher score
+	cat "$HOME/stackexchange/$site/questions" | fzf --tac --tiebreak=index --preview="echo {} | sed -E 's/.*\sId=\"([^\"]+).*/\1/g' | xargs $0 $site"
+fi

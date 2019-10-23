@@ -2,6 +2,8 @@
 
 url="$1"
 
+notify-send "Opening Video" "$url"
+
 if [ -z "$url" ]; then
 	url=$(rofi -dmenu -p 'URL')
 fi
