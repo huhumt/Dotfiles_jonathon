@@ -26,8 +26,8 @@ if [ -e /usr/share/fzf/key-bindings.zsh ]; then
 		zle reset-prompt
 		return $ret
 	}
-	zle     -N   fzf-wordlist-widget
-	bindkey '^W' fzf-wordlist-widget
+	#zle     -N   fzf-wordlist-widget
+	#bindkey '^W' fzf-wordlist-widget
 
 	# CTRL-P to select an IP address from project host
 	__fsel_ip() {
@@ -44,6 +44,84 @@ if [ -e /usr/share/fzf/key-bindings.zsh ]; then
 		zle reset-prompt
 		return $ret
 	}
-	zle     -N   fzf-ip-widget
-	bindkey '^P' fzf-ip-widget
+	#zle     -N   fzf-ip-widget
+	#bindkey '^P' fzf-ip-widget
+
+
+	# I want my tab complete to be based on "current" word I am typing sometimes, before the command
+	custom_tabcomplete(){
+		local tokens cmd prefix trigger tail fzf matches lbuf d_cmds
+		setopt localoptions noshwordsplit noksh_arrays noposixbuiltins
+
+		# http://zsh.sourceforge.net/FAQ/zshfaq03.html
+		# http://zsh.sourceforge.net/Doc/Release/Expansion.html#Parameter-Expansion-Flags
+		tokens=(${(z)LBUFFER})
+		if [ ${#tokens} -lt 1 ]; then
+			zle ${fzf_default_completion:-expand-or-complete}
+			return
+		fi
+		cmd=${tokens[1]}
+		tail=${LBUFFER:$(( ${#LBUFFER} - ${#trigger} ))}
+		local currentProject=$(project current --path)
+		#local newLBuffer="${tokens:1:${#tokens[@]}-1}"
+		local newLBuffer
+		for i in $(seq 1 $((${#tokens[@]} - 1)) ); do
+			newLBuffer="${newLBuffer}${tokens[i]} "
+		done
+		
+
+		# Some of my completions should only work when in a project
+		if [ -n "$currentProject" ]; then
+			if [[ "${LBUFFER[-1]}" == " " ]]; then
+				fzf-completion
+			else
+				case "${tokens[-1]}" in
+					ip)
+						LBUFFER="${newLBuffer}$(project hosts ip --fzf) "
+						local ret=$?
+						zle reset-prompt
+						return $ret
+						;;
+					pf)
+						LBUFFER="${newLBuffer}$(find "$currentProject" -type f | fzf) "
+						local ret=$?
+						zle reset-prompt
+						return $ret
+						;;
+					pd)
+						LBUFFER="${newLBuffer}$(find "$currentProject" -type d | fzf --no-preview) "
+						local ret=$?
+						zle reset-prompt
+						return $ret
+						;;
+					wl)
+						LBUFFER="${newLBuffer}$(__fsel_wordlist)"
+						local ret=$?
+						zle reset-prompt
+						return $ret
+						;;
+					*)
+						# Fall back to fzf completion
+						fzf-completion
+				esac
+			fi
+		else
+			case "${tokens[-1]}" in
+				wl)
+					LBUFFER="${newLBuffer}$(__fsel_wordlist)"
+					local ret=$?
+					zle reset-prompt
+					return $ret
+					;;
+				*)
+					# Fall back to fzf completion
+					fzf-completion
+			esac
+		fi
+	}
+	zle     -N   custom_tabcomplete
+	bindkey '^I' custom_tabcomplete
+
+
+
 fi

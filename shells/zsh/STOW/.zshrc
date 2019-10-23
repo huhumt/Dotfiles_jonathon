@@ -108,16 +108,16 @@ TRAPWINCH(){
 #fi
 #
 
-local current="$(project current --path)"
-if [ -n "$current" ]; then
-	echo "yay"
-	local script="/usr/bin/script"
-	echo "'$(ps -ocommand -p $PPID  | grep -v 'COMMAND' | cut -d' ' -f1)'"
-	if [[ ! "$(ps -ocommand -p $PPID | grep -v 'COMMAND' | cut -d' ' -f1 )" == "$script" ]]; then
-		mkdir "$current/shell-logs"
-		/usr/bin/script -f "$current/shell-logs/$(date +"%d-%b-%y_%H-%M-%S")_shell.log"
-	fi
-fi
+#local current="$(project current --path)"
+#if [ -n "$current" ]; then
+#	echo "yay"
+#	local script="/usr/bin/script"
+#	echo "'$(ps -ocommand -p $PPID  | grep -v 'COMMAND' | cut -d' ' -f1)'"
+#	if [[ ! "$(ps -ocommand -p $PPID | grep -v 'COMMAND' | cut -d' ' -f1 )" == "$script" ]]; then
+#		mkdir "$current/shell-logs"
+#		/usr/bin/script -f "$current/shell-logs/$(date +"%d-%b-%y_%H-%M-%S")_shell.log"
+#	fi
+#fi
 
-clear
-tldr --linux -r
+#clear
+#tldr --linux -r
