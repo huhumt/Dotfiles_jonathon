@@ -176,6 +176,9 @@ alias surecheckImport="$JAVA_HOME/bin/java -jar $ARMORY/host_build_reviews/windo
 
 alias rot13="tr 'A-Za-z' 'N-ZA-Mn-za-m'"
 
+alias mysql="echo \"You might want to use mycli instead\"; /usr/bin/mysql"
+alias postgres="echo \"You might want to use pgcli instead\"; /usr/bin/postgres"
+
 # These aliases are related to projects
 # Make sqlmap put output in the current project folder
 alias sqlmap="[ -L ~/Projects/current ] && sqlmap --output-dir=\"~/Projects/current/sqlmap\""
@@ -187,3 +190,5 @@ alias pa="project switch --auto"
 alias pc="project switch --fzf"
 # Create a new project
 alias pn="project new"
+
+alias tl="tldr -a | tr ',' '\n' | tr -d ' ' | fzf --preview='tldr {} -m | bat -l markdown --color always' | xargs tldr -m | bat -l markdown --color always"
