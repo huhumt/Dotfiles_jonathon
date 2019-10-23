@@ -1,0 +1,73 @@
+#!/usr/bin/env bash
+
+function print_help(){
+	echo -e "new\t\tCreates a new project. Will prompt for a name if no argements are given"
+	echo -e "\t<project>\tCreates a new project with the name given"
+	echo -e "\t--dmenu\tPrompt using dmenu"
+	echo -e "\t--rofi\tPrompt using rofi"
+	echo -e "\t--read\tPrompt using read"
+}
+
+function read_prompt(){
+	local name
+	echo -n "Project name: " > /dev/tty
+	read name < /dev/tty
+	echo "$name"
+}
+
+function dmenu_prompt(){
+	local name
+	name=$(echo "" | dmenu -p "Project name: " )
+	echo "$name"
+}
+
+function rofi_prompt(){
+	local name
+	name=$(rofi -dmenu -l 0 -p "Project name" )
+	echo "$name"
+}
+
+function create_project(){
+	local name="$1"
+	local default_dirs=( bin screenshots Downloads www )
+	# If name empty, exit
+	if [ -z "$name" ]; then
+		exit 1
+	fi
+	mkdir -p "$PROJECTS_PATH/$name"
+	# Make all the directories
+	for dir in "${default_dirs[@]}"; do
+		mkdir "$PROJECTS_PATH/$name/$dir"
+	done
+}
+
+if [ -n "$1" ]; then
+	case "$1" in 
+		-h|--help)
+			print_help | column -t -s"	"
+			exit 0
+			;;
+		--parent-help)
+			print_help
+			exit 0
+			;;
+		--read)
+			read_prompt | xargs project-new
+			exit 0
+			;;
+		--dmenu)
+			dmenu_prompt | xargs project-new
+			exit 0
+			;;
+		--rofi)
+			rofi_prompt | xargs project-new
+			exit 0
+			;;
+		*)
+			create_project "$1"
+			exit 0
+			;;
+	esac
+else
+	read_prompt | xargs project-new
+fi

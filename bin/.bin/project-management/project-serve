@@ -1,0 +1,69 @@
+#!/usr/bin/env bash
+
+function print_help(){
+	echo -e "serve\t\tmanages a webserver for the project"
+	echo -e "\t--start [port [bind]]\tstarts the server"
+	echo -e "\t--stop\tstops the server"
+	echo -e "\t--status\treports the status of the server"
+}
+
+function start_server(){
+	local current="$(project current --path)"
+	if [ -z "$current" ]; then
+		echo "Set current project first"
+		exit 1
+	fi
+	local www="$current/www/"
+	local port=${1:-"8000"}
+	local bind="$2"
+	if [ -d "$www" ]; then
+		echo "Creating www directory"
+	fi
+	local count=$( find "$www" -type f | wc -l)
+	if [ -n "$bind" ]; then
+		echo "Serving $count files to $bind from the $www directory"
+		setsid python -m http.server "$port" --bind "$bind" --directory "$www" > /dev/null 2> /dev/null &
+	else
+		echo "Serving $count files from the $www directory"
+		setsid python -m http.server "$port" --directory "$www" > /dev/null 2> /dev/null &
+	fi
+}
+
+function stop_server(){
+	echo "Stopping..."
+	ps -aux | grep -i "python" | grep -v "grep" | awk '{print $2}' | xargs kill
+	echo "Stopped"
+}
+
+function status_server(){
+	ps -aux | grep -v "grep" | grep -qi "python"
+	if [ $? -eq 1 ]; then
+		# There is not a server running
+		echo "Server not running"
+	else
+		echo "Server is running"
+	fi
+}
+
+case "$1" in 
+	-h|--help)
+		print_help | column -t -s"	"
+		exit 0
+		;;
+	--parent-help)
+		print_help
+		exit 0
+		;;
+	--start)
+		start_server
+		exit 0
+		;;
+	--stop)
+		stop_server
+		exit 0
+		;;
+	--status)
+		status_server
+		exit 0
+		;;
+esac

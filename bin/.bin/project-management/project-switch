@@ -1,0 +1,86 @@
+#!/usr/bin/env bash
+
+function print_help(){
+	echo -e "switch\t\tSwitches the current project"
+	echo -e "\t--auto\tAutomatically deduce the project based on current working directory"
+	echo -e "\t--fzf\tUses fzf to choose a project"
+	echo -e "\t--dmenu\tUses dmenu to choose a project"
+	echo -e "\t--rofi\tUses rofi to choose a project"
+	echo -e "\t--unset\tUnsets the project"
+	echo -e "\t<project>\tSets the project"
+}
+
+function auto_switch(){
+	local switchto
+	if echo "$PWD" | grep -q "$PROJECTS_PATH"; then
+		switchto=$( echo "$PWD" | sed "s#$PROJECTS_PATH/##")
+		switchto="${switchto%/*}"
+		if [[ "$PWD" == "$PROJECTS_PATH" ]]; then
+			switchto="--unset"
+		fi
+	else
+		switchto="--unset"
+	fi
+	"$0" "$switchto"
+}
+function unset_project(){
+	if [ -L "$SYMLINC" ]; then
+		rm "$SYMLINC" 2> /dev/null
+		# See note about SIGWINCH below
+		pkill -u $USER -SIGWINCH zsh
+	fi
+}
+
+function set_project(){
+	local switchto="$PROJECTS_PATH/$1"
+	if [ -d "$switchto" ]; then
+		if [ -L "$SYMLINC" ]; then
+			rm "$SYMLINC" 2> /dev/null
+		fi
+		ln -s "$switchto" "$SYMLINC"
+		pkill -u $USER -SIGWINCH zsh
+	else
+		echo "No such directory $switchto"
+		exit 1
+	fi
+}
+
+case "$1" in 
+	-h|--help)
+		print_help | column -t -s"	"
+		exit 0
+		;;
+	--parent-help)
+		print_help
+		exit 0
+		;;
+	--auto)
+		auto_switch
+		exit 0
+		;;
+	--fzf)
+		project-list --options | fzf --no-preview | xargs "$0"
+		exit 0
+		;;
+	--dmenu)
+		project-list --options | dmenu -i | xargs "$0"
+		exit 0
+		;;
+	--rofi)
+		project-list --options | rofi -dmenu -i | xargs "$0"
+		exit 0
+		;;
+	--unset)
+		unset_project
+		exit 0
+		;;
+	--new)
+		project_new
+		exit 0
+		;;
+	*)
+		set_project "$1"
+		#list_projects "$@"
+		exit 0
+		;;
+esac

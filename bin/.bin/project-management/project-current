@@ -1,0 +1,83 @@
+#!/usr/bin/env bash
+
+NOTIFY=0
+PRINTPATH=0
+
+function print_help(){
+	echo -e "current\t\tPrints the current project"
+	echo -e "\t--notify\tUses notify send to print current project"
+	echo -e "\t--path\tPrints the full path rather than the name"
+}
+
+function get_name(){
+	local path=$(get_path)
+	local name
+	if [ $? -eq "0" ]; then
+		if [ -f "$path"/index.yaml ]; then
+			name=$(cat "$path/index.yaml" | yq -r '.name')
+		fi
+		if [ -z "$name" ]; then
+			name=$(basename "$path")
+		fi
+		echo "$name"
+		exit 0
+	fi
+	exit 1
+}
+
+function get_path(){
+	if [ -L "$SYMLINC" ]; then
+		readlink "$SYMLINC"
+		exit 0
+	fi
+	exit 1
+}
+
+function get_current(){
+	local ret
+	if [ "$PRINTPATH" -eq 1 ]; then
+		ret=$(get_path)
+	else
+		ret=$(get_name)
+	fi
+
+	if [ "$NOTIFY" -eq 1 ]; then
+		if [ -n "$ret" ]; then
+			notify-send "Current Project" "$ret"
+		else
+			notify-send "Current Project" "Not Set"
+		fi
+	else
+		echo "$ret"
+	fi
+
+	if [ -n "$ret" ]; then
+		exit 0
+	else
+		exit 1
+	fi
+}
+
+while [ -n "$1" ]; do
+	case "$1" in 
+		-h|--help)
+			print_help | column -t -s"	"
+			exit 0
+			;;
+		--parent-help)
+			print_help
+			exit 0
+			;;
+		--notify)
+			NOTIFY=1
+			shift
+			;;
+		--path)
+			PRINTPATH=1
+			shift
+			;;
+	esac
+done
+
+get_current
+exit $?

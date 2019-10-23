@@ -1,0 +1,142 @@
+#!/usr/bin/env bash
+
+# This script sets things based on my current project and will set the symlink ~/Projects/current to the correct folder
+
+# GLOBAL VARIABLES
+export PROJECTS_PATH="$HOME/Projects"
+export SYMLINC="$PROJECTS_PATH/current"
+
+function print_subcommand_details(){
+	"$1" --parent-help
+}
+
+# Prints help text
+function print_help(){
+	echo "Manages projects"
+	echo ""
+	echo -e "Usage: $0 <command> [<args>]"
+	echo ""
+	echo -e "Commands"
+	echo -e "--------"
+
+	echo $PATH | tr ':' '\n' | while read line; do
+		find "$line" -maxdepth 1 -type f -executable -name project-\* -exec basename {} \; 2> /dev/null
+	done | sort | uniq | while read line; do
+		print_subcommand_details "$line"
+	done | column -t -s"	"
+
+	#echo -e "copy <target> <files> [..<files>]\t\tCopies files to a target in the project"
+	#echo -e "\t--bin\t\tCopy to bin directory (inside \$PATH)"
+	#echo -e "\t--www\t\tCopy to the www directory"
+
+	exit 0
+}
+
+# Manipulates hosts for the project
+function hosts(){
+	local current="$(project current --path)"
+	index="$current/index.yaml"
+	if [ -n "$1" ] ; then
+		case "$1" in
+			ip)
+				local ip
+				case "$2" in
+					--fzf)
+						ip=$(hosts list | fzf --no-preview | cut -d',' -f2)
+						;;
+					--dmenu)
+						ip=$(hosts list | dmenu | cut -d',' -f2)
+						echo "$ip" | xclip -selection primary
+						echo "$ip" | xclip -selection clipboard
+						;;
+					--rofi)
+						ip=$(hosts list | rofi -dmenu | cut -d',' -f2)
+						echo "$ip" | xclip -selection primary
+						echo "$ip" | xclip -selection clipboard
+						;;
+				esac
+					echo "$ip"
+				;;
+			add)
+				echo -n "Name: "
+				read name < /dev/tty
+				echo -n "IP: "
+				read ip < /dev/tty
+				echo -n "Description: "
+				read description < /dev/tty
+				local host='{}'
+				if [ -n "$name" ]; then
+					host="$(echo $host | jq ".name=\"$name\"" )"
+				fi
+				if [ -n "$ip" ]; then
+					host="$(echo $host | jq ".ip=\"$ip\"" )"
+				fi
+				if [ -n "$description" ]; then
+					host="$(echo $host | jq ".description=\"$description\"" )"
+				fi
+				yq --yaml-output ".hosts |= .+ [$host]" "$index" > newindex
+				rm "$index"
+				mv newindex "$index"
+				;;
+			*)
+				echo "Unknown command $1"
+				print_help
+				exit 1
+				;;
+		esac
+	fi
+	
+}
+
+if [ -n "$1" ] ; then
+	case "$1" in
+		-h|--help)
+			print_help
+			exit 0
+			;;
+		#list)
+		#	list_projects
+		#	exit 0
+		#	;;
+		#switch)
+		#	switch "$2"
+		#	exit 0
+		#	;;
+		#current)
+		#	get_current "$2"
+		#	exit 0
+		#	;;
+		#new)
+		#	new_project "$2"
+		#	exit 0
+		#	;;
+		#copy)
+		#	shift
+		#	copyto "$@"
+		#	exit 0
+		#	;;
+		#serve)
+		#	shift
+		#	serve "$@"
+		#	exit 0
+		#	;;
+		#hosts)
+		#	shift
+		#	hosts "$@"
+		#	exit 0
+		#	;;
+		*)
+			executable="project-${1}"
+			if command -v "$executable" > /dev/null; then
+				shift
+				"$executable" "$@"
+				exit 0
+			else
+				echo "Unknown command $1"
+				print_help
+				exit 1
+			fi
+			;;
+	esac
+fi
+

@@ -1,0 +1,87 @@
+#!/usr/bin/env bash
+
+function print_help(){
+	echo -e "hosts\t\tManages hosts in the yaml file"
+}
+
+function listhosts(){
+	local current="$(project current --path)"
+	index="$current/index.yaml"
+	if [ ! -f "$index" ]; then
+		echo "No index file"
+		exit 1
+	fi
+	if [ $(yq -r '.hosts | length ' "$index" ) -gt 0 ]; then
+		yq -r '.hosts[] | [.name, .ip, .domain, .description] | join(",")' "$index"
+	else
+		echo "No hosts in index file"
+		exit 1
+	fi
+}
+
+function getip(){
+	local current="$(project current --path)"
+	index="$current/index.yaml"
+	case "$1" in
+		--fzf)
+			ip=$( listhosts | fzf --no-preview | cut -d',' -f2)
+			;;
+		--dmenu)
+			ip=$( listhosts | dmenu | cut -d',' -f2)
+			echo "$ip" | xclip -selection primary
+			echo "$ip" | xclip -selection clipboard
+			;;
+		--rofi)
+			ip=$( listhosts | rofi -dmenu | cut -d',' -f2)
+			echo "$ip" | xclip -selection primary
+			echo "$ip" | xclip -selection clipboard
+			;;
+		*)
+			ip=$( listhosts | fzf --no-preview | cut -d',' -f2)
+			;;
+	esac
+	echo $ip
+}
+
+function addip(){
+	echo -n "Name: "
+	read name < /dev/tty
+	echo -n "IP: "
+	read ip < /dev/tty
+	echo -n "Description: "
+	read description < /dev/tty
+	local host='{}'
+	if [ -n "$name" ]; then
+		host="$(echo $host | jq ".name=\"$name\"" )"
+	fi
+	if [ -n "$ip" ]; then
+		host="$(echo $host | jq ".ip=\"$ip\"" )"
+	fi
+	if [ -n "$description" ]; then
+		host="$(echo $host | jq ".description=\"$description\"" )"
+	fi
+	yq --yaml-output ".hosts |= .+ [$host]" "$index" > newindex
+	rm "$index"
+	mv newindex "$index"
+}
+
+case "$1" in 
+	-h|--help)
+		print_help | column -t -s"	"
+		exit 0
+		;;
+	--parent-help)
+		print_help
+		exit 0
+		;;
+	list)
+		listhosts
+		;;
+	ip)
+		getip
+		;;
+	add)
+		addip
+		;;
+esac
+

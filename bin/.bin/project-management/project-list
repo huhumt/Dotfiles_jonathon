@@ -1,0 +1,34 @@
+#!/usr/bin/env bash
+
+# Lists the available projects
+# If the --options flag is given, it will also list --new and, if relevant, --unset.
+# This is useful foa piping it into a fuzzy finder
+function list_projects(){
+	if [[ "$1" == "--options" ]]; then
+		if [ -L "$SYMLINC" ]; then
+			echo "--unset"
+		fi
+		echo "--new"
+	fi
+	find "$PROJECTS_PATH/" -maxdepth 1 -mindepth 1 -type d | xargs -L 1 basename
+}
+
+function print_help(){
+	echo -e "list\t\tLists the available projects"
+	echo -e "\t--options\tAdds the --new option and the --unset option if appropriate"
+}
+
+case "$1" in 
+	-h|--help)
+		print_help | column -t -s"	"
+		exit 0
+		;;
+	--parent-help)
+		print_help
+		exit 0
+		;;
+	*)
+		list_projects "$@"
+		exit 0
+		;;
+esac
