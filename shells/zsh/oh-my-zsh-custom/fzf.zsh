@@ -48,11 +48,91 @@ if [ -e /usr/share/fzf/key-bindings.zsh ]; then
 	#bindkey '^P' fzf-ip-widget
 
 
+	jhComplete(){
+		local comp=$(echo $1 | cut -d':' -f1)
+		local prompt=$(echo $1 | cut -d':' -f2)
+		case "${comp}" in
+			ip)
+				if [ -n "$currentProject" ]; then
+					project hosts ip --fzf
+				else
+					echo ""
+				fi
+				;;
+			pf)
+				if [ -n "$currentProject" ]; then
+					find "$currentProject" -type f | fzf
+				else
+					echo ""
+				fi
+				;;
+			pd)
+				if [ -n "$currentProject" ]; then
+					find "$currentProject" -type d | fzf --no-preview
+				else
+					echo ""
+				fi
+				;;
+			wl|wordlist)
+				__fsel_wordlist
+				;;
+			snip)
+				snippets
+				;;
+			*)
+				# Fall back to fzf completion
+				echo ""
+		esac
+	}
+
+jhswap(){
+		local orig="$1"
+		local inside=$(echo "$orig" | grep -Eo '<[^>]+>' | tr -d '<>')
+		local new=$(jhComplete "$inside")
+		echo "${orig/$inside/$new}" | tr -d '<>'
+	}
+
+	on_word_replace(){
+		setopt localoptions noshwordsplit noksh_arrays noposixbuiltins
+		local word="${LBUFFER##* }${RBUFFER%% *}"
+		if [ -n "$word" ]; then
+			local changeto=$(jhswap "$word" )
+			if [ -n "$changeto" ]; then
+				local lastWord="$changeto"
+				local LWORDS=$(echo $LBUFFER | tr ' ' '\n' | wc -l)
+				local RWORDS=$(echo $RBUFFER | tr ' ' '\n' | wc -l)
+				if [ "$LWORDS" -gt "1" ]; then
+					LBUFFER="${LBUFFER% *} $lastWord"
+				else
+					LBUFFER="$lastWord"
+				fi
+				if [ "$RWORDS" -gt "1" ]; then
+					RBUFFER=" ${RBUFFER#* }"
+				else
+					RBUFFER=""
+				fi
+				zle reset-prompt
+				zle -R
+				return 0
+			fi
+		fi
+
+	}
+
 	# I want my tab complete to be based on "current" word I am typing sometimes, before the command
 	custom_tabcomplete(){
 		local tokens cmd prefix trigger tail fzf matches lbuf d_cmds
 		setopt localoptions noshwordsplit noksh_arrays noposixbuiltins
 
+		if [ -n "$RBUFFER" ]; then
+			if [[ "${RBUFFER[1]}" != " " ]]; then
+				on_word_replace
+				return 0
+			fi
+		fi
+
+		
+		
 		# http://zsh.sourceforge.net/FAQ/zshfaq03.html
 		# http://zsh.sourceforge.net/Doc/Release/Expansion.html#Parameter-Expansion-Flags
 		tokens=(${(z)LBUFFER})
@@ -71,53 +151,19 @@ if [ -e /usr/share/fzf/key-bindings.zsh ]; then
 		
 
 		# Some of my completions should only work when in a project
-		if [ -n "$currentProject" ]; then
 			if [[ "${LBUFFER[-1]}" == " " ]]; then
 				fzf-completion
 			else
-				case "${tokens[-1]}" in
-					ip)
-						LBUFFER="${newLBuffer}$(project hosts ip --fzf) "
-						local ret=$?
-						zle reset-prompt
-						return $ret
-						;;
-					pf)
-						LBUFFER="${newLBuffer}$(find "$currentProject" -type f | fzf) "
-						local ret=$?
-						zle reset-prompt
-						return $ret
-						;;
-					pd)
-						LBUFFER="${newLBuffer}$(find "$currentProject" -type d | fzf --no-preview) "
-						local ret=$?
-						zle reset-prompt
-						return $ret
-						;;
-					wl)
-						LBUFFER="${newLBuffer}$(__fsel_wordlist)"
-						local ret=$?
-						zle reset-prompt
-						return $ret
-						;;
-					*)
-						# Fall back to fzf completion
-						fzf-completion
-				esac
-			fi
-		else
-			case "${tokens[-1]}" in
-				wl)
-					LBUFFER="${newLBuffer}$(__fsel_wordlist)"
+				local new=$(jhComplete "${tokens[-1]}")
+				if [ -n "$new" ]; then
+					LBUFFER="${newLBuffer}${new} "
 					local ret=$?
 					zle reset-prompt
 					return $ret
-					;;
-				*)
-					# Fall back to fzf completion
+				else
 					fzf-completion
-			esac
-		fi
+				fi
+			fi
 	}
 	zle     -N   custom_tabcomplete
 	bindkey '^I' custom_tabcomplete

@@ -1,0 +1,18 @@
+#!/usr/bin/env bash
+
+SNIPPETS="$HOME/.local/share/snippets/"
+
+function get_commands(){
+	cat "$1" | grep -Ev '^#' | grep -Ev '^$' |  awk "{print \"$1\\t\" \$0}" | sed 's/ # /\t/'
+}
+export -f get_commands
+
+function do_preview(){
+	local file=$(echo "$1" | cut -d'	' -f1)
+	local command=$(echo "$1" | cut -d'	' -f2)
+	cat "$file" | awk -v RS="\n\n" -v ORS="\n\n" '{if ($0 ~ "'"$command"'" ) print $0}' | sed -n '/^#/p' | sed -E 's/# ?//' | bat --color always -l markdown
+}
+export -f do_preview
+
+find "$SNIPPETS" -name '*.snip' -exec /bin/bash -c 'get_commands "$0"' {} \; | fzf --preview="/bin/bash -c 'do_preview \"\$0\"' {}" --delimiter "\t" --with-nth 2,3 | cut -d'	' -f 2
+
