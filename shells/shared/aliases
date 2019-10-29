@@ -14,7 +14,7 @@ alias tree='tree -F -C'
 # Make qmv open on 1 column mode
 alias qmv='qmv -f do'
 
-alias msfconsole="msfconsole --quiet -x \"db_connect msf@msf\""
+alias msfconsole="( systemctl status --no-pager postgresql.service > /dev/null || (echo \"Statring postgres\"; sudo systemctl start postgresql.service) ); ( pass show system/metasploit/database.yaml > database.yaml; msfconsole -y database.yaml; rm database.yaml )"
 
 #Start cups
 alias cups='sudo systemctl start org.cups.cupsd.service'

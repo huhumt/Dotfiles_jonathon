@@ -24,9 +24,8 @@ function my_dir(){
 	# Replace wp-content/plugins with plugin icon if in plugin
 	# current_path=$(echo $current_path | sed -r -e "s/wp\-content\/plugins/$wpPluginsIcon/")
 
-	local current_project_full="$(project current --path)"
-	local current_project_name="$(project current)"
-	if [ -n "$current_project_name" ]; then
+	current_project_full="$(project current --path)"
+	if [ -n "$current_project_full" ]; then
 		if echo "$PWD" | grep -q "$current_project_full"; then
 			current_path=$(echo $PWD | sed -r -e "s#$current_project_full##" | sed -r -e 's/^\///')
 			current_path="$current_path"
@@ -102,9 +101,9 @@ POWERLEVEL9K_CUSTOM_CAPS_FOREGROUND="white"
 
 function prompt_project() {
 	local segment_content state icon
-	local current_project_name="$(project current)"
-	local current_project_full="$(project current --path)"
 	local parent_process="$(ps -ocommand -p $PPID | grep -v 'COMMAND' | cut -d' ' -f1)"
+	local current_project_full="$(project current --path)"
+	local current_project_name="$(project current)"
 	# If there is a current project
 	if [ -n "$current_project_name" ]; then
 		segment_content="$current_project_name"
