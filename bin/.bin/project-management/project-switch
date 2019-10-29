@@ -28,6 +28,7 @@ function unset_project(){
 		rm "$SYMLINC" 2> /dev/null
 		# See note about SIGWINCH below
 		pkill -u $USER -SIGWINCH zsh
+		project hosts hosts_file
 	fi
 }
 
@@ -39,6 +40,7 @@ function set_project(){
 		fi
 		ln -s "$switchto" "$SYMLINC"
 		pkill -u $USER -SIGWINCH zsh
+		project hosts hosts_file
 	else
 		echo "No such directory $switchto"
 		exit 1

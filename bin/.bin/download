@@ -10,13 +10,14 @@ if [[ "$1" = "surf-download" ]]; then
 	url="$4"
 fi
 
-path="~/Downloads/"
+path="$HOME/Downloads/"
 project=$(project current --path)
 if [ -n "$project" ]; then
 	path="$project/Downloads/"
 fi
 
-mkcd -p "$path"
+
+mkdir -p "$path"
 cd "$path"
 
 echo "$useragent"
@@ -24,4 +25,8 @@ echo "$cookiefile"
 echo "$referer"
 echo "$url"
 
-curl -g -L -J -O -A "$useragent" -b "$cookiefile" -c "$cookiefile" -e "$referer" "$url"
+if command -v aria2c; then
+	aria2c -U "$useragent" --referer "$referer" --load-cookies $cookiefile --save-cookies $cookiefile "$url"
+else
+	curl -k -g -L -J -O -A "$useragent" -b "$cookiefile" -c "$cookiefile" -e "$referer" "$url"
+fi

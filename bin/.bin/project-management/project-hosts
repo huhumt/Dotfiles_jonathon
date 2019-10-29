@@ -19,6 +19,36 @@ function listhosts(){
 	fi
 }
 
+function get_hosts(){
+	local current="$(project current --path)"
+	index="$current/index.yaml"
+	if [ ! -f "$index" ]; then
+		echo ""
+		exit 0
+	fi
+	if [ $(yq -r '.hosts | length ' "$index" ) -gt 0 ]; then
+		yq -r '.hosts[]| select(.domain) | [.ip, .domain ] | join(",,")' "$index" | tr ',' '\t'
+	else
+		echo ""
+		exit 0
+	fi
+}
+
+function host_file(){
+
+	sed '/# Project specific hosts/,$ d' /etc/hosts > /tmp/newhosts
+	cat /tmp/newhosts > /etc/hosts
+	rm /tmp/newhosts
+
+	local current="$(project current --path)"
+	if [ -n "$current" ]; then
+		(
+			echo "# Project specific hosts - Everything after this line will be deleted when the project is changed"
+			get_hosts
+		) >> /etc/hosts
+	fi
+}
+
 function getip(){
 	local current="$(project current --path)"
 	index="$current/index.yaml"
@@ -44,8 +74,12 @@ function getip(){
 }
 
 function addip(){
+	local current="$(project current --path)"
+	index="$current/index.yaml"
 	echo -n "Name: "
 	read name < /dev/tty
+	echo -n "Domain: "
+	read domain < /dev/tty
 	echo -n "IP: "
 	read ip < /dev/tty
 	echo -n "Description: "
@@ -54,15 +88,20 @@ function addip(){
 	if [ -n "$name" ]; then
 		host="$(echo $host | jq ".name=\"$name\"" )"
 	fi
+	if [ -n "$domain" ]; then
+		host="$(echo $host | jq ".domain=\"$domain\"" )"
+	fi
 	if [ -n "$ip" ]; then
 		host="$(echo $host | jq ".ip=\"$ip\"" )"
 	fi
 	if [ -n "$description" ]; then
 		host="$(echo $host | jq ".description=\"$description\"" )"
 	fi
+	echo $host
 	yq --yaml-output ".hosts |= .+ [$host]" "$index" > newindex
 	rm "$index"
 	mv newindex "$index"
+	host_file
 }
 
 case "$1" in 
@@ -76,6 +115,10 @@ case "$1" in
 		;;
 	list)
 		listhosts
+		;;
+	hosts_file)
+		shift
+		host_file "$@"
 		;;
 	ip)
 		getip
