@@ -51,26 +51,28 @@ if [ -e /usr/share/fzf/key-bindings.zsh ]; then
 	jhComplete(){
 		local comp=$(echo $1 | cut -d':' -f1)
 		local prompt=$(echo $1 | cut -d':' -f2)
+		local currentProject=$(project current --path)
+		export FZF_DEFAULT_OPTS="$FZF_DEFAULT_OPTS --reverse --height 40%"
+		find "$HOME/.local/share/snippets/" -name \*.func | while read line; do
+			source "$line"
+		done
 		case "${comp}" in
 			ip)
 				if [ -n "$currentProject" ]; then
 					project hosts ip --fzf
-				else
-					echo ""
 				fi
+				;;
+			myip)
+				ip route | grep -oE '(dev|src) [^ ]+' | sed 'N;s/\n/,/;s/src //' | awk -F',' '{print $2 " " $1}' | sort -u | fzf --no-preview | cut -d' ' -f1
 				;;
 			pf)
 				if [ -n "$currentProject" ]; then
 					find "$currentProject" -type f | fzf
-				else
-					echo ""
 				fi
 				;;
 			pd)
 				if [ -n "$currentProject" ]; then
 					find "$currentProject" -type d | fzf --no-preview
-				else
-					echo ""
 				fi
 				;;
 			wl|wordlist)
@@ -79,9 +81,18 @@ if [ -e /usr/share/fzf/key-bindings.zsh ]; then
 			snip)
 				snippets
 				;;
+			hcm)
+				hashcat --example-hashes | awk -v RS="\n\n" -F "\t" '{gsub("\n","\t",$0); print $1 "\t" $2 "\t" $3}' | sed 's/MODE: //; s/TYPE: //' | fzf -d "\t" --header="Mode	Type" --with-nth='1,2' --preview='echo {3}' --preview-window=up:1 | cut -d'	' -f1
+				;;
+			network-interface|int)
+				ip -o link show | cut -d' ' -f2- | sed -E 's/[^:]+(UP|DOWN).*/\1/' | tr ':' ' ' | fzf --preview="interface=\$(echo {} | cut -f1 -d' ');ip address show \$interface" | cut -d' ' -f1
+				;;
 			*)
-				# Fall back to fzf completion
-				echo ""
+				if command -v "jhcomplete::$comp" > /dev/null; then
+					"jhcomplete::$comp"
+				else
+					echo ""
+				fi
 		esac
 	}
 
@@ -97,24 +108,22 @@ jhswap(){
 		local word="${LBUFFER##* }${RBUFFER%% *}"
 		if [ -n "$word" ]; then
 			local changeto=$(jhswap "$word" )
-			if [ -n "$changeto" ]; then
-				local lastWord="$changeto"
-				local LWORDS=$(echo $LBUFFER | tr ' ' '\n' | wc -l)
-				local RWORDS=$(echo $RBUFFER | tr ' ' '\n' | wc -l)
-				if [ "$LWORDS" -gt "1" ]; then
-					LBUFFER="${LBUFFER% *} $lastWord"
-				else
-					LBUFFER="$lastWord"
-				fi
-				if [ "$RWORDS" -gt "1" ]; then
-					RBUFFER=" ${RBUFFER#* }"
-				else
-					RBUFFER=""
-				fi
-				zle reset-prompt
-				zle -R
-				return 0
+			local lastWord="$changeto"
+			local LWORDS=$(echo $LBUFFER | tr ' ' '\n' | wc -l)
+			local RWORDS=$(echo $RBUFFER | tr ' ' '\n' | wc -l)
+			if [ "$LWORDS" -gt "1" ]; then
+				LBUFFER="${LBUFFER% *} $lastWord"
+			else
+				LBUFFER="$lastWord"
 			fi
+			if [ "$RWORDS" -gt "1" ]; then
+				RBUFFER=" ${RBUFFER#* }"
+			else
+				RBUFFER=""
+			fi
+			zle reset-prompt
+			zle -R
+			return 0
 		fi
 
 	}
@@ -142,7 +151,6 @@ jhswap(){
 		fi
 		cmd=${tokens[1]}
 		tail=${LBUFFER:$(( ${#LBUFFER} - ${#trigger} ))}
-		local currentProject=$(project current --path)
 		#local newLBuffer="${tokens:1:${#tokens[@]}-1}"
 		local newLBuffer
 		for i in $(seq 1 $((${#tokens[@]} - 1)) ); do
