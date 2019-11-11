@@ -238,10 +238,18 @@ function updatePath(){
 
 }
 
+function reset_colourscheme(){
+	if [ -L $HOME/.dotfiles/shells/zsh/current-color-scheme ]; then
+		source $HOME/.dotfiles/shells/zsh/current-color-scheme
+	fi
+	exit 2
+}
+
 function ssh(){
 	if [ -L $HOME/.dotfiles/shells/zsh/ssh-color-scheme ]; then
 		source $HOME/.dotfiles/shells/zsh/ssh-color-scheme
 	fi
+	trap "reset_colourscheme" 2
 	command /usr/bin/ssh "$@"
 	if [ -L $HOME/.dotfiles/shells/zsh/current-color-scheme ]; then
 		source $HOME/.dotfiles/shells/zsh/current-color-scheme
