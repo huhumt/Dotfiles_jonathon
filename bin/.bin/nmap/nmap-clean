@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+
+cat | grep -v 'host down' |\
+	grep -v Increa |\
+	grep -v Ignoring |\
+	grep -v '^#'

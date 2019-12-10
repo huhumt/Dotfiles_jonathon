@@ -1,8 +1,4 @@
 #!/usr/bin/env bash
 
-cat | grep -v 'host down' |\
-	grep -v Increa |\
-	grep -v Ignoring |\
-	grep -v '^#' |\
-	awk -v RS="\n\n" -v ORS="\n\n" '{if ($0 ~ "'"$1"'" ) print $0}'
 
+cat | awk -v RS="\n\n" -v ORS="\n" '{gsub("\n","§",$0); print $0}' | grep "$@" | sed 's/$/\n/' | sed 's/§/\n/g'

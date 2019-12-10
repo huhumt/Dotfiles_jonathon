@@ -38,6 +38,37 @@ function print_basic_info(){
  #| [select(."@attributes".protocol)]
 }
 
+function print_with_match(){
+	local match=$1
+	echo $json | # Echo the full json file
+		jq ' if ( .host | type ) == "object" then [ .host ] else .host end ' | # Get the hosts as an array (even if there is only one
+		#jq '.[9]'
+		#jq '[ .[9] | {
+		#	address: .address."@attributes".addr,
+		#	domains: .hostnames.hostname."@attributes".name,
+		#	port: {
+		#		tcp : (try ( [ .ports.port[] | select( ."@attributes".protocol == "tcp" ) | select( .service."@attributes".name | test("'"$match"'; "i") ) |  {
+		#			port: ."@attributes".portid,
+		#			service: .service."@attributes",
+		#		}  ] )   catch null ),
+		#		udp : (try ( [ .ports.port[] | select( ."@attributes".protocol == "udp" ) | {
+		#			port: ."@attributes".portid,
+		#			service: .service."@attributes",
+		#		}  ] )   catch null )
+		#	}
+		#} ]'
+		jq '[ .[9] | {
+			address: .address."@attributes".addr,
+			domains: .hostnames.hostname."@attributes".name,
+			port: {
+				tcp : [ .ports.port |  {
+					port: .,
+					service: .service."@attributes",
+				}  ],
+			}
+		} ]'
+}
+
 if [ -n "$1" ] ; then
 	case "$1" in
 		-h|--help)
@@ -46,6 +77,10 @@ if [ -n "$1" ] ; then
 			;;
 		basic)
 			print_basic_info
+			exit 0
+			;;
+		*)
+			print_with_match "$@"
 			exit 0
 			;;
 	esac
