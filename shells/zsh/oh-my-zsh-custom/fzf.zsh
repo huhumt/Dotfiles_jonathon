@@ -52,7 +52,6 @@ if [ -e /usr/share/fzf/key-bindings.zsh ]; then
 		local comp=$(echo $1 | cut -d':' -f1)
 		local prompt=$(echo $1 | cut -d':' -f2)
 		local currentProject=$(project current --path)
-		export FZF_DEFAULT_OPTS="$FZF_DEFAULT_OPTS --reverse --height 40%"
 		find "$HOME/.local/share/snippets/" -name \*.func | while read line; do
 			source "$line"
 		done
@@ -80,9 +79,6 @@ if [ -e /usr/share/fzf/key-bindings.zsh ]; then
 				;;
 			snip)
 				snippets
-				;;
-			hcm)
-				hashcat --example-hashes | awk -v RS="\n\n" -F "\t" '{gsub("\n","\t",$0); print $1 "\t" $2 "\t" $3}' | sed 's/MODE: //; s/TYPE: //' | fzf -d "\t" --header="Mode	Type" --with-nth='1,2' --preview='echo {3}' --preview-window=up:1 | cut -d'	' -f1
 				;;
 			network-interface|int)
 				ip -o link show | cut -d' ' -f2- | sed -E 's/[^:]+(UP|DOWN).*/\1/' | tr ':' ' ' | fzf --preview="interface=\$(echo {} | cut -f1 -d' ');ip address show \$interface" | cut -d' ' -f1
@@ -131,6 +127,7 @@ jhswap(){
 	# I want my tab complete to be based on "current" word I am typing sometimes, before the command
 	custom_tabcomplete(){
 		local tokens cmd prefix trigger tail fzf matches lbuf d_cmds
+		export FZF_DEFAULT_OPTS="$FZF_DEFAULT_OPTS --reverse --height 40%"
 		setopt localoptions noshwordsplit noksh_arrays noposixbuiltins
 
 		if [ -n "$RBUFFER" ]; then
@@ -141,7 +138,6 @@ jhswap(){
 		fi
 
 		
-		
 		# http://zsh.sourceforge.net/FAQ/zshfaq03.html
 		# http://zsh.sourceforge.net/Doc/Release/Expansion.html#Parameter-Expansion-Flags
 		tokens=(${(z)LBUFFER})
@@ -150,7 +146,16 @@ jhswap(){
 			return
 		fi
 		cmd=${tokens[1]}
-		tail=${LBUFFER:$(( ${#LBUFFER} - ${#trigger} ))}
+		if [[ "$cmd" == "hydra" && "${tokens[-1]}" == "-m" ]]; then
+			mode=$(hashcat --example-hashes | awk -v RS="\n\n" -F "\t" '{gsub("\n","\t",$0); print $1 "\t" $2 "\t" $3}' | sed 's/MODE: //; s/TYPE: //' | fzf -d "\t" --header="Mode	Type" --with-nth='1,2' --preview='echo {3}' --preview-window=up:1 | cut -d'	' -f1)
+			if [[ "${LBUFFER[-1]}" != " " ]]; then
+				LBUFFER="${LBUFFER} "
+			fi
+			LBUFFER="${LBUFFER}${mode}"
+			zle reset-prompt
+			return $ret
+			return 0
+		fi
 		#local newLBuffer="${tokens:1:${#tokens[@]}-1}"
 		local newLBuffer
 		for i in $(seq 1 $((${#tokens[@]} - 1)) ); do
