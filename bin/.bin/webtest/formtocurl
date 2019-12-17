@@ -1,0 +1,26 @@
+#!/usr/bin/env bash
+# Requires hq : https://github.com/coderobe/hq
+
+form=$(cat)
+headers(){
+	echo "$fields" | while read name; do
+		value=$(echo "$form" | hq "input[name=$name]" attr value)
+		if [ -z "$value" ]; then
+			value="<PLACEHOLDER>"
+		fi
+		echo "-H '${name}=${value}'"
+	done | tr '\n' ' ' | sed 's/ $//'
+}
+
+url=$(echo "$form" | hq form attr action)
+method=$(echo "$form" | hq form attr method)
+fields=$(echo "$form" | hq input attr name)
+
+curlHeaders=$(headers)
+if [ -z "$method" ]; then
+	method="POST"
+fi
+
+echo "curl -X $method $curlHeaders $url"
+
+#curlHeaders=$(echo "$fields" | sed 's/\(.*\)/-H '"'"'\1=<PLACEHOLDER>'"'"'/' | tr '\n' ' ')
