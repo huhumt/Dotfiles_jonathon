@@ -146,7 +146,7 @@ jhswap(){
 			return
 		fi
 		cmd=${tokens[1]}
-		if [[ "$cmd" == "hydra" && "${tokens[-1]}" == "-m" ]]; then
+		if [[ "$cmd" == "hashcat" && "${tokens[-1]}" == "-m" ]]; then
 			mode=$(hashcat --example-hashes | awk -v RS="\n\n" -F "\t" '{gsub("\n","\t",$0); print $1 "\t" $2 "\t" $3}' | sed 's/MODE: //; s/TYPE: //' | fzf -d "\t" --header="Mode	Type" --with-nth='1,2' --preview='echo {3}' --preview-window=up:1 | cut -d'	' -f1)
 			if [[ "${LBUFFER[-1]}" != " " ]]; then
 				LBUFFER="${LBUFFER} "
