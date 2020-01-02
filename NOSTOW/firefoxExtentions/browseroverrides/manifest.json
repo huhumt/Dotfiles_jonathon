@@ -1,0 +1,29 @@
+{
+	"manifest_version": 2,
+	"name": "Jonathans Overrides",
+	"version": "1.0",
+	"description": "Adds my style and script overides to sites",
+	"applications": {
+		"gecko": {
+			"id": "overides@jonathanh.co.uk"
+		}
+	},
+	"content_scripts": [
+		{
+			"matches": ["*://wiki.archlinux.org/*"],
+			"css": [ "css/archwiki.css" ]
+		},
+		{
+			"matches": ["*://*.amazon.com/*","*://*.amazon.co.uk/*"],
+			"css": [ "css/amazon.css" ]
+		},
+		{
+			"matches": ["*://*.duckduckgo.com/*","*://*.duckduckgo.co.uk/*"],
+			"css": [ "css/duckduckgo.css" ]
+		},
+		{
+			"matches": ["*://*.reddit.com/*"],
+			"css": [ "css/reddit.css" ]
+		}
+	]
+}
