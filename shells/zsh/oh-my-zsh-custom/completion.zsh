@@ -23,3 +23,4 @@ complete -o nospace -F _wp_complete wp
 
 _comp_options+=(globdots)
 
+fpath+="$(dirname $0)/completion"

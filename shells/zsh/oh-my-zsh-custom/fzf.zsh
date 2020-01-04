@@ -146,12 +146,20 @@ jhswap(){
 			return
 		fi
 		cmd=${tokens[1]}
-		if [[ "$cmd" == "hashcat" && "${tokens[-1]}" == "-m" ]]; then
-			mode=$(hashcat --example-hashes | awk -v RS="\n\n" -F "\t" '{gsub("\n","\t",$0); print $1 "\t" $2 "\t" $3}' | sed 's/MODE: //; s/TYPE: //' | fzf -d "\t" --header="Mode	Type" --with-nth='1,2' --preview='echo {3}' --preview-window=up:1 | cut -d'	' -f1)
+		append=""
+		if [[ "$cmd" == "hashcat" ]]; then
+			if [[ "${tokens[-1]}" == "-m" || "${tokens[-1]}" == "--hash-type" ]]; then
+				append=$(hashcat --example-hashes | awk -v RS="\n\n" -F "\t" '{gsub("\n","\t",$0); print $1 "\t" $2 "\t" $3}' | sed 's/MODE: //; s/TYPE: //' | fzf -d "\t" --header="Mode	Type" --with-nth='1,2' --preview='echo {3}' --preview-window=up:1 | cut -d'	' -f1)
+			#else
+			#	append=$(hashcat --help | sed -n '/Options Short/,/^$/p' | sed -E 's/ +/ /g' | sed '/==============/d' | column -t -s '|' -o "	" | fzf -d "	" --with-nth="1,3" --tabstop=2 --header-lines="1" --no-preview | cut -d'	' -f1 | sed 's/\s*$//' | grep -Eo '\S+$')
+			fi
+		fi
+		if [ -n "$append" ]; then
+			# Make sure that we are adding a space
 			if [[ "${LBUFFER[-1]}" != " " ]]; then
 				LBUFFER="${LBUFFER} "
 			fi
-			LBUFFER="${LBUFFER}${mode}"
+			LBUFFER="${LBUFFER}${append}"
 			zle reset-prompt
 			return $ret
 			return 0
@@ -163,7 +171,6 @@ jhswap(){
 		done
 		
 
-		# Some of my completions should only work when in a project
 			if [[ "${LBUFFER[-1]}" == " " ]]; then
 				fzf-completion
 			else
