@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+source $HOME/.dotfiles/shells/zsh/current-color-scheme
+vim "$@"

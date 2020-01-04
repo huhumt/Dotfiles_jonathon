@@ -2,6 +2,10 @@
 
 function print_help(){
 	echo -e "hosts\t\tManages hosts in the yaml file"
+	echo -e "\tlist\tLists hosts in the project"
+	echo -e "\thosts_file\tUpdates the hosts file to reflect the hosts on this project"
+	echo -e "\tip\tUses fzf to select an IP from the project"
+	echo -e "\tadd\tAdd an IP address"
 }
 
 function listhosts(){
@@ -12,7 +16,11 @@ function listhosts(){
 		exit 1
 	fi
 	if [ $(yq -r '.hosts | length ' "$index" ) -gt 0 ]; then
-		yq -r '.hosts[] | [.name, .ip, .domain, .description] | join(",")' "$index"
+		yq -r '.hosts[] | [
+			.ip,
+			(if ( .domain | type == "array") then .domain | join(",") else .domain end),
+			.description
+		] | join(",")' "$index"
 	else
 		echo "No hosts in index file"
 		exit 1
@@ -27,7 +35,10 @@ function get_hosts(){
 		exit 0
 	fi
 	if [ $(yq -r '.hosts | length ' "$index" ) -gt 0 ]; then
-		yq -r '.hosts[]| select(.domain) | [.ip, .domain ] | join(",,")' "$index" | tr ',' '\t'
+		yq -r '.hosts[]| select(.domain) | [
+			.ip,
+			(if ( .domain | type == "array") then .domain | join(",") else .domain end)
+		] | join(",,")' "$index" | tr ',' '\t'
 	else
 		echo ""
 		exit 0
@@ -35,7 +46,6 @@ function get_hosts(){
 }
 
 function host_file(){
-
 	sed '/# Project specific hosts/,$ d' /etc/hosts > /tmp/newhosts
 	cat /tmp/newhosts > /etc/hosts
 	rm /tmp/newhosts
@@ -54,20 +64,20 @@ function getip(){
 	index="$current/index.yaml"
 	case "$1" in
 		--fzf)
-			ip=$( listhosts | fzf --no-preview | cut -d',' -f2)
+			ip=$( listhosts | fzf --no-preview | cut -d',' -f1)
 			;;
 		--dmenu)
-			ip=$( listhosts | dmenu | cut -d',' -f2)
+			ip=$( listhosts | dmenu | cut -d',' -f1)
 			echo "$ip" | xclip -selection primary
 			echo "$ip" | xclip -selection clipboard
 			;;
 		--rofi)
-			ip=$( listhosts | rofi -dmenu | cut -d',' -f2)
+			ip=$( listhosts | rofi -dmenu | cut -d',' -f1)
 			echo "$ip" | xclip -selection primary
 			echo "$ip" | xclip -selection clipboard
 			;;
 		*)
-			ip=$( listhosts | fzf --no-preview | cut -d',' -f2)
+			ip=$( listhosts | fzf --no-preview | cut -d',' -f1)
 			;;
 	esac
 	echo $ip
@@ -76,8 +86,6 @@ function getip(){
 function addip(){
 	local current="$(project current --path)"
 	index="$current/index.yaml"
-	echo -n "Name: "
-	read name < /dev/tty
 	echo -n "Domain: "
 	read domain < /dev/tty
 	echo -n "IP: "
@@ -85,9 +93,6 @@ function addip(){
 	echo -n "Description: "
 	read description < /dev/tty
 	local host='{}'
-	if [ -n "$name" ]; then
-		host="$(echo $host | jq ".name=\"$name\"" )"
-	fi
 	if [ -n "$domain" ]; then
 		host="$(echo $host | jq ".domain=\"$domain\"" )"
 	fi

@@ -10,4 +10,5 @@ else
 	json=$(curl https://xkcd.com/$comic/info.0.json 2> /dev/null)
 fi
 echo $json | /usr/bin/jq -C
-echo $json | /usr/bin/jq ".img" | xargs sxiv
+echo $json | /usr/bin/jq ".img" | xargs curl -s -o /tmp/xkcd
+sxiv /tmp/xkcd

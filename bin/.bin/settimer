@@ -1,0 +1,24 @@
+#!/usr/bin/env bash
+
+echo "$@" > "$HOME/timer"
+
+
+humanDuration=$(head -n 1 "$HOME/timer")
+# All these dates are in seconds since the epoch
+duration=$(( $(date -d "now + $humanDuration" '+%s') - $(date '+%s') ))
+
+# Display date time notification when half way
+( sleep $(( duration / 2 ))
+	datetime
+) & disown
+
+# Display date time notification when 90% done
+( sleep $(( (duration * 9) / 10 ))
+	datetime
+) & disown
+
+# Display date time notification when half way
+( sleep $duration
+	datetime "Finished"
+) & disown
+

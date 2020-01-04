@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+
+domain="$1"
+
+if [ -z "$domain" ];
+	echo "You need to give a domain or ip address"
+fi
+
+if

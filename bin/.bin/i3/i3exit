@@ -1,31 +1,32 @@
 #!/bin/sh
 lock() {
-    ~/.bin/i3/fadeLockScreen
-    #i3lock
+	killall -SIGUSR1 dunst # Pause dunst
+	~/.bin/i3/fadeLockScreen
+	killall -SIGUSR2 dunst # Resume dunst
 }
 
 case "$1" in
-    lock)
-        lock
-        ;;
-    logout)
-        i3-msg exit
-        ;;
-    suspend)
-        systemctl suspend && lock
-        ;;
-    hibernate)
-        systemctl hibernate && lock
-        ;;
-    reboot)
-        systemctl reboot
-        ;;
-    shutdown)
-        systemctl poweroff
-        ;;
-    *)
-        echo "Usage: $0 {lock|logout|suspend|hibernate|reboot|shutdown}"
-        exit 2
+	lock)
+		lock
+		;;
+	logout)
+		i3-msg exit
+		;;
+	suspend)
+		systemctl suspend && lock
+		;;
+	hibernate)
+		systemctl hibernate && lock
+		;;
+	reboot)
+		systemctl reboot
+		;;
+	shutdown)
+		systemctl poweroff
+		;;
+	*)
+		echo "Usage: $0 {lock|logout|suspend|hibernate|reboot|shutdown}"
+		exit 2
 esac
 
 exit 0
