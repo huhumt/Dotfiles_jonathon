@@ -192,3 +192,10 @@ alias pc="project switch --fzf"
 alias pn="project new"
 
 alias tl="tldr -a | tr ',' '\n' | tr -d ' ' | fzf --preview='tldr {} -m | bat -l markdown --color always' | xargs tldr -m | bat -l markdown --color always"
+
+alias snmp-check="/usr/bin/snmpcheck-nothink"
+
+alias chrome-curl="node $HOME/GitRepos/chrome-curl/index.js"
+
+#alias irmgpg="gpg --no-default-keyring --keyring=irm.gpg"
+alias irmgpg="gpg --options ~/.gnupg/irmgpg.conf --keyring=irm.gpg"
