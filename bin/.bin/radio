@@ -1,0 +1,43 @@
+#!/usr/bin/env bash
+
+LIST="$HOME/.local/share/radioStations"
+PLAY="mpv --input-ipc-server=/tmp/mpvsocket"
+
+function getRadioStations(){
+	echo "Updating radio stations"
+	curl -s http://www.radiofeeds.co.uk/pda/search.asp\?search\=+ |\
+		hq p data |\
+		grep 'href=' |\
+		sed -e 's/<\/\?font[^>]*>//g' |\
+		while read line; do
+			name="$(echo $line | hq b text | head -n 1)"
+			echo "$(echo $line | hq a data)" | while read stream; do
+				url="$(echo $stream | hq a attr href)"
+				quality="$(echo $stream | hq a text)"
+				echo "$name	$quality	$url"
+			done
+		done > "$LIST"
+}
+
+function playStation(){
+	if [ ! -e "$LIST" ]; then
+		getRadioStations
+	fi
+	cat "$LIST" | fzf --no-preview | cut -d'	' -f3 | xargs $PLAY
+}
+
+
+if [ -n "$1" ]; then
+	while [ -n "$1" ]; do
+		case "$1" in
+			"-u"|"--update")
+				getRadioStations
+				exit
+				;;
+			*)
+				playStation
+		esac
+	done
+else
+	playStation
+fi
