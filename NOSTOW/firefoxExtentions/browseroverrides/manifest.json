@@ -24,6 +24,18 @@
 		{
 			"matches": ["*://*.reddit.com/*"],
 			"css": [ "css/reddit.css" ]
+		},
+		{
+			"matches": ["*://*.wikipedia.org/*"],
+			"css": [ "css/wikipedia.css" ]
+		},
+		{
+			"matches": ["*://stackoverflow.com/*","*://*.stackoverflow.com/*"],
+			"css": [ "css/stackoverflow.css" ]
+		},
+		{
+			"matches": ["*://github.com/*","*://*.github.com/*"],
+			"css": [ "css/github.css" ]
 		}
 	]
 }

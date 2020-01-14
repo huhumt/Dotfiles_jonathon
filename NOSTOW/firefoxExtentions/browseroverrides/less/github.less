@@ -1,3 +1,241 @@
 @import "gruvbox-colours.less";
 
+body{
+	background-color: @gb-dm-bg0;
+	color: @gb-dm-fg0;
+}
+
+a{
+	&, &:visited{
+		color: @gb-dm-dark-aqua;
+	}
+}
+
+.Box{
+	background-color: @gb-dm-bg0;
+	border-color: @gb-dm-bg0-hard;
+}
+.Box-header{
+	background-color: @gb-dm-bg0;
+	border-color: @gb-dm-bg0-hard;
+}
+
+.link-gray{
+	color: @gb-dm-fg3 !important;
+	&:hover{
+		color: @gb-dm-dark-aqua !important;
+	}
+}
+.text-gray{
+	color: @gb-dm-fg3 !important;
+}
+
+.link-gray-dark{
+	color: @gb-dm-fg4 !important;
+	&:hover{
+		color: @gb-dm-dark-aqua !important;
+	}
+}
+
+.State--green{
+	background-color: @gb-dm-dark-green;
+}
+
+
+
+/*
+ * Header
+*/
+.pagehead{
+	border-bottom-color: @gb-dm-bg0-soft;
+}
+.repohead.experiment-repo-nav{
+	background-color: @gb-dm-bg0-hard;
+}
+.reponav-item{
+	color: @gb-dm-fg0;
+	&:hover, &:focus{
+		color: @gb-dm-dark-aqua;
+	}
+	&.selected{
+		background-color: @gb-dm-bg0;
+		color: @gb-dm-fg0;
+		border-top-color: @gb-dm-dark-orange;
+		border-left-color: @gb-dm-bg0-soft;
+		border-right-color: @gb-dm-bg0-soft;
+	}
+}
+
+.gh-header{
+	background-color: @gb-dm-bg0;
+}
+.gh-header .gh-header-sticky.is-stuck + .gh-header-shadow{
+	background-color: @gb-dm-bg0-hard;
+	color: @gb-dm-fg0;
+}
+
+.subnav-item{
+	border-color: @gb-dm-fg4;
+	color: @gb-dm-fg2;
+	&:hover, &:focus{
+		background: @gb-dm-bg2;
+	}
+}
+
+/*
+ * Code
+*/
+
+table.files{
+	background-color: @gb-dm-bg0;
+}
+
+table.files tr:nth-child(even) td{
+	background-color: @gb-dm-bg1;
+}
+table.files tr.navigation-focus td, table.files tr[aria-selected="true"] td{
+	background-color: @gb-dm-bg3;
+}
+
+table.files td.icon{
+	color: @gb-dm-dark-aqua;
+	.octicon{
+		color: @gb-dm-dark-aqua;
+	}
+}
+
+.blob-num{
+	color: @gb-dm-fg0;
+}
+
+.blob-code-inner{
+	font-family: 'Iosevka';
+}
+
+/*
+ * Timeline
+*/
+.timeline-comment{
+	background-color: @gb-dm-bg0;
+	border-color: @gb-dm-bg0-hard;
+	color: @gb-dm-fg0;
+	
+	&.current-user{
+		border-color: @gb-dm-dark-aqua;
+		.timeline-comment-header{
+			background-color: @gb-dm-bg0;
+		}
+	}
+
+	.timeline-comment-header{
+		background-color: @gb-dm-bg0;
+		color: @gb-dm-fg0;
+		.link-gray-dark{
+			color: @gb-dm-fg0 !important;
+		}
+	}
+}
+
+.border-md{
+	border-color: @gb-dm-bg0-hard !important;
+}
+
+.discussion-timeline-actions{
+	background-color: @gb-dm-bg0;
+}
+
+.markdown-body .highlight pre, .markdown-body pre{
+	background-color: @gb-dm-bg0-hard;
+}
+
+
+
+
+/*
+ * Dropdowns
+*/
+
+.dropdown-menu{
+	background-color: @gb-dm-bg0-hard;
+}
+
+.dropdown-item{
+	color: @gb-dm-fg0;
+}
+.dropdown-item:focus, .dropdown-item:hover{
+	background-color: @gb-dm-dark-aqua;
+	color: @gb-dm-fg0;
+}
+
+.discussion-sidebar-heading,
+.discussion-sidebar-item{
+	color: @gb-dm-fg0;
+}
+
+.thread-subscription-status{
+	background-color: @gb-dm-bg0;
+}
+
+.SelectMenu-modal{
+	background-color: @gb-dm-bg0-hard;
+}
+.SelectMenu-item{
+	background-color: @gb-dm-bg0-hard;
+	color: @gb-dm-fg0;
+	border-bottom-color: @gb-dm-bg0-soft;
+	&:hover, &:focus{
+		background-color: @gb-dm-dark-aqua;
+	}
+}
+
+
+
+/*
+ * Issues
+*/
+.Box-row--focus-gray.navigation-focus{
+	background-color: @gb-dm-bg1;
+}
+.table-list-header-toggle .btn-link.selected, .table-list-header-toggle .btn-link.selected:hover{
+	color: @gb-dm-fg0;
+}
+
+
+/*
+ * Forms
+*/
+
+.btn{
+	background: @gb-dm-bg4;
+	color: @gb-dm-fg2;
+	&:hover,&:focus{
+		background: @gb-dm-bg2;
+	}
+}
+.btn-primary{
+	&,&:visited{
+		background-color: @gb-dm-dark-aqua;
+		background-image: none;
+		//box-shadow: none;
+		color: @gb-dm-fg0;
+	}
+}
+.form-control, .form-select{
+	color: @gb-dm-fg0;
+	background-color: @gb-dm-bg0;
+	border-color: @gb-dm-fg4;
+	&:focus{
+		background-color: @gb-dm-bg0-hard;
+		border-color: @gb-dm-dark-aqua;
+	}
+}
+
+
+
+
+
+
+
+
+
 
