@@ -9,6 +9,9 @@ case "$1" in
 		;;
 	"down")
 		amixer -q -D default sset Master 5%- unmute
+		;;
+	"toggle")
+		amixer -q -D default sset Master toggle
 esac
 
-command -v notify-send && notify-send "Volume" "$(amixer -D default sget Master | grep -o '\[.*\%' | tr -d '[')"
+command -v notify-send && notify-send "Volume" "$(amixer -D default sget Master | grep -o '\[.*\%'  | head -n 1 | tr -d '[')"

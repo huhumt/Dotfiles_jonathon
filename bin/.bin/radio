@@ -4,6 +4,10 @@
 # Currently uses mpv to play the them
 # On first run it will download a list of radio stations
 # To update them run radio -u
+# REQUIRES:
+# * fzf
+# * mpv
+# * hq
 
 # Change this if you want the radio stations to be saved somewhere else
 LIST="$HOME/.local/share/radioStations"
