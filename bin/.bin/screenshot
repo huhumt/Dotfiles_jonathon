@@ -1,10 +1,11 @@
 #!/bin/bash
 
-# A simple wrapper around scrot
+# A simple wrapper around maim
 #
 # When run, the screenshot will be added to she clipboard
 
 path='/tmp'
+command -v maim > /dev/null && screenshooter="maim" || screenshooter="scrot"
 
 #If a project is set we will put screenshots in the project's folder
 project=$(project current --path)
@@ -14,15 +15,19 @@ if [ -n "$project" ]; then
 	mkdir "$path" 2> /dev/null
 fi
 
+filename="$(date +"%Y-%m-%dT%H-%M-%SZ").png"
+file="${path}/${filename}"
+
 case $1 in
 	"window")
-		file=$(scrot -u "$path/%F_%T_\$wx\$h.png" -e "echo -n $path/%F_%T_\$wx\$h.png")
+		maim -i $(xdotool getactivewindow) "$file"
 		;;
 	"select")
-		file=$(sleep 0.2; scrot -s "$path/%F_%T_\$wx\$h.png" -e "echo -n $path/%F_%T_\$wx\$h.png")
+		#maim -s -r crosshair "$file"
+		maim -s -c 0.41,0.62,0.42,0.2 -l -u "$file"
 		;;
 	*)
-		file=$(scrot "$path/%F_%T_\$wx\$h.png" -e "echo -n $path/%F_%T_\$wx\$h.png")
+		maim "$file"
 		;;
 esac
 
