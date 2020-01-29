@@ -1,0 +1,94 @@
+@import "gruvbox-colours.less";
+
+.headerSecured-container{
+	background-color: @gb-dm-bg0-hard;
+}
+
+#ptSidebar{
+	background-color: @gb-dm-bg0;
+}
+
+.headerSecuredDesktop-logo{
+	background-color: @gb-dm-bg0;
+}
+
+.pm_toolbar{
+	background-color: @gb-dm-bg1;
+}
+
+.pm_buttons a, .pm_buttons button, .pm_buttons .pm_buttons-child,
+.appConfigBody-rows .chooseLayoutBtns-btn-rows, body:not(.appConfigBody-rows) .chooseLayoutBtns-btn-column{
+	background-color: @gb-dm-light-blue;
+	color: @gb-dm-fg1;
+	border-color: @gb-dm-dark-blue;
+	&:hover{
+		background-color: @gb-dm-dark-blue;
+		color: @gb-dm-fg1;
+	}
+}
+
+.sidebarApp-container .sidebar-btn-compose{
+	background-color: @gb-dm-dark-aqua;
+	border-color: @gb-dm-dark-aqua;
+	&:hover{
+		background-color: @gb-dm-light-aqua;
+	}
+}
+
+body #conversation-list-rows .conversation{
+	background-color: @gb-dm-bg0-hard;
+	color: @gb-dm-fg0;
+	.subject h4{
+		color: @gb-dm-fg0;
+	}
+	&.read{
+		background-color: @gb-dm-bg0-soft;
+		color: @gb-dm-fg2;
+	}
+}
+
+body #wrapper{
+	background-color: @gb-dm-bg0;
+	color: @gb-dm-fg0;
+}
+
+#conversation-view header h1{
+	color: @gb-dm-fg0;
+}
+
+#conversation-view .message{
+	border-color: @gb-dm-bg0-hard;
+	.summary, .details, .summary .summary-right{
+		background-color: @gb-dm-bg0;
+		color: @gb-dm-fg0;
+	}
+}
+
+.messageExtra-container > [class*="-container"]{
+	background-color: @gb-dm-bg1;
+	color: @gb-dm-fg0;
+}
+
+#conversation-view .message .summary .labels, #conversation-view .message .summary .location.folders, #conversation-view .message .summary .message-attachments, #conversation-view .message .summary .status, #conversation-view .message .summary .time{
+	background-color: @gb-dm-bg0;
+	color: @gb-dm-fg0;
+}
+
+.pm_dropdown{
+	background-color: @gb-dm-dark-blue;
+}
+.pm_dropdown > a:hover, .pm_dropdown > button:hover, .pm_dropdown > ul > li:hover{
+	color: @gb-dm-fg0 !important;
+}
+.pm_buttons{
+	color: @gb-dm-fg0;
+}
+.scrollbox-container{
+	&,&::before,&::after{
+		background-color: @gb-dm-dark-blue;
+	}
+}
+#conversation-view .frame, #pm_main{
+	background-color: @gb-dm-bg0;
+	color: @gb-dm-fg0;
+}

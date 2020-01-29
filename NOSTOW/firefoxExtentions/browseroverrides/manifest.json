@@ -34,8 +34,30 @@
 			"css": [ "css/stackoverflow.css" ]
 		},
 		{
+			"matches": ["*://youtube.com/*","*://*.youtube.com/*"],
+			"css": [ "css/youtube.css" ]
+		},
+		{
+			"matches": ["*://protonmail.com/*","*://*.protonmail.com/*"],
+			"css": [ "css/protonmail.css" ]
+		},
+		{
 			"matches": ["*://github.com/*","*://*.github.com/*"],
 			"css": [ "css/github.css" ]
+		},
+
+		{
+			"matches": ["*://*/*"],
+			"exclude_matches": ["*://wiki.archlinux.org/*",
+			"*://*.amazon.com/*","*://*.amazon.co.uk/*",
+			"*://*.duckduckgo.com/*","*://*.duckduckgo.co.uk/*",
+			"*://*.reddit.com/*",
+			"*://*.wikipedia.org/*",
+			"*://stackoverflow.com/*","*://*.stackoverflow.com/*",
+			"*://youtube.com/*","*://*.youtube.com/*",
+			"*://protonmail.com/*","*://*.protonmail.com/*",
+			"*://github.com/*","*://*.github.com/*"],
+			"css": [ "css/global.css" ]
 		}
 	]
 }
