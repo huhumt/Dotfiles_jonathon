@@ -16,7 +16,7 @@ setxkbmap -layout gb,gb -variant "colemak," -option grp:shifts_toggle
 xset r rate 200 70
 xinput --list | grep -E 'ErgoDox EZ ErgoDox EZ\s+id' | grep -oE 'id=[0-9]+' | cut -d'=' -f2 | xargs -r setxkbmap -layout gb -device
 
-exec /usr/bin/picom -f -i 0.95 &
+exec /usr/bin/compton --config "$HOME/.config/picom/picom.conf" &
 #setbackground &
 /usr/bin/nitrogen --restore &
 /usr/lib/kdeconnectd &
