@@ -1,0 +1,35 @@
+#!/usr/bin/gawk -f
+# Echo the input as different "fonts." Redirect this into an html
+# page and copy/paste fancy text into twitter or facebook.
+
+BEGIN { alpha="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"; }
+
+function is_alpha(c) {
+  return(index(alpha, c));
+}
+function print_script(c) {
+  if ( is_alpha(c) ) { printf("&%cscr;", c); } else { printf("%c", c); }
+}
+function print_fraktur(c) {
+  if ( is_alpha(c) ) { printf("&%cfr;", c); }  else { printf("%c", c); }
+}
+function print_double(c) {
+  if ( is_alpha(c) ) { printf("&%copf;", c); } else { printf("%c", c); }
+}
+{ text=$0;
+  len=length(text);
+
+  print "data:text/html, <html> <p>";
+  for (i=1; i<=len; i++) {
+    print_script( substr(text, i, 1) );
+  }
+  print "</p><p>";
+  for (i=1; i<=len; i++) {
+    print_fraktur( substr(text, i, 1) );
+  }
+  print "</p><p>";
+  for (i=1; i<=len; i++) {
+    print_double( substr(text, i, 1) );
+  }
+  print "</p>";
+}

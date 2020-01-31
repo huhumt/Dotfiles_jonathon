@@ -1,0 +1,59 @@
+#!/usr/bin/env bash
+
+function print_help(){
+	echo -e "pass"
+	echo -e "\t--init\tCreates a password directory and initialised pass in it"
+	echo -e "\ttakes the same options as pass but works on a project specific folder"
+}
+
+function copy(){
+	local current="$(get_current --path)"
+	local target="$1"
+	shift
+	local files="$@"
+	local destination= "$current/$target"
+	if [[ "$target" == "--NONE" ]]; then
+		local destination= "$current/"
+	fi
+	if [[ -n "$destination" ]]; then
+		mkdir -p "$destination"
+		cp -r "$files" "$destination"
+	fi
+}
+
+
+if [ -n "$1" ]; then
+	case "$1" in 
+		-h|--help)
+			print_help | column -t -s"	"
+			exit 0
+			;;
+		--parent-help)
+			print_help
+			exit 0
+			;;
+		--target)
+			target="$2"
+			shift
+			shift
+			copy "$target" "$@"
+			exit 0
+			;;
+		--www)
+			shift
+			copy "www" "$@"
+			exit 0
+			;;
+		--bin)
+			shift
+			copy "bin" "$@"
+			exit 0
+			;;
+		*)
+			copy "--NONE" "$@"
+			exit 0
+			;;
+	esac
+else
+	read_prompt | xargs project-new
+fi

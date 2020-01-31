@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+
+
+node /home/jonathan/GitRepos/chrome-curl/index.js "$1" |\
+	#hq '.iconPreview' data
+	hq '.iconPreview' attr style | # This gets the style attribute from the preview element
+	cut -d '"' -f 2 | cut -d ',' -f 2 | # Gets the base 64 out that we want
+	base64 -d | # Decodes it
+	xclip -selection clipboard -target image/svg+xml -i # Puts it on the clipboard
