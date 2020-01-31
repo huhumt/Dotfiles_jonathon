@@ -1,10 +1,18 @@
 export LANG="en_GB.UTF-8"
 export TERMINAL=/usr/local/bin/st
 export TERM=xterm-256color
-export PATH=~/Projects/current/bin:~/.bin:$PATH:.
 export EDITOR='vim'
 export READER='zathura'
-export CDPATH=.:~:~/Sites
+export CDPATH=.:~:~/Projects
+
+#Adds a list of all the sub directories in my .bin folder to a variable called mypath
+mypath="$HOME/.bin"
+# Adds sub folders in by .bin directory to the PATH
+for d in "$HOME"/.bin/*/; do
+    mypath+=":$d"
+done
+
+export PATH=~/Projects/current/bin:$mypath:$PATH:.
 
 #Ruby things
 GEM_HOME=$(ls -t -U | ruby -e 'puts Gem.user_dir')
@@ -12,9 +20,5 @@ GEM_PATH=$GEM_HOME
 export PATH=$PATH:$GEM_HOME/bin
 export GEM_HOME=$(ruby -e 'print Gem.user_dir')
 
-# Adds sub folders in by .bin directory to the PATH
-for d in ~/.bin/*/; do
-    PATH+=":$d"
-done
 
 #echo -e "Please don't sabotage my computer while I'm away \n\nTo turn on the print server, run the command 'cups'" | /usr/bin/cowsay -f tux -W 80
