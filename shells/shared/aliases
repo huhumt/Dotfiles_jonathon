@@ -163,6 +163,7 @@ alias ss="tail -n +2 /usr/share/exploitdb/files_exploits.csv | awk -F ',' '{prin
 alias ddg="ddgr"
 
 alias docker="sudo docker"
+alias docker-compose="sudo docker-compose"
 
 alias rm="rmtrash"
 alias rmdir="rmdirtrash"
