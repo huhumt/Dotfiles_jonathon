@@ -38,9 +38,6 @@ function mycd() {
 	cd "$@" 2> /dev/null
 	if [ $? = 0 ]; then
 		# If we get here cd was successful
-		#if [ ! $TMUX ]; then
-		#	pwd > ~/.current-folder
-		#fi
 		ls
 	else
 		# If we get here, cd was not successful
@@ -50,7 +47,7 @@ function mycd() {
 			echo "Can't cd"
 		fi
 	fi
-	updatePath
+	#updatePath
 }
 alias cd="mycd"
 
@@ -203,12 +200,12 @@ function themes() {
 	fi
 }
 
-function todo() {
-	wikidir=${${PWD%/public_html*}%/wiki*}/wiki
-	if [ -d "$wikidir" ]; then
-		$EDITOR "$wikidir/ToDo.md"
-	fi
-}
+#function todo() {
+#	wikidir=${${PWD%/public_html*}%/wiki*}/wiki
+#	if [ -d "$wikidir" ]; then
+#		$EDITOR "$wikidir/ToDo.md"
+#	fi
+#}
 
 #This function toggles debug in wp-config
 function debugToggle(){
