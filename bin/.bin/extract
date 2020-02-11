@@ -3,21 +3,21 @@
 if [ -f "$1" ] ; then
 	case "$1" in
 		*.tar.bz2)
-			if [ ""$2"" ]; then
+			if [ "$2" ]; then
 				tar xvjf "$1" -C "$2"
 			else
 				tar xvjf "$1"
 			fi
 			;;
 		*.tar.gz)
-			if [ ""$2"" ]; then
+			if [ "$2" ]; then
 				tar xvzf "$1" -C "$2"
 			else
 				tar xvzf "$1"
 			fi
 			;;
 		*.bz2)
-			if [ ""$2"" ]; then
+			if [ "$2" ]; then
 				bunzip -c "$1" > "$2"
 			else
 				bunzip "$1"
@@ -25,14 +25,14 @@ if [ -f "$1" ] ; then
 			;;
 		#*.rar)       rar x "$1"       ;;
 		*.gz)
-			if [ ""$2"" ]; then
+			if [ "$2" ]; then
 				gunzip -c "$1" > "$2"
 			else
 				gunzip "$1"
 			fi
 			;;
 		*.rar)
-			if [ ""$2"" ]; then
+			if [ "$2" ]; then
 				#tar xvf "$1" -C "$2"
 				echo "Look into how to unrar into directory"
 			else
@@ -40,42 +40,42 @@ if [ -f "$1" ] ; then
 			fi
 			;;
 		*.tar)
-			if [ ""$2"" ]; then
+			if [ "$2" ]; then
 				tar xvf "$1" -C "$2"
 			else
 				tar xvf "$1"
 			fi
 			;;
 		*.tbz2)
-			if [ ""$2"" ]; then
+			if [ "$2" ]; then
 				tar xvjf "$1" -C "$2"
 			else
 				tar xvjf "$1"
 			fi
 			;;
 		*.tgz)
-			if [ ""$2"" ]; then
+			if [ "$2" ]; then
 				tar xvzf "$1" -C "$2"
 			else
 				tar xvzf "$1"
 			fi
 			;;
 		*.zip)
-			if [ ""$2"" ]; then
+			if [ "$2" ]; then
 				unzip "$1" -d "$2"
 			else
 				unzip "$1"
 			fi
 			;;
 		*.Z)
-			if [ ""$2"" ]; then
+			if [ "$2" ]; then
 				uncompress -c "$1" > "$2"
 			else
 				uncompress "$1"
 			fi
 			;;
 		*.7z)
-			if [ ""$2"" ]; then
+			if [ "$2" ]; then
 				7z x "$1" -o"$2"
 			else
 				7z x "$1"
