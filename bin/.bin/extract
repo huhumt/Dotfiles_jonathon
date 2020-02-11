@@ -1,84 +1,84 @@
 #!/usr/bin/bash
 
-if [ -f $1 ] ; then
-	case $1 in
+if [ -f "$1" ] ; then
+	case "$1" in
 		*.tar.bz2)
-			if [ "$2" ]; then
-				tar xvjf $1 -C $2
+			if [ ""$2"" ]; then
+				tar xvjf "$1" -C "$2"
 			else
-				tar xvjf $1
+				tar xvjf "$1"
 			fi
 			;;
 		*.tar.gz)
-			if [ "$2" ]; then
-				tar xvzf $1 -C $2
+			if [ ""$2"" ]; then
+				tar xvzf "$1" -C "$2"
 			else
-				tar xvzf $1
+				tar xvzf "$1"
 			fi
 			;;
 		*.bz2)
-			if [ "$2" ]; then
-				bunzip -c $1 > $2
+			if [ ""$2"" ]; then
+				bunzip -c "$1" > "$2"
 			else
-				bunzip $1
+				bunzip "$1"
 			fi
 			;;
-		#*.rar)       rar x $1       ;;
+		#*.rar)       rar x "$1"       ;;
 		*.gz)
-			if [ "$2" ]; then
-				gunzip -c $1 > $2
+			if [ ""$2"" ]; then
+				gunzip -c "$1" > "$2"
 			else
-				gunzip $1
+				gunzip "$1"
 			fi
 			;;
 		*.rar)
-			if [ "$2" ]; then
-				#tar xvf $1 -C $2
+			if [ ""$2"" ]; then
+				#tar xvf "$1" -C "$2"
 				echo "Look into how to unrar into directory"
 			else
-				unrar x $1
+				unrar x "$1"
 			fi
 			;;
 		*.tar)
-			if [ "$2" ]; then
-				tar xvf $1 -C $2
+			if [ ""$2"" ]; then
+				tar xvf "$1" -C "$2"
 			else
-				tar xvf $1
+				tar xvf "$1"
 			fi
 			;;
 		*.tbz2)
-			if [ "$2" ]; then
-				tar xvjf $1 -C $2
+			if [ ""$2"" ]; then
+				tar xvjf "$1" -C "$2"
 			else
-				tar xvjf $1
+				tar xvjf "$1"
 			fi
 			;;
 		*.tgz)
-			if [ "$2" ]; then
-				tar xvzf $1 -C $2
+			if [ ""$2"" ]; then
+				tar xvzf "$1" -C "$2"
 			else
-				tar xvzf $1
+				tar xvzf "$1"
 			fi
 			;;
 		*.zip)
-			if [ "$2" ]; then
-				unzip $1 -d $2
+			if [ ""$2"" ]; then
+				unzip "$1" -d "$2"
 			else
-				unzip $1
+				unzip "$1"
 			fi
 			;;
 		*.Z)
-			if [ "$2" ]; then
-				uncompress -c $1 > $2
+			if [ ""$2"" ]; then
+				uncompress -c "$1" > "$2"
 			else
-				uncompress $1
+				uncompress "$1"
 			fi
 			;;
 		*.7z)
-			if [ "$2" ]; then
-				7z x $1 -o$2
+			if [ ""$2"" ]; then
+				7z x "$1" -o"$2"
 			else
-				7z x $1
+				7z x "$1"
 			fi
 			;;
 		*)           echo "don't know how to extract '$1'..." ;;
