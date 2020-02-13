@@ -1,0 +1,24 @@
+#!/usr/bin/env bash
+
+# will grep for each argument passed
+
+# Can pass each search arguments by adding an argument before in the form
+# --args="-i -E" or --args "-i -E"
+
+if [ -n "$1" ]; then
+	args=""
+	if [[ "$1" == "--args" ]]; then
+		args=( $2 )
+		shift
+		shift
+	elif [[ "$1" == "--args="* ]]; then
+		tmp="${1#--args=}"
+		args=( $tmp )
+		shift
+	fi
+	i="$1"
+	shift
+	cat - | grep ${args[@]} "$i" | multigrep "$@"
+else
+	cat -
+fi
