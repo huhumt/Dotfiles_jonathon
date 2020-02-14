@@ -1,9 +1,56 @@
 @import "gruvbox-colours.less";
 
-body{
+html, body, .pun{
 	font-family: opendyslexic !important;
 	background-color: @gb-dm-bg0 !important;
 	color: @gb-dm-fg0 !important;
+}
+
+.pun .punwrap{
+	background: @gb-dm-bg0-soft;
+	border: none;
+}
+
+#brdmenu{
+	background: transparent;
+	a{
+		&, &:visited, &:link{
+			background: @gb-dm-bg0;
+			border: none;
+		}
+	}
+}
+
+.pun .blockpost{
+	color: @gb-dm-fg0;
+	background-color: @gb-dm-bg1;
+}
+
+.pun .blockpost .postbody, .pun .blockpost .postfoot{
+	background-color: @gb-dm-bg0-soft;
+	color: @gb-dm-fg0;
+}
+
+.pun .postmsg{
+	color: @gb-dm-fg0;
+}
+
+.pun .blockpost h2{
+	background: @gb-dm-bg2;
+}
+
+.pun .blocktable th{
+	background: @gb-dm-bg2;
+	color: @gb-dm-fg0;
+}
+
+.pun .blocktable .box{
+	background-color: @gb-dm-bg0-soft;
+}
+
+div.box{
+	background: @gb-dm-bg0-hard;
+	border: none;
 }
 
 code, pre, tt, .blob-code-inner{
@@ -14,6 +61,44 @@ code, pre, tt, .blob-code-inner{
 
 h1, h2, h3, h4, h5, h6 g{
 	color: inherit !important;
+}
+
+.pun a, .pun a:link, .pun a:visited, a:link, a:visited{
+	color: @gb-dm-light-aqua;
+	&:hover{
+		color: @gb-dm-dark-aqua;
+	}
+}
+
+.pun .quotebox{
+	background-color: @gb-dm-bg4;
+	color: @gb-dm-fg0;
+	border-color: @gb-dm-bg3;
+	cite{
+		color: @gb-dm-fg0;
+	}
+}
+
+dl dt{
+	color: @gb-dm-fg2;
+}
+
+.results tr:nth-child(2n+1), #article-list tr:nth-child(2n+1){
+	background-color: @gb-dm-bg1;
+}
+
+.results tr:nth-child(2n), #article-list tr:nth-child(2n){
+	background-color: @gb-dm-bg3;
+}
+
+.results th{
+	background-color: @gb-dm-bg2;
+}
+
+select[multiple], input[type="text"], input[type="password"], textarea, select{
+	background-color: @gb-dm-bg2;
+	border-color: @gb-dm-bg1;
+	color: @gb-dm-fg0;
 }
 
 #content{

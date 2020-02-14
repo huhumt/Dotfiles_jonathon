@@ -1,0 +1,100 @@
+@import "gruvbox-colours.less";
+
+body{
+	background-color: @gb-dm-bg0-soft;
+}
+
+.content-wrapper .container-fluid{
+	background-color: @gb-dm-bg0-soft;
+}
+
+.layout-nav{
+	background-color: @gb-dm-bg0-soft;
+	li a{
+		color: @gb-dm-fg0;
+	}
+	li.active a{
+		color: @gb-dm-dark-aqua;
+		border-color: @gb-dm-dark-aqua;
+	}
+}
+.nav-links.sub-nav{
+	&, .container-fluid{
+		background-color: @gb-dm-bg0-soft;
+		a, a:visited{
+			color: @gb-dm-fg0;
+		}
+	}
+}
+h1, h2, h3, h4, h5, h6, p{
+	color: @gb-dm-fg0;
+}
+
+.project-stats .nav > li > a{
+	&, &:link, &:visited{
+		color: @gb-dm-fg0;
+		&:hover{
+			color: @gb-dm-fg0;
+			text-decoration: underline;
+		}
+	}
+
+}
+
+table.table tr th, .file-holder table tr th, .wiki table tr th, .md table tr th, ul.notes .note .note-body .note-text table tr th{
+	background-color: @gb-dm-bg4;
+}
+
+.tree-holder .tree-table tr{
+	background-color: @gb-dm-bg1;
+	td{
+		color: @gb-dm-fg0;
+	}
+	&:nth-of-type(2n){
+		background-color: @gb-dm-bg2;
+	}
+	&:hover{
+		td{
+			background-color: @gb-dm-bg3;
+		}
+	}
+}
+
+.tree-holder .tree-item .tree-item-file-name i, .tree-holder .tree-item .tree-item-file-name a{
+	color: @gb-dm-fg0;
+}
+
+.tree-holder .tree-commit .tree-commit-link{
+	color: @gb-dm-light-aqua;
+}
+
+.file-holder{
+	border-color: @gb-dm-bg0-hard;
+	.file-title{
+		background-color: @gb-dm-bg1;
+		color: @gb-dm-fg0;
+		a:not(.btn){
+			color: @gb-dm-fg0;
+		}
+	}
+	.file-content{
+		background-color: @gb-dm-bg0;
+	}
+}
+
+.wiki{
+	h1, h2, h3, h4, h5, h6, p, ul, ol, li{
+		color: @gb-dm-fg0;
+	}
+	a, a:link, a:visited{
+		color: @gb-dm-light-aqua;
+		&:hover{
+			color: @gb-dm-dark-aqua;
+		}
+	}
+	p code, li code{
+		background-color: @gb-dm-bg4;
+		color: @gb-dm-fg0;
+		border: 1px solid @gb-dm-bg3;
+	}
+}
