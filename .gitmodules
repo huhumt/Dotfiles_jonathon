@@ -8,11 +8,8 @@
 	path = shells/zsh/zsh-syntax-highlighting
 	url = https://github.com/zsh-users/zsh-syntax-highlighting.git
 [submodule "shells/zsh/oh-my-zsh/plugins/zsh-autosuggestions"]
-	path = shells/zsh/oh-my-zsh-custom/plugins/zsh-autosuggestions
+	path = shells/zsh/plugins/zsh-autosuggestions
 	url = https://github.com/zsh-users/zsh-autosuggestions
-[submodule "shells/zsh/oh-my-zsh/plugins/zsh-better-npm-completion"]
-	path = shells/zsh/oh-my-zsh-custom/plugins/zsh-better-npm-completion
-	url = https://github.com/lukechilds/zsh-better-npm-completion
 [submodule "dwm"]
 	path = NOSTOW/dwm
 	url = git@github.com:Jab2870/dwm.git
