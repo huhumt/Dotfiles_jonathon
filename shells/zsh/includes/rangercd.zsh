@@ -9,4 +9,4 @@ rangercd () {
     fi
 }
 alias ranger="rangercd"
-bindkey -s '^o' 'ranger\n'
+#bindkey -s '^o' 'ranger\n'

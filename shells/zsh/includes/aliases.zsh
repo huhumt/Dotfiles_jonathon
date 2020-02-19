@@ -21,4 +21,4 @@ alias -s gitignore=$EDITOR
 
 alias -s json=$EDITOR
 
-unalias gf
+#unalias gf

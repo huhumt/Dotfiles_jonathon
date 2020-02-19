@@ -104,12 +104,12 @@ function prompt_project() {
 	local parent_process="$(ps -ocommand -p $PPID | grep -v 'COMMAND' | cut -d' ' -f1)"
 	local current_project_full="$(project current --path)"
 	local current_project_name="$(project current)"
+	if [[ "$parent_process" == "/usr/bin/script" ]]; then
+		segment_content="辶"
+	fi
 	# If there is a current project
 	if [ -n "$current_project_name" ]; then
-		segment_content="$current_project_name"
-		if [[ "$parent_process" == "/usr/bin/script" ]]; then
-			segment_content="辶$segment_content"
-		fi
+		segment_content="${segment_content}$current_project_name"
 		# If in the current project
 		if echo "$PWD" | grep -q "$current_project_full"; then
 			state="INSIDE"

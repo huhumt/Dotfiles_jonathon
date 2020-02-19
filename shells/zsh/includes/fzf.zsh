@@ -1,5 +1,5 @@
 # this rg command will get a list of files that are not in gitignore or similar
-export FZF_DEFAULT_COMMAND="fd --type f --hidden --follow --exclude .git"
+export FZF_DEFAULT_COMMAND="fd --type f --hidden --follow --exclude .git --exclude .PlayOnLinux --exclude \"PlayOnLinux\'s virtual drives\""
 export FZF_DEFAULT_OPTS="--preview '[[ \$(file -L --mime {}) =~ binary ]] && echo {} is a binary file || ( bat --style=numbers --color=always {} || cat {}) 2> /dev/null | head -500'"
 export FZF_CTRL_R_OPTS="--no-preview"
 # this is the argument completeion optionm, use the same command
