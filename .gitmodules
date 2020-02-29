@@ -19,3 +19,12 @@
 [submodule "NOSTOW/st"]
 	path = NOSTOW/st
 	url = git@github.com:Jab2870/st.git
+[submodule "shells/zsh/plugins/powerlevel9k"]
+	path = shells/zsh/plugins/powerlevel9k
+	url = https://github.com/bhilburn/powerlevel9k.git
+[submodule "shells/zsh/plugins/zsh-auto-notify"]
+	path = shells/zsh/plugins/zsh-auto-notify
+	url = https://github.com/MichaelAquilina/zsh-auto-notify.git
+[submodule "shells/zsh/plugins/fzf-tab"]
+	path = shells/zsh/plugins/fzf-tab
+	url = https://github.com/Aloxaf/fzf-tab
