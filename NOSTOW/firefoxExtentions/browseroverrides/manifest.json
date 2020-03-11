@@ -83,7 +83,9 @@
 			"*://wiki.local.irmplc.com/*",
 			"*://protonmail.com/*","*://*.protonmail.com/*",
 			"*://github.com/*","*://*.github.com/*",
-			"*://gitlab.irmtechies.net/*"
+			"*://gitlab.irmtechies.net/*",
+			"*://lbry.tv/*", "*://*.lbry.tv/*",
+			"*://invidio.us/*", "*://*.invidio.us/*"
 			],
 			"css": [ "css/global.css" ],
 			"run_at": "document_start"
