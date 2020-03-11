@@ -1,7 +1,11 @@
 # This is the config I use for Powerlevel9k
 
+
+#source "$HOME/.dotfiles/shells/zsh/plugins/powerlevel9k/powerlevel9k.zsh-theme"
+
+
 # Custom dir command
-function my_dir(){
+prompt_dir(){
 	homeIcon=""
 	wpPluginsIcon=".p."
 	wpThemesIcon=".t."
@@ -72,38 +76,21 @@ function my_dir(){
 	current_path=$(echo $current_path | sed -r -e "s/$seperator\$//g")
 
 	echo $current_path
-
-}
-POWERLEVEL9K_CUSTOM_DIR="my_dir"
-if [ -n "$SSH_CLIENT" ] || [ -n "$SSH_TTY" ]; then
-	POWERLEVEL9K_CUSTOM_DIR_BACKGROUND="green"
-	POWERLEVEL9K_CUSTOM_DIR_FOREGROUND="black"
-else
-	POWERLEVEL9K_CUSTOM_DIR_BACKGROUND="blue"
-	POWERLEVEL9K_CUSTOM_DIR_FOREGROUND="black"
-fi
-
-# POWERLEVEL9K_LEFT_SEGMENT_SEPARATOR="\ue0c0"
-# POWERLEVEL9K_RIGHT_SEGMENT_SEPARATOR="\ue0c2"
-
-function Capslock(){
-	x=$(xset -q | grep Caps) 2> /dev/null || exit 0
-	x=${x:22:1}
-	if [[ $x == "n" ]]; then
-
-		echo ""
+	if [ -n "$SSH_CLIENT" ] || [ -n "$SSH_TTY" ]; then
+		echo "green"
+	else
+		echo "blue"
 	fi
-}
-POWERLEVEL9K_CUSTOM_CAPS="Capslock"
-POWERLEVEL9K_CUSTOM_CAPS_BACKGROUND="red"
-POWERLEVEL9K_CUSTOM_CAPS_FOREGROUND="white"
+	echo "black"
 
+}
 
 function prompt_project() {
-	local segment_content state icon
+	# Prints the current project and a recording symbol if appropriate
 	local parent_process="$(ps -ocommand -p $PPID | grep -v 'COMMAND' | cut -d' ' -f1)"
 	local current_project_full="$(project current --path)"
 	local current_project_name="$(project current)"
+	local background=""
 	if [[ "$parent_process" == "/usr/bin/script" ]]; then
 		segment_content="辶"
 	fi
@@ -112,29 +99,134 @@ function prompt_project() {
 		segment_content="${segment_content}$current_project_name"
 		# If in the current project
 		if echo "$PWD" | grep -q "$current_project_full"; then
-			state="INSIDE"
+			background="green"
 		elif echo "$PWD" | grep -q "$HOME/Projects/"; then
-			state="WRONG"
+			background="red"
 		else
-			state="OUTSIDE"
+			background="yellow"
 		fi
 	fi
 
-	if [ -n "$segment_content" ]; then
-		"$1_prompt_segment" "${0}_${state}" "$2" $DEFAULT_COLOR_INVERTED $DEFAULT_COLOR "$segment_content" "$icon"
-	fi
+	echo "$state$segment_content"
+	echo "$background"
+	echo "black"
 }
 
+prompt_git(){
+	local branch="$(git branch --show-current 2> /dev/null)"
+	local color="green"
+	local ret=""
+	if [ -n "branch" ]; then
+		ret="$branch"
+		local repoTopLevel="$(command git rev-parse --show-toplevel 2> /dev/null)"
+		local untrackedFiles=$(command git ls-files --others --exclude-standard "${repoTopLevel}" 2> /dev/null)
+		local staged=$(command git diff --staged --name-only 2> /dev/null)
 
-POWERLEVEL9K_PROJECT_DEFAULT_FOREGROUND="black"
-POWERLEVEL9K_PROJECT_WRONG_BACKGROUND="red"
-POWERLEVEL9K_PROJECT_OUTSIDE_BACKGROUND="yellow"
-POWERLEVEL9K_PROJECT_INSIDE_BACKGROUND="green"
+		if [ -n "$untrackedFiles" ]; then
+			ret="$ret "
+			color="orange1"
+		fi
+		if [ -n "$staged" ]; then
+			ret="$ret "
+			color="orange1"
+		fi
+		
+	fi
+	echo "$ret"
+	echo "$color"
+}
 
-# Left Prompt
-if [[ "$(basename "/"$(ps -f -p $(cat /proc/$(echo $$)/stat | cut -d \  -f 4) | tail -1 | sed 's/^.* //'))" != "$(echo $USER)" ]]; then
-	POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(project custom_dir vcs custom_caps)
-fi
+prompt_last_exit_code() {
+  local LAST_EXIT_CODE="$1"
+  if [[ $LAST_EXIT_CODE -ne 0 ]]; then
+    local EXIT_CODE_PROMPT=' '
+    EXIT_CODE_PROMPT+="%{$fg[red]%}-%{$reset_color%}"
+    EXIT_CODE_PROMPT+="%{$fg_bold[red]%}$LAST_EXIT_CODE%{$reset_color%}"
+    EXIT_CODE_PROMPT+="%{$fg[red]%}-%{$reset_color%}"
+    echo "$EXIT_CODE_PROMPT"
+  fi
+}
 
-# Right Prompt
-POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS=(status root_indicator)
+# Draws a seperator
+# Takes 2 arguments, from color then to color
+# If only 1 given, assumes it is the last
+seperator(){
+	local from="$1"
+	local to="$2"
+	local sep=""
+	if [ -z "$to" ]; then
+		resetColor
+	else
+		focusBackgroundColor "$to"
+	fi
+	focusForegroundColor "$from"
+	echo -n "$sep"
+	resetColor
+}
+
+draw_segment(){
+	# Echoes a segment
+	# $1 is the command to be run to print the segment
+	# $2 is the color of the last segment (if empty, no seperator is added)
+	# Returns segment on line 1
+	# returns background color on line 2
+	local output="$($1)"
+	local contents="$(echo "$output" | sed -n '1p')"
+	local previousBackground="$2"
+	local background=""
+	local foreground=""
+	local ret=""
+	if [ -n "$contents" ]; then
+		background="$(echo "$output" | sed -n '2p')"
+		foreground="$(echo "$output" | sed -n '3p')"
+		if [ -n "$previousBackground" ]; then
+			ret=" $(seperator $previousBackground $background)"
+		fi
+		ret="$ret$(focusBackgroundColor $background) $(focusForegroundColor $foreground)$contents"
+		echo "$ret"
+		echo "$background"
+	fi
+}
+set_prompts(){
+	# Get the return status of the previous command
+	local RETVAL=$?
+
+	#Set background to nothing at the start of the prompt
+	local background=""
+	local foreground=""
+
+	#Set the prompt to an empty string
+	PROMPT=""
+
+	###### Each segment printed here
+	
+	# Project
+	segment="$(draw_segment "prompt_project" "$background")"
+	if [ -n "$(echo "$segment" | sed -n '1p')" ];then
+		PROMPT="$PROMPT$(echo "$segment" | sed -n '1p')"
+		background="$(echo "$segment" | sed -n '2p')"
+	fi
+
+	# Directory
+	segment="$(draw_segment "prompt_dir" "$background")"
+	if [ -n "$(echo "$segment" | sed -n '1p')" ];then
+		PROMPT="$PROMPT$(echo "$segment" | sed -n '1p')"
+		background="$(echo "$segment" | sed -n '2p')"
+	fi
+
+	# Git
+	segment="$(draw_segment "prompt_git" "$background")"
+	if [ -n "$(echo "$segment" | sed -n '1p')" ];then
+		PROMPT="$PROMPT$(echo "$segment" | sed -n '1p')"
+		background="$(echo "$segment" | sed -n '2p')"
+	fi
+	
+	PROMPT="$PROMPT $(seperator "$background")$(resetColor)"
+
+#$(resetColor)
+	RPROMPT="$(resetColor)$(prompt_last_exit_code "$RETVAL")$(resetColor)"
+}
+zle -N set_prompts
+autoload -U add-zsh-hook
+add-zsh-hook precmd set_prompts
+

@@ -1,2 +1,2 @@
-source ~/.dotfiles/shells/shared/profile
+source ~/.dotfiles/shells/shared/environmentVariables
 

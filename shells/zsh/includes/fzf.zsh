@@ -1,9 +1,10 @@
 # this rg command will get a list of files that are not in gitignore or similar
 export FZF_DEFAULT_COMMAND="fd --type f --hidden --follow --exclude .git --exclude .PlayOnLinux --exclude \"PlayOnLinux\'s virtual drives\""
-export FZF_DEFAULT_OPTS="--preview '[[ \$(file -L --mime {}) =~ binary ]] && echo {} is a binary file || ( bat --style=numbers --color=always {} || cat {}) 2> /dev/null | head -500'"
-export FZF_CTRL_R_OPTS="--no-preview"
+export FZF_DEFAULT_OPTS="--reverse --height 40%"
+export FZF_CTRL_R_OPTS=""
 # this is the argument completeion optionm, use the same command
 export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
+export FZF_CTRL_T_OPTS="$FZF_DEFAULT_OPTS --preview \"bat --style=numbers --color=always {}\""
 if [ -e /usr/share/fzf/key-bindings.zsh ]; then
 	source /usr/share/fzf/key-bindings.zsh
 	source /usr/share/fzf/completion.zsh
@@ -127,7 +128,7 @@ jhswap(){
 	# I want my tab complete to be based on "current" word I am typing sometimes, before the command
 	custom_tabcomplete(){
 		local tokens cmd prefix trigger tail fzf matches lbuf d_cmds
-		export FZF_DEFAULT_OPTS="$FZF_DEFAULT_OPTS --reverse --height 40%"
+		FZF_DEFAULT_OPTS="$FZF_DEFAULT_OPTS --reverse --height 40%"
 		setopt localoptions noshwordsplit noksh_arrays noposixbuiltins
 
 		if [ -n "$RBUFFER" ]; then
@@ -187,7 +188,5 @@ jhswap(){
 	}
 	zle     -N   custom_tabcomplete
 	bindkey '^I' custom_tabcomplete
-
-
 
 fi
