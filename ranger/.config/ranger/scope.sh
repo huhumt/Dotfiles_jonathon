@@ -109,7 +109,7 @@ esac
 
 case "$mimetype" in
     # Syntax highlight for text files:
-    text/* | */xml)
+    text/* | */xml )
         if [ "$(tput colors)" -ge 256 ]; then
             pygmentize_format=terminal256
             highlight_format=xterm256
@@ -121,6 +121,9 @@ case "$mimetype" in
         try safepipe highlight --out-format=${highlight_format} "$path" && { dump | trim; exit 5; }
         try safepipe pygmentize -f ${pygmentize_format} "$path" && { dump | trim; exit 5; }
         exit 2;;
+	application/json )
+		jq -C '.' "$path" && exit 0 || echo "what's happening" && exit 0
+		;;
     # Ascii-previews of images:
     image/*)
         img2txt --gamma=0.6 --width="$width" "$path" && exit 4 || exit 1;;
