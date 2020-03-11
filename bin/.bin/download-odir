@@ -1,0 +1,48 @@
+#!/usr/bin/env bash
+
+directory=""
+dryrun="false"
+
+
+function multigrep(){
+	# will grep for each argument passed
+	
+	if [ -n "$1" ]; then
+		local i="$1"
+		shift
+		cat - | grep "$i" | multigrep "$@"
+	else
+		cat -
+	fi
+}
+
+function main(){
+	if [ "$dryrun" == "true" ]; then
+		curl "$directory" | hq a attr href | multigrep "$@"
+	else
+		curl "$directory" | hq a attr href | multigrep "$@" | awk "{print \"$directory\" \$1}" | aria2c -i -
+	fi
+}
+
+if [ -n "$1" ]; then
+	while [ -n "$1" ]; do
+		case "$1" in
+			"-d"|"--dry-run")
+				dryrun="true"
+				shift
+				;;
+			*)
+				directory="$1"
+				shift
+				main "$@"
+				exit 0
+				;;
+		esac
+	done
+	
+else
+	echo "No url passed"
+fi
+
+shift
+curl "$directory" | hq a attr href | multigrep "$@"
