@@ -12,6 +12,9 @@ eval $(/usr/bin/gnome-keyring-daemon --start --components=gpg,pkcs11,secrets,ssh
 export $(gnome-keyring-daemon --start --components=pkcs11,secrets,ssh,gpg)
 dbus-update-activation-environment --systemd DISPLAY
 
+export CORPUSER="jonathan.hodgson"
+export CORPPASSCOMMAND="pass IRM/corp"
+
 setxkbmap -layout gb,gb -variant "colemak," -option grp:shifts_toggle
 xset r rate 200 70
 xinput --list | grep -E 'ErgoDox EZ ErgoDox EZ\s+id' | grep -oE 'id=[0-9]+' | cut -d'=' -f2 | xargs -r setxkbmap -layout gb -device
@@ -21,6 +24,7 @@ exec /usr/bin/compton --config "$HOME/.config/picom/picom.conf" &
 /usr/bin/nitrogen --restore &
 /usr/lib/kdeconnectd &
 /usr/bin/pactl load-module module-switch-on-connect &
+/usr/bin/unclutter &
 #greenclip daemon &
 #exec xrdb .Xresources
 #xbindkeys
