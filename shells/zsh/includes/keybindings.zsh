@@ -57,3 +57,25 @@ zle -N edit-command-line
 bindkey '\C-x\C-e' edit-command-line
 
 bindkey -M viins jj vi-cmd-mode
+
+# Make CTRL-Z background things and unbackground them.
+# Based off https://github.com/wincent/wincent/commit/30b502d811fbf4ca058db3a6f006aaecab68f6b7
+function fg-bg() {
+	if [[ $#BUFFER -eq 0 ]]; then
+		local backgroundProgram="$(jobs | tail -n 1 | awk '{print $4}')"
+		if [[ "$backgroundProgram" == "nc" ]] || [[ "$backgroundProgram" == "ncat" ]]; then
+			# Make sure that /dev/tty is given to the stty command
+			local columns=$(stty -a < /dev/tty | grep -oE 'columns [0-9]+' | cut -d' ' -f2)
+			local rows=$(stty -a < /dev/tty | grep -oE 'rows [0-9]+' | cut -d' ' -f2)
+			notify-send "Terminal dimensions" "Rows: $rows\nColumns: $columns\nstty command on clipboard"
+			echo "stty rows $rows cols $columns" | clip
+			stty raw -echo < /dev/tty; fg
+		else
+			fg
+		fi
+	else
+		zle push-input
+	fi
+}
+zle -N fg-bg
+bindkey '^Z' fg-bg
