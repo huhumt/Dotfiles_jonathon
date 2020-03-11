@@ -1,0 +1,110 @@
+#!/usr/bin/env bash
+
+NOTIFY="FALSE"
+# The download script will append an extention
+file="/tmp/background"
+
+function notification(){
+	notify-send "$( jq -r '.name' /tmp/backgroundinfo.json)"
+}
+
+function get_random_earth_slug(){
+	curl -s "https://earthview.withgoogle.com/" | hq 'a.intro__explore' attr href
+}
+
+function download_earth_image(){
+	local slug=$(get_random_earth_slug)
+	file="$file.jpg"
+	curl -s "https://earthview.withgoogle.com/_api${slug}.json" > /tmp/backgroundinfo.json
+	image=$( jq -r '.photoUrl' /tmp/backgroundinfo.json )
+	curl -s -o "$file" "$image"
+}
+
+function get_film_image(){
+	videoFolder="$HOME/Videos/wallpaper-candidates/"
+	file="$file.png"
+	args=()
+	while [[ "$1" == "--"* ]]; do
+		case "$1" in
+			"--effect")
+				args+=("--effect")
+				shift
+				;;
+			*)
+				echo "Unknown option $1"
+				shift
+		esac
+	done
+
+	if [ -f "$1" ]; then
+		randomVideoFrame -o "$file" "$1"
+	else
+		if [ -d "$1" ]; then
+			videoFolder="$1"
+		elif [ -d "${videoFolder}$1" ]; then
+			videoFolder="${videoFolder}$1"
+		fi
+		find -L "$videoFolder" -type f \( -name "*.mp4" -o -name "*.mkv" -o -name "*.avi" \) | multigrep "$@"| shuf | head -n 1 | xargs randomVideoFrame "${args[@]}" -o "$file"
+	fi
+}
+
+function set_background(){
+	if command -v nitrogen > /dev/null; then
+		nitrogen --set-zoom-fill "$file"
+	elif command -v nitrogen > /dev/null; then
+		feh --bg-fill "$file"
+	else
+		echo "No wallpaper tools found"
+	fi
+	if [ "$NOTIFY" == "TRUE" ]; then
+		notification
+	fi
+}
+function rand(){
+	case "$( seq 1 2 | shuf | head -n 1)" in
+		"1")
+			download_earth_image
+			set_background
+			;;
+		"2")
+			get_film_image
+			set_background
+			;;
+	esac
+}
+
+while [ -n "$1" ]; do
+	case "$1" in
+		"--notify")
+			NOTIFY="TRUE"
+			shift
+			;;
+		"--only-notify")
+			notification
+			shift
+			exit 0
+			;;
+		"--earth")
+			download_earth_image
+			set_background
+			shift
+			exit 0
+			;;
+		"--film")
+			shift
+			get_film_image "$@"
+			set_background
+			exit 0
+			;;
+		"--random")
+			rand
+			exit 0
+			;;
+		*)
+			echo "Hopefully don't get here"
+			shift
+			exit 1
+	esac
+done
+
+set_image

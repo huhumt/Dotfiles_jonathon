@@ -1,0 +1,84 @@
+#!/usr/bin/env bash
+
+# Largely taken from here: https://gitlab.com/uoou/dotfiles/-/blob/master/stow/bin/home/drew/bin/movwp_halftone
+# However, changed to have options and to remove credits (hopefully)
+
+output="/tmp/frame.png"
+file=""
+EFFECT="FALSE"
+
+while [ -n "$1" ]; do
+	case "$1" in 
+		"-o"|"--output")
+			output="$2"
+			shift
+			shift
+			;;
+		"--effect")
+			EFFECT="TRUE"
+			shift
+			;;
+		*)
+			if [ -z "$file" ]; then
+				file="$1"
+				shift
+			else
+				echo "Too many arguments"
+				exit 1
+			fi
+			;;
+	esac
+done
+
+if [ -z "$file" ]; then
+	echo "You need to specify a file"
+	exit 1
+fi
+
+if [ ! -f "$file" ]; then
+	echo "$file is not a file"
+	exit 1
+fi
+
+output="${output%.png}.png"
+
+# Uses ffmpeg to get the duration
+duration=$(ffmpeg -i "$file" 2>&1 | grep Duration | awk '{print $2}' | tr -d ,)
+seconds=$(echo "$duration" | awk -F: '{ print ($1 * 3600) + ($2 * 60) + $3 }')
+seconds=${seconds%.*}
+if [ "$seconds" -le 0 ];then
+	echo "Doesn't appear to be a video"
+	exit 1
+fi
+
+if [[ "$seconds" -gt $(( 50 * 60 )) ]]; then
+	# If the video is more than 50 minutes log, assume it is a film and ignore 5 minutes at the end (credits)
+	seconds="$(($seconds - 300 ))"
+elif [[ "$seconds" -gt $(( 10 * 60 )) ]]; then
+	# If the video is more than 10 minutes log, assume it is a tv episode and ignore 1 minute at the end (credits)
+	seconds="$(($seconds - 60 ))"
+fi
+
+randpoint=$((1 + RANDOM % "$seconds"))
+if [ "$EFFECT" == "TRUE" ]; then
+	echo "I lastly get here"
+	ffmpeg -ss "$randpoint" -i "$file" -vf hue=h=310:s=2.8:b=3,eq=contrast=4 -vframes 1 "$output" -y >> /dev/null 2>&1 &&
+	convert "$output"  \
+		-set option:distort:viewport '%wx%h+0+0' \
+		-colorspace CMYK -separate null: \
+		\( -size 3x3 xc: \( +clone -negate \) \
+		+append \( +clone -negate \) -append \) \
+		-virtual-pixel tile -filter gaussian \
+		\( +clone -distort SRT 60 \) +swap \
+		\( +clone -distort SRT 30 \) +swap \
+		\( +clone -distort SRT 45 \) +swap \
+		\( +clone -fill black -colorize 100 -distort SRT 0 \)  +swap +delete \
+		-compose Overlay -layers composite \
+		-set colorspace CMYK -combine -colorspace RGB \
+		"$output" &&
+		convert "$output"  \
+		-virtual-pixel edge -channel M -fx "p[-5,-1]" \
+		"$output"
+else
+	ffmpeg -ss "$randpoint" -i "$file" -vframes 1 "$output" -y >> /dev/null 2>&1
+fi
