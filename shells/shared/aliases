@@ -200,3 +200,5 @@ alias chrome-curl="node $HOME/GitRepos/chrome-curl/index.js"
 
 #alias irmgpg="gpg --no-default-keyring --keyring=irm.gpg"
 alias irmgpg="gpg --options ~/.gnupg/irmgpg.conf --keyring=irm.gpg"
+
+alias weakopenssl="$HOME/GitRepos/openssl-weak/openssl-1.0.2-chacha/apps/openssl"

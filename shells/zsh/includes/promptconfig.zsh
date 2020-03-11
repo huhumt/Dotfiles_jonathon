@@ -116,7 +116,7 @@ prompt_git(){
 	local branch="$(git branch --show-current 2> /dev/null)"
 	local color="green"
 	local ret=""
-	if [ -n "branch" ]; then
+	if [ -n "$branch" ]; then
 		ret="$branch"
 		local repoTopLevel="$(command git rev-parse --show-toplevel 2> /dev/null)"
 		local untrackedFiles=$(command git ls-files --others --exclude-standard "${repoTopLevel}" 2> /dev/null)
