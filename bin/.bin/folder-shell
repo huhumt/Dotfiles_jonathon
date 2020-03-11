@@ -7,7 +7,7 @@ CMD=$TERMINAL
 CWD=''
 
 if [ ! -z "$1" ]; then
-	CMD="${CMD} -e $1"
+	export initialCommand="$1"
 fi;
 
 # Get window ID
