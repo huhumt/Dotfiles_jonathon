@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+
+case "$(echo -e "default\nfilm\nearth" | rofi -dmenu)" in
+	default)
+		feh --bg-fill "$HOME/Pictures/background"
+		;;
+	earth)
+		background --notify --earth
+		;;
+	film)
+		dir="$HOME/Videos/wallpaper-candidates/"
+		background --film $( ls "$dir" | rofi -dmenu )
+		;;
+esac
+
