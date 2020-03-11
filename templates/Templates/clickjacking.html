@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width" />
+		<title>Clickjacking example</title>
+		<style type="text/css" media="screen">
+body{
+	width: 100vw;
+	height: 100vh;
+}
+iframe{
+	border: 3px solid black;
+	width: 80%;
+	height: 80%;
+	margin: 20px auto;
+	display: block;
+}
+h1, p{
+	text-align: center;
+}
+		</style>
+	</head>
+	<body>
+		<h1>Clickjacking example</h1>
+		<iframe src="URL">
+		</iframe>
+		<p>If content is rendered above, the site is vulnerable to clickjacking</p>
+	</body>
+</html>
