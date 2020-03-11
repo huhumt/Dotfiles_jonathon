@@ -1,0 +1,17 @@
+@namespace url("http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul");
+
+#statuspanel {
+  position: fixed;
+  bottom: -1px;
+  right: -1px;
+  text-align: right;
+  background-color: #282828;
+  color: #fbf1c7;
+  border: 1px solid #689d6a;
+
+}
+
+#statuspanel-inner {
+	height: auto !important;
+	margin-right: 0;
+}
