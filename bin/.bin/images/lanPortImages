@@ -1,22 +1,16 @@
 #!/usr/bin/env bash
+# 
 
 mkdir "portraits"
 mkdir "landscapes"
-for f in ./*.jpg; do
-	WIDTH=$(identify -format "%w" "$f")> /dev/null
-	HEIGHT=$(identify -format "%h" "$f")> /dev/null
-	echo "Width: $WIDTH"
-	echo "Height: $HEIGHT"
-	echo ""
-	if [[ "$HEIGHT" > "$WIDTH" ]]; then
-		mv "$f" portraits/
-	else
-		mv "$f" landscapes/
+for f in ./*.{jpg,jpeg,png,gif}; do
+	if [ -f "$f" ]; then
+		WIDTH=$(identify -format "%w" "$f")> /dev/null
+		HEIGHT=$(identify -format "%h" "$f")> /dev/null
+		if [[ "$HEIGHT" > "$WIDTH" ]]; then
+			mv "$f" portraits/
+		else
+			mv "$f" landscapes/
+		fi
 	fi
-    #if file "$f" 2>&1 | awk '/w =/{w=$5+0; h=$7+0; if (h>w) exit; else exit 1}'
-    #then
-    #    mv "$f" portraits/
-    #else
-    #    mv "$f" landscapes/
-    #fi
 done
