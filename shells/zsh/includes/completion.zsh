@@ -15,6 +15,10 @@ bindkey -v '^?' backward-delete-char
 
 compdef sshrc=ssh
 
+# Vim completion
+compdef v=vim
+compdef vi=vim
+
 autoload bashcompinit
 bashcompinit
 _wp_complete() {
@@ -38,5 +42,7 @@ complete -o nospace -F _wp_complete wp
 
 # Include hidden files in autocomplete:
 _comp_options+=(globdots)
+
+fpath=("$ZSH_FOLDER/completion" $fpath)
 
 #source "$ZSH_FOLDER/plugins/fzf-tab/fzf-tab.zsh"

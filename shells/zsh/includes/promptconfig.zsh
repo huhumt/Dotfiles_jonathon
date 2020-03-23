@@ -11,6 +11,7 @@ prompt_dir(){
 	wpThemesIcon=".t."
 	siteIcon=" "
 	wpSiteIcon=" "
+	gitReposIcon=""
 	magentoSiteIcon=" "
 	dropboxIcon=""
 	seperator="  "
@@ -62,6 +63,9 @@ prompt_dir(){
 
 	# Replace Dropbox with icon
 	current_path=$(echo $current_path | sed -r -e "s/$homeIcon\/Dropbox/$dropboxIcon/")
+
+	# Replace GitRepos with icon
+	current_path=$(echo $current_path | sed -r -e "s/$homeIcon\/GitRepos/$gitReposIcon/")
 
 	# Set the root
 	current_path=$(echo $current_path | sed -r -e "s/^\//$root/g")
