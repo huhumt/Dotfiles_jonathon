@@ -18,6 +18,7 @@
 #
 #  * Spencer McIntyre
 #
+#  * Extended by Jonathan Hodgson
 # ------------------------------------------------------------------------------
 
 _msfvenom_archs_list=(
