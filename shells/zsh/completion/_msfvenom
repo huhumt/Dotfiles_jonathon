@@ -164,7 +164,7 @@ _msfvenom_formats_list=(
   'vbscript'
 )
 
-_msfvenom_format() {
+_msfvenom_formats() {
   _describe -t formats 'available formats' _msfvenom_formats_list || compadd "$@"
 }
 
