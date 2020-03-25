@@ -3,6 +3,20 @@
 
 set header_cache = ~/.cache/mutt
 
+# This file should include
+# imap_user, imap_pass, realname and from
+source ~/.config/mutt/work-email.secret
+
+set folder      = "imap://127.0.0.1:1143/"
+set spoolfile   = +INBOX
+mailboxes       = +INBOX
+
+set use_from = yes
+
+set smtp_url="smtp://$imap_user:$imap_pass@127.0.0.1:1025"
+
+set ssl_force_tls = no
+set ssl_starttls = no
 
 set sort = threads
 set sort_aux = reverse-last-date-received
@@ -14,7 +28,7 @@ set include			# include message in replies
 set editor = "vim +':set textwidth=0'"
 set include = yes
 set new_mail_command = "notify-send 'New Email'"
-set sendmail = "/home/jonathan/.bin/emails/send-from-mutt"
+#set sendmail = "/home/jonathan/.bin/emails/send-from-mutt"
 set edit_headers=yes
 
 
@@ -24,6 +38,13 @@ auto_view application/pgp-encrypted
 alternative_order text/plain text/enriched text/html
 
 macro attach 'V' "<pipe-entry>cat >~/.cache/mutt/mail.html && qutebrowser ~/.cache/mutt/mail.html && rm ~/.cache/mutt/mail.html<enter>"
+
+
+bind index R imap-fetch-mail
+
+
+set query_command = "/home/jonathan/Contacts/lookup | grep '%s'"
+
 
 # Formatting
 
