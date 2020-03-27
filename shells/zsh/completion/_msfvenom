@@ -18,7 +18,6 @@
 #
 #  * Spencer McIntyre
 #
-#  * Extended by Jonathan Hodgson
 # ------------------------------------------------------------------------------
 
 _msfvenom_archs_list=(
@@ -208,26 +207,18 @@ _msfvenom_platform() {
   _describe -t platforms 'available platforms' _msfvenom_platforms_list || compadd "$@"
 }
 
-local -a _msfvenom_payload_list
-
-if [ -f "$HOME/.local/cache/msfvenom/payloads.txt" ]; then
-  while read line; do
-    _msfvenom_payload_list+=("$line")
-  done < "$HOME/.local/cache/msfvenom/payloads.txt"
-fi
-
 _msfvenom_payload() {
-  if [ ${#_msfvenom_payload_list[@]} -ne 0 ]; then
-    _describe -t payloads 'available payloads' _msfvenom_payload_list || compadd "$@"
+  local cacheFile="$HOME/.msf4/store/modules_metadata.json"
+  local -a _msfvenom_payloads_list
+  [ -f "$cacheFile" ] || cacheFile="/opt/metasploit/db/modules_metadata_base.json"
+  if [ ! -f "$cacheFile" ]; then
+    _message -r "Cannot find metasploit cache file. Run msfconsole to populate it"
+    compadd "$@"
   else
-    _message -r "You need to pre-populate the payload cache, run the following commands:"
-    _message -r ""
-    _message -r "mkdir -p \$HOME/.local/cache/msfvenom/"
-    _message -r "msfvenom --list payloads 2> /dev/null | tail -n +5 | sed '2d' | awk -F '  +' '{print \$2 \":\" \$3}' > \$HOME/.local/cache/msfvenom/payloads.txt"
+    _msfvenom_payloads_list=("${(f)$(sed -n '/"type": "payload"/,/"ref_name"/p' "$cacheFile" | grep -E '(ref_name|description)' | cut -d '"' -f 4 | sed -n 'h;n;p;g;p' | sed 'N;s/\n/:/')}")
+    _describe -t payloads 'available payloads' _msfvenom_payloads_list || compadd "$@"
   fi
 }
-
-
 
 _arguments \
   "--smallest[Generate the smallest possible payload using all available encoders]" \
