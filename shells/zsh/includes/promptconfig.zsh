@@ -131,6 +131,10 @@ prompt_git(){
 		local modified=$(command git diff --name-only 2> /dev/null)
 		local staged=$(command git diff --staged --name-only 2> /dev/null)
 
+		if [ -n "$untrackedFiles" ]; then
+			ret+=" "
+			color="orange1"
+		fi
 		if [ -n "$modified" ]; then
 			ret+=" "
 			color="orange1"
