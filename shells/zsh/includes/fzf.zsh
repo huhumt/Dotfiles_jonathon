@@ -1,6 +1,6 @@
 # this rg command will get a list of files that are not in gitignore or similar
 export FZF_DEFAULT_COMMAND="fd --type f --hidden --follow --color=always --exclude .git --exclude .PlayOnLinux --exclude \"PlayOnLinux\'s virtual drives\""
-export FZF_DEFAULT_OPTS="--reverse --height 40%"
+export FZF_DEFAULT_OPTS="--reverse --ansi --height 40%"
 export FZF_CTRL_R_OPTS=""
 # this is the argument completeion optionm, use the same command
 export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
@@ -13,8 +13,8 @@ if [ -e /usr/share/fzf/key-bindings.zsh ]; then
 	__fsel_wordlist() {
 		local cmd="$FZF_DEFAULT_COMMAND --exclude \*.md --exclude \*.gif --exclude \*.jpg --exclude \*.png --exclude \*.lua --exclude \*.jar --exclude \*.pl '' /usr/share/wordlists/ | sed 's#^/usr/share/wordlists/##'"
 		setopt localoptions pipefail 2> /dev/null
-		eval "$cmd" | FZF_DEFAULT_OPTS="--height ${FZF_TMUX_HEIGHT:-40%} --reverse $FZF_DEFAULT_OPTS $FZF_CTRL_T_OPTS --preview 'bat --color=always /usr/share/wordlists/{}'" $(__fzfcmd) -m "$@" | while read item; do
-			echo -n "/usr/share/wordlists/${(q)item} "
+		eval "$cmd" | FZF_DEFAULT_OPTS="--height ${FZF_TMUX_HEIGHT:-40%} --reverse $FZF_DEFAULT_OPTS $FZF_CTRL_T_OPTS --preview 'bat --color=always {}'" $(__fzfcmd) -m "$@" | while read item; do
+			echo -n "${(q)item} "
 		done
 		local ret=$?
 		echo

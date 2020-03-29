@@ -117,25 +117,30 @@ function prompt_project() {
 }
 
 prompt_git(){
-	local branch="$(git branch --show-current 2> /dev/null)"
-	local color="green"
-	local ret=""
-	if [ -n "$branch" ]; then
-		ret="$branch"
+	local repoTopLevel="$(command git rev-parse --show-toplevel 2> /dev/null)"
+	if [ -n "$repoTopLevel" ]; then
+		local branch="$(git branch --show-current 2> /dev/null)"
+		local tag="$(git describe --tags --exact-match HEAD 2> /dev/null)"
+		local color="green"
+		local ret=""
+		[ -n "$branch" ] && ret="$branch "
+		[ -n "$tag" ] && ret+="$tag "
+		[ -n "$ret" ] || ret="$(git rev-parse --short HEAD 2> /dev/null)"
 		local repoTopLevel="$(command git rev-parse --show-toplevel 2> /dev/null)"
 		local untrackedFiles=$(command git ls-files --others --exclude-standard "${repoTopLevel}" 2> /dev/null)
+		local modified=$(command git diff --name-only 2> /dev/null)
 		local staged=$(command git diff --staged --name-only 2> /dev/null)
 
-		if [ -n "$untrackedFiles" ]; then
-			ret="$ret "
+		if [ -n "$modified" ]; then
+			ret+=" "
 			color="orange1"
 		fi
 		if [ -n "$staged" ]; then
-			ret="$ret "
+			ret+=" "
 			color="orange1"
 		fi
-		
 	fi
+	ret="$(echo "$ret" | sed -e 's/ *$//')"
 	echo "$ret"
 	echo "$color"
 }
@@ -197,7 +202,6 @@ set_prompts(){
 
 	#Set background to nothing at the start of the prompt
 	local background=""
-	local foreground=""
 
 	#Set the prompt to an empty string
 	PROMPT=""
@@ -224,8 +228,10 @@ set_prompts(){
 		PROMPT="$PROMPT$(echo "$segment" | sed -n '1p')"
 		background="$(echo "$segment" | sed -n '2p')"
 	fi
+
+	invisibleSeperator=$(echo -e '\u2063')
 	
-	PROMPT="$PROMPT $(seperator "$background")$(resetColor)"
+	PROMPT="$PROMPT $(seperator "$background")$(resetColor)$invisibleSeperator"
 
 #$(resetColor)
 	RPROMPT="$(resetColor)$(prompt_last_exit_code "$RETVAL")$(resetColor)"
