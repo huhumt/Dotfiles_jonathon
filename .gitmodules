@@ -1,9 +1,6 @@
 [submodule "config/vim"]
 	path = vim/.vim
 	url = git@git.jonathanh.co.uk:jab2870/vim.git
-[submodule "custom-oh-my-zsh/themes/powerlevel9k"]
-	path = custom-oh-my-zsh/themes/powerlevel9k
-	url = https://github.com/bhilburn/powerlevel9k.git
 [submodule "shells/zsh/zsh-syntax-highlighting"]
 	path = shells/zsh/plugins/zsh-syntax-highlighting
 	url = https://github.com/zsh-users/zsh-syntax-highlighting.git
