@@ -5,6 +5,8 @@ autoload -U colors && colors
 # Make sure we are using vi mode
 bindkey -v
 
+[ -z "$DOTFILES" ] && source ~/.dotfiles/shells/shared/environmentVariables
+
 # History in cache directory:
 setopt INC_APPEND_HISTORY        # Write to the history file immediately, not when the shell exits.
 setopt SHARE_HISTORY             # Share history between all sessions.
