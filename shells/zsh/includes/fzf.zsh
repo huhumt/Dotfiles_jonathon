@@ -5,10 +5,21 @@ export FZF_CTRL_R_OPTS=""
 # this is the argument completeion optionm, use the same command
 export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
 export FZF_CTRL_T_OPTS="$FZF_DEFAULT_OPTS --ansi --preview \"bat --style=numbers --color=always {}\""
+
+sourced="False"
+
 if [ -e /usr/share/fzf/key-bindings.zsh ]; then
 	source /usr/share/fzf/key-bindings.zsh
 	source /usr/share/fzf/completion.zsh
+	sourced="True"
+elif [ -e /usr/share/doc/fzf/examples/key-bindings.zsh ]; then
+	source /usr/share/doc/fzf/examples/key-bindings.zsh
+	source /usr/share/doc/fzf/examples/completion.zsh
+	sourced="True"
+fi
+	
 
+if [ "$sourced" = "True" ]; then
 	# CTRL-W to select a wordlist
 	__fsel_wordlist() {
 		local cmd="$FZF_DEFAULT_COMMAND --exclude \*.md --exclude \*.gif --exclude \*.jpg --exclude \*.png --exclude \*.lua --exclude \*.jar --exclude \*.pl '' /usr/share/wordlists/ | sed 's#^/usr/share/wordlists/##'"
