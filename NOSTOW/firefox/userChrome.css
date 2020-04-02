@@ -1,4 +1,3 @@
-@namespace url("http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul");
 
 #statuspanel {
   position: fixed;
@@ -8,10 +7,47 @@
   background-color: #282828;
   color: #fbf1c7;
   border: 1px solid #689d6a;
-
 }
 
 #statuspanel-inner {
-	height: auto !important;
-	margin-right: 0;
+  height: auto !important;
+  margin-right: 0;
+}
+
+/* hides the url bar unless I hover over it */
+#navigator-toolbox {
+	margin-top: -72px;
+	transition: 0.2s margin-top ease-out;
+	border-bottom-width: 0;
+}
+#navigator-toolbox:hover {
+	margin-top: 0;
+}
+
+
+#main-window[sizemode="maximized"] #content-deck {
+  padding-top: 8px;
+}
+
+#titlebar, window, #main-window, #toolbar-menubar, #TabsToolbar, #PersonalToolbar, #navigator-toolbox{
+	background:transparent !important;
+	-moz-appearance: none !important;
+}
+
+#main-window{
+	background-image: linear-gradient(30deg, rgba(239, 240, 241, 0.5), transparent, rgba(239, 240, 241, 0.5), transparent, rgba(239, 240, 241, 0.3)) !important;
+	background-color: rgba(239, 240, 241, 0.6) !important;
+}
+
+#toolbar-menubar{
+	border-bottom: solid 0px #013 !important;
+	background-color: var(--toolbar-bgcolor) !important;
+	position: relative !important;
+	filter: drop-shadow(2px 2px 3px rgba(0,0,0,0.3)) !important;
+	padding: 6px 0px 6px 0px !important;
+}
+
+#nav-bar{
+	background-color: #282828;
+	opacity: 0.7;
 }
