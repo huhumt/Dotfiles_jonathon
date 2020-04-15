@@ -6,7 +6,7 @@
 
 # Custom dir command
 prompt_dir(){
-	homeIcon=""
+	homeIcon=" "
 	wpPluginsIcon=".p."
 	wpThemesIcon=".t."
 	siteIcon=" "
@@ -16,7 +16,7 @@ prompt_dir(){
 	dropboxIcon=""
 	seperator="  "
 	seperatorDual="  "
-	root="$seperator"
+	root=" $seperator"
 	# Gets the path.
 	local current_path="$(print -P "%~")"
 
@@ -123,8 +123,8 @@ prompt_git(){
 		local tag="$(git describe --tags --exact-match HEAD 2> /dev/null)"
 		local color="green"
 		local ret=""
-		[ -n "$branch" ] && ret="$branch "
-		[ -n "$tag" ] && ret+="$tag "
+		[ -n "$branch" ] && ret=" $branch "
+		[ -n "$tag" ] && ret+=" $tag "
 		[ -n "$ret" ] || ret="$(git rev-parse --short HEAD 2> /dev/null)"
 		local repoTopLevel="$(command git rev-parse --show-toplevel 2> /dev/null)"
 		local untrackedFiles=$(command git ls-files --others --exclude-standard "${repoTopLevel}" 2> /dev/null)
