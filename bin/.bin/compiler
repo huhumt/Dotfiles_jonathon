@@ -60,8 +60,8 @@ case "$file" in
         *\.c) cc "$file" -o "$base" && "$base" ;;
 	*\.py) python "$file" ;;
 	*\.js) cat "$file" | minify --js > "${base}.min.js" ;;
-	#*\.less) lessc --clean-css --source-map --autoprefix="last 3 versions, ie >= 11" "$file"  "${base}.min.css" ;;
-	*\.less) lessc "$file" "${base}.css" ;;
+	*\.less) lessc --clean-css "$file"  "${base}.min.css" ;;
+	#*\.less) lessc "$file" "${base}.css" ;;
 	#*\.go) go run "$file" ;;
 	#*) shebangtest ;;
 esac
