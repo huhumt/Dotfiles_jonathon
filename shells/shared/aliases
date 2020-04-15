@@ -107,7 +107,7 @@ alias .v='cd ~/.vim/'
 alias df='cd ~/.dotfiles'
 
 #Make vim start in server mode
-alias vim='vim --servername jab2870'
+#alias vim='vim --servername jab2870'
 
 # moon phase
 alias moonphase='weather moon'
@@ -165,8 +165,8 @@ alias ddg="ddgr"
 alias docker="sudo docker"
 alias docker-compose="sudo docker-compose"
 
-alias rm="rmtrash"
-alias rmdir="rmdirtrash"
+type rmtrash > /dev/null && alias rm="rmtrash"
+type rmdirtrash > /dev/null && alias rmdir="rmdirtrash"
 
 alias rs="rofi-reverse-shells"
 
@@ -177,8 +177,8 @@ alias surecheckImport="$JAVA_HOME/bin/java -jar $ARMORY/host_build_reviews/windo
 
 alias rot13="tr 'A-Za-z' 'N-ZA-Mn-za-m'"
 
-alias mysql="echo \"You might want to use mycli instead\"; /usr/bin/mysql"
-alias postgres="echo \"You might want to use pgcli instead\"; /usr/bin/postgres"
+type mycli > /dev/null && alias mysql="echo \"You might want to use mycli instead\"; /usr/bin/mysql"
+type pgcli > /dev/null && alias postgres="echo \"You might want to use pgcli instead\"; /usr/bin/postgres"
 
 # These aliases are related to projects
 # Make sqlmap put output in the current project folder
