@@ -5,7 +5,7 @@
 
 
 function drawBar(){
-	local percent=$1;
+	local percent="$1";
 
 	for i in {1..10}; do
 		local boxPercent=$(($i*10))
@@ -37,7 +37,6 @@ volume="$(amixer -D default sget Master | grep -o '\[.*\%'  | head -n 1 | tr -d 
 speakerStatus="$(amixer -D default sget Master | grep -o '\[\(on\|off\)'  | head -n 1 | tr -d '[')"
 
 
-echo "$speakerStatus"
 if [[ "$speakerStatus" == "on" ]]; then
 	command -v notify-send && notify-send -R "/tmp/volume" "Volume" "$(drawBar $volume) ${volume}%"
 else
