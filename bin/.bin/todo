@@ -8,6 +8,18 @@ function is_int() {
 	return $(test "$@" -eq "$@" > /dev/null 2>&1);
 }
 
+function help(){
+	echo "TODO"
+	echo "===="
+	echo "Simple todo list manager"
+	echo ""
+	(
+		echo "list|l	List contents of to do list"
+		echo "add|a \"Description\"	Add an item to the todo list"
+		echo "delete|del|d \"item id\"	Delete an item from the todo list"
+	) | column -t -s'	'
+
+}
 function list(){
 	if [ -f "$FILE" ]; then
 		awk '{printf("%5d : %s\n", NR,$0)}' "$FILE"
@@ -47,6 +59,10 @@ if [ -n "$1" ]; then
 			"delete"|"del"|"d")
 				shift
 				delete "$@"
+				exit 0
+				;;
+			"help"|"--help"|"-h")
+				help
 				exit 0
 				;;
 			*)
