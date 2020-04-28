@@ -16,3 +16,6 @@
 [submodule "shells/zsh/plugins/fzf-tab"]
 	path = shells/zsh/plugins/fzf-tab
 	url = https://github.com/Aloxaf/fzf-tab
+[submodule "bin/.bin/uberw3m"]
+	path = bin/.bin/uberw3m
+	url = https://github.com/sersorrel/uberw3m
