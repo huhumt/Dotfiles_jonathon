@@ -1,0 +1,24 @@
+#!/usr/bin/env bash
+
+function trysuffex(){
+	local suffix="$1"
+	local response=$(curl -L -A "$useragent" --write-out %{http_code} --silent --output /dev/null "$url/$suffix")
+	[ "$response" -eq "200" ] && (echo "$url/$suffix"; return 0) || return 1
+}
+
+# Remove trailing slash if there is one
+url="${1%/}"
+
+# User FF's user agent
+useragent="Mozilla/5.0 (X11; Linux x86_64; rv:76.0) Gecko/20100101 Firefox/76.0"
+
+page="$(curl -A "$useragent" -s -L "$url")"
+
+# Look for alternate links with atom or rss type
+echo "$page" | hq 'link[rel=alternate][type="application/rss+xml"]' attr href | awk '{print "RSS:  " $0}'
+echo "$page" | hq 'link[rel=alternate][type="application/atom+xml"]' attr href | awk '{print "Atom: " $0}'
+
+# Try common url patterns
+trysuffex "feed" | awk '{print "200:  " $0}'
+sleep 0.2
+trysuffex ".rss" | awk '{print "200:  " $0}'
