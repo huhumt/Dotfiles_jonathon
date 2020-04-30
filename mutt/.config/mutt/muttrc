@@ -7,14 +7,18 @@ set header_cache = ~/.cache/mutt
 # imap_user, imap_pass, realname and from
 source ~/.config/mutt/work-email.secret
 
+# Using davmail to interface with exchange
 set folder      = "imap://127.0.0.1:1143/"
 set spoolfile   = +INBOX
 mailboxes       = +INBOX
 
 set use_from = yes
 
+# Davmail again
 set smtp_url="smtp://$imap_user:$imap_pass@127.0.0.1:1025"
 
+# This communication is only between mutt and davmail (all on local computer) so ssl is not necesary
+# SSL / TLS is used between davmail and exchange server
 set ssl_force_tls = no
 set ssl_starttls = no
 
@@ -22,14 +26,27 @@ set sort = threads
 set sort_aux = reverse-last-date-received
 set date_format="%y/%m/%d %I:%M%p"
 set forward_format = "Fwd: %s"	# format of subject when forwarding
-set forward_quote		# include message in forwards
-set include			# include message in replies
+set forward_quote = yes		# include message in forwards
+set include = yes		# include message in replies
 
-set editor = "vim +':set textwidth=0'"
-set include = yes
+# Use nvim but don't force text width (looks terible if read on a phone)
+set editor = "nvim +':set textwidth=0'"
 set new_mail_command = "notify-send 'New Email'"
 #set sendmail = "/home/jonathan/.bin/emails/send-from-mutt"
+# Puts email headers in Vim
 set edit_headers=yes
+# Go straight to vim when writing an email
+# Means that we will not be prompted for to / subject before opening email
+set autoedit=yes
+
+# Don't show + on wrapped lines
+set markers=no
+
+# Wrap lines at 78 chars
+set wrap=78
+
+# Makes escape key cancel inputs. Normally it's ctrl+G (weird)
+set abort_key = "<Esc>"
 
 
 set mailcap_path = "~/.config/mutt/mailcap"
@@ -37,12 +54,32 @@ auto_view text/html
 auto_view application/pgp-encrypted
 alternative_order text/plain text/enriched text/html
 
-macro attach 'V' "<pipe-entry>cat >~/.cache/mutt/mail.html && qutebrowser ~/.cache/mutt/mail.html && rm ~/.cache/mutt/mail.html<enter>"
+macro attach 'V' "<pipe-entry>pipebrowser<enter>"
 
+macro pager U "<enter-command>set pipe_decode = yes<enter><pipe-message>urlscan  -dc -r 'linkhandler {}'<enter><enter-command>set pipe_decode = no<enter>" "view URLs"
 
+# Macro to toggle alternates (plain <-> html), based on:
+# https://groups.google.com/d/msg/comp.mail.mutt/9I702oMwQQE/JqdLnp3j9WAJ
+macro pager ,@aoh= "<enter-command>unalternative_order *; alternative_order text/html text/plain text/enriched; macro pager A ,@aot= 'toggle alternative order'<enter><exit><display-message>"
+macro pager ,@aot= "<enter-command>unalternative_order *; alternative_order text/plain text/enriched text/html; macro pager A ,@aoh= 'toggle alternative order'<enter><exit><display-message>"
+macro pager A ,@aoh= "toggle alternative order"
+
+#Make R fetch imap emails
 bind index R imap-fetch-mail
+# Vim like jumping to start and end
+bind index,pager g noop
+bind index G last-entry
+bind index gg first-entry
+bind pager G bottom
+bind pager gg top
+bind pager j next-line
+bind pager k previous-line
+bind index r group-reply
+bind pager r reply
+bind pager R group-reply
 
 
+# Use contact lookup funnction for contacts
 set query_command = "/home/jonathan/Contacts/lookup | grep '%s'"
 
 
