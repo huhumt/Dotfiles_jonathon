@@ -1,0 +1,20 @@
+#!/usr/bin/env bash
+
+# A script to open urls
+# For example, open images with sxiv
+
+# This is necesary becuase environment variables are lost when calling from newsboat for some reason
+
+notify-send "I get here"
+
+url="$1"
+browser="${BROWSER:-firefox-developer-edition}"
+
+notify-send "Opening" "$url"
+
+case "$url" in
+	*"//invidio.us/"*) open-youtube "$url"; exit 0 ;;
+	*) $browser "$url"; exit 0 ;;
+esac
+
+exit 1
