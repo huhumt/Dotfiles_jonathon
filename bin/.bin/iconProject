@@ -1,7 +1,10 @@
 #!/usr/bin/env bash
 
 
-node /home/jonathan/GitRepos/chrome-curl/index.js "$1" |\
+pagesource="$(cat -)"
+[ -z "$pagesource" ] && pagesource="$(node /home/jonathan/GitRepos/chrome-curl/index.js "$1")"
+
+echo "$pagesource" |\
 	#hq '.iconPreview' data
 	hq '.iconPreview' attr style | # This gets the style attribute from the preview element
 	cut -d '"' -f 2 | cut -d ',' -f 2 | # Gets the base 64 out that we want
