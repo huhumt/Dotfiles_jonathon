@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+
+export SUDO_ASKPASS='/usr/lib/seahorse/ssh-askpass'
+
+# Make sure the docker daemon is running
+if ! systemctl status --no-pager docker.service > /dev/null; then
+	sudo -A systemctl start docker.service
+fi
+
+# Make sure the container is running
+if ! docker container ls | grep -q mpepping/cyberchef; then
+	sudo -A systemctl start cyberchef
+fi
+
+firefox-developer-edition localhost:8000
