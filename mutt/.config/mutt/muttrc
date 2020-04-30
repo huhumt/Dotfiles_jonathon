@@ -1,89 +1,159 @@
 # vim: filetype=neomuttrc
 #source "~/.config/mutt/accounts/protonmail"
 
-set header_cache = ~/.cache/mutt
 
 # This file should include
 # imap_user, imap_pass, realname and from
 source ~/.config/mutt/work-email.secret
 
 # Using davmail to interface with exchange
-set folder      = "imap://127.0.0.1:1143/"
-set spoolfile   = +INBOX
-mailboxes       = +INBOX
+#set folder      = "imap://127.0.0.1:1143/"
+#set spoolfile   = +INBOX
+#mailboxes       = +INBOX
 
-set use_from = yes
 
-# Davmail again
-set smtp_url="smtp://$imap_user:$imap_pass@127.0.0.1:1025"
+########################
+#  Email Folder Setup  #
+########################
 
-# This communication is only between mutt and davmail (all on local computer) so ssl is not necesary
-# SSL / TLS is used between davmail and exchange server
-set ssl_force_tls = no
-set ssl_starttls = no
+# Folder with emails
+set folder = "$HOME/.mail/work" # https://neomutt.org/guide/reference#folder
+# Type of mailbox
+set mbox_type = Maildir # https://neomutt.org/guide/reference#mbox_type
+# Directory to poll for new mail
+set spoolfile = +Inbox # https://neomutt.org/guide/reference#spoolfile
+# Directory to save sent messages into
+set record = +Sent # https://neomutt.org/guide/reference#record
+# Sets the drafts folder
+set postponed = +Drafts # https://neomutt.org/guide/reference#postponed
+# File that headers will be cached
+set header_cache = ~/.cache/mutt # https://neomutt.org/guide/reference#header_cache
+# Find all mailboxes in the mail folder
+mailboxes +Inbox +Sent +Drafts +Junk +Trash +Projects `find $HOME/.mail/work/Projects -mindepth 1 -not \( -name 'tmp' -o -name 'new' -o -name 'cur' \) -type d -printf "+'Projects/%P' "`
+#
+####################
+#  Sending Emails  #
+####################
 
-set sort = threads
-set sort_aux = reverse-last-date-received
-set date_format="%y/%m/%d %I:%M%p"
-set forward_format = "Fwd: %s"	# format of subject when forwarding
-set forward_quote = yes		# include message in forwards
-set include = yes		# include message in replies
+# Use davmail for sending emails
+set smtp_url="smtp://$imap_user:$imap_pass@127.0.0.1:1025" # https://neomutt.org/guide/reference#smtp-url
+#set sendmail = "/home/jonathan/.bin/emails/send-from-mutt"
+
+#########################
+#  Index View Settings  #
+#########################
+
+# Sort by threads
+set sort = threads # https://neomutt.org/guide/reference#sort
+# Sort threads by last date recieved - newest first
+set sort_aux = reverse-last-date-received # https://neomutt.org/guide/reference#sort_aux
+# Show date in year/month/day hour:minute format
+set date_format="%y/%m/%d %I:%M%p" # https://neomutt.org/guide/reference#date_format
+# Vim like keybindings
+bind index G last-entry
+bind index g noop
+bind index gg first-entry
+# Reply bindings
+bind index r reply
+bind index R group-reply
+
+######################
+#  Sidebar Settings  #
+######################
+
+set sidebar_divider_char = '│'
+set sidebar_delim_chars = "/"
+set sidebar_short_path
+set sidebar_folder_indent
+set sidebar_visible = yes
+set sidebar_width = 24
+set sidebar_format = '%B%?F? [%F]?%* %?N?%N/? %?S?%S?'
+bind index,pager \Cj sidebar-next
+bind index,pager \Ck sidebar-prev
+bind index,pager \Co sidebar-open
+bind index,pager \Cb sidebar-toggle-visible
+
+
+########################
+#  Composing Settings  #
+########################
 
 # Use nvim but don't force text width (looks terible if read on a phone)
-set editor = "nvim +':set textwidth=0'"
-set new_mail_command = "notify-send 'New Email'"
-#set sendmail = "/home/jonathan/.bin/emails/send-from-mutt"
+set editor = "nvim +':set textwidth=0'" # https://neomutt.org/guide/reference#editor
 # Puts email headers in Vim
-set edit_headers=yes
+set edit_headers=yes # https://neomutt.org/guide/reference#edit_headers
 # Go straight to vim when writing an email
 # Means that we will not be prompted for to / subject before opening email
-set autoedit=yes
+set autoedit=yes # https://neomutt.org/guide/reference#autoedit
+# Use From header
+set use_from = yes # https://neomutt.org/guide/reference#use_from
+# When forwading, put Fwd: before original subject
+set forward_format = "Fwd: %s" # https://neomutt.org/guide/reference#forward_format
+# Include the forwarded message in the body
+set forward_quote = yes # https://neomutt.org/guide/reference#forward_quote
+# Include the replied mesaage in the body
+set include = yes # https://neomutt.org/guide/reference#include
+# Vim like keybindings
+bind pager g noop
+bind pager G bottom
+bind pager gg top
+bind pager j next-line
+bind pager k previous-line
+
+######################
+#  Viewing settings  #
+######################
 
 # Don't show + on wrapped lines
-set markers=no
-
+set markers=no # https://neomutt.org/guide/reference#markers
 # Wrap lines at 78 chars
-set wrap=78
-
-# Makes escape key cancel inputs. Normally it's ctrl+G (weird)
-set abort_key = "<Esc>"
-
-
-set mailcap_path = "~/.config/mutt/mailcap"
-auto_view text/html
-auto_view application/pgp-encrypted
+set wrap=78 # https://neomutt.org/guide/reference#wrap
+# When at the end, don't go to next email when trying to scroll
+set pager_stop=yes # https://neomutt.org/guide/reference#pager_stop
+# Mailcap file is used to tell mutt how to open different types of file
+set mailcap_path = "~/.config/mutt/mailcap" # https://neomutt.org/guide/mimesupport#3-%C2%A0mime-viewer-configuration-with-mailcap
+# Tells Mutt to automatically view files with these mime types
+auto_view text/html # https://neomutt.org/guide/reference#auto_view
+auto_view application/pgp-encrypted # https://neomutt.org/guide/reference#auto_view
+# Order to try and show multipart emails
 alternative_order text/plain text/enriched text/html
-
-macro attach 'V' "<pipe-entry>pipebrowser<enter>"
-
-macro pager U "<enter-command>set pipe_decode = yes<enter><pipe-message>urlscan  -dc -r 'linkhandler {}'<enter><enter-command>set pipe_decode = no<enter>" "view URLs"
-
 # Macro to toggle alternates (plain <-> html), based on:
 # https://groups.google.com/d/msg/comp.mail.mutt/9I702oMwQQE/JqdLnp3j9WAJ
 macro pager ,@aoh= "<enter-command>unalternative_order *; alternative_order text/html text/plain text/enriched; macro pager A ,@aot= 'toggle alternative order'<enter><exit><display-message>"
 macro pager ,@aot= "<enter-command>unalternative_order *; alternative_order text/plain text/enriched text/html; macro pager A ,@aoh= 'toggle alternative order'<enter><exit><display-message>"
 macro pager A ,@aoh= "toggle alternative order"
-
-#Make R fetch imap emails
-bind index R imap-fetch-mail
-# Vim like jumping to start and end
-bind index,pager g noop
-bind index G last-entry
-bind index gg first-entry
-bind pager G bottom
-bind pager gg top
-bind pager j next-line
-bind pager k previous-line
-bind index r group-reply
+# Open in default browser
+# Relies on pipebrowser script in bin folder
+#https://git.jonathanh.co.uk/jab2870/Dotfiles/src/branch/master/bin/.bin/pipebrowser
+macro attach 'V' "<pipe-entry>pipebrowser<enter>"
+# Use urlscan to handle links in messages
+macro pager U "<enter-command>set pipe_decode = yes<enter><pipe-message>urlscan  -dc -r 'linkhandler {}'<enter><enter-command>set pipe_decode = no<enter>" "view URLs"
 bind pager r reply
 bind pager R group-reply
 
+##############
+#  Contacts  #
+##############
 
-# Use contact lookup funnction for contacts
-set query_command = "/home/jonathan/Contacts/lookup | grep '%s'"
+set query_command= "abook --mutt-query '%s'"
+macro index,pager  a "<pipe-message>abook --add-email-quiet<return>" "Add this sender to Abook"
 
+###################
+#  Misc Settings  #
+###################
 
-# Formatting
+# Don't ask to push enter after external command is run
+set wait_key = no # https://neomutt.org/guide/reference#wait_key
+# Send a notification when a new email arrives
+set new_mail_command = "notify-send 'New Email'" # https://neomutt.org/guide/reference#new_mail_command
+# Makes escape key cancel inputs. Normally it's ctrl+G (weird)
+set abort_key = "<Esc>" # https://neomutt.org/guide/reference#abort_key
+# My Name
+set realname = "Jonathan Hodgson"
+
+#############
+#  Colours  #
+#############
 
 # Default index colors:
 color index yellow default '.*'
