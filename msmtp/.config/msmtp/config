@@ -1,0 +1,43 @@
+# Example for a system wide configuration file
+
+# Use TLS on port 465
+port 465
+tls on
+tls_starttls off
+
+# Construct envelope-from addresses of the form "user@oursite.example"
+#auto_from on
+#maildomain oursite.example
+
+# Syslog logging with facility LOG_MAIL instead of the default LOG_USER
+syslog LOG_MAIL
+
+# sendgrid
+account        sendgrid
+host           smtp.sendgrid.net
+port           465
+tls            on
+tls_starttls   off
+auth           on
+from           FROMADDRESS
+user           USER
+password       PASSWORD
+
+# Work
+account        work
+host           localhost
+port           1025
+tls            off
+tls_starttls   off
+auth           on
+user           USER
+passwordeval   PASSWORD
+from           jonathan.hodgson@example.com
+
+
+
+
+# A system wide configuration file is optional.
+# If it exists, it usually defines a default account.
+# This allows msmtp to be used like /usr/sbin/sendmail.
+
