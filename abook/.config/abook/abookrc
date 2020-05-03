@@ -1,0 +1,48 @@
+field manager="Manager"
+field title="Title"
+
+view CONTACT = name, email, title, manager
+view PHONE = phone, workphone, mobile
+view ADDRESS = address, address2, city, state, zip, country
+view OTHER = nick, url
+
+set preserve_fields=all
+
+# Preserve any unknown field while loading an abook database
+set preserve_fields=all
+
+# Automatically save database on exit
+set autosave=true
+
+# Format of entries lines in list
+set index_format=" {name:22} {email:40} {phone:25|workphone|mobile} {title:30} {manager:22}"
+
+# Show all email addresses in list
+set show_all_emails=true
+
+# Command used to start mutt
+set mutt_command=mutt
+
+# Return all email addresses to a mutt query
+set mutt_return_all_emails=true
+
+# Command used to print
+set print_command=lpr
+
+# Command used to start the web browser
+set www_command=w3m
+
+# Address style [eu|us|uk]
+set address_style=uk
+
+# Use ASCII characters only
+set use_ascii_only=false
+
+# Prevent double entry
+set add_email_prevent_duplicates=true
+
+# Field to be used with "sort by field" command
+set sort_field=name
+
+# Show cursor in main display
+set show_cursor=false
