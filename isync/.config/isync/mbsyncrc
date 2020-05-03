@@ -1,0 +1,31 @@
+IMAPAccount work
+# Address to connect to
+Host 127.0.0.1
+Port 1143
+User USERNAME
+# To store the password in an encrypted file use PassCmd instead of Pass
+PassCmd "pass email/work"
+# Only the connection to davmail (localhost) is unencrypted
+# If you are not using a 
+SSLType None
+AuthMechs LOGIN
+
+IMAPStore work-remote
+Account work
+
+MaildirStore work-local
+# Copy folder hierarchy
+Subfolders Verbatim
+# The trailing "/" is important
+Path ~/.mail/work/
+Inbox ~/.mail/work/Inbox
+
+Channel work
+Master :work-remote:
+Slave :work-local:
+# Include everything, except Sync Issues
+Patterns * !'Sync Issues' !'Sync Issues/*'
+# Automatically create missing mailboxes, both locally and on the server
+Create Both
+# Save the synchronization state files in the relevant directory
+SyncState *
