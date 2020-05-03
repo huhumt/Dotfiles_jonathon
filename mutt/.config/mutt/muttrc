@@ -29,15 +29,32 @@ set postponed = +Drafts # https://neomutt.org/guide/reference#postponed
 # File that headers will be cached
 set header_cache = ~/.cache/mutt # https://neomutt.org/guide/reference#header_cache
 # Find all mailboxes in the mail folder
-mailboxes +Inbox +Sent +Drafts +Junk +Trash +Projects `find $HOME/.mail/work/Projects -mindepth 1 -not \( -name 'tmp' -o -name 'new' -o -name 'cur' \) -type d -printf "+'Projects/%P' "`
-#
+mailboxes +Sent +Drafts +Junk +Trash +Projects `find $HOME/.mail/work/Projects -mindepth 1 -not \( -name 'tmp' -o -name 'new' -o -name 'cur' \) -type d -printf "+'Projects/%P' "`
+
+######################
+#  NotMuch Settings  #
+######################
+# All the notmuch settings are documented here: https://neomutt.org/feature/notmuch
+
+# Points to the notmuch directory
+set nm_default_url = "notmuch://$HOME/.mail/work"
+# Makes notmuch return threads rather than messages
+set nm_query_type = "threads"
+# Set a virtual impox for Inbox, this will mean (with the above option) that threads in the inbox will show emails I sent if in reply to an email
+virtual-mailboxes "My INBOX" "notmuch://?query=tag:inbox"
+# Makes virtual mailbox open at the start ( I think )
+set virtual_spoolfile = yes
+# Binding for notmuch search
+bind index \\ vfolder-from-query
+
 ####################
 #  Sending Emails  #
 ####################
 
 # Use davmail for sending emails
-set smtp_url="smtp://$imap_user:$imap_pass@127.0.0.1:1025" # https://neomutt.org/guide/reference#smtp-url
-#set sendmail = "/home/jonathan/.bin/emails/send-from-mutt"
+#set smtp_url="smtp://$imap_user:$imap_pass@127.0.0.1:1025" # https://neomutt.org/guide/reference#smtp-url
+# Use my msmtp / markdown wrapper script to send emails using the work account
+set sendmail = "/home/jonathan/.bin/emails/send-from-mutt work"
 
 #########################
 #  Index View Settings  #
@@ -56,6 +73,14 @@ bind index gg first-entry
 # Reply bindings
 bind index r reply
 bind index R group-reply
+# Collapsing / Uncollapsing threads
+bind index c collapse-thread
+bind index C collapse-all
+# Search back
+bind index N search-opposite
+# Easily copy / move messages
+macro index C "<copy-message>?<toggle-mailboxes>" "copy a message to a mailbox"
+macro index M "<save-message>?<toggle-mailboxes>" "move a message to a mailbox"
 
 ######################
 #  Sidebar Settings  #
@@ -93,6 +118,8 @@ set forward_format = "Fwd: %s" # https://neomutt.org/guide/reference#forward_for
 set forward_quote = yes # https://neomutt.org/guide/reference#forward_quote
 # Include the replied mesaage in the body
 set include = yes # https://neomutt.org/guide/reference#include
+# Adds a header that is used to determine whether my send script should convert the markdown to html
+my_hdr Markdown: false
 # Vim like keybindings
 bind pager g noop
 bind pager G bottom
@@ -122,10 +149,6 @@ alternative_order text/plain text/enriched text/html
 macro pager ,@aoh= "<enter-command>unalternative_order *; alternative_order text/html text/plain text/enriched; macro pager A ,@aot= 'toggle alternative order'<enter><exit><display-message>"
 macro pager ,@aot= "<enter-command>unalternative_order *; alternative_order text/plain text/enriched text/html; macro pager A ,@aoh= 'toggle alternative order'<enter><exit><display-message>"
 macro pager A ,@aoh= "toggle alternative order"
-# Open in default browser
-# Relies on pipebrowser script in bin folder
-#https://git.jonathanh.co.uk/jab2870/Dotfiles/src/branch/master/bin/.bin/pipebrowser
-macro attach 'V' "<pipe-entry>pipebrowser<enter>"
 # Use urlscan to handle links in messages
 macro pager U "<enter-command>set pipe_decode = yes<enter><pipe-message>urlscan  -dc -r 'linkhandler {}'<enter><enter-command>set pipe_decode = no<enter>" "view URLs"
 bind pager r reply
