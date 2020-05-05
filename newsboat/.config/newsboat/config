@@ -27,10 +27,10 @@ color info red black bold
 color article cyan default
 
 # Basic options
-browser linkHandler
+browser linkhandler
 delete-read-articles-on-quit yes
 show-read-feeds no
-external-url-viewer "urlscan -dc -r 'linkHandler {}'"
+external-url-viewer "urlscan -dc -r 'linkhandler {}'"
 
 # Key bindings
 macro , open-in-browser
