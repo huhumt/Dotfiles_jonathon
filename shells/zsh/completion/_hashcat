@@ -1,0 +1,86 @@
+#compdef hashcat
+#
+tokens=(${(z)LBUFFER})
+
+if [[ "${LBUFFER[-1]}" == " " ]]; then
+	previousArg="${tokens[-1]}"
+else
+	previousArg="${tokens[-2]}"
+fi
+
+
+trim(){
+	cat - | sed 's/^[[:space:]]*//' | sed 's/[[:space:]]*$//'
+}
+
+_args(){
+	hashcat --help | sed -n '/Options/,/Hash modes/p' | tail -n +5 | head -n -2 | while read line; do
+		op="$(echo "$line" | cut -d"|" -f1 | trim)"
+		description="$(echo "$line" | cut -d"|" -f3 | trim)"
+		ty="$(echo "$line" | cut -d"|" -f2 | trim)"
+		echo "$op" | sed 's/,/\n/' | trim | awk "{print \$1 \":$description:$ty\"}"
+	done
+}
+
+_hashes(){
+	hashcat --example-hashes | awk -v RS="\n\n" -F "\t" '{gsub("\n","\t",$0); print $1 ":" $2 }' | sed 's/MODE: //; s/TYPE: //'
+}
+
+_basic_section(){
+	hashcat --help | sed -n '/'"$1"'/,/- \[/p' | tail -n +5 | head -n -2 | awk -F '|' '{gsub(/ /, "", $1); print $1 ":" $2}'
+}
+_modes(){
+	hashcat --help | sed -n '/Attack Modes/,/- \[/p' | tail -n +5 | head -n -2 | awk -F '|' '{gsub(/ /, "", $1); print $1 ":" $2}'
+}
+
+_brain_client_features(){
+	hashcat --help | sed -n '/Attack Modes/,/- \[/p' | tail -n +5 | head -n -2 | awk -F '|' '{gsub(/ /, "", $1); print $1 ":" $2}'
+}
+
+best_guess(){
+	# This get all possible arguments in the form argument:description:type
+	allArgs="$(_args)"
+	curr="$(echo "$allArgs" | grep -E "^$previousArg:")"
+	if [ -z  "$(echo "$curr" | cut -d':' -f3)" ]; then
+		# If the type is empty, there should be no positional options
+		# Complete full list of arguments
+		args=("${(f)$(echo "$allArgs" | cut -d':' -f1-2)}")
+		_describe "Help" args
+	else
+		case "$(echo "$curr" | cut -d':' -f3)" in
+			# If it takes a file, prompt to choose a file
+			File) _files ;;
+			# Otherwise, just show a message containing the description
+			*) _message -r "$(echo "$curr" | cut -d':' -f2)" ;;
+		esac
+	fi
+}
+
+case "$previousArg" in
+	-m|--hash-type)
+		hashes=("${(f)$(_hashes)}")
+		_describe "Hashes" hashes ;;
+	-a|--attack-mode)
+		ops=("${(f)$(_basic_section "Attack Modes")}")
+		_describe "Modes" ops ;;
+	--brain-client-features)
+		ops=("${(f)$(_basic_section "Brain Client Features")}")
+		_describe "Modes" ops ;;
+	--outfile-format)
+		ops=("${(f)$(_basic_section "Outfile Formats")}")
+		_describe "Modes" ops ;;
+	--debug-mode)
+		ops=("${(f)$(_basic_section "Rule Debugging Modes")}")
+		_describe "Modes" ops ;;
+	#--)
+	#	ops=("${(f)$(_basic_section "Built-in Charsets")}")
+	#	_describe "Modes" ops ;;
+	-D|--opencl-device-types)
+		ops=("${(f)$(_basic_section "OpenCL Device Types")}")
+		_describe "Modes" ops ;;
+	-w|--workload-profile)
+		ops=("${(f)$(_basic_section "Workload Profiles")}")
+		_describe "Modes" ops ;;
+
+	*) best_guess ;;
+esac
