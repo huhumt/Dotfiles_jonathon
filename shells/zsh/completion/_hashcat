@@ -23,7 +23,13 @@ _args(){
 }
 
 _hashes(){
-	hashcat --example-hashes | awk -v RS="\n\n" -F "\t" '{gsub("\n","\t",$0); print $1 ":" $2 }' | sed 's/MODE: //; s/TYPE: //'
+	if $(type fzf > /dev/null); then
+		# If fzf if available, use it for hash completion
+
+		hashcat --example-hashes | awk -v RS="\n\n" -F "\t" '{gsub("\n","\t",$0); print $1 "\t" $2 "\t" $3}' | sed 's/MODE: //; s/TYPE: //' | fzf -d "\t" --header="Mode	Type" --with-nth='1,2' --preview='echo {3}' --preview-window=up:1 | cut -d'	' -f1
+	else
+		hashcat --example-hashes | awk -v RS="\n\n" -F "\t" '{gsub("\n","\t",$0); print $1 ":" $2 }' | sed 's/MODE: //; s/TYPE: //'
+	fi
 }
 
 _basic_section(){
