@@ -1,9 +1,3 @@
-# This is the config I use for Powerlevel9k
-
-
-#source "$HOME/.dotfiles/shells/zsh/plugins/powerlevel9k/powerlevel9k.zsh-theme"
-
-
 # Custom dir command
 prompt_dir(){
 	homeIcon=" "
