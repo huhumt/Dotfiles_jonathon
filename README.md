@@ -1,8 +1,10 @@
 # My Dotfiles
 
-Use as you wish. Any code / scripts I have borrowed from other places should be credited in comments in the file. I currently use a [fork of DWM](https://github.com/Jab2870/dwm) as my window manager on Arch Linux, however, I don't think there is anything that is Arch specific.
+Use as you wish. Any code / scripts I have borrowed from other places should be credited in comments in the file. I currently use a [fork of DWM](https://git.jonathanh.co.uk/jab2870/dwm) as my window manager on Arch Linux, however, I don't think there is anything that is Arch specific.
 
-My primary editor is vim, who's config is in a submodule because I often need to deploy my vim configuration but don't need to download all of my dotfiles.
+My primary editor is ~~vim~~ neovim, who's config is in a submodule because I often need to deploy my vim configuration but don't need to download all of my dotfiles. The main reason I switched from Vim to NeoVim was to experiment [Deoplete](https://github.com/Shougo/deoplete.nvim).
+
+My email client of choice is NeoMutt, although there are a plethora of tools that go along with it. If you are interested in how it all interlocks, I wrote a blog post about it: <https://jonathanh.co.uk/blog/mutt-setup.html>
 
 I use [GNU Stow](https://www.gnu.org/software/stow/) to deploy my dotfiles. There is a helper script in the root of this directory called install.sh that runs the necessary stow commands.
 
