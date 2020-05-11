@@ -153,12 +153,8 @@ _arguments -C -s "${args[@]}" ':service:->hydra_service'  && return
 case $state in
 	hydra_service)
 	if compset -P "(${(j:|:)services})://"; then
-		notify-send "Line" "$line"
-		notify-send "Expl" "$expl"
 		_wanted servers expl 'server' _hosts && ret=0
 	else
-		notify-send "Line" "$line"
-		notify-send "Expl" "$expl"
 		_wanted services expl $state_descr compadd -S '://' -q -a services && ret=0
 	fi
 	;;
