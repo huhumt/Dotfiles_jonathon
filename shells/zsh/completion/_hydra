@@ -1,0 +1,166 @@
+#compdef hydra
+
+tokens=(${(z)LBUFFER})
+
+
+if [[ "${LBUFFER[-1]}" == " " ]]; then
+	previousArg="${tokens[-1]}"
+else
+	previousArg="${tokens[-2]}"
+fi
+
+services=(
+	"adam6500"
+	"asterisk"
+	"afp"
+	"cisco"
+	"cisco-enable"
+	"cvs"
+	"firebird"
+	"ftp"
+	"ftps"
+	"http-head"
+	"https-head"
+	"http-get"
+	"https-get"
+	"http-post"
+	"https-post"
+	"http-get-form"
+	"https-get-form"
+	"http-post-form"
+	"https-post-form"
+	"http-proxy"
+	"http-proxy-urlenum"
+	"icq"
+	"imap"
+	"imaps"
+	"irc"
+	"ldap2"
+	"ldap2s"
+	"ldap3"
+	"ldap3s"
+	"ldap3-crammd5"
+	"ldap3-crammd5s"
+	"ldap3-digestmd5"
+	"ldap3-digestmd5s"
+	"mssql"
+	"mysql"
+	"nntp"
+	"oracle-listener"
+	"oracle-sid"
+	"pcanywhere"
+	"pcnfs"
+	"pop3"
+	"pop3s"
+	"postgres"
+	"radmin2"
+	"redis"
+	"rexec"
+	"rlogin"
+	"rpcap"
+	"rsh"
+	"rtsp"
+	"s7-300"
+	"sip"
+	"smb"
+	"smtp"
+	"smtps"
+	"smtp-enum"
+	"snmp"
+	"socks5"
+	"ssh"
+	"sshkey"
+	"svn"
+	"teamspeak"
+	"telnet"
+	"telnets"
+	"vmauthd"
+	"vnc"
+	"xmpp"
+)
+
+min_max_charset(){
+	_message -r "$(hydra -x -h)"
+}
+
+service_help(){
+	_message -r "${hydra -U $previousArg}"
+}
+service_list(){
+	_describe "Services" services
+}
+
+
+
+args=(
+	"-R[restore a previous aborted/crashed session]"
+	"-I[ignore an existing restore file (don't wait 10 seconds)]"
+	"-S[perform an SSL connect]"
+	"-s[if the service is on a different default port, define it here]:value"
+	"-l[login with LOGIN name]:value"
+	"-L[load several logins from a file]:filename:_files"
+	"-p[try password PASS]:value"
+	"-P[load several passwords from a file]:filename:_files"
+	"-C[colon separated \"login:pass\" format, instead of -L/-P options]:filename:_files"
+	"-x[MIN:MAX:CHARSET  password bruteforce generation, type \"-x -h\" to get help]:min-max:min_max_charset"
+	"-y[disable use of symbols in bruteforce, see above]"
+	"-e[Extra passowrds to try options (nsr)]:nsr:_values -s '' \"Options\" \"n[Null Password]\" \"s[Login as Password]\" \"r[Reversed Login as Password]\""
+	"-u[loop around users, not passwords (effective! implied with -x)]"
+	"-M[list of servers to attack, one entry per line, ':' to specify port]:filename:_files"
+	"-o[write found login/password pairs to FILE instead of stdout]:filename:_files"
+	"-b[specify the format for the -o FILE]:format:_values \"Ouptut type\" text json jsonv1"
+	"-f[exit when a login/pass pair is found (-M: -f per host)]"
+	"-F[exit when a login/pass pair is found (-M: -F global)]"
+	"-t[run X number of connects in parallel per target (default: 16)]:value"
+	"-T[run X connects in parallel overall (for -M, default: 64)]:value"
+	"-w[wait x time for a response (32)]:value"
+	"-W[wait x time between connects per thread (0)]"
+	"-c[wait x time per login attempt over all threads (enforces -t 1)]"
+	"-4[use IPv4 (default)]"
+	"-6[use IPv6 addresses (put always in \[\] also in -M)]"
+	"-v[verbose mode]"
+	"-V[show login+pass for each attempt]"
+	"-d[debug mode]"
+	"-O[use old SSL v2 and v3]"
+	"-q[do not print messages about connection errors]"
+	"-U[service module usage details]:services:service_list"
+	"-h[COMPLETE HELP]"
+)
+
+declare -a delete
+if (( ${tokens[(I)-l]} )); then
+	delete=("-L" "-C")
+elif (( ${tokens[(I)-L]} )); then
+	delete=("-l" "-C")
+elif (( ${tokens[(I)-p]} )); then
+	delete=("-P" "-C")
+elif (( ${tokens[(I)-P]} )); then
+	delete=("-p" "-C")
+elif (( ${tokens[(I)-C]} )); then
+	delete=("-l" "-L" "-p" "-P")
+fi
+
+for target in "${delete[@]}"; do
+	args=("${(f)$(echo -e "${(pj:\n:)args}" | grep -v "^${target}")}")
+done
+	#&& fzf_dirs "$current" || fzf_files "$current"
+
+
+local -a line expl
+local -i ret=1
+typeset -A opt_args
+_arguments -C -s "${args[@]}" ':service:->hydra_service'  && return
+case $state in
+	hydra_service)
+	if compset -P "(${(j:|:)services})://"; then
+		notify-send "Line" "$line"
+		notify-send "Expl" "$expl"
+		_wanted servers expl 'server' _hosts && ret=0
+	else
+		notify-send "Line" "$line"
+		notify-send "Expl" "$expl"
+		_wanted services expl $state_descr compadd -S '://' -q -a services && ret=0
+	fi
+	;;
+esac
+ 

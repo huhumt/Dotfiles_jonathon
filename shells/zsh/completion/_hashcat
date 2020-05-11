@@ -1,5 +1,6 @@
 #compdef hashcat
 #
+#
 tokens=(${(z)LBUFFER})
 
 if [[ "${LBUFFER[-1]}" == " " ]]; then
@@ -30,6 +31,7 @@ _hashes(){
 	else
 		hashcat --example-hashes | awk -v RS="\n\n" -F "\t" '{gsub("\n","\t",$0); print $1 ":" $2 }' | sed 's/MODE: //; s/TYPE: //'
 	fi
+	return 0
 }
 
 _basic_section(){
@@ -64,8 +66,9 @@ best_guess(){
 
 case "$previousArg" in
 	-m|--hash-type)
-		hashes=("${(f)$(_hashes)}")
-		_describe "Hashes" hashes ;;
+		# hashes=("${(f)$(_hashes)}")
+		# _describe "Hashes" hashes ;;
+		compadd -- "$(_hashes)" ;;
 	-a|--attack-mode)
 		ops=("${(f)$(_basic_section "Attack Modes")}")
 		_describe "Modes" ops ;;
