@@ -84,7 +84,12 @@ min_max_charset(){
 }
 
 service_help(){
-	_message -r "${hydra -U $previousArg}"
+	if [ "$1" = "new" ]; then
+		service="$( echo "${tokens[-1]}" | cut -d':' -f1)"
+		_message -r "$(hydra -U $service)"
+	else
+		_message -r "$(hydra -U $previousArg)"
+	fi
 }
 service_list(){
 	_describe "Services" services
@@ -149,14 +154,87 @@ done
 local -a line expl
 local -i ret=1
 typeset -A opt_args
-_arguments -C -s "${args[@]}" ':service:->hydra_service'  && return
-case $state in
-	hydra_service)
-	if compset -P "(${(j:|:)services})://"; then
-		_wanted servers expl 'server' _hosts && ret=0
-	else
-		_wanted services expl $state_descr compadd -S '://' -q -a services && ret=0
-	fi
-	;;
-esac
- 
+
+
+# Hydra has 2 syntaxes. They are:
+#
+# hydra [some command line options] [-s PORT] TARGET PROTOCOL [MODULE-OPTIONS]
+# or
+# hydra [some command line options] PROTOCOL://TARGET:PORT/MODULE-OPTIONS
+#
+# The protocol:// option is considered the new version but can only be used if there is 1 target
+
+newSyntax="either"
+targetNeeded="true"
+
+# If the -M option is given, we need to use the old syntax
+if (( ${tokens[(I)-M]} )); then
+	newSyntax="false"
+	targetNeeded="false"
+fi
+
+if $(echo "$BUFFER" | grep -Eq "(${(j:|:)services}) "); then
+	newSyntax="false"
+fi
+
+
+#if [ "$newSyntax" != "false" ]; then
+#	_arguments -C -s "${args[@]}" ':service:->hydra_service'  && return
+#	case $state in
+#		hydra_service)
+#		if compset -P "(${(j:|:)services})://*/"; then
+#			service_help "new"
+#		elif compset -P "(${(j:|:)services})://*:"; then
+#			_message -r "service://host:port/options"
+#		elif compset -P "(${(j:|:)services})://"; then
+#			_hosts -S ':' && ret=0
+#		else
+#			compadd -S '://' -q -a services && ret=0
+#		fi
+#		;;
+#	esac
+#else
+	_arguments -C -s "${args[@]}" ':target:->param1' ':service:->param2'  ':options:->param3' && return
+	case $state in
+		param1)
+			if [ "$newSyntax" != "false" ]; then
+				if compset -P "(${(j:|:)services})://*/"; then
+					newSyntax="true"
+					service_help "new"
+				elif compset -P "(${(j:|:)services})://*:"; then
+					_message -r "service://host:port/options"
+					newSyntax="true"
+				elif compset -P "(${(j:|:)services})://"; then
+					_hosts -S ':'
+					newSyntax="true"
+				else
+					compadd -S '://' -q -a services
+				fi
+			fi
+
+			if [ "$newSyntax" != "true" ]; then
+				if [ "$targetNeeded" = "true" ]; then
+					_hosts
+				else
+					compadd -q -a services
+				fi
+			fi
+			;;
+		param2)
+			if [ "$newSyntax" != "true" ]; then
+				if [ "$targetNeeded" = "true" ]; then
+					compadd -q -a services
+				else
+					service_help
+				fi
+			fi
+			;;
+		param3)
+			if [ "$newSyntax" != "true" ]; then
+				if [ "$targetNeeded" = "true" ]; then
+					service_help
+				fi
+			fi
+			;;
+	esac
+#fi
