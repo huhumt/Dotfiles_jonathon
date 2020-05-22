@@ -1,0 +1,24 @@
+#!/usr/bin/env bash
+
+buildURL(){
+	if [ -n "$1" ]; then
+		in="$1"
+	else
+		in="$(cat -)"
+	fi
+	id="$(echo "$in" | cut -d '	' -f 1)"
+	mins="$(echo "$in" | cut -d '	' -f 4)"
+	secs="$(echo "$in" | cut -d '	' -f 5)"
+	seconds="$(( $mins * 60 + $secs ))"
+	echo -e "https://youtube.com/watch?v=$id&t=$seconds"
+}
+export -f buildURL
+
+url="$(curl https://ippsec.rocks/dataset.json 2>/dev/null |\
+	jq -cM '[.[] | {machine:.machine,ID:.videoId,mins:.timestamp.minutes,secs:.timestamp.seconds,line:.line}]' |\
+	jq -r '(map(keys) | add | unique) as $cols | map(. as $row | $cols | map($row[.])) as $rows | $cols, $rows[] | @tsv' |\
+	fzf -d '	' --with-nth '3,2' --header-lines 1 --preview-window 'up:1' --preview 'bash -c '\''buildURL "$0"'\'' {}' |\
+	buildURL)"
+
+open-youtube "$url"
+

@@ -1,14 +1,19 @@
 #!/bin/bash
 
-url="$1"
-
-notify-send "Opening Video" "$url"
-
-if [ -z "$url" ]; then
-	url=$(rofi -dmenu -p 'URL')
+isxclient=$( readlink /dev/fd/2 | grep -q 'tty' && [[ -n $DISPLAY ]] ; echo $? )
+if [[ ! -t 2  || $isxclient == "0" ]]; then
+	DMENU="rofi -dmenu -p"
+else
+	DMENU="fzf --prompt"
 fi
 
-code=$(youtube-dl "$url" -F | sed -n '/format code/,$ p' | tail -n +2 | rofi -dmenu -p Quality | awk '{print $1}')
+url="$1"
+
+if [ -z "$url" ]; then
+	url=$($DMENU 'URL')
+fi
+
+code=$(youtube-dl "$url" -F | sed -n '/format code/,$ p' | tail -n +2 | $DMENU Quality | awk '{print $1}')
 
 mpv "$url" --ytdl-format="$code"
 
