@@ -1,6 +1,14 @@
 # This file will try to provide completion before the default completion system
 # This allows me to overide parts of command completion. Normally, this is so I can use fzf.
 
+get_msfvenom_payloads(){
+	local cacheFile="$HOME/.msf4/store/modules_metadata.json"
+	sed -n '/"type": "payload"/,/"ref_name"/p' "$cacheFile" | \
+		grep -E '(ref_name|description)' | \
+		cut -d '"' -f 4 | \
+		sed -n 'h;n;p;g;p' | \
+		sed 'N;s/\n/:/; s/\\n.*$//'
+}
 overidecomplete(){
 	local tokens cmd toadd ret=1 lastWord
 	# http://zsh.sourceforge.net/FAQ/zshfaq03.html
@@ -37,7 +45,13 @@ overidecomplete(){
 					-S) toadd="$($cmd -Slq | fzf -m --preview "$cmd -Si {1}" | tr '\n' ' ')"; ret=0 ;;
 					# If I want to uninstall something, give a list of things to uninstall
 					-R*) toadd="$($cmd -Qq | fzf -m --preview "$cmd -Qi {1}" | tr '\n' ' ')"; ret=0 ;;
+					-Ql) toadd="$($cmd -Qq | fzf -m --preview "$cmd -Qi {1}" | tr '\n' ' ')"; ret=0 ;;
 				esac ;;
+			msfvenom)
+				case "$lastWord" in
+					-p|--payload) toadd="$(get_msfvenom_payloads | fzf -m -d \: --with-nth=1 --preview='echo {2}' --preview-window=up:1 | cut -d ':' -f 1| tr '\n' ' ')"; ret=0 ;;
+				esac ;;
+
 		esac
 	fi
 
