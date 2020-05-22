@@ -29,6 +29,8 @@ key[ShiftTab]="${terminfo[kcbt]}"
 [[ -n "${key[PageDown]}"  ]] && bindkey -- "${key[PageDown]}"  end-of-buffer-or-history
 [[ -n "${key[ShiftTab]}"  ]] && bindkey -- "${key[ShiftTab]}"  reverse-menu-complete
 
+bindkey -M viins "^q" push-input
+
 # Finally, make sure the terminal is in application mode, when zle is
 # active. Only then are the values from $terminfo valid.
 if (( ${+terminfo[smkx]} && ${+terminfo[rmkx]} )); then
@@ -89,3 +91,33 @@ rationalise-dot() {
 }
 zle -N rationalise-dot
 bindkey . rationalise-dot
+
+make_current_word_directory(){
+	tokens=(${(z)LBUFFER})
+	local folder="${tokens[-1]}" output
+	if [ "${folder[1]}" = '"' ] || [ "${folder[1]}" = "'" ]; then
+		folder=${folder:1}
+	else
+		folder="${folder//\\ / }"
+	fi
+	#folder="${folder%/*}"
+	if [ -e "$folder" ]; then
+		zle -M "$folder already exists"
+	else
+		output="$(mkdir -p "$folder" 2>&1)"
+		if [ $? -eq 0 ]; then
+			zle -M "$folder created"
+		else
+			zle -M "$output"
+		fi
+	fi
+}
+zle -N make_current_word_directory
+# Alt + m
+bindkey '\em' make_current_word_directory
+
+
+
+
+
+
