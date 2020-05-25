@@ -1,9 +1,26 @@
 #!/usr/bin/env bash
 
+if [ "$1" = "-h" ] || [ "$1" = "--help" ]; then
+	cat << 'EOF'
+Usage: clickjacking url [outfile]
+
+The script will use a headless version of firefox to screenshot a page containing the provided url in an iframe
+
+You will need to create a profile called headless for firefox before this will work.
+
+Open firefox and go to about:profiles to create one
+EOF
+	exit 0
+fi
 # Name of firefox binary
 firefox="firefox"
 # If firefox developer edition is installed, use that instead
 type "firefox-developer-edition" 2>&1 >/dev/null && firefox="firefox-developer-edition"
+
+die(){
+	echo "$@"
+	exit 1
+}
 
 # Name of firefox profile to use
 # This will need to be a profile that isn't currently open
@@ -13,6 +30,8 @@ profile="headless"
 
 # Url of site to put in iframe
 url="$1"
+
+[ -z "$url" ] && die "You need to provide a url"
 
 # Name of image to make
 output="${2:-screenshot.png}"
