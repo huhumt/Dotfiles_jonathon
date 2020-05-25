@@ -172,6 +172,10 @@ $endif$
 $if(colorlinks)$
 \usepackage{xcolor}
 $endif$
+
+\usepackage{sectsty}
+\sectionfont{\clearpage}
+
 \usepackage{hyperref}
 \hypersetup{
 $if(title-meta)$
