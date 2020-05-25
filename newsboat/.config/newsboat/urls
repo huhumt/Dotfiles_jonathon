@@ -1,10 +1,17 @@
+https://blog.filippo.io/rss/	go security
 https://blog.z3bra.org/rss/feed.xml	linux
-https://feeds.bbci.co.uk/news/rss.xml	news
+https://castel.dev/rss.xml
+#https://feeds.bbci.co.uk/news/rss.xml	news
 https://feeds.feedburner.com/ItsFoss	linux
-https://invidio.us/feed/channel/UC2C_jShtL725hvbm1arSV9w	invidious interest
-https://invidio.us/feed/channel/UC4w1YQAJMWOz4qtxinq55LQ	invidious tech
-https://invidio.us/feed/channel/UCBa659QWEk1AI4Tg--mrJ2A	invidious interest
+https://invidio.us/feed/channel/UC2C_jShtL725hvbm1arSV9w	invidious "~CGP Grey" interest
+https://invidio.us/feed/channel/UC4w1YQAJMWOz4qtxinq55LQ	invidious "~Level1Techs" tech
+https://invidio.us/feed/channel/UCOWcZ6Wicl-1N34H0zZe38w	invidious "~Level1Linux" linux
+https://invidio.us/feed/channel/UCa6eh7gCkpPo5XXUDfygQQA	invidious "~Ippsec" security
+https://invidio.us/feed/channel/UCBa659QWEk1AI4Tg--mrJ2A	invidious "~Tom Scott" interest
+https://invidio.us/feed/channel/UCFzGyNKXPAglNq28qWYTDFA	invidious "~Kai Hendry" linux
 https://invidio.us/feed/channel/UCXPHFM88IlFn68OmLwtPmZA	invidious "~Greg Hurrell - Vim Screencasts" linux
+https://invidio.us/feed/channel/UCgREucssIfY9e0Iy3yhse8w	invidious "~Nix Casts" linux
+https://jonathanh.co.uk/feed.rss
 https://jordanelver.co.uk/feed.xml	linux
 https://opensource.com/feed	linux
 https://pentestlab.blog/feed/	security
