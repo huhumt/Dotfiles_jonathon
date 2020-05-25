@@ -4,6 +4,7 @@
 [core]
 	editor = vim -c 'startinsert'
 	excludesfile = ~/.dotfiles/git/global_gitignore
+	pager = delta --theme='gruvbox' --plus-color="#98971a" --minus-color="#9d0006"
 [status]
 	submoduleSummary = true
 [alias]
