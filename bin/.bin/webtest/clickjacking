@@ -1,0 +1,53 @@
+#!/usr/bin/env bash
+
+# Name of firefox binary
+firefox="firefox-developer-edition"
+
+# Name of firefox profile to use
+# This will need to be a profile that isn't currently open
+# I suggest making one for headless use
+# go to about:profiles in firefox to create one
+profile="headless"
+
+# Url of site to put in iframe
+url="$1"
+
+# Name of image to make
+output="${2:-screenshot.png}"
+
+source="
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset='UTF-8' />
+		<meta name='viewport' content='width=device-width' />
+		<title>Clickjacking example</title>
+		<style type='text/css' media='screen'>
+body{
+	width: 100vw;
+	height: 100vh;
+	border: 2px solid black;
+}
+iframe{
+	border: 3px solid black;
+	width: 80%;
+	height: 80%;
+	margin: 20px auto;
+	display: block;
+}
+h1, p{
+	text-align: center;
+}
+		</style>
+	</head>
+	<body>
+		<h1>Clickjacking example</h1>
+		<iframe src='$url'>
+		</iframe>
+		<p>If content is rendered above, the site is vulnerable to clickjacking</p>
+	</body>
+</html>
+"
+
+
+firefox-developer-edition -P headless --screenshot "$output" "data:text/html;base64,$(echo "$source" | base64 -w 0)"
