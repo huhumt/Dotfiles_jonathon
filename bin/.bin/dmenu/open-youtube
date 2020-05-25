@@ -13,7 +13,13 @@ if [ -z "$url" ]; then
 	url=$($DMENU 'URL')
 fi
 
-code=$(youtube-dl "$url" -F | sed -n '/format code/,$ p' | tail -n +2 | $DMENU Quality | awk '{print $1}')
+code=$( ( youtube-dl "$url" -F; echo "bb        Best of both") | sed -n '/format code/,$ p' | tail -n +2 | $DMENU "Quality " -m | awk '{print $1}')
 
-mpv "$url" --ytdl-format="$code"
+code="$(echo "$code" | tr '\n' '+' | sed 's/+$//')"
+notify-send "$code"
+
+case "$code" in
+	"bb") mpv "$url" --ytdl-format="bestvideo+bestaudio" ;;
+	*) mpv "$url" --ytdl-format="$code"
+esac
 
