@@ -24,13 +24,13 @@ if [ "$sourced" = "True" ]; then
 	fzf_files(){
 		# The directory can be passed as arg1
 		dir="${1:-$PWD}"
-		fd --type f --hidden --follow --color=always --exclude .git --exclude .PlayOnLinux --exclude "PlayOnLinux's virtual drives" . "$dir"
+		fd --type f --hidden --follow --color=always --exclude node_modules --exclude .git --exclude .PlayOnLinux --exclude "PlayOnLinux's virtual drives" . "$dir"
 	}
 
 
 	fzf_dirs(){
 		dir="${1:-$PWD}"
-		fd --type d --hidden --follow --color=always --exclude .git --exclude .PlayOnLinux --exclude "PlayOnLinux's virtual drives" . "$dir"
+		fd --type d --hidden --follow --color=always --exclude node_modules --exclude .git --exclude .PlayOnLinux --exclude "PlayOnLinux's virtual drives" . "$dir"
 	}
 
 	# This function is used to provide the ctrl+t completion for fzf
