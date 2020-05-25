@@ -22,6 +22,8 @@ fi
 filename="$(date +"%Y-%m-%dT%H-%M-%SZ").png"
 file="${path}/${filename}"
 
+[ "$1" = "-w" ] && sleep "$2" && shift && shift
+
 case $1 in
 	"window")
 		maim -i $(xdotool getactivewindow) "$file"
@@ -35,9 +37,11 @@ case $1 in
 		;;
 esac
 
-# Copies the image to your clipboard (ctrl + v)
-xclip -selection clipboard -target image/png -i "$file"
-# Copies the filename to primary selection (shift + insert or middle mouse)
-echo -n "$file" | xclip -selection primary
-# Creates notification with file name
-command -v notify-send > /dev/null && notify-send "New Screenshot" "$file"
+if [ -f "$file" ]; then
+	# Copies the image to your clipboard (ctrl + v)
+	xclip -selection clipboard -target image/png -i "$file"
+	# Copies the filename to primary selection (shift + insert or middle mouse)
+	echo -n "$file" | xclip -selection primary
+	# Creates notification with file name
+	command -v notify-send > /dev/null && notify-send "New Screenshot" "$file"
+fi
