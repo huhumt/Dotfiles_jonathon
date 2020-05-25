@@ -1,7 +1,9 @@
 #!/usr/bin/env bash
 
 # Name of firefox binary
-firefox="firefox-developer-edition"
+firefox="firefox"
+# If firefox developer edition is installed, use that instead
+type "firefox-developer-edition" 2>&1 >/dev/null && firefox="firefox-developer-edition"
 
 # Name of firefox profile to use
 # This will need to be a profile that isn't currently open
@@ -50,4 +52,4 @@ h1, p{
 "
 
 
-firefox-developer-edition -P headless --screenshot "$output" "data:text/html;base64,$(echo "$source" | base64 -w 0)"
+$firefox -P "$profile" --screenshot "$output" "data:text/html;base64,$(echo "$source" | base64 -w 0)"
