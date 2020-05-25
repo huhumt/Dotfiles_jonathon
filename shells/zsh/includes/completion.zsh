@@ -19,6 +19,8 @@ zstyle ':completion:*' format ' %F{yellow}-- %d --%f'
 zstyle ':completion:*' group-name ''
 zstyle ':completion:*' verbose yes
 
+export LISTMAX=-1
+
 zmodload zsh/complist
 compinit
 #
