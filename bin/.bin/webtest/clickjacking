@@ -24,7 +24,7 @@ die(){
 # This will need to be a profile that isn't currently open
 # I suggest making one for headless use
 # go to about:profiles in firefox to create one
-profile="test"
+profile="headless"
 
 # Url of site to put in iframe
 url="$1"
