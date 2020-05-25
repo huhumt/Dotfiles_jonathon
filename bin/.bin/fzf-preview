@@ -1,0 +1,53 @@
+#!/usr/bin/env bash
+
+# As best I can tell, zsh doesn't have the ability to export functions so I created this script instead
+# This is only used by the file /shells/zsh/includes/fzf.zsh
+
+preview="$1"
+RED='\033[0;31m'
+YELLOW='\033[0;33m'
+GREEN='\033[0;32m'
+NC='\033[0m'
+
+# prints dir git info
+gitInfo(){
+	local dir="$1"
+	cd "$dir"
+	local repoTopLevel="$(command git rev-parse --show-toplevel 2> /dev/null)"
+	local branch="$(git branch --show-current 2> /dev/null)"
+	if [ -n "$branch" ]; then
+		local tag="$(git describe --tags --exact-match HEAD 2> /dev/null)"
+		local ret=""
+		[ -n "$branch" ] && ret=" $branch "
+		[ -n "$tag" ] && ret+=" $tag "
+		[ -n "$ret" ] || ret="$(git rev-parse --short HEAD 2> /dev/null)"
+		local repoTopLevel="$(command git rev-parse --show-toplevel 2> /dev/null)"
+		local untrackedFiles=$(command git ls-files --others --exclude-standard "${repoTopLevel}" 2> /dev/null)
+		local modified=$(command git diff --name-only 2> /dev/null)
+		local staged=$(command git diff --staged --name-only 2> /dev/null)
+		if [ -n "$untrackedFiles" ]; then
+			ret+=" "
+		fi
+		if [ -n "$modified" ]; then
+			ret+=" "
+		fi
+		if [ -n "$staged" ]; then
+			ret+=" "
+		fi
+		echo -e "$ret"
+	fi
+}
+
+directoryInfo(){
+	local dir="$1"
+	local git="$(gitInfo "$dir")"
+	local size="Size: $(du -hs "$dir" | cut -f 1)"
+	echo -e "$GREEN$git $YELLOW$size $NC" | sed -e 's/^[[:space:]]*//'
+}
+
+if [ -d "$preview" ]; then
+	directoryInfo "$preview"
+	ls -lah --color "$preview" | sed '/^total/d'
+else
+	bat --style=numbers --color=always "$preview"
+fi
