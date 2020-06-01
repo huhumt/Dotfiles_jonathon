@@ -7,6 +7,9 @@
 # Will create notification containing file path
 #
 # If you have a project specified, it will put the sceenshot in that folder instead of /tmp
+#
+# Relies on maim for taking screenshot
+# If you give it the -o flag for ocr, it needs tesseract
 
 path='/tmp'
 command -v maim > /dev/null && screenshooter="maim" || ( echo -n "You need to install maim\nhttps://github.com/naelstrof/maim" && exit 1 )
