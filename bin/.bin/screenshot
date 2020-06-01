@@ -10,6 +10,7 @@
 
 path='/tmp'
 command -v maim > /dev/null && screenshooter="maim" || ( echo -n "You need to install maim\nhttps://github.com/naelstrof/maim" && exit 1 )
+ocr="false"
 
 #If a project is set we will put screenshots in the project's folder
 command -v project > /dev/null && project=$(project current --path)
@@ -23,6 +24,7 @@ filename="$(date +"%Y-%m-%dT%H-%M-%SZ").png"
 file="${path}/${filename}"
 
 [ "$1" = "-w" ] && sleep "$2" && shift && shift
+[ "$1" = "-o" ] && ocr="true" && shift
 
 case $1 in
 	"window")
@@ -38,10 +40,23 @@ case $1 in
 esac
 
 if [ -f "$file" ]; then
-	# Copies the image to your clipboard (ctrl + v)
-	xclip -selection clipboard -target image/png -i "$file"
-	# Copies the filename to primary selection (shift + insert or middle mouse)
-	echo -n "$file" | xclip -selection primary
-	# Creates notification with file name
-	command -v notify-send > /dev/null && notify-send "New Screenshot" "$file"
+	if [ "$ocr" == "true" ]; then
+		# Input and output files look the same because tesseract adds .txt to whatever we give as the output file
+
+		tesseract "$file" "$file"
+		LINES=$(wc -l < "${file}.txt")
+		if [ "$LINES" -eq 0 ]; then
+			notify-send "ocr" "no text was detected\nimage file at $file"
+			exit 1
+		fi
+		cat "${file}.txt" | xclip -selection clipboard
+		echo -n "${file}.txt" | xclip -selection primary
+	else
+		# Copies the image to your clipboard (ctrl + v)
+		xclip -selection clipboard -target image/png -i "$file"
+		# Copies the filename to primary selection (shift + insert or middle mouse)
+		echo -n "$file" | xclip -selection primary
+		# Creates notification with file name
+		notify-send "New Screenshot" "$file"
+	fi
 fi
