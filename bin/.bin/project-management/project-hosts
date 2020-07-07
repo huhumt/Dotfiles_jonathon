@@ -64,7 +64,7 @@ function getip(){
 	index="$current/index.yaml"
 	case "$1" in
 		--fzf)
-			ip=$( listhosts | fzf --no-preview | cut -d',' -f1)
+			ip=$( listhosts | fzf -1 --no-preview | cut -d',' -f1)
 			;;
 		--dmenu)
 			ip=$( listhosts | dmenu | cut -d',' -f1)
@@ -77,7 +77,7 @@ function getip(){
 			echo "$ip" | xclip -selection clipboard
 			;;
 		*)
-			ip=$( listhosts | fzf --no-preview | cut -d',' -f1)
+			ip=$( listhosts | fzf -1 --no-preview | cut -d',' -f1)
 			;;
 	esac
 	echo $ip
