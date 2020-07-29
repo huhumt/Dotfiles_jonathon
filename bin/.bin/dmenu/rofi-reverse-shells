@@ -52,7 +52,8 @@ function display() {
 	echo -n "$reverseShell" | /usr/bin/xclip -i -selection clipboard
 	echo -n "$reverseShell" | /usr/bin/xclip -i -selection primary
 
-	nc -lvnp $port
+	resize-netcat-listener -r /home/jonathan/go/src/resize-nc-listener/examples/stty-resize-copy $port
+	#nc -lvnp $port
 	#Put the tty back to normal
 	# This is useful if I got a nice shell before
 	stty -raw echo
