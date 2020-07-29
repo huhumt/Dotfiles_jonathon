@@ -1,61 +1,37 @@
-# These alow me to easily set the file and folder permissions for a wordpress instilation.
-alias folder-perms='find . -type d -not -path "./.git/*" -not -path "./.git" -not -path "./node_modules/*" -not -path "./node_modules" -not -perm 775 -exec chmod 775 {} \;'
-alias file-perms='find . -type f -not -path "./.git/*" -not -path "./.git" -not -path "./node_modules/*" -not -path "./node_modules" -not -perm 664 -exec chmod 664 {} \;'
-alias wp-perms='folder-perms; file-perms'
-alias magentoPerms='cd ${PWD%/public_html*}/public_html;sudo chown -R jonathan:http .; folder-perms; file-perms; chmod +x bin/*; cd -'
-alias upgr='magento setup:upgrade && magento setup:di:compile && magentoPerms'
-                       #
-# Make ls add Indicator#s to file names and colour the output
-alias ls='ls -F --color=auto'
-
-# Make tree add indicators and color
-alias tree='tree -F -C'
-
-# Make qmv open on 1 column mode
-alias qmv='qmv -f do'
-
-alias msfconsole="( systemctl status --no-pager postgresql.service > /dev/null || (echo \"Statring postgres\"; sudo systemctl start postgresql.service) ); ( pass show system/metasploit/database.yaml > database.yaml; sudo msfconsole -y database.yaml; rm database.yaml )"
-
-#Start cups
-alias cups='sudo systemctl start org.cups.cupsd.service'
-
-#Start network manager
-alias net='sudo systemctl start NetworkManager.service'
-
-# Alias lampp because I don't want to clog my PATH
-#alias lampp='/opt/lampp/lampp'
-#alias glampp='gksudo /opt/lampp/manager-linux-x64.run'
-#alias php='/opt/lampp/bin/php'
-#alias php-cgi='/opt/lampp/bin/php-cgi'
-#alias php-config='/opt/lampp/bin/php-config'
+##########################
+#  Add flags by default  #
+##########################
 
 #Always make all directories necesary
 alias mkdir='mkdir -p'
 
-# Shortcut for rewriting wp permalinks
-alias perms='wp rewrite flush'
+# Make qmv open on 1 column mode
+alias qmv='qmv -f do'
 
-#Clear terminal and try to get moon phase. If it takes longer than .5 seconds then it will show neofetch
-alias cls='clear; timeout 0.5s weather moon || neofetch'
-
-#An alias for my standard less configuration
-#I don't set it to lessc because sometimes I don't use this config and I always forget how to ignore an alias
-#alias myless='lessc --clean-css --source-map-basepath=/home/jonathan/Sites/charts/public_html --source-map --autoprefix="last 3 versions, ie >= 9" styles.less styles.min.css'
+#An alias for my standard less configuration I don't set it to lessc because
+#sometimes I don't use this config and I always forget how to ignore an alias
+#alias myless='lessc --clean-css
+#--source-map-basepath=/home/jonathan/Sites/charts/public_html --source-map
+#--autoprefix="last 3 versions, ie >= 9" styles.less styles.min.css'
 alias myless='lessc --clean-css --source-map --autoprefix="last 3 versions, ie >= 11" styles.less styles.min.css'
-
-# Git shortcuts
-alias status='git status '
-alias st='git status'
-alias checkout='git checkout'
-alias ch='git checkout'
-alias push='git push '
-alias pull='git pull '
-alias bb='git open'
-alias merge='git merge'
-alias mg='git merge'
 
 # Always make grep ouput color
 alias grep="grep --color=auto"
+
+#Make the cal command default to start on Sunday
+alias cal='cal -s'
+
+# Makes jq use colour
+alias jq="jq -C"
+
+# Use the config files I want
+alias mbsync="mbsync -c \"$XDG_CONFIG_HOME/isync/mbsyncrc.secret\""
+alias imapfilter="imapfilter -c \"$XDG_CONFIG_HOME/imapfilter/config.lua\""
+
+
+####################
+#  Path Shortcuts  #
+####################
 
 # Shortcuts to sites folder
 alias sites="cd ~/Sites"
@@ -75,45 +51,20 @@ alias db="cd ~/Dropbox/"
 alias home="cd ~/"
 alias ~="cd ~/"
 
-#Goes up to the public_html folder
-alias ph='cd ${${PWD%/public_html*}%/wiki*}/public_html'
-alias wiki='cd ${${PWD%/public_html*}%/wiki*}/wiki'
-
-#Edit wp-config.php using $EDITOR
-alias conf='$EDITOR ${PWD%/public_html*}/public_html/wp-config.php'
-
-# Quit the terminal using :q (The same as Vi/Vim)
-alias :q='exit;'
-alias q='exit;'
-
-# Not sure why and how but this makes sudo work with my aliases
-alias sudo='sudo '
-
-#Make the cal command default to start on Sunday
-alias cal='cal -s'
-
-# update the third party wordpress plugins we are mirroring
-alias u3p='update3rdPartyPlugins'
-
-# Edit my bashrc
-alias brc='$EDITOR ~/.bashrc'
-
-# Edit my vimrc
-alias vrc='$EDITOR ~/.vimrc'
-
 # Go to my .vim folder
 alias .v='cd ~/.vim/'
 
-alias df='cd ~/.dotfiles'
+# Got to my dotfiles folder
+alias .f='cd ~/.dotfiles'
 
-#Make vim start in server mode
-#alias vim='vim --servername jab2870'
+# Edit my vimrc
+alias vrc='$EDITOR ~/.dotfiles/vim/.vim/vimrc'
 
-# moon phase
-alias moonphase='weather moon'
 
-#Get arch news
-alias archNews='w3m https://www.archlinux.org/ | sed -n "/Latest News/,/Older News/ p" | head -n -1 | less'
+
+####################
+#  Radio Stations  #
+####################
 
 #Radio Stations
 AUDIO="mpv --input-ipc-server=/tmp/mpvsocket"
@@ -123,62 +74,100 @@ alias classic="$AUDIO http://icy-e-bab-04-cr.sharp-stream.com/absoluteradio.mp3"
 alias absolute="$AUDIO 'http://network.absoluteradio.co.uk/core/audio/mp3/live.pls?service=vrbb'"
 alias magic="$AUDIO 'http://www.radiofeeds.co.uk/bauer.pls?station=magicnational.mp3.m3u'"
 
-alias bs="curl -s http://cbsg.sourceforge.net/cgi-bin/live | grep -Eo '^<li>.*</li>' | sed -r -e 's/<\/?li>//g' | shuf -n 1 | cowsay"
+##########
+#  sudo  #
+##########
+#
+# Not sure why and how but this makes sudo work with my aliases
+alias sudo='sudo '
 
-alias jq="jq -C"
-
-alias debugBuild='node --inspect-brk /usr/bin/grunt build'
-
-#alias lc="colorls -r"
-
-#alias open="$TERMINAL & disown"
-
-#audiable to mp3
-alias aa2mp3='ffmpeg -f concat -safe 0 -i <(for f in *.aa; do echo "file '"'"'$(pwd)/$f'"'"'";done) output.mp3'
-
-# Fix Typos
-alias cim="vim"
-alias vom="vim"
-alias vin="vim"
-alias vi="vim"
-alias v="vim"
-
-# Updates time using ntp
-alias updateTime="sudo ntpd -qg"
-
-# Keyboard - reset
-# Sometimes, if I turn the screens off, the keyboard resets itself to defaults. Not sure why but this will put my keyboard back to how I like it
-#alias kb="xmodmap ~/.Xmodmap; xset r rate 200 70; xcape"
-alias kb="setxkbmap -layout gb,gb -variant \"colemak,\" -option grp:shifts_toggle; xset r rate 200 70; xinput --list | grep -E 'ErgoDox EZ ErgoDox EZ\s+id' | grep -oE 'id=[0-9]+' | cut -d'=' -f2 | xargs setxkbmap -layout gb -device"
-
-alias colemak="setxkbmap -layout gb,gb -variant \"colemak,\" -option grp:shifts_toggle"
-alias qwerty="setxkbmap -layout gb"
-
-alias ol="open-local"
-
-alias globalip="drill myip.opendns.com @resolver1.opendns.com | sed -n '/ANSWER SECTION/,/AUTHORITY SECTION/ p' | sed -n '2 p' | awk '{print \$5}'"
-
-alias ss="tail -n +2 /usr/share/exploitdb/files_exploits.csv | awk -F ',' '{print \$2 \"\t\" \$3 \"\t(\" \$1 \")\"}' | fzf --preview-window=up --preview='echo {} | cut -d\"	\" -f1 | xargs echo \"/usr/share/exploitdb/\" | tr -d \" \" | xargs bat --color=always' | cut -d'	' -f3 | tr -d \"()\" | xargs searchsploit -m"
-
-alias ddg="ddgr"
-
+# Being in the docker group is essentually being root so use sudo instead
+# https://github.com/moby/moby/issues/9976
 alias docker="sudo docker"
 alias docker-compose="sudo docker-compose"
 
-type rmtrash > /dev/null && alias rm="rmtrash"
-type rmdirtrash > /dev/null && alias rmdir="rmdirtrash"
+###################
+#  Upgrade tools  #
+###################
+# This section is for tools that replace common tools
+# I only do this if the flag syntax is the same of very similar
 
-alias rs="rofi-reverse-shells"
+# If exa is available, alias ls to exa, otherwise alias to ls with colour and
+# indicators
+type -p exa > /dev/null && alias ls="exa -F" || alias ls='ls -F --color=auto'
+type -p exa > /dev/null && alias l="exa -lahg --git --grid" || alias l="ls -lah"
 
-# Armory Aliases
+# Make tree add indicators and color
+# If exa is available, use it instead
+type -p exa > /dev/null && alias tree="exa -FT" || alias tree='tree -F -C'
+
+# Alias cat to bat if it's available
+type -p bat > /dev/null && alias cat="bat"
+
+# If nvim is available, alias vim to neovim
+type -p nvim > /dev/null && alias vim="nvim"
+
+# Trash instead of rm
+type -p rmtrash > /dev/null && alias rm="rmtrash"
+type -p rmdirtrash > /dev/null && alias rmdir="rmdirtrash"
+
+
+# These don't have the same syntax but I want to be reminded of the better
+# versions
+type mycli > /dev/null && alias mysql="echo \"You might want to use mycli instead\"; /usr/bin/mysql"
+type pgcli > /dev/null && alias postgres="echo \"You might want to use pgcli instead\"; /usr/bin/postgres"
+
+###################
+#  Git Shortcuts  #
+###################
+
+alias status='git status '
+alias st='git status'
+alias checkout='git checkout'
+alias ch='git checkout'
+alias push='git push '
+alias pull='git pull '
+alias bb='git open'
+alias merge='git merge'
+alias mg='git merge'
+alias switch='git switch'
+alias sw='git switch'
+
+#######################
+#  typos / shortcuts  #
+#######################
+
+alias vim="nvim"
+alias cim="nvim"
+alias vom="nvim"
+alias vin="nvim"
+alias vi="nvim"
+alias v="nvim"
+
+alias cls="clear"
+#Clear terminal and try to get moon phase. If it takes longer than .5 seconds then it will show neofetch
+#alias cls='clear; timeout 0.5s weather moon || neofetch'
+
+# Quit the terminal using :q (The same as Vi/Vim)
+alias :q='exit;'
+alias q='exit;'
+
+alias rnc="resize-netcat-listener -r $HOME/go/src/resize-nc-listener/examples/stty-resize-copy"
+
+################
+#  Pentesting  #
+################
+
+# Start postgres for msfconsole
+# In time, use docker instead
+alias msfconsole="( systemctl status --no-pager postgresql.service > /dev/null || (echo \"Statring postgres\"; sudo systemctl start postgresql.service) ); ( pass show system/metasploit/database.yaml > database.yaml; sudo msfconsole -y database.yaml; rm database.yaml )"
+
+alias ss="tail -n +2 /usr/share/exploitdb/files_exploits.csv | awk -F ',' '{print \$2 \"\t\" \$3 \"\t(\" \$1 \")\"}' | fzf --preview-window=up --preview='echo {} | cut -d\"	\" -f1 | xargs echo \"/usr/share/exploitdb/\" | tr -d \" \" | xargs bat --color=always' | cut -d'	' -f3 | tr -d \"()\" | xargs searchsploit -m"
 
 ARMORY="$HOME/GitRepos/armoury"
 alias surecheckImport="$JAVA_HOME/bin/java -jar $ARMORY/host_build_reviews/windows/SurecheckImport/SurecheckImport_v0.2.jar "
 
 alias rot13="tr 'A-Za-z' 'N-ZA-Mn-za-m'"
-
-type mycli > /dev/null && alias mysql="echo \"You might want to use mycli instead\"; /usr/bin/mysql"
-type pgcli > /dev/null && alias postgres="echo \"You might want to use pgcli instead\"; /usr/bin/postgres"
 
 # These aliases are related to projects
 # Make sqlmap put output in the current project folder
@@ -192,13 +181,112 @@ alias pc="project switch --fzf"
 # Create a new project
 alias pn="project new"
 
-alias tl="tldr -a | tr ',' '\n' | tr -d ' ' | fzf --preview='tldr {} -m | bat -l markdown --color always' | xargs tldr -m | bat -l markdown --color always"
-
 alias snmp-check="/usr/bin/snmpcheck-nothink"
-
-alias chrome-curl="node $HOME/GitRepos/chrome-curl/index.js"
 
 #alias irmgpg="gpg --no-default-keyring --keyring=irm.gpg"
 alias irmgpg="gpg --options ~/.gnupg/irmgpg.conf --keyring=irm.gpg"
 
 alias weakopenssl="$HOME/GitRepos/openssl-weak/openssl-1.0.2-chacha/apps/openssl"
+
+
+##############
+#  Keyboard  #
+##############
+
+# Keyboard - reset
+# Sometimes, if I turn the screens off, the keyboard resets itself to defaults. Not sure why but this will put my keyboard back to how I like it
+#alias kb="xmodmap ~/.Xmodmap; xset r rate 200 70; xcape"
+alias kb="setxkbmap -layout gb,gb -variant \"colemak,\" -option grp:shifts_toggle; xset r rate 200 70; xinput --list | grep -Ei 'ErgoDox EZ\s+id' | grep -oE 'id=[0-9]+' | cut -d'=' -f2 | xargs setxkbmap -layout gb -device"
+
+alias colemak="setxkbmap -layout gb,gb -variant \"colemak,\" -option grp:shifts_toggle"
+alias qwerty="setxkbmap -layout gb"
+
+#################
+#  Web Searches  #
+#################
+
+alias ws="websearch"
+alias aw="websearch aw"
+alias wiki="websearch wiki"
+alias aur="websearch aur"
+alias ddg="BROWSER=\"w3m\" ddgr"
+#
+#############
+#  Web Dev  #
+#############
+
+# These alow me to easily set the file and folder permissions for a wordpress instilation.
+alias folder-perms='find . -type d -not -path "./.git/*" -not -path "./.git" -not -path "./node_modules/*" -not -path "./node_modules" -not -perm 775 -exec chmod 775 {} \;'
+alias file-perms='find . -type f -not -path "./.git/*" -not -path "./.git" -not -path "./node_modules/*" -not -path "./node_modules" -not -perm 664 -exec chmod 664 {} \;'
+alias wp-perms='folder-perms; file-perms'
+
+# Same for Magento
+alias magentoPerms='cd ${PWD%/public_html*}/public_html;sudo chown -R jonathan:http .; folder-perms; file-perms; chmod +x bin/*; cd -'
+alias magentoUpgr='magento setup:upgrade && magento setup:di:compile && magentoPerms'
+
+# Shortcut for rewriting wp permalinks
+alias perms='wp rewrite flush'
+
+#Goes up to the public_html folder
+alias ph='cd ${${PWD%/public_html*}%/wiki*}/public_html'
+alias wiki='cd ${${PWD%/public_html*}%/wiki*}/wiki'
+
+#Edit wp-config.php using $EDITOR
+alias wpconf='$EDITOR ${PWD%/public_html*}/public_html/wp-config.php'
+
+##########
+#  Misc  #
+##########
+
+#Start cups
+alias cups='sudo systemctl start org.cups.cupsd.service'
+
+# moon phase
+alias moonphase='weather moon'
+
+#audiable to mp3
+alias aa2mp3='ffmpeg -f concat -safe 0 -i <(for f in *.aa; do echo "file '"'"'$(pwd)/$f'"'"'";done) output.mp3'
+
+# Updates time using ntp
+alias updateTime="sudo ntpd -qg"
+
+alias globalip="drill myip.opendns.com @resolver1.opendns.com | sed -n '/ANSWER SECTION/,/AUTHORITY SECTION/ p' | sed -n '2 p' | awk '{print \$5}'"
+
+alias chrome-curl="node $HOME/GitRepos/chrome-curl/index.js"
+
+if type grc > /dev/null 2>&1; then
+	for cmd in "nmap" "ping" "traceroute" "mount" "netstat" "ps" "dig" "du" "df" "ip" "iptables" "lsblk" "id" "free" "tcpdump" "uptime" "showmount" "whois" ; do
+		alias "$cmd"="grc $(whence $cmd)"
+		alias "${cmd}c"="grc --colour=on $(whence $cmd)"
+	done
+fi
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

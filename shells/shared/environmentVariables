@@ -1,9 +1,12 @@
 export LANG="en_GB.UTF-8"
 export TERMINAL=/usr/local/bin/st
 export TERM=xterm-256color
-export EDITOR='vim'
+type -p nvim > /dev/null && export EDITOR="nvim" || export EDITOR="vim"
 export READER='zathura'
+export BROWSER="firefox-developer-edition"
 export CDPATH=.:~:~/Projects:~/.dotfiles
+export GOPATH="$HOME/go"
+export NODE_PATH='/usr/lib/node_modules/'
 
 #Adds a list of all the sub directories in my .bin folder to a variable called mypath
 mypath="$HOME/.bin"
@@ -12,7 +15,7 @@ for d in "$HOME"/.bin/*/; do
     mypath+=":$d"
 done
 
-export PATH=~/Projects/current/bin:$mypath:$PATH:.
+export PATH=~/Projects/current/bin:$mypath:$GOPATH/bin:$PATH:.
 
 #Ruby things
 GEM_HOME=$(ls -t -U | ruby -e 'puts Gem.user_dir')
@@ -20,6 +23,13 @@ GEM_PATH=$GEM_HOME
 export PATH=$PATH:$GEM_HOME/bin
 export GEM_HOME=$(ruby -e 'print Gem.user_dir')
 
+export PATH=$PATH:$HOME/node_modules/.bin
+
+export XDG_CONFIG_HOME="$HOME/.config"
+export XDG_CACHE_HOME="$HOME/.cache"
+export XDG_DATA_HOME="$HOME/.local/share"
+
+export NOTMUCH_CONFIG="${XDG_CONFIG_HOME}/notmuch/config"
 
 export LESS_TERMCAP_mb=$'\e[1;36m'
 export LESS_TERMCAP_md=$'\e[1;36m'
