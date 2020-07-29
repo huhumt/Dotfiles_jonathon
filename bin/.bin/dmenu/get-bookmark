@@ -1,6 +1,13 @@
 #!/usr/bin/env bash
 
-BOOKMARKS="$HOME/.surf/bookmarks/"
+BOOKMARKS="$HOME/.local/share/bookmarks/"
+
+isxclient=$( readlink /dev/fd/2 | grep -q 'tty' && [[ -n $DISPLAY ]] ; echo $? )
+if [[ ! -t 2  || $isxclient == "0" ]]; then
+	DMENU="rofi -dmenu"
+else
+	DMENU="fzf"
+fi
 
 function formatFile(){
 	keywords="$(grep -E '^keywords:' "$1" | sed 's/^keywords://')"
@@ -10,7 +17,7 @@ export -f formatFile
 
 if [ -d "$BOOKMARKS" ]; then
 	cd "$BOOKMARKS"
-	selection=$(find . -type f -exec bash -c 'formatFile "{}"' \; | dmenu -l 20 | sed 's/ : .*//')
+	selection=$(fd --type f --exclude README.md --exec bash -c 'formatFile "{}"' ";" . | $DMENU | sed 's/ : .*//')
 	if [ -f "$selection" ]; then
 		head -n 1 "$selection"
 	fi
