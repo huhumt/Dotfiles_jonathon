@@ -169,9 +169,8 @@ $endif$
 $if(verbatim-in-note)$
 \usepackage{fancyvrb}
 $endif$
-$if(colorlinks)$
+
 \usepackage{xcolor}
-$endif$
 
 \usepackage{sectsty}
 \sectionfont{\clearpage}
