@@ -5,12 +5,8 @@
 
 # This is necesary becuase environment variables are lost when calling from newsboat for some reason
 
-notify-send "I get here"
-
 url="$1"
 browser="${BROWSER:-firefox-developer-edition}"
-
-notify-send "Opening" "$url"
 
 case "$url" in
 	*"//invidio.us/"*) open-youtube "$url"; exit 0 ;;
