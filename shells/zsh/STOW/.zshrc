@@ -57,6 +57,7 @@ TRAPWINCH(){
 }
 
 setopt autocd
+setopt chaselinks
 
 # I use initial command in my folder-shell script
 # This is normally empty, but might be lf or ranger if I want to open it
