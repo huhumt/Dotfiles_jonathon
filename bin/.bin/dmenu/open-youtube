@@ -16,7 +16,6 @@ fi
 code=$( ( youtube-dl "$url" -F; echo "bb        Best of both") | sed -n '/format code/,$ p' | tail -n +2 | $DMENU "Quality " -m | awk '{print $1}')
 
 code="$(echo "$code" | tr '\n' '+' | sed 's/+$//')"
-notify-send "$code"
 
 case "$code" in
 	"bb") mpv "$url" --ytdl-format="bestvideo+bestaudio" ;;
