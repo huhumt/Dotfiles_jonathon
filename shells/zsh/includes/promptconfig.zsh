@@ -120,23 +120,29 @@ prompt_git(){
 		[ -n "$branch" ] && ret=" $branch "
 		[ -n "$tag" ] && ret+=" $tag "
 		[ -n "$ret" ] || ret="$(git rev-parse --short HEAD 2> /dev/null)"
-		local repoTopLevel="$(command git rev-parse --show-toplevel 2> /dev/null)"
 		local untrackedFiles=$(command git ls-files --others --exclude-standard "${repoTopLevel}" 2> /dev/null)
 		local modified=$(command git diff --name-only 2> /dev/null)
 		local staged=$(command git diff --staged --name-only 2> /dev/null)
+		local conflicts=$(command git status --porcelain | grep  -E '^(.?U|DD|AA)')
 
+		local tokens
 		if [ -n "$untrackedFiles" ]; then
-			ret+=" "
+			tokens+=" "
 			color="orange1"
 		fi
 		if [ -n "$modified" ]; then
-			ret+=" "
+			tokens+=" "
 			color="orange1"
 		fi
 		if [ -n "$staged" ]; then
-			ret+=" "
+			tokens+=" "
 			color="orange1"
 		fi
+		if [ -n "$conflicts" ]; then
+			tokens=" "
+			color="red1"
+		fi
+		ret+="$tokens"
 	fi
 	ret="$(echo "$ret" | sed -e 's/ *$//')"
 	echo "$ret"
