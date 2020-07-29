@@ -19,7 +19,7 @@ urlencodespecial() {
 
 string="$1"
 if [ -z "$string" ]; then
-	string="$(cat)"
+	string="$(cat - | sed 's/^ //')" # For some reason, vim likes to add a space to the begining
 fi
 
 #URL
