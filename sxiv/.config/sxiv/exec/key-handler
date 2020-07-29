@@ -30,12 +30,21 @@ case "$1" in
 					convert -rotate 90 "$file" "$file" ;;
 				"less")
 					convert -rotate 270 "$file" "$file" ;;
+				"question")
+					convert -rotate 180 "$file" "$file" ;;
 				"y")
-					echo -n "$file" | xclip -selection clipboard ;;
+					mimetype="$(file --mime-type -b "$file")"
+					xclip -selection clipboard -target "$mimetype" -i "$file"
+					echo -n "$file" | xclip -selection primary
+					notify-send "copied" "
+					xclip -selection clipboard -target \"$mimetype\" -i \"$file\""
+					;;
 				"g")
 					gimp "$file" & disown ;;
 				"G")
 					optirun gimp "$file" & disown ;;
+				"d")
+					rm "$file" ;;
 				*)
 					# If none of the above were used, send a notificaton with the key combination
 					notify-send "$1"
