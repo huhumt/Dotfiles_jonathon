@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+
+html="$(curl $1 2> /dev/null )"
+
+{
+	echo "$html" | hq \* attr src
+	echo "$html" | hq \* attr href
+	echo "$html" | hq \* attr target
+	echo "$html" | hq \* attr style | sed 's/;/\n;/' | grep url
+	echo "$html" | hq \* data style | sed 's/;/\n;/' | grep url
+} | sort | uniq
