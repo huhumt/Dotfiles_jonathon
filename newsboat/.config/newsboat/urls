@@ -1,20 +1,30 @@
+#https://feeds.bbci.co.uk/news/rss.xml	news
+http://turnoff.us/feed.xml	comic
+https://abstrusegoose.com/feed.xml	comic
+https://bill.harding.blog/feed/	linux
 https://blog.filippo.io/rss/	go security
+https://blog.ropnop.com/index.xml	linux security
+https://blog.xpnsec.com/rss.xml	security
 https://blog.z3bra.org/rss/feed.xml	linux
 https://castel.dev/rss.xml
-#https://feeds.bbci.co.uk/news/rss.xml	news
 https://feeds.feedburner.com/ItsFoss	linux
 https://invidio.us/feed/channel/UC2C_jShtL725hvbm1arSV9w	invidious "~CGP Grey" interest
 https://invidio.us/feed/channel/UC4w1YQAJMWOz4qtxinq55LQ	invidious "~Level1Techs" tech
-https://invidio.us/feed/channel/UCOWcZ6Wicl-1N34H0zZe38w	invidious "~Level1Linux" linux
-https://invidio.us/feed/channel/UCa6eh7gCkpPo5XXUDfygQQA	invidious "~Ippsec" security
 https://invidio.us/feed/channel/UCBa659QWEk1AI4Tg--mrJ2A	invidious "~Tom Scott" interest
 https://invidio.us/feed/channel/UCFzGyNKXPAglNq28qWYTDFA	invidious "~Kai Hendry" linux
+https://invidio.us/feed/channel/UCOWcZ6Wicl-1N34H0zZe38w	invidious "~Level1Linux" linux
 https://invidio.us/feed/channel/UCXPHFM88IlFn68OmLwtPmZA	invidious "~Greg Hurrell - Vim Screencasts" linux
+https://invidio.us/feed/channel/UCa6eh7gCkpPo5XXUDfygQQA	invidious "~Ippsec" security
 https://invidio.us/feed/channel/UCgREucssIfY9e0Iy3yhse8w	invidious "~Nix Casts" linux
+https://invidio.us/feed/channel/UCpoyhjwNIWZmsiKNKpsMAQQ	invidious "~VbScrub" security
+https://invidio.us/feed/channel/UCuXy5tCgEninup9cGplbiFw	invidious "~Missing Semester"
+https://invidio.us/feed/channel/UCy0tKL1T7wFoYcxCe0xjN6Q	invidious "~Technology Connections" interest
 https://jonathanh.co.uk/feed.rss
 https://jordanelver.co.uk/feed.xml	linux
+https://latexdraw.com/feed	latex
 https://opensource.com/feed	linux
 https://pentestlab.blog/feed/	security
+https://redteaming.co.uk/feed/	security
 https://stevelosh.com/rss.xml	linux
 https://thehackernews.com/feeds/posts/default	security
 https://torrentfreak.com/feed/	security
@@ -22,5 +32,6 @@ https://www.bleepingcomputer.com/feed/	security
 https://www.fsf.org/static/fsforg/rss/blogs.xml	linux
 https://www.fsf.org/static/fsforg/rss/news.xml	linux
 https://www.troyhunt.com/rss/	security
+https://www.universetoday.com/	astronomy
 https://www.wordfence.com/feed/	security
 https://xkcd.com/atom.xml	comic
