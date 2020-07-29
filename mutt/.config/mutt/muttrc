@@ -82,6 +82,7 @@ bind index N search-opposite
 macro index C "<copy-message>?<toggle-mailboxes>" "copy a message to a mailbox"
 macro index M "<save-message>?<toggle-mailboxes>" "move a message to a mailbox"
 
+macro index o "<shell-escape>check-emails<enter>" "Check Emails"
 ######################
 #  Sidebar Settings  #
 ######################
@@ -120,12 +121,6 @@ set forward_quote = yes # https://neomutt.org/guide/reference#forward_quote
 set include = yes # https://neomutt.org/guide/reference#include
 # Adds a header that is used to determine whether my send script should convert the markdown to html
 my_hdr Markdown: false
-# Vim like keybindings
-bind pager g noop
-bind pager G bottom
-bind pager gg top
-bind pager j next-line
-bind pager k previous-line
 
 ######################
 #  Viewing settings  #
@@ -153,6 +148,12 @@ macro pager A ,@aoh= "toggle alternative order"
 macro pager U "<enter-command>set pipe_decode = yes<enter><pipe-message>urlscan  -dc -r 'linkhandler {}'<enter><enter-command>set pipe_decode = no<enter>" "view URLs"
 bind pager r reply
 bind pager R group-reply
+# Vim like keybindings
+bind pager g noop
+bind pager G bottom
+bind pager gg top
+bind pager j next-line
+bind pager k previous-line
 
 ##############
 #  Contacts  #
