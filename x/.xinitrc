@@ -21,7 +21,8 @@ xinput --list | grep -E 'ErgoDox EZ ErgoDox EZ\s+id' | grep -oE 'id=[0-9]+' | cu
 
 exec /usr/bin/compton --config "$HOME/.config/picom/picom.conf" &
 #setbackground &
-/usr/bin/nitrogen --restore &
+#/usr/bin/nitrogen --restore &
+/usr/bin/systemctl --user start background.service
 /usr/lib/kdeconnectd &
 /usr/bin/pactl load-module module-switch-on-connect &
 /usr/bin/unclutter &
