@@ -3,13 +3,14 @@ fpath=("${ZSH_FOLDER}completion" $fpath)
 # Make completion work
 autoload -U compinit
 zstyle ':completion:*' menu select
-## Auto complete with case insenstivity
+## Auto complete with case insenstivity and allowing some characters to be
+#forgotten at the start like a .
 zstyle ':completion:*' matcher-list '' 'm:{a-zA-Z}={A-Za-z}' 'r:|[._-]=* r:|=*' 'l:|=* r:|=*'
 
 # Completion style
 zstyle ':completion:*:matches' group 'yes'
 zstyle ':completion:*:options' description 'yes'
-zstyle ':completion:*:options' auto-description '%d'
+zstyle ':completion:*:options' auto-description 'Specify %d'
 zstyle ':completion:*:corrections' format ' %F{green}-- %d (errors: %e) --%f'
 zstyle ':completion:*:descriptions' format ' %F{yellow}-- %d --%f'
 zstyle ':completion:*:messages' format ' %F{purple} -- %d --%f'
@@ -43,5 +44,12 @@ compdef vi=vim
 # Include hidden files in autocomplete:
 _comp_options+=(globdots)
 
+function _aliased_with_prefix() {
+	shift words
+	(( CURRENT-- ))
+	_normal
+}
+compdef _aliased_with_prefix grc
+compdef _aliased_with_prefix sudo
 
 #source "$ZSH_FOLDER/plugins/fzf-tab/fzf-tab.zsh"
