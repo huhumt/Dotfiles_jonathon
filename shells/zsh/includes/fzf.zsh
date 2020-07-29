@@ -1,6 +1,6 @@
 # this rg command will get a list of files that are not in gitignore or similar
 export FZF_DEFAULT_COMMAND="fd --type f --hidden --follow --color=always --exclude .git --exclude .PlayOnLinux --exclude \"PlayOnLinux\'s virtual drives\""
-export FZF_DEFAULT_OPTS="--reverse --ansi --height 40%"
+export FZF_DEFAULT_OPTS="--reverse --ansi --height 40% --bind change:top"
 export FZF_CTRL_R_OPTS=""
 export FZF_CTRL_T_OPTS="$FZF_DEFAULT_OPTS --ansi --preview \"fzf-preview {}\""
 export FZF_ALT_C_OPTS="$FZF_DEFAULT_OPTS --ansi --preview \"fzf-preview {}\""
@@ -56,8 +56,9 @@ if [ "$sourced" = "True" ]; then
 
 		if [ "${LBUFFER[-1]}" != " " ]; then
 			current="$lastWord"
+			current="${current/\~/$HOME}"
 		else
-			current="$PWD"
+			current=""
 		fi
 
 		# An array of commands that should use dir search instead of file search
