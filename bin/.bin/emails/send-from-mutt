@@ -25,3 +25,6 @@ cleanHeaders(){
 echo "$message" | sed '/^$/q' | grep -q -i 'markdown: true' \
 	&& echo "$message" | cleanHeaders | convertToHtmlMultipart | msmtp --file="$config" --account="$account" "$@" \
 	|| echo "$message" | cleanHeaders | msmtp --file="$config" --account="$account" "$@"
+
+# Update notmuch database
+( sleep 2 && notmuch new ) &
