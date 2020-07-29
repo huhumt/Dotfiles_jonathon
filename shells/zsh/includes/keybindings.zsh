@@ -65,16 +65,16 @@ bindkey -M viins jj vi-cmd-mode
 function fg-bg() {
 	if [[ $#BUFFER -eq 0 ]]; then
 		local backgroundProgram="$(jobs | tail -n 1 | awk '{print $4}')"
-		if [[ "$backgroundProgram" == "nc" ]] || [[ "$backgroundProgram" == "ncat" ]]; then
-			# Make sure that /dev/tty is given to the stty command
-			local columns=$(stty -a < /dev/tty | grep -oE 'columns [0-9]+' | cut -d' ' -f2)
-			local rows=$(stty -a < /dev/tty | grep -oE 'rows [0-9]+' | cut -d' ' -f2)
-			notify-send "Terminal dimensions" "Rows: $rows\nColumns: $columns\nstty command on clipboard"
-			echo "stty rows $rows cols $columns" | clip
-			stty raw -echo < /dev/tty; fg
-		else
-			fg
-		fi
+		case "$backgroundProgram" in
+			"nc"|"ncat"|"netcat"|"resize-netcat-listener"|"rnc")
+				# Make sure that /dev/tty is given to the stty command by doing </dev/tty
+				terminal-size-clip < /dev/tty
+				stty raw -echo < /dev/tty; fg
+				;;
+			*)
+				fg
+				;;
+		esac
 	else
 		zle push-input
 	fi
@@ -100,7 +100,7 @@ make_current_word_directory(){
 	else
 		folder="${folder//\\ / }"
 	fi
-	#folder="${folder%/*}"
+	folder="${folder%/*}"
 	if [ -e "$folder" ]; then
 		zle -M "$folder already exists"
 	else
