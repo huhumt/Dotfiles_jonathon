@@ -137,12 +137,13 @@ set mailcap_path = "~/.config/mutt/mailcap" # https://neomutt.org/guide/mimesupp
 # Tells Mutt to automatically view files with these mime types
 auto_view text/html # https://neomutt.org/guide/reference#auto_view
 auto_view application/pgp-encrypted # https://neomutt.org/guide/reference#auto_view
+auto_view text/calendar # https://neomutt.org/guide/reference#auto_view
 # Order to try and show multipart emails
-alternative_order text/plain text/enriched text/html
+alternative_order text/plain text/calendar text/enriched text/html
 # Macro to toggle alternates (plain <-> html), based on:
 # https://groups.google.com/d/msg/comp.mail.mutt/9I702oMwQQE/JqdLnp3j9WAJ
-macro pager ,@aoh= "<enter-command>unalternative_order *; alternative_order text/html text/plain text/enriched; macro pager A ,@aot= 'toggle alternative order'<enter><exit><display-message>"
-macro pager ,@aot= "<enter-command>unalternative_order *; alternative_order text/plain text/enriched text/html; macro pager A ,@aoh= 'toggle alternative order'<enter><exit><display-message>"
+macro pager ,@aoh= "<enter-command>unalternative_order *; alternative_order text/calendar text/html text/plain text/enriched; macro pager A ,@aot= 'toggle alternative order'<enter><exit><display-message>"
+macro pager ,@aot= "<enter-command>unalternative_order *; alternative_order text/plain text/calendar text/enriched text/html; macro pager A ,@aoh= 'toggle alternative order'<enter><exit><display-message>"
 macro pager A ,@aoh= "toggle alternative order"
 # Use urlscan to handle links in messages
 macro pager U "<enter-command>set pipe_decode = yes<enter><pipe-message>urlscan  -dc -r 'linkhandler {}'<enter><enter-command>set pipe_decode = no<enter>" "view URLs"
