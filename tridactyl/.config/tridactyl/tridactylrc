@@ -1,0 +1,63 @@
+" Reset
+" This resets all default settings
+sanitize tridactyllocal tridactylsync
+
+"""""""""""""""""""""
+"  General Options  "
+"""""""""""""""""""""
+colours dark
+
+set newtab about:blank
+set browser firefox-developer-edition
+set allowautofocus false
+set editorcmd /usr/bin/st -e vim
+
+""""""""""""
+"  Search  "
+""""""""""""
+
+" Remove old search urls
+jsb Object.keys(tri.config.get("searchurls")).reduce((prev, u) => prev.then(_ => tri.config.set("searchurls", u, null)), Promise.resolve())
+
+set searchengine ddg
+
+set searchurls.alternativeto https://alternativeto.net/browse/search/?q=%s
+set searchurls.ebay https://www.ebay.co.uk/sch/i.html?_nkw=%s
+set searchurls.ddg https://duckduckgo.co.uk/?q=%s
+set searchurls.aur https://aur.archlinux.org/packages/?O=0&K=%s
+set searchurls.aw https://wiki.archlinux.org/?search=%s
+set searchurls.gh https://github.com/search?q=%s
+
+""""""""""""""
+"  Commands  "
+""""""""""""""
+
+command withUrl composite get_current_url |
+command openvid withUrl !s open-youtube
+command openvidLink composite hint -pipe a[href]:not([display="none"]):not([href=""]) href | !s open-youtube
+command testclickjacking withUrl !s $HOME/.config/tridactyl/scripts/clickjacking | nativeopen
+
+
+
+"""""""""""
+"  Binds  "
+"""""""""""
+"
+" Ctrl-F should use the browser's native 'find' functionality.
+unbind <C-f>
+
+bind / fillcmdline find
+bind ? fillcmdline find -?
+bind n findnext 1
+bind N findnext -1
+
+bind ; fillcmdline_notrail
+
+bind <space>y openvid
+bind <space>Y openvidLink
+
+" Url Specific
+bindurl ^https://duckduckgo.com f hint -Jc [class=result__a]
+bindurl ^https://duckduckgo.com F hint -Jbc [class=result__a]
+
+
