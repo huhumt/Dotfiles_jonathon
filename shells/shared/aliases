@@ -102,7 +102,8 @@ type -p exa > /dev/null && alias l="exa -lahg --git --grid" || alias l="ls -lah"
 type -p exa > /dev/null && alias tree="exa -FT" || alias tree='tree -F -C'
 
 # Alias cat to bat if it's available
-type -p bat > /dev/null && alias cat="bat"
+#type -p bat > /dev/null && alias cat="bat"
+# This has been moved into a function
 
 # If nvim is available, alias vim to neovim
 type -p nvim > /dev/null && alias vim="nvim"
@@ -186,7 +187,11 @@ alias snmp-check="/usr/bin/snmpcheck-nothink"
 #alias irmgpg="gpg --no-default-keyring --keyring=irm.gpg"
 alias irmgpg="gpg --options ~/.gnupg/irmgpg.conf --keyring=irm.gpg"
 
-alias weakopenssl="$HOME/GitRepos/openssl-weak/openssl-1.0.2-chacha/apps/openssl"
+if [ -f "$HOME/GitRepos/openssl-weak/openssl-1.0.2-chacha/apps/openssl" ]; then
+	alias weakopenssl="$HOME/GitRepos/openssl-weak/openssl-1.0.2-chacha/apps/openssl"
+	alias testssl="testssl --openssl=\"$HOME/GitRepos/openssl-weak/openssl-1.0.2-chacha/apps/openssl\""
+fi
+
 
 
 ##############
@@ -196,7 +201,7 @@ alias weakopenssl="$HOME/GitRepos/openssl-weak/openssl-1.0.2-chacha/apps/openssl
 # Keyboard - reset
 # Sometimes, if I turn the screens off, the keyboard resets itself to defaults. Not sure why but this will put my keyboard back to how I like it
 #alias kb="xmodmap ~/.Xmodmap; xset r rate 200 70; xcape"
-alias kb="setxkbmap -layout gb,gb -variant \"colemak,\" -option grp:shifts_toggle; xset r rate 200 70; xinput --list | grep -Ei 'ErgoDox EZ\s+id' | grep -oE 'id=[0-9]+' | cut -d'=' -f2 | xargs setxkbmap -layout gb -device"
+alias kb="setxkbmap -layout gb,gb -variant \"colemak,\" -option grp:shifts_toggle; xset r rate 200 70; xinput --list | grep -Ei 'ErgoDox EZ\s+id' | grep -oE 'id=[0-9]+' | cut -d'=' -f2 | xargs -r setxkbmap -layout gb -device"
 
 alias colemak="setxkbmap -layout gb,gb -variant \"colemak,\" -option grp:shifts_toggle"
 alias qwerty="setxkbmap -layout gb"
@@ -253,6 +258,9 @@ alias updateTime="sudo ntpd -qg"
 alias globalip="drill myip.opendns.com @resolver1.opendns.com | sed -n '/ANSWER SECTION/,/AUTHORITY SECTION/ p' | sed -n '2 p' | awk '{print \$5}'"
 
 alias chrome-curl="node $HOME/GitRepos/chrome-curl/index.js"
+
+# Plays a youtube video or playlist - audio only
+alias ytaudio='mpv --ytdl-format="bestaudio"'
 
 if type grc > /dev/null 2>&1; then
 	for cmd in "nmap" "ping" "traceroute" "mount" "netstat" "ps" "dig" "du" "df" "ip" "iptables" "lsblk" "id" "free" "tcpdump" "uptime" "showmount" "whois" ; do

@@ -306,3 +306,16 @@ function debugToggle(){
 	fi
 }
 
+function cat(){
+	local grcConfigs="$HOME/.config/grc/"
+	if [ -f "$1" ]; then
+		local ext="${1##*.}"
+		if [ -f "${grcConfigs}conf.${ext}" ]; then
+			/usr/bin/cat "$1" | /usr/bin/grcat "${grcConfigs}conf.${ext}" | /usr/bin/bat --file-name "$1"
+		else
+			/usr/bin/bat "$@"
+		fi
+	else
+		/usr/bin/bat "$@"
+	fi
+}
