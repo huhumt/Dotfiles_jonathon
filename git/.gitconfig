@@ -2,17 +2,17 @@
 	email = git@jonathanh.co.uk
 	name = Jonathan Hodgson
 [core]
-	editor = vim -c 'startinsert'
+	editor = nvim
 	excludesfile = ~/.dotfiles/git/global_gitignore
-	pager = delta --theme='gruvbox' --plus-color="#98971a" --minus-color="#9d0006"
+	pager = delta
 [status]
 	submoduleSummary = true
 [alias]
 	#lol = log --graph --decorate --pretty=oneline --abbrev-commit
-	lol = log --graph --pretty=format:\"%C(yellow)%h %C(blue)%cd %C(green)%cn %C(white) - %s\" --date=format:\"%d/%m/%Y %H:%M:%S\"
+	lol = log --graph --pretty=format:\"%C(yellow)%h %C(red)%d %C(blue)%cd %C(green)%cn %C(white) - %s\" --date=format:\"%d/%m/%Y %H:%M:%S\"
 	#lola = log --graph --decorate --pretty=oneline --abbrev-commit --all
-	lola = log --graph --pretty=format:\"%C(yellow)%h %C(blue)%cd %C(green)%cn %C(white) - %s\" --date=format:\"%d/%m/%Y %H:%M:%S\" --all
-	lolame = log --graph --pretty=format:\"%C(yellow)%h %C(blue)%cd %C(green)%cn %C(white) - %s\" --date=format:\"%d/%m/%Y %H:%M:%S\" --all --author=Jonathan
+	lola = log --graph --pretty=format:\"%C(yellow)%h %C(red)%d %C(blue)%cd %C(green)%cn %C(white) - %s\" --date=format:\"%d/%m/%Y %H:%M:%S\" --all
+	lolame = log --graph --pretty=format:\"%C(yellow)%h %C(red)%d %C(blue)%cd %C(green)%cn %C(white) - %s\" --date=format:\"%d/%m/%Y %H:%M:%S\" --all --author=Jonathan
 	ilog = recall
 	detach = "!git checkout $(git rev-parse HEAD)"
 	undo = reset --soft HEAD^
@@ -24,3 +24,9 @@
 	required = true
 	clean = git-lfs clean -- %f
 	smudge = git-lfs smudge -- %f
+[pull]
+	rebase = false
+[delta]
+	plus-color = "#9d0006"
+	minus-color = "#9d0006"
+	theme = gruvbox
