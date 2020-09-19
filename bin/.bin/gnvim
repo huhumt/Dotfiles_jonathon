@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+
+export initialCommand="nvim $@"
+/usr/local/bin/st
