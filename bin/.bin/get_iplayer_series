@@ -1,0 +1,45 @@
+#!/usr/bin/env bash
+
+# A small script to download all the videos from a series from iplayer
+# Relies heavily on get_iplayer script
+# Only use this if it is legal for you to do so. I am not responsible if you
+# break the law using this.
+
+error(){
+	echo "$@" >&2
+	exit 1
+}
+
+type -p get_iplayer > /dev/null || error "You must install get_iplayer"
+
+printHelp(){
+	echo "Iplayer Series Downloader"
+	echo ""
+	echo "Use --url or -u to spicify url for series"
+	echo "Any other arguments (except --help) are passed directly to get_iplayer"
+}
+
+url=""
+if [ "$#" -gt 0 ]; then
+	while [ "$#" -gt 0 ]; do
+		case "$1" in
+			"--help")
+				printHelp
+				exit
+				shift
+				;;
+			"--url"|"-u")
+				url="$2"
+				shift;shift
+				;;
+			*)
+				break
+		esac
+	done
+fi
+
+[ -z "$url" ] && error "No url given"
+
+echo "$url"
+curl -L "$url" | hq 'a.content-item__link' attr href | awk -F '/' '{print "--pid=" $4}' |
+	xargs get_iplayer "$@" 
