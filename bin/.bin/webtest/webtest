@@ -1,9 +1,147 @@
 #!/usr/bin/env bash
 
-domain="$1"
+error(){
+	echo "$@" >&2
+	exit 1
+}
 
-if [ -z "$domain" ];
-	echo "You need to give a domain or ip address"
-fi
+maybeMkdir(){
+	[ -d "$1" ] || mkdir "$1"
+}
 
-if
+
+RED='\033[0;31m'
+LRED='\033[1;31m'
+YELLOW='\033[1;33m'
+GREEN='\033[0;32m'
+LGREEN='\033[1;32m'
+LBLUE='\033[1;34m'
+CYAN='\033[0;36m'
+LCYAN='\033[1;36m'
+ORANGE='\033[0;33m'
+LGREY='\033[0;37m'
+WHITE='\033[1;37m'
+NC='\033[0m' # No Color
+
+stripAnsi(){
+	sed -r "s/\x1B\[([0-9]{1,3}(;[0-9]{1,2})?)?[mGK]//g"
+}
+
+drawInBox(){
+	innerWidth="45"
+	echo -en "${LBLUE}╭"
+	head -c $innerWidth /dev/zero | tr '\0' '-'
+	echo -e "╮${NC}"
+	while IFS= read -r line; do
+		# The ansi characters mess up the string length so we need to strip them to calculate the width
+		stripped="$(echo -n "$line" | stripAnsi)"
+		leftPad=$(( ( innerWidth - ${#stripped} ) / 2))
+		rightPad=$(( ( innerWidth - leftPad ) - ${#stripped} ))
+		echo -en "${LBLUE}|${NC}"
+		head -c $leftPad /dev/zero | tr '\0' ' '
+		echo -n "$line"
+		head -c $rightPad /dev/zero | tr '\0' ' '
+		echo -e "${LBLUE}|${NC}"
+	done
+	echo -en "${LBLUE}╰"
+	head -c $innerWidth /dev/zero | tr '\0' '-'
+	echo -e "╯${NC}"
+}
+
+portOpen(){
+	nc -z -w5 "$domain" "$1"
+}
+
+portStatus(){
+	portOpen "$1" &&
+		echo "Port $1 open" ||
+		echo "Port $1 closed"
+}
+
+action_nmap(){
+	echo "Running nmap" | drawInBox
+	maybeMkdir nmap
+	nmap -sC -sV -Pn -oA "nmap/$domain" "$domain"
+}
+
+action_testredirect(){
+	echo "Testing that http redirects to https" | drawInBox
+	finalUrl="$(curl -Ls -o /dev/null -w %{url_effective} "http://$domain")"
+	case "$finalUrl" in
+		"http://"*) echo -e "${RED} http://$domain -> $finalUrl${NC}" ;;
+		"https://"*) echo -e "${GREEN} http://$domain -> $finalUrl${NC}" ;;
+	esac
+}
+
+action_testssl(){
+	echo "testssl on 443" | drawInBox
+	testssl --color 2 --logfile "ssl/testssl.out" "$domain"
+}
+
+action_clickjacking(){
+	echo "Testing for clickjacking" | drawInBox
+	finalUrl="$(curl -Ls -o /dev/null -w %{url_effective} "http://$domain")"
+	if curl -s --head "$finalUrl" | grep -q 'X-Frame-Options'; then
+		echo -e "${GREEN}$domain doesnt appear to be susceptible to clickjacking${NC}"
+	else
+		echo -e "${RED}$domain does appear to be susceptible to clickjacking${NC}"
+		echo "Evidence in clickjacking folder"
+		maybeMkdir clickjacking
+		curl --head -s "$finalUrl" >> clickjacking/headers
+		clickjacking "$finalUrl" clickjacking/screenshot.png
+	fi
+}
+
+action_all(){
+	action_nmap
+	action_clickjacking
+	# Xss header
+	# determine cms?
+		# cms specific enum
+	# spider a bit
+		# Look for login, password reset, signup pages
+
+			# Check for username enum
+			
+
+
+	if portOpen 443; then
+		action_testredirect
+		action_testssl
+		#action_hsts
+	fi
+
+}
+
+domain=""
+action="all"
+
+while [ -n "$1" ]; do
+	case "$1" in
+		"-d"|"--domain")
+			domain="${2##*//}"
+			shift; shift
+			;;
+		"-a"|"--action")
+			action="$2"
+			shift; shift
+			;;
+		"--")
+			shift
+			break
+			;;
+		*)
+			error "Unknown option $1"
+			;;
+	esac
+done
+
+
+[ -z "$domain" ] && error "You need to give a domain or ip address"
+
+
+
+maybeMkdir "$domain"
+cd "$domain"
+
+"action_$action" "$@"
