@@ -8,8 +8,6 @@ if ! systemctl status --no-pager docker.service > /dev/null; then
 fi
 
 # Make sure the container is running
-if ! docker container ls | grep -q mpepping/cyberchef; then
-	sudo -A systemctl start cyberchef
-fi
+sudo -A docker run -d -p 8000:8000 mpepping/cyberchef
 
 firefox-developer-edition localhost:8000
