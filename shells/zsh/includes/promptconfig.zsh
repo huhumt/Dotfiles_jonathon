@@ -160,6 +160,15 @@ prompt_last_exit_code() {
   fi
 }
 
+prompt_email(){
+	unread="$(notmuch count "tag:unread")"
+	if [ "$unread" -gt 0 ]; then
+		echo "🖂  $unread"
+		echo "yellow3"
+	fi
+}
+
+
 # Draws a seperator
 # Takes 2 arguments, from color then to color
 # If only 1 given, assumes it is the last
@@ -221,6 +230,13 @@ set_prompts(){
 
 	# Directory
 	segment="$(draw_segment "prompt_dir" "$background")"
+	if [ -n "$(echo "$segment" | sed -n '1p')" ];then
+		PROMPT="$PROMPT$(echo "$segment" | sed -n '1p')"
+		background="$(echo "$segment" | sed -n '2p')"
+	fi
+
+	# Emails
+	segment="$(draw_segment "prompt_email" "$background")"
 	if [ -n "$(echo "$segment" | sed -n '1p')" ];then
 		PROMPT="$PROMPT$(echo "$segment" | sed -n '1p')"
 		background="$(echo "$segment" | sed -n '2p')"
