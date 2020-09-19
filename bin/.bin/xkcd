@@ -7,7 +7,11 @@ elif [[ "$comic" == "random" ]] || [[ "$comic" == "r" ]]; then
 	number=$(shuf -i1-$latest -n1)
 	json=$(curl https://xkcd.com/$number/info.0.json 2> /dev/null)
 else
-	json=$(curl https://xkcd.com/$comic/info.0.json 2> /dev/null)
+	if [[ "$comic" = *"xkcd.com"* ]]; then
+		json=$(curl $comic/info.0.json 2> /dev/null)
+	else
+		json=$(curl https://xkcd.com/$comic/info.0.json 2> /dev/null)
+	fi
 fi
 echo $json | /usr/bin/jq -C
 echo $json | /usr/bin/jq ".img" | xargs curl -s -o /tmp/xkcd

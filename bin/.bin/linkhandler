@@ -9,8 +9,12 @@ url="$1"
 browser="${BROWSER:-firefox-developer-edition}"
 
 case "$url" in
-	*"//invidio.us/"*) open-youtube "$url"; exit 0 ;;
+	*"//invidious.*/"*) open-youtube "$url"; exit 0 ;;
+	*//*.youtube.*/*) open-youtube "$url"; exit 0 ;;
+	*"//videos.*"*) open-youtube "$url"; exit 0 ;;
+	*"//xkcd.com/"*) xkcd "$url"; exit 0 ;;
 	*) $browser "$url"; exit 0 ;;
+	#*) notify-send "$url"; exit ;;
 esac
 
 exit 1
