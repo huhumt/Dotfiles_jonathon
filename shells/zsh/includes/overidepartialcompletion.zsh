@@ -51,6 +51,8 @@ overidecomplete(){
 				case "$lastWord" in
 					-p|--payload) toadd="$(get_msfvenom_payloads | fzf -m -d \: --with-nth=1 --preview='echo {2}' --preview-window=up:1 | cut -d ':' -f 1| tr '\n' ' ')"; ret=0 ;;
 				esac ;;
+			ytaudio)
+				toadd="\"$(cat "$HOME/Music/youtube-playlists" | fzf -d '	' --with-nth=2 --preview='echo {1}' --preview-window=up:1 | cut -d'	' -f1)\""; ret=0 ;;
 
 		esac
 	fi
