@@ -82,7 +82,8 @@ bind index N search-opposite
 macro index C "<copy-message>?<toggle-mailboxes>" "copy a message to a mailbox"
 macro index M "<save-message>?<toggle-mailboxes>" "move a message to a mailbox"
 
-macro index o "<shell-escape>check-emails<enter>" "Check Emails"
+macro index o "<shell-escape>check-emails inbox<enter>" "Check Emails"
+macro index O "<shell-escape>check-emails<enter>" "Check Emails"
 ######################
 #  Sidebar Settings  #
 ######################
@@ -170,7 +171,7 @@ macro index,pager  a "<pipe-message>abook --add-email-quiet<return>" "Add this s
 # Don't ask to push enter after external command is run
 set wait_key = no # https://neomutt.org/guide/reference#wait_key
 # Send a notification when a new email arrives
-set new_mail_command = "notify-send 'New Email'" # https://neomutt.org/guide/reference#new_mail_command
+# set new_mail_command = "notify-send 'New Email'" # https://neomutt.org/guide/reference#new_mail_command
 # Makes escape key cancel inputs. Normally it's ctrl+G (weird)
 set abort_key = "<Esc>" # https://neomutt.org/guide/reference#abort_key
 # My Name
