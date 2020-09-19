@@ -64,7 +64,7 @@ setopt chaselinks
 # THis is almost always a curses app so I don't want to try and record the terminal
 if [ -n "$initialCommand" ]; then
 	echo "Running $initialCommand"
-	$initialCommand && exit
+	${=initialCommand} && exit
 else
 	local current="$(project current --path)"
 	if [ -n "$current" ]; then
