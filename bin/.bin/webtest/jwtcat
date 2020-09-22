@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+i=0
+
+cat - | tr '.' '\n' | while read line; do
+	[ "$i" -eq 0 ] && echo -e "Header:\n-------"
+	[ "$i" -eq 1 ] && echo -e "Body:\n-----"
+	[ "$i" -eq 2 ] && break
+	echo "$line" | base64 -d 2> /dev/null | jq
+	i=$((i+1))
+done
+
