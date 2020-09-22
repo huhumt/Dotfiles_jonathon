@@ -82,5 +82,7 @@ for file in "$ZSH_FOLDER/includes/"*".zsh"; do
 	source "$file"
 done
 
+export PATH="$PATH:$ZSH_FOLDER/plugins/git-fuzzy/bin"
+
 # Load zsh-syntax-highlighting; should be last.
 source $HOME/.dotfiles/shells/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh 2> /dev/null
