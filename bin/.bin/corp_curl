@@ -1,0 +1,32 @@
+#!/usr/bin/env bash
+
+
+USERNAME="${CORPUSER}"
+PASS="${CORPPASS}"
+
+PASSCOMMAND="${CORPPASSCOMMAND}"
+
+get_username(){
+	if [ -z "$USERNAME" ]; then
+		read -p "Corp Username: " USERNAME < /dev/tty
+	fi
+	echo $USERNAME
+	return 0
+}
+
+get_password(){
+	if [ -z "$PASS" ]; then
+		if [ -n "$CORPPASSCOMMAND" ]; then
+			PASS=$(eval $PASSCOMMAND)
+		else
+			read -p "Corp Password: " -s PASS < /dev/tty
+		fi
+	fi
+	echo $PASS
+	return 0
+}
+
+
+username=
+password=$(get_password)
+curl --ntlm --negotiate -u "$(get_username):$(get_password)" "$@"
