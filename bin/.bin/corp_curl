@@ -27,6 +27,6 @@ get_password(){
 }
 
 
-username=
-password=$(get_password)
+username=""
+password="$(get_password)"
 curl --ntlm --negotiate -u "$(get_username):$(get_password)" "$@"
