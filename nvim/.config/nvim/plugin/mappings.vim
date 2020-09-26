@@ -32,3 +32,14 @@ endif
 " a      - enter insert mode
 " <c-g>u - break undo sequence (new change)
 inoremap <C-l> <c-g>u<Esc>[s1z=`]a<c-g>u
+
+" Do Shebang line
+" <Esc>            - go into normal mode
+" :silent          - run command silently
+" s/^/…/           - write at the begining of the line
+" <bar>            - used to seperate commands
+" filetype detect  - attempt to detect filetype again
+" :nohlsearch      - un-hilight the search pattern
+inoremap <C-y> <Esc>:silent s/^/#!\/usr\/bin\/env / <bar> filetype detect<cr>:nohlsearch<cr>o
+" alternative: inoremap <C-y> <Esc>:silent exe ".!which <cWORD>" <bar> s/^/#!/ <bar> filetype detect<cr>YpDi
+
