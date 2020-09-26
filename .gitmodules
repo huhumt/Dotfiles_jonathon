@@ -22,3 +22,6 @@
 [submodule "nvim/.config/nvim/pack/opt/gruvbox"]
 	path = nvim/.config/nvim/pack/bundle/opt/gruvbox
 	url = https://github.com/morhetz/gruvbox.git
+[submodule "nvim/.config/nvim/pack/bundle/opt/fzf.vim"]
+	path = nvim/.config/nvim/pack/bundle/opt/fzf.vim
+	url = https://github.com/junegunn/fzf.vim
