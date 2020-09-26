@@ -14,6 +14,7 @@ if has('packages')
 		packadd! nvim-lspconfig
 		packadd! deoplete.nvim
 		packadd! deoplete-abook
+		packadd! deoplete-lsp
 		packadd! deoplete-notmuch
 	endif
 endif
