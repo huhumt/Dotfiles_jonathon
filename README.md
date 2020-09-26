@@ -2,7 +2,7 @@
 
 Use as you wish. Any code / scripts I have borrowed from other places should be credited in comments in the file. I currently use a [fork of DWM](https://git.jonathanh.co.uk/jab2870/dwm) as my window manager on Arch Linux, however, I don't think there is anything that is Arch specific.
 
-My primary editor is ~~vim~~ neovim, who's config is in a submodule because I often need to deploy my vim configuration but don't need to download all of my dotfiles. The main reason I switched from Vim to NeoVim was to experiment [Deoplete](https://github.com/Shougo/deoplete.nvim).
+My primary editor is ~~vim~~ neovim. You can see the relevent configuration in the nvim folder. I used to keep my vim configuration in a seperate submodule but that became more hassel than it was worth so it now all lives here.
 
 My email client of choice is NeoMutt, although there are a plethora of tools that go along with it. If you are interested in how it all interlocks, I wrote a blog post about it: <https://jonathanh.co.uk/blog/mutt-setup.html>
 
