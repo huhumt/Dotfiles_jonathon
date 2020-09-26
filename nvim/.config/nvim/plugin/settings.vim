@@ -22,3 +22,9 @@ set hidden
 
 " Makes vim try to keep 5 lines visible at the top and bottom
 set scrolloff=5
+
+" set tabwidth
+set autoindent
+set smartindent
+set shiftwidth=4
+set tabstop=4
