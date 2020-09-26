@@ -12,6 +12,7 @@ if has('packages')
 	packadd! vim-vinegar
 	if has('nvim')
 		packadd! nvim-lspconfig
+		packadd! deoplete.nvim
 	endif
 endif
 
