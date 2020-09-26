@@ -40,3 +40,6 @@
 [submodule "nvim/.config/nvim/pack/bundle/opt/vim-surround"]
 	path = nvim/.config/nvim/pack/bundle/opt/vim-surround
 	url = https://github.com/tpope/vim-surround
+[submodule "nvim/.config/nvim/pack/bundle/opt/vim-repeat"]
+	path = nvim/.config/nvim/pack/bundle/opt/vim-repeat
+	url = https://github.com/tpope/vim-repeat
