@@ -52,3 +52,6 @@
 [submodule "nvim/.config/nvim/pack/bundle/opt/deoplete-abook"]
 	path = nvim/.config/nvim/pack/bundle/opt/deoplete-abook
 	url = https://github.com/michaeladler/deoplete-abook
+[submodule "nvim/.config/nvim/pack/bundle/opt/deoplete-notmuch"]
+	path = nvim/.config/nvim/pack/bundle/opt/deoplete-notmuch
+	url = https://github.com/paretje/deoplete-notmuch
