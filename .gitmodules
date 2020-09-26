@@ -25,3 +25,12 @@
 [submodule "nvim/.config/nvim/pack/bundle/opt/fzf.vim"]
 	path = nvim/.config/nvim/pack/bundle/opt/fzf.vim
 	url = https://github.com/junegunn/fzf.vim
+[submodule "nvim/.config/nvim/pack/bundle/opt/vim-tridactyl"]
+	path = nvim/.config/nvim/pack/bundle/opt/vim-tridactyl
+	url = https://github.com/tridactyl/vim-tridactyl
+[submodule "nvim/.config/nvim/pack/bundle/opt/vim-less"]
+	path = nvim/.config/nvim/pack/bundle/opt/vim-less
+	url = https://github.com/groenewege/vim-less
+[submodule "nvim/.config/nvim/pack/bundle/opt/vim-json"]
+	path = nvim/.config/nvim/pack/bundle/opt/vim-json
+	url = https://github.com/elzr/vim-json

@@ -2,8 +2,11 @@ let mapleader = "\<Space>"
 let maplocalleader = "\\"
 
 if has('packages')
-	packadd! gruvbox
 	packadd! fzf.vim
+	packadd! gruvbox
+	packadd! vim-json
+	packadd! vim-less
+	packadd! vim-tridactyl
 endif
 
 " Enables filetype detection as well as filetype specific indent rules and
