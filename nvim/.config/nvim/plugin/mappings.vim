@@ -43,3 +43,10 @@ inoremap <C-l> <c-g>u<Esc>[s1z=`]a<c-g>u
 inoremap <C-y> <Esc>:silent s/^/#!\/usr\/bin\/env / <bar> filetype detect<cr>:nohlsearch<cr>o
 " alternative: inoremap <C-y> <Esc>:silent exe ".!which <cWORD>" <bar> s/^/#!/ <bar> filetype detect<cr>YpDi
 
+" Mappings for my encoding functions
+vnoremap [b :call mine#encoding#wrapper('base64Encode')<cr>
+vnoremap ]b :call mine#encoding#wrapper('base64Decode')<cr>
+vnoremap [u :call mine#encoding#wrapper('urlEncode')<cr>
+vnoremap ]u :call mine#encoding#wrapper('urlDecode')<cr>
+vnoremap [U :call mine#encoding#wrapper('urlEncodeAll')<cr>
+vnoremap ]U :call mine#encoding#wrapper('urlDecode')<cr>
