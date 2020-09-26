@@ -1,1 +1,1 @@
-setlocal spell
+call mine#functions#text()
