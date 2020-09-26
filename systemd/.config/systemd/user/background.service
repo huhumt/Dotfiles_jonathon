@@ -1,0 +1,8 @@
+[Unit]
+Description=Background Switcher
+
+[Service]
+ExecStart=/home/jonathan/.config/systemd/user/randomBackground
+
+[Install]
+WantedBy=default.target
