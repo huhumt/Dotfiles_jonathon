@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+
+stdin="$(cat -)"
+escaped="$(echo "$stdin" | sed 's/"/\\"/g')"
+query="$(echo "" | fzf --preview-window=up:99% --print-query \
+	--preview "echo \"$escaped\" | jq -C {q}" | head -n 1)"
+
+echo "$stdin" | jq "$query"
+
