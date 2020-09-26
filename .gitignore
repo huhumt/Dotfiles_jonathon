@@ -9,3 +9,4 @@ mutt/accounts/*
 /qutebrowser/.config/qutebrowser/autoconfig.yml
 /bin/.bin/pappy
 /systemd/.config/systemd/user/timers.target.wants/
+nvim/.config/nvim/.netrwhist
