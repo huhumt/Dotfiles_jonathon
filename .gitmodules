@@ -43,3 +43,6 @@
 [submodule "nvim/.config/nvim/pack/bundle/opt/vim-repeat"]
 	path = nvim/.config/nvim/pack/bundle/opt/vim-repeat
 	url = https://github.com/tpope/vim-repeat
+[submodule "nvim/.config/nvim/pack/bundle/opt/nvim-lspconfig"]
+	path = nvim/.config/nvim/pack/bundle/opt/nvim-lspconfig
+	url = https://github.com/neovim/nvim-lspconfig/
