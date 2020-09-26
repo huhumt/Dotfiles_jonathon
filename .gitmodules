@@ -19,3 +19,6 @@
 [submodule "shells/zsh/plugins/git-fuzzy"]
 	path = shells/zsh/plugins/git-fuzzy
 	url = https://github.com/bigH/git-fuzzy
+[submodule "nvim/.config/nvim/pack/opt/gruvbox"]
+	path = nvim/.config/nvim/pack/bundle/opt/gruvbox
+	url = https://github.com/morhetz/gruvbox.git
