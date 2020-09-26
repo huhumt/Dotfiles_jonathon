@@ -28,3 +28,6 @@ set autoindent
 set smartindent
 set shiftwidth=4
 set tabstop=4
+
+" Add invisivle character reperesentation
+set list listchars=tab:»\ ,trail:\␣,eol:↩
