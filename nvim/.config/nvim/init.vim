@@ -7,6 +7,7 @@ if has('packages')
 	packadd! vim-json
 	packadd! vim-less
 	packadd! vim-tridactyl
+	packadd! vim-vinegar
 endif
 
 " Enables filetype detection as well as filetype specific indent rules and

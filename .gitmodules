@@ -34,3 +34,6 @@
 [submodule "nvim/.config/nvim/pack/bundle/opt/vim-json"]
 	path = nvim/.config/nvim/pack/bundle/opt/vim-json
 	url = https://github.com/elzr/vim-json
+[submodule "nvim/.config/nvim/pack/bundle/opt/vim-vinegar"]
+	path = nvim/.config/nvim/pack/bundle/opt/vim-vinegar
+	url = https://github.com/tpope/vim-vinegar
