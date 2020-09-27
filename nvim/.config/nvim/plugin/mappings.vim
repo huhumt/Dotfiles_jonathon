@@ -50,3 +50,5 @@ vnoremap [u :call mine#encoding#wrapper('urlEncode')<cr>
 vnoremap ]u :call mine#encoding#wrapper('urlDecode')<cr>
 vnoremap [U :call mine#encoding#wrapper('urlEncodeAll')<cr>
 vnoremap ]U :call mine#encoding#wrapper('urlDecode')<cr>
+vnoremap [h :call mine#encoding#wrapper('hexEncode')<cr>
+vnoremap ]h :call mine#encoding#wrapper('hexDecode')<cr>

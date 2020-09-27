@@ -12,6 +12,19 @@ function! mine#encoding#base64Decode(text) abort
 	return substitute(system('base64 --decode --ignore-garbage --wrap=0', a:text), '\n$', '', 'g')
 endfunction
 
+" hex encodes text
+" It relies on the executable xxd
+function! mine#encoding#hexEncode(text) abort
+	return substitute(system('xxd -p', a:text), '\n$', '', 'g')
+endfunction
+
+" base64 decodes text
+" It relies on the executable base64 which should be installed on most unix-y
+" systems.
+function! mine#encoding#hexDecode(text) abort
+	return substitute(system('xxd -r -p', a:text), '\n$', '', 'g')
+endfunction
+
 " Url encodes characters that are normally encoded in urls
 " Taken from https://github.com/tpope/vim-unimpaired/blob/master/plugin/unimpaired.vim
 function! mine#encoding#urlEncode(text) abort
