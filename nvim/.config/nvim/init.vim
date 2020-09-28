@@ -4,6 +4,7 @@ let maplocalleader = "\\"
 if has('packages')
 	packadd! fzf.vim
 	packadd! gruvbox
+	packadd! vim-fugitive
 	packadd! vim-json
 	packadd! vim-less
 	packadd! vim-repeat
