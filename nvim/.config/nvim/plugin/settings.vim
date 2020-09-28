@@ -31,3 +31,6 @@ set tabstop=4
 
 " Add invisivle character reperesentation
 set list listchars=tab:»\ ,trail:\␣,eol:↩
+
+" Stops vim wrapping in the middle of a word
+set linebreak
