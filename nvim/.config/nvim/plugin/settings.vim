@@ -34,3 +34,7 @@ set list listchars=tab:»\ ,trail:\␣,eol:↩
 
 " Stops vim wrapping in the middle of a word
 set linebreak
+
+" Sets tool for opening non-text files with gx
+" If in netrw, this is run with just x
+let g:netrw_browsex_viewer = "opout"
