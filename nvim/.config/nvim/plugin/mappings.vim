@@ -52,3 +52,6 @@ vnoremap [U :call mine#encoding#wrapper('urlEncodeAll')<cr>
 vnoremap ]U :call mine#encoding#wrapper('urlDecode')<cr>
 vnoremap [h :call mine#encoding#wrapper('hexEncode')<cr>
 vnoremap ]h :call mine#encoding#wrapper('hexDecode')<cr>
+
+" Makes the delete key work in insert mode
+inoremap <Del> <Right><BS>
