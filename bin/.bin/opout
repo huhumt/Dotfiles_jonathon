@@ -8,4 +8,5 @@ case "$1" in
 	/tmp/neomutt*|*.tex|*.latex|*.md|*.rmd|*.ms|*.me|*.mom) setsid "$READER" "$basename".pdf >/dev/null 2>&1 & ;;
 	*.html) setsid "surf" "$basename".html >/dev/null 2>&1 & ;;
 	*.sent) setsid sent "$1" >/dev/null 2>&1 & ;;
+	*.jpg|*.jpeg|*.png|*.gif) setsid sxiv "$1" > /dev/null 2>&1 & ;;
 esac
