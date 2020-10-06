@@ -43,3 +43,8 @@ let g:netrw_browsex_viewer = "opout"
 set formatoptions+=r
 " Automatically insert comment leader after hitting o or O
 set formatoptions+=o
+
+augroup colorcols
+	autocmd!
+	autocmd FileType,VimEnter,BufEnter * call mine#functions#colorcols()
+augroup end
