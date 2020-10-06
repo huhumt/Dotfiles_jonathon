@@ -38,3 +38,8 @@ set linebreak
 " Sets tool for opening non-text files with gx
 " If in netrw, this is run with just x
 let g:netrw_browsex_viewer = "opout"
+
+" Automatically insert comment leader after hitting enter
+set formatoptions+=r
+" Automatically insert comment leader after hitting o or O
+set formatoptions+=o
