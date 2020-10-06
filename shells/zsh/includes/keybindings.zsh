@@ -56,7 +56,7 @@ bindkey '^D' exit_zsh
 
 autoload -U edit-command-line
 zle -N edit-command-line
-bindkey '\C-x\C-e' edit-command-line
+bindkey '\C-x' edit-command-line
 
 bindkey -M viins jj vi-cmd-mode
 
