@@ -10,19 +10,6 @@ https://blog.z3bra.org/rss/feed.xml	linux
 https://castel.dev/rss.xml
 https://feeds.feedburner.com/ItsFoss	linux
 https://hackertarget.com/feed/	security
-https://www.youtube.com/feeds/videos.xml?channel_id=UC2C_jShtL725hvbm1arSV9w	invidious "~CGP Grey" interest
-https://www.youtube.com/feeds/videos.xml?channel_id=UC4w1YQAJMWOz4qtxinq55LQ	invidious "~Level1Techs" tech
-https://www.youtube.com/feeds/videos.xml?channel_id=UCBa659QWEk1AI4Tg--mrJ2A	invidious "~Tom Scott" interest
-https://www.youtube.com/feeds/videos.xml?channel_id=UCFzGyNKXPAglNq28qWYTDFA	invidious "~Kai Hendry" linux
-https://www.youtube.com/feeds/videos.xml?channel_id=UCOWcZ6Wicl-1N34H0zZe38w	invidious "~Level1Linux" linux
-https://www.youtube.com/feeds/videos.xml?channel_id=UCXPHFM88IlFn68OmLwtPmZA	invidious "~Greg Hurrell - Vim Screencasts" linux
-https://www.youtube.com/feeds/videos.xml?channel_id=UCa6eh7gCkpPo5XXUDfygQQA	invidious "~Ippsec" security
-https://www.youtube.com/feeds/videos.xml?channel_id=UCgREucssIfY9e0Iy3yhse8w	invidious "~Nix Casts" linux
-https://www.youtube.com/feeds/videos.xml?channel_id=UCiG4mll4HhVwvgP0FtKA7cw	invidious "~The Forge Church" church
-https://www.youtube.com/feeds/videos.xml?channel_id=UCpoyhjwNIWZmsiKNKpsMAQQ	invidious "~VbScrub" security
-https://www.youtube.com/feeds/videos.xml?channel_id=UCuXy5tCgEninup9cGplbiFw	invidious "~Missing Semester"
-https://www.youtube.com/feeds/videos.xml?channel_id=UCy0tKL1T7wFoYcxCe0xjN6Q	invidious "~Technology Connections" interest
-https://www.youtube.com/feeds/videos.xml?channel_id=UCSMqateX8OA2s1wsOR2EgJA	invidious "~TLDR News UK" news
 https://jakearchibald.com/posts.rss	web
 https://jonathanh.co.uk/feed.rss
 https://jordanelver.co.uk/feed.xml	linux
@@ -43,4 +30,19 @@ https://www.theregister.com/headlines.atom	tech
 https://www.troyhunt.com/rss/	security
 https://www.universetoday.com/	astronomy
 https://www.wordfence.com/feed/	security
+https://www.youtube.com/feeds/videos.xml?channel_id=UC2C_jShtL725hvbm1arSV9w	youtube "~CGP Grey" interest
+https://www.youtube.com/feeds/videos.xml?channel_id=UC4w1YQAJMWOz4qtxinq55LQ	youtube "~Level1Techs" tech
+https://www.youtube.com/feeds/videos.xml?channel_id=UC8ENHE5xdFSwx71u3fDH5Xw	youtube "~The Primeagen" vim
+https://www.youtube.com/feeds/videos.xml?channel_id=UCBa659QWEk1AI4Tg--mrJ2A	youtube "~Tom Scott" interest
+https://www.youtube.com/feeds/videos.xml?channel_id=UCFzGyNKXPAglNq28qWYTDFA	youtube "~Kai Hendry" linux
+https://www.youtube.com/feeds/videos.xml?channel_id=UCOWcZ6Wicl-1N34H0zZe38w	youtube "~Level1Linux" linux
+https://www.youtube.com/feeds/videos.xml?channel_id=UCSMqateX8OA2s1wsOR2EgJA	youtube "~TLDR News UK" news
+https://www.youtube.com/feeds/videos.xml?channel_id=UCXPHFM88IlFn68OmLwtPmZA	youtube "~Greg Hurrell - Vim Screencasts" linux
+https://www.youtube.com/feeds/videos.xml?channel_id=UCa6eh7gCkpPo5XXUDfygQQA	youtube "~Ippsec" security
+https://www.youtube.com/feeds/videos.xml?channel_id=UCgREucssIfY9e0Iy3yhse8w	youtube "~Nix Casts" linux
+https://www.youtube.com/feeds/videos.xml?channel_id=UCiG4mll4HhVwvgP0FtKA7cw	youtube "~The Forge Church" church
+https://www.youtube.com/feeds/videos.xml?channel_id=UCpoyhjwNIWZmsiKNKpsMAQQ	youtube "~VbScrub" security
+https://www.youtube.com/feeds/videos.xml?channel_id=UCsXVk37bltHxD1rDPwtNM8Q	youtube "~Kurzgesagt" vim
+https://www.youtube.com/feeds/videos.xml?channel_id=UCuXy5tCgEninup9cGplbiFw	youtube "~Missing Semester"
+https://www.youtube.com/feeds/videos.xml?channel_id=UCy0tKL1T7wFoYcxCe0xjN6Q	youtube "~Technology Connections" interest
 https://xkcd.com/atom.xml	comic
