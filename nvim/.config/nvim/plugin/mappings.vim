@@ -55,3 +55,15 @@ vnoremap ]h :call mine#encoding#wrapper('hexDecode')<cr>
 
 " Makes the delete key work in insert mode
 inoremap <Del> <Right><BS>
+
+" Compiles documents
+" The uppercase versions don't push enter an extra time resulting in seeing
+" the output of the compile command. Useful for debugging
+nnoremap <leader>cc :w! \| !compiler <c-r>%<CR><CR>
+nnoremap <leader>cC :w! \| !compiler <c-r>%<CR>
+nnoremap <leader>cl :w! \| !compiler <c-r>% letter<CR><CR>
+nnoremap <leader>cL :w! \| !compiler <c-r>% letter<CR>
+
+" Opens the compiled documents
+" If something like html, it doesn't need to be compiled first
+nnoremap <leader>co :!opout <c-r>%<CR><CR>
