@@ -21,6 +21,9 @@ set statusline+=%=
 set statusline+=%{FugitiveStatusline()}
 " Space character
 set statusline+=\ 
+" column number
+set statusline+=%c
+set statusline+=:
 " Line number
 set statusline+=%l
 " Literal `/`
