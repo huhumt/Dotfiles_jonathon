@@ -3,6 +3,8 @@ if !has('nvim')
   finish
 endif
 lua <<EOF
+	-- Bash Language Server
+	require'nvim_lsp'.bashls.setup{}
 	-- Go Language Server
 	require'nvim_lsp'.gopls.setup{}
 	-- Vim Language Server
