@@ -67,3 +67,7 @@ nnoremap <leader>cL :w! \| !compiler <c-r>% letter<CR>
 " Opens the compiled documents
 " If something like html, it doesn't need to be compiled first
 nnoremap <leader>co :!opout <c-r>%<CR><CR>
+
+" Makes vim default to "very magic" searching
+nnoremap / /\v
+vnoremap / /\v
