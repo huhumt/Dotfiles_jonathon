@@ -116,8 +116,34 @@ zle -N make_current_word_directory
 # Alt + m
 bindkey '\em' make_current_word_directory
 
+# This came about because I often find myself starting off with cd, tabbing and
+# realising I would have been better off starting the command with vim
+swap_command(){
+	local commands=("cd" "vim" "ls")
+	local tokens=(${(z)LBUFFER})
+	local cmd="${tokens[1]}"
+	local newindex=0
+	# If there is no command, return
+	[ "$cmd" = "" ] && return 0
 
+	local currentindex=${commands[(ie)${cmd}]}
 
+	if [ "$currentindex" -gt "${#commands}" ]; then
+		# If the element isn't found in an array, zsh's search returns length + 1
+		return 0
+	elif [ "$currentindex" -eq "${#commands}" ]; then 
+		newindex=1
+	else
+		newindex="$((currentindex + 1))"
+	fi
+
+	tokens[1]="${commands[$newindex]}"
+	LBUFFER="${tokens[@]}"
+	zle reset-prompt
+	return 0
+}
+zle -N swap_command
+bindkey '\ec' swap_command
 
 
 
