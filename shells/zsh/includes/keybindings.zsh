@@ -119,13 +119,20 @@ bindkey '\em' make_current_word_directory
 # This came about because I often find myself starting off with cd, tabbing and
 # realising I would have been better off starting the command with vim
 swap_command(){
-	local commands=("cd" "vim" "ls")
+	# Each group should be seperated by a colon with each item in a group 
+	# seperated by a space
+	local groups="cd vim ls:ping mtr"
 	local tokens=(${(z)LBUFFER})
 	local cmd="${tokens[1]}"
 	local newindex=0
 	# If there is no command, return
 	[ "$cmd" = "" ] && return 0
 
+	# Find the first group group with the current command
+	local group="$(echo -en "$groups" | tr ':' '\n' | grep "$cmd" | head -n 1)"
+	# Turn the chosen group into an array, splitting on a space
+	local commands=(${(@s/ /)group})
+	# Find out where the current command is in the list
 	local currentindex=${commands[(ie)${cmd}]}
 
 	if [ "$currentindex" -gt "${#commands}" ]; then
