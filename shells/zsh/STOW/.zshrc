@@ -73,6 +73,8 @@ else
 			mkdir "$current/shell-logs" 2> /dev/null
 			/usr/bin/script -f "$current/shell-logs/$(date +"%d-%b-%y_%H-%M-%S")_shell.log"
 		fi
+	else
+		rem -@
 	fi
 fi
 

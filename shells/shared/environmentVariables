@@ -7,6 +7,7 @@ export BROWSER="firefox-developer-edition"
 export CDPATH=.:~:~/Projects:~/.dotfiles
 export GOPATH="$HOME/go"
 export NODE_PATH='/usr/lib/node_modules/'
+export DOTREMINDERS="$HOME/.config/remind/remind.rem"
 
 #Adds a list of all the sub directories in my .bin folder to a variable called mypath
 mypath="$HOME/.bin"
