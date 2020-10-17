@@ -47,13 +47,13 @@ REM 25 Dec MSG Christmas Day
 REM 26 Dec MSG Boxing Day
 # If Christmas day is on a Saturday, the following Monday and Tuesday will be
 # substitute bank holidays for Christmas and boxing day
-REM 27 Dec SATISFY [$Uw == 1] MSG Christmas Day (substitute bank holiday)
-REM 28 Dec SATISFY [$Uw == 2] MSG Boxing Day (substitute bank holiday)
+REM 27 Dec SATISFY [$Tw == 1] MSG Christmas Day (substitute bank holiday)
+REM 28 Dec SATISFY [$Tw == 2] MSG Boxing Day (substitute bank holiday)
 # If boxing day is a Saturday, the following Monday will be a bank holiday
-REM 28 Dec SATISFY [$Uw == 1] MSG Boxing Day (substitute bank holiday)
+REM 28 Dec SATISFY [$Tw == 1] MSG Boxing Day (substitute bank holiday)
 # Need to look into what happens if Christmas falls on a Sunday.
 # I expect Mon and Tues are both bank holidays
-REM 27 Dec SATISFY [$Uw == 2 ] MSG Christmas Day (substitute bank holiday)
+REM 27 Dec SATISFY [$Tw == 2 ] MSG Christmas Day (substitute bank holiday)
 
 
 ####################
