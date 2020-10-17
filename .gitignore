@@ -10,3 +10,4 @@ mutt/accounts/*
 /bin/.bin/pappy
 /systemd/.config/systemd/user/timers.target.wants/
 nvim/.config/nvim/.netrwhist
+remind/.local/share/remind/work.rem
