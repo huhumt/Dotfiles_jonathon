@@ -1,3 +1,38 @@
-include /home/jonathan/.local/share/remind/birthdays.secret.rem
+SET Esc CHAR(27)
+SET Nrm Esc + "[0m"
+SET Blk Esc + "[0;30m"
+SET Red Esc + "[0;31m"
+SET Grn Esc + "[0;32m"
+SET Ylw Esc + "[0;33m"
+SET Blu Esc + "[0;34m"
+SET Mag Esc + "[0;35m"
+SET Cyn Esc + "[0;36m"
+SET Wht Esc + "[0;37m"
+SET Gry Esc + "[30;1m"
+SET BrRed Esc + "[31;1m"
+SET BrGrn Esc + "[32;1m"
+SET BrYlw Esc + "[33;1m"
+SET BrBlu Esc + "[34;1m"
+SET BrMag Esc + "[35;1m"
+SET BrCyn Esc + "[36;1m"
+SET BrWht Esc + "[37;1m"
 
-REM 10 Oct MSG Test
+IF defined("subsequent")
+	BANNER [BrRed]-------------------%_Reminders for %w, %d%s %m, %y%o:[Nrm]
+ELSE
+	BANNER [BrRed]Reminders for %w, %d%s %m, %y%o:[Nrm]
+	SET subsequent 1
+	PRESERVE subsequent
+ENDIF
+
+include /home/jonathan/.local/share/remind/functions.rem
+SET $DefaultColor "255 255 0"
+include /home/jonathan/.local/share/remind/uk-hollidays.rem
+SET $DefaultColor "0 255 255"
+include /home/jonathan/.local/share/remind/yearly.secret.rem
+SET $DefaultColor "255 0 255"
+include /home/jonathan/.local/share/remind/one-off.secret.rem
+include /home/jonathan/.local/share/remind/weekly.secret.rem
+SET $DefaultColor "0 0 255"
+include /home/jonathan/.local/share/remind/work.rem
+SET $DefaultColor "-1 -1 -1"
