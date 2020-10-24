@@ -5,10 +5,16 @@ endif
 lua <<EOF
 	-- Bash Language Server
 	require'nvim_lsp'.bashls.setup{}
+	-- Clang Language Server
+	require'nvim_lsp'.clangd.setup{}
 	-- Go Language Server
 	require'nvim_lsp'.gopls.setup{}
+	-- Python Language Server
+	require'nvim_lsp'.pyls.setup{}
 	-- Vim Language Server
 	require'nvim_lsp'.vimls.setup{}
+	-- VUE Language Server
+	require'nvim_lsp'.vuels.setup{}
 EOF
 function! s:ConfigureBuffer()
 	nnoremap <buffer> <silent> <c-]> <cmd>lua vim.lsp.buf.definition()<CR>
