@@ -20,6 +20,11 @@ set number
 " Allows vim to background buffers without saving
 set hidden
 
+" Sets vim to smart case
+" If search is all lowercase, search insensitively; if you include a capital
+" it becomes a case sensitive match
+set ignorecase smartcase
+
 " Makes vim try to keep 5 lines visible at the top and bottom
 set scrolloff=5
 
