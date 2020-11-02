@@ -160,6 +160,8 @@ alias q='exit;'
 
 alias rnc="resize-netcat-listener -r $HOME/go/src/resize-nc-listener/examples/stty-resize-copy"
 
+alias wingcc='x86_64-w64-mingw32-gcc'
+
 ################
 #  Pentesting  #
 ################
