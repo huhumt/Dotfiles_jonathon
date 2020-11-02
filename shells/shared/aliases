@@ -115,6 +115,8 @@ type -p nvim > /dev/null && alias vim="nvim"
 type -p rmtrash > /dev/null && alias rm="rmtrash"
 type -p rmdirtrash > /dev/null && alias rmdir="rmdirtrash"
 
+# Use sc-im instead of sc
+type -p sc-im > /dev/null && alias sc="sc-im"
 
 # These don't have the same syntax but I want to be reminded of the better
 # versions
