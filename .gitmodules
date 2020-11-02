@@ -61,3 +61,6 @@
 [submodule "nvim/.config/nvim/pack/bundle/opt/vim-fugitive"]
 	path = nvim/.config/nvim/pack/bundle/opt/vim-fugitive
 	url = https://github.com/tpope/vim-fugitive
+[submodule "nvim/.config/nvim/pack/bundle/opt/AnsiEsc.vim"]
+	path = nvim/.config/nvim/pack/bundle/opt/AnsiEsc.vim
+	url = https://github.com/vim-scripts/AnsiEsc.vim
