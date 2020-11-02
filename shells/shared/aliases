@@ -123,6 +123,10 @@ type -p sc-im > /dev/null && alias sc="sc-im"
 type mycli > /dev/null && alias mysql="echo \"You might want to use mycli instead\"; /usr/bin/mysql"
 type pgcli > /dev/null && alias postgres="echo \"You might want to use pgcli instead\"; /usr/bin/postgres"
 
+# These are the gnu coreutils mv and cp with a progress bar patched in
+type mvg > /dev/null && alias mv="mvg --progress-bar"
+type cpg > /dev/null && alias cp="cpg --progress-bar"
+
 ###################
 #  Git Shortcuts  #
 ###################
