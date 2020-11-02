@@ -29,7 +29,7 @@ alias mbsync="mbsync -c \"$XDG_CONFIG_HOME/isync/mbsyncrc.secret\""
 alias imapfilter="imapfilter -c \"$XDG_CONFIG_HOME/imapfilter/config.lua\""
 
 # Makes rem output color by default
-alias rem="rem -@"
+alias rem="rem -@ -gaadd"
 
 
 ####################
