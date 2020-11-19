@@ -1,25 +1,21 @@
 ####################
+#      Notes       #
+####################
+# For some reason, Omit doesn't like having a day in it's definition.
+# You can get around this limitation by using REM without a message.
+# If the rem has `SATISFY 1` in its definition, it will always be run and Trigdate
+# will be set.
+# You can then use Trigdate (or %T) in the omit definition
+# https://blog.thechases.com/posts/remind/#omit-weekdays
+
+####################
 #     New Year     #
 ####################
 # New Year is always January 1st
-REM 01 Jan MSG New Year's Day
+OMIT 01 Jan MSG New Year's Day
 # Although, there will be a bank holliday on the following monday if
 # new years day is on a weekend
-REM 02 Jan [YEAR(CURRENT())] THROUGH 03 Jan [YEAR(CURRENT())] SATISFY [$Uw == 1] MSG New Year's Bank Holiday
-
-
-####################
-#      Simple      #
-####################
-# Early May bank holliday is the first Monday in May
-REM Mon 1 May MSG Early May Bank Holiday
-# Spring bank holiday is the last Monday in May
-# (7 days before first Monday in June)
-REM Mon 1 Jun --7 MSG Spring Bank Holiday (Whitsun)
-# Summer bank holiday is the last Monday in May
-# (7 days before first Monday in June)
-REM Mon 1 Sep --7 MSG Summer Bank Holiday
-
+OMIT 02 Jan [YEAR(CURRENT())] THROUGH 03 Jan [YEAR(CURRENT())] SATISFY [$Uw == 1] MSG New Year's Bank Holiday
 
 ####################
 #      Easter      #
@@ -27,47 +23,82 @@ REM Mon 1 Sep --7 MSG Summer Bank Holiday
 # Easter is confusing, thankfully remind gives us a way to get it
 SET easter EASTERDATE(YEAR(CURRENT()))
 # Good Friday is always exactly 2 days before easter
-REM [trigger(easter-2)] MSG Good Friday
+OMIT [trigger(easter-2)] MSG Good Friday
 # Easter is on easter
-REM [trigger(easter)] MSG Easter Sunday
+OMIT [trigger(easter)] MSG Easter Sunday
 # Easter Monday is always 1 day after Easter
-REM [trigger(easter+1)] MSG Easter Monday
+OMIT [trigger(easter+1)] MSG Easter Monday
 # Mothering Sunday is always 3 weeks before easter
+# It is not a bank holliday though so don't omit it
 REM [trigger(easter-21)] MSG Mothering Sunday
-
 
 ####################
 #     Christmas    #
 ####################
-# Christmas eve is always the 24th December
-REM 24 Dec MSG Christmas Eve
 # Christmas is always the 25th December
-REM 25 Dec MSG Christmas Day
-# Boxing Day is always the 26th December
-REM 26 Dec MSG Boxing Day
-# If Christmas day is on a Saturday, the following Monday and Tuesday will be
-# substitute bank holidays for Christmas and boxing day
-REM 27 Dec SATISFY [$Tw == 1] MSG Christmas Day (substitute bank holiday)
-REM 28 Dec SATISFY [$Tw == 2] MSG Boxing Day (substitute bank holiday)
-# If boxing day is a Saturday, the following Monday will be a bank holiday
-REM 28 Dec SATISFY [$Tw == 1] MSG Boxing Day (substitute bank holiday)
-# Need to look into what happens if Christmas falls on a Sunday.
-# I expect Mon and Tues are both bank holidays
-REM 27 Dec SATISFY [$Tw == 2 ] MSG Christmas Day (substitute bank holiday)
+REM 25 Dec SCANFROM [$U - 7] SATISFY 1
+set christmas trigdate()
 
+# Christmas eve is always the 24th December
+# It is not a bank holliday though
+REM [christmas - 1] MSG Christmas Eve
+
+# if Christmas fell on a Saturday
+IF wkdaynum(christmas) == 6
+	REM [christmas] MSG Christmas Day
+	REM [christmas+1] MSG Boxing Day
+	# The following Mon and Tues will be bank hollidays
+	OMIT [christmas+2] MSG Christmas day (bank holliday)
+	OMIT [christmas+3] MSG Boxing Day (bank holliday)
+ELSE
+	# if it fell on a Friday
+	IF wkdaynum(christmas) == 5
+		OMIT [christmas] MSG Christmas Day
+		REM [christmas+1] MSG Boxing Day
+		OMIT [christmas+3] MSG Boxing Day (bank holliday)
+	ELSE
+		# if it falls on a Sunday
+		IF wkdaynum(christmas) == 0
+			REM [christmas] MSG Christmas Day
+			OMIT [christmas+1] MSG Boxing Day
+			OMIT [christmas+2] MSG Christmas day (bank holliday)
+		ELSE
+			# otherwise, observed=actual
+			OMIT [christmas] MSG Christmas Day
+			OMIT [christmas+1] MSG Boxing Day
+		ENDIF
+	ENDIF
+ENDIF
+# If I don't buy an advent callender, I'll be in trouble
+REM 1 Dec ++7 MSG %"Advent starts %b%"%_Have you bought an advent callender%_scratchcard advent calender is on cork board
 
 ####################
 #   Other Events   #
 ####################
-REM 14 Feb MSG Valentine's Day
+# Valentine's day is always 14th February
+REM 14 Feb ++14 MSG Valentine's Day %b
+# Early May bank holliday is the first Monday in May
+REM Mon 1 May SATISFY 1
+OMIT [$T] MSG Early May Bank Holiday
+# Spring bank holiday is the last Monday in May
+# (7 days before first Monday in June)
+REM Mon 1 Jun --7 SATISFY 1
+OMIT [$T] MSG Spring Bank Holiday (Whitsun)
 # 3rd Sunday of June
 # This expression means the first Sunday after or on 15th June
 REM Sun 15 Jun MSG Father's Day
+# Summer bank holiday is the last Monday in May
+# (7 days before first Monday in June)
+REM Mon 1 Sep --7 SATISFY 1
+OMIT [$T] MSG Summer Bank Holiday
+# Black Friday is always the 4th Friday of November
+# that is the same as saying the friday on or after the 22nd
+REM Fri 22 November MSG Black Friday
 
 ####################
 # Daylight Savings #
 ####################
 # British summer time starts on the last Sunday of March
-REM Sun 1 Apr --7 MSG %"Clocks Forward%" British Summer Time Starts
+REM Sun 1 Apr --7 ++1 MSG %"Clocks Forward%" British Summer Time Starts
 # British summer time ends on the last Sunday of October
-REM Sun 1 Nov --7 MSG %"Clocks Backward%" British Summer Time Ends
+REM Sun 1 Nov --7 ++1 MSG %"Clocks Backward%" British Summer Time Ends
