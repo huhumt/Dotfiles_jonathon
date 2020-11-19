@@ -1,3 +1,5 @@
 # Function to calculate how many years since a date
 # Useful for birthdays, anniversaries etc.
 FSET years(y) ($Uy-y)
+FSET birthyear(y) ("(" + years(y) + " Years Old)")
+FSET marriageyear(y) ("(" + ord(years(y)) + " Anniversary)")
