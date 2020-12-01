@@ -1,0 +1,365 @@
+#!/usr/bin/env bash
+
+set -o pipefail
+
+die(){
+	echo "$@" >&2
+	exit 1
+}
+
+#RED='\033[0;31m'
+RED='\033[1;31m'
+YELLOW='\033[1;33m'
+GREEN='\033[1;32m'
+LBLUE='\033[1;34m'
+LCYAN='\033[1;36m'
+ORANGE='\033[0;33m'
+LGREY='\033[0;37m'
+BOLDJ='\033[1;37m'
+NC='\033[0m' # No Color
+
+stripAnsi(){
+	sed -r "s/\x1B\[([0-9]{1,3}(;[0-9]{1,2})?)?[mGK]//g"
+}
+
+trimWhitespace(){
+	sed -e 's/^[[:space:]]*//' -e 's/[[:space:]]*$//'
+}
+
+drawInBox(){
+	innerWidth="45"
+	echo -en "${LBLUE}╭"
+	head -c $innerWidth /dev/zero | tr '\0' '-'
+	echo -e "╮${NC}"
+	while IFS= read -r line; do
+		# The ansi characters mess up the string length so we need to strip them to calculate the width
+		stripped="$(echo -n "$line" | stripAnsi)"
+		leftPad=$(( ( innerWidth - ${#stripped} ) / 2))
+		rightPad=$(( ( innerWidth - leftPad ) - ${#stripped} ))
+		echo -en "${LBLUE}|${NC}"
+		head -c $leftPad /dev/zero | tr '\0' ' '
+		echo -n "$line"
+		head -c $rightPad /dev/zero | tr '\0' ' '
+		echo -e "${LBLUE}|${NC}"
+	done
+	echo -en "${LBLUE}╰"
+	head -c $innerWidth /dev/zero | tr '\0' '-'
+	echo -e "╯${NC}"
+}
+
+# gets the colour that should be output
+# 0 = green
+# 1 = yellow
+# 2 = red
+getColour(){
+	case "$1" in
+		0) echo -en "$GREEN" ;;
+		1) echo -en "$YELLOW" ;;
+		2) echo -en "$RED" ;;
+	esac
+}
+
+printKey(){
+	echo -e "Not checked\
+\t${GREEN}Fine${NC}\
+\t${YELLOW}Mis-configured${NC}\
+\t${RED}Missing${NC}"
+}
+
+test_server(){
+	local value="$(echo "$1" | cut -d ':' -f 2 | trimWhitespace)"
+	echo "Server" | drawInBox
+	echo -e "The server responds with ${ORANGE}$value${NC} in the Server header"
+	echo -e "This is potentially un-necesary information disclosure\n\n"
+	[ -n "$value" ] && return 1 || return 0
+}
+
+test_x-powered-by(){
+	local value="$(echo "$1" | cut -d ':' -f 2 | trimWhitespace)"
+	echo "X-Powered-By" | drawInBox
+	echo -e "The server responds with ${ORANGE}$value${NC} in the X-Powered-By header"
+	echo -e "This is potentially un-necesary information disclosure\n\n"
+	[ -n "$value" ] && return 1 || return 0
+}
+
+test_x-aspnet-version(){
+	local value="$(echo "$1" | cut -d ':' -f 2 | trimWhitespace)"
+	echo "X-Powered-By" | drawInBox
+	echo -e "The server responds with ${ORANGE}$value${NC} in the \
+X-AspNet-Version header"
+	echo -e "This is potentially un-necesary information disclosure\n\n"
+	[ -n "$value" ] && return 1 || return 0
+}
+
+test_x-xss-protection(){
+	local value="$(echo "$1" | cut -d ':' -f 2 | grep -oE '[0-9]+' )"
+	if [ "$value" = "1" ]; then
+		return 0
+	else
+		echo "X-XSS-Protection" | drawInBox
+		echo -e "The X-XSS-Protection header asks browsers to try and prevent \
+reflected cross site scripting attacks. It has been replaced in modern browsers \
+by the content-security-policy although should still be included for the sake \
+of old browsers\n\n"
+		return 1
+	fi
+}
+
+test_x-frame-options(){
+	local value="$(echo "$1" | cut -d ':' -f 2 | trimWhitespace)"
+	case "$value" in
+		"SAMEORIGIN"|"DENY") return 0 ;;
+		"ALLOW-FROM"*)
+			echo "X-Frame-Opitons" | drawInBox
+			echo "The ALLOW-FROM derivative is obsolete and no longer works \
+in modern browsers."
+			echo "The Content-Security-Policy HTTP header has a \
+frame-ancestors directive which you can use instead."
+			return 1
+			;;
+		*)
+			echo "X-Frame-Opitons" | drawInBox
+			echo "The X-Frame-Options HTTP response header can be used to \
+indicate whether or not a browser should be allowed to render a page in a \
+<frame>, <iframe>, <embed> or <object>. Sites can use this to avoid \
+click-jacking attacks, by ensuring that their content is not embedded into \
+other sites."
+
+			source="
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset='UTF-8' />
+<meta name='viewport' content='width=device-width' />
+<title>Clickjacking example</title>
+<style type='text/css' media='screen'>
+body{
+	width: 100vw;
+	height: 100vh;
+	border: 2px solid black;
+}
+iframe{
+	border: 3px solid black;
+	width: 80%;
+	height: 80%;
+	margin: 20px auto;
+	display: block;
+}
+h1, p{
+text-align: center;
+}
+</style>
+</head>
+<body>
+<h1>Clickjacking example</h1>
+<iframe src='$url'>
+</iframe>
+<p>If content is rendered above, the site is vulnerable to clickjacking</p>
+</body>
+</html>
+"
+			echo "To verify, type paste the following into your browser:"
+			echo -e "\ndata:text/html;base64,$(echo "$source" | base64 -w 0)\n\n"
+
+			return 2
+	esac
+}
+
+#test_x-content-type-options(){
+#}
+
+test_content-security-policy(){
+	local value="$(echo "$1" | cut -d ':' -f 2 | trimWhitespace)"
+	# TODO: work on content security testing
+	
+	if [ -z "$value" ]; then
+		echo "Content-Security-Policy" | drawInBox
+		echo -e "The HTTP Content-Security-Policy response header allows web site \
+administrators to control resources the user agent is allowed to load for a \
+given page. With a few exceptions, policies mostly involve specifying server \
+origins and script endpoints. This helps guard against cross-site scripting \
+attacks (XSS).\n\n"
+		return 2
+	elif echo "$value" | grep -q 'unsafe-inline'; then
+		echo "Content-Security-Policy" | drawInBox
+		echo -e "The content security policy includes the \
+${ORANGE}unsafe-inline${NC} property which allows for inline JS/CSS assets. \
+This prevents the content security policy from effectively mitigating against
+reflected or stored XSS attacks\n\n"
+	elif echo "$value" | grep -q 'unsafe-eval'; then
+		echo "Content-Security-Policy" | drawInBox
+		echo -e "The content security policy includes the \
+${ORANGE}unsafe-eval${NC} property which allows for eval to be used in JS. \
+This prevents the content security policy from effectively mitigating against
+DOM based XSS attacks\n\n"
+	fi
+	return 0
+}
+
+test_strict-transport-security(){
+	local value="$(echo "$1" | cut -d ':' -f 2 | trimWhitespace)"
+	local ret=0
+	local output=""
+	local maxAge="$(echo "$value" | grep -oE 'max-age=[0-9]+' |
+		grep -oE '[0-9]+')"
+
+	if [ "$maxAge" -lt "31536000" ]; then
+		output+="The max-age is set to a low value of ${ORANGE}$maxAge${NC}.
+We suggest setting it to at least 31536000.\n\n"
+		ret=$((ret>1 ? ret : 1))
+	fi
+
+	if ! echo "$value" | grep -q 'includeSubDomains'; then
+		output+="The ${ORANGE}includeSubdomains${NC} property was not found. \
+When included browsers won't connect to subdomains unless over an encrypted \
+channel.\n\n"
+		ret=$((ret>1 ? ret : 1))
+	fi
+
+	#if ! echo "$value" | grep -q 'preload'; then
+	#	output+="The preload property "
+	#	ret=$((ret>1 ? ret : 1))
+	#fi
+
+	if [ "$ret" -gt 0 ]; then
+		echo "Strict-Transport-Security" | drawInBox
+		echo -e "$output"
+	fi
+	return $ret
+}
+
+test_set-cookie(){
+	local value="$(echo "$1" | cut -d ':' -f 2 | trimWhitespace)"
+	local cookieName="$(echo "$value" | cut -d '=' -f 1)"
+	local ret=0
+	local output=""
+
+	if ! echo "$value" | grep -q "HttpOnly"; then
+		output+="The HttpOnly flag isn't set which means the cookie value can \
+be read by JavaScript. If a malicious actor manages to run JavaScript through \
+methods like XSS, they may be able to steal the contents of cookies\n\n"
+		ret=$((ret>1 ? ret : 1))
+	fi
+
+	if ! echo "$value" | grep -q "Secure"; then
+		output+="The Secure flag isn't set which means the cookie could be \
+sent over unencrypted channels\n\n"
+		ret=$((ret>1 ? ret : 1))
+	fi
+	
+	if [ "$ret" -gt 0 ]; then
+		echo "Set-Cookie: $cookieName" | drawInBox
+		echo -e "$output"
+	fi
+
+	return "$ret"
+}
+
+
+usage(){
+	echo -n "analyse-headers [OPTIONS]... URL
+
+	Analyse the headers of a website
+
+	Options:
+	-h, --help              Display this help and exit
+"
+}
+
+
+# Iterate over options breaking -ab into -a -b when needed and --foo=bar into
+# --foo bar
+optstring=h
+unset options
+while (($#)); do
+	case $1 in
+		# If option is of type -ab
+		-[!-]?*)
+		# Loop over each character starting with the second
+		for ((i=1; i < ${#1}; i++)); do
+			c=${1:i:1}
+
+			# Add current char to options
+			options+=("-$c")
+
+			# If option takes a required argument, and it's not the last char make
+			# the rest of the string its argument
+			if [[ $optstring = *"$c:"* && ${1:i+1} ]]; then
+				options+=("${1:i+1}")
+				break
+			fi
+		done
+		;;
+
+		# If option is of type --foo=bar
+		--?*=*) options+=("${1%%=*}" "${1#*=}") ;;
+		# add --endopts for --
+		--) options+=(--endopts) ;;
+		# Otherwise, nothing special
+		*) options+=("$1") ;;
+	esac
+	shift
+done
+set -- "${options[@]}"
+unset options
+
+followRedirect="false"
+
+# Read the options and set stuff
+while [[ $1 = -?* ]]; do
+	case $1 in
+		-h|--help) usage; exit;;
+		--) shift; break ;;
+		*) die "invalid option: '$1'." ;;
+	esac
+	shift
+done
+
+# Store the remaining part as arguments.
+args+=("$@")
+
+url="${args[0]}"
+[ -z "$url" ] && die "You need to specify a url"
+
+headers="$(curl -s -I "$url")"
+missingHeaders="x-frame-options
+content-security-policy
+x-xss-protection
+x-content-type-options"
+
+tmpfile="$(mktemp)"
+touch "$tmpfile"
+
+printKey
+
+echo ""
+
+echo "$headers" | sed -n '1p'
+
+while read line; do
+	headerKey="$(echo "$line" | cut -d ':' -f1)"
+	lowercase="$(echo "$headerKey" | tr '[A-Z]' '[a-z]')"
+	missingHeaders="$(echo -n "$missingHeaders" | sed '/'"$lowercase"'/d')"
+	functionName="test_$lowercase"
+	if declare -f "$functionName" > /dev/null; then
+		"$functionName" "$line" >> "$tmpfile"
+		colour="$(getColour "$?")"
+		echo -e "${colour}$line${NC}"
+	else
+		echo "$line"
+	fi
+done<<<$(echo "$headers" | sed '1d') # We don't want the initial http banner
+
+echo "$missingHeaders" | while read line; do
+	echo -e "${RED}$line${NC}"
+	functionName="test_$line"
+	"$functionName" >> "$tmpfile"
+done
+
+
+cat "$tmpfile"
+rm "$tmpfile"
+
+
+
+
