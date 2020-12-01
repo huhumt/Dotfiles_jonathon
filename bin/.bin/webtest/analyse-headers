@@ -248,6 +248,13 @@ methods like XSS, they may be able to steal the contents of cookies\n\n"
 sent over unencrypted channels\n\n"
 		ret=$((ret>1 ? ret : 1))
 	fi
+
+	if ! echo "$value" | grep -q "SameSite=Strict"; then
+		output+="SameSite controls whether a cookie is sent with cross-origin requests, \
+providing some protection against cross-site request forgery attacks.
+Strict means the browser sends the cookie only for same-site requests\n\n"
+		ret=$((ret>1 ? ret : 1))
+	fi
 	
 	if [ "$ret" -gt 0 ]; then
 		echo "Set-Cookie: $cookieName" | drawInBox
