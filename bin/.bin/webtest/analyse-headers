@@ -269,6 +269,36 @@ Strict means the browser sends the cookie only for same-site requests\n\n"
 	return "$ret"
 }
 
+test_permissions-policy(){
+	if [ -z "$1" ]; then
+		echo "Permissions-Policy" | drawInBox
+		wecho "The Permission-Policy header replaces the Feature-Policy and is \
+used to allow or disallow certain browser features or apis in the interest of \
+security.\n\n"
+		return 3
+	fi
+	local value="$(echo "$1" | cut -d ':' -f 2- | trimWhitespace)"
+}
+
+test_feature-policy(){
+	if [ -z "$1" ]; then
+		echo "Feature-Policy" | drawInBox
+		wecho "The Feature-Policy header was used to allow or disallow certian \
+browser features or apis. It has been superceded by the permissions-policy
+header but should still be included for legacy browsers.\n\n"
+		return 3
+	fi
+	if ! echo "$headers" | grep -Eqi '^permissions-policy'; then
+		echo "Feature-Policy" | drawInBox
+		wecho "The Feature-Policy header was used to allow or disallow certian \
+browser features or apis. It has been superceded by the permissions-policy
+header but should still be included for legacy browsers.
+It has been highlighted because the Permissions-policy header wasn't found.\n\n"
+		return 3
+	fi
+	local value="$(echo "$1" | cut -d ':' -f 2- | trimWhitespace)"
+}
+
 
 usage(){
 	echo -n "analyse-headers [OPTIONS]... URL
@@ -339,7 +369,9 @@ headers="$(curl -s -I "$url")"
 missingHeaders="x-frame-options
 content-security-policy
 x-xss-protection
-x-content-type-options"
+x-content-type-options
+feature-policy
+permissions-policy"
 
 tmpfile="$(mktemp)"
 touch "$tmpfile"
