@@ -26,6 +26,11 @@ trimWhitespace(){
 	sed -e 's/^[[:space:]]*//' -e 's/[[:space:]]*$//'
 }
 
+#wrapped echo
+wecho(){
+	builtin echo -e "$@" | fold -s -w 80
+}
+
 drawInBox(){
 	innerWidth="45"
 	echo -en "${LBLUE}╭"
@@ -69,25 +74,25 @@ printKey(){
 test_server(){
 	local value="$(echo "$1" | cut -d ':' -f 2 | trimWhitespace)"
 	echo "Server" | drawInBox
-	echo -e "The server responds with ${ORANGE}$value${NC} in the Server header"
-	echo -e "This is potentially un-necesary information disclosure\n\n"
+	wecho -e "The server responds with ${ORANGE}$value${NC} in the Server header"
+	wecho -e "This is potentially un-necesary information disclosure\n\n"
 	[ -n "$value" ] && return 1 || return 0
 }
 
 test_x-powered-by(){
 	local value="$(echo "$1" | cut -d ':' -f 2 | trimWhitespace)"
 	echo "X-Powered-By" | drawInBox
-	echo -e "The server responds with ${ORANGE}$value${NC} in the X-Powered-By header"
-	echo -e "This is potentially un-necesary information disclosure\n\n"
+	wecho -e "The server responds with ${ORANGE}$value${NC} in the X-Powered-By header" | wrap
+	wecho -e "This is potentially un-necesary information disclosure\n\n"
 	[ -n "$value" ] && return 1 || return 0
 }
 
 test_x-aspnet-version(){
 	local value="$(echo "$1" | cut -d ':' -f 2 | trimWhitespace)"
 	echo "X-Powered-By" | drawInBox
-	echo -e "The server responds with ${ORANGE}$value${NC} in the \
+	wecho -e "The server responds with ${ORANGE}$value${NC} in the \
 X-AspNet-Version header"
-	echo -e "This is potentially un-necesary information disclosure\n\n"
+	wecho -e "This is potentially un-necesary information disclosure\n\n"
 	[ -n "$value" ] && return 1 || return 0
 }
 
@@ -97,7 +102,7 @@ test_x-xss-protection(){
 		return 0
 	else
 		echo "X-XSS-Protection" | drawInBox
-		echo -e "The X-XSS-Protection header asks browsers to try and prevent \
+		wecho -e "The X-XSS-Protection header asks browsers to try and prevent \
 reflected cross site scripting attacks. It has been replaced in modern browsers \
 by the content-security-policy although should still be included for the sake \
 of old browsers\n\n"
@@ -111,15 +116,15 @@ test_x-frame-options(){
 		"SAMEORIGIN"|"DENY") return 0 ;;
 		"ALLOW-FROM"*)
 			echo "X-Frame-Opitons" | drawInBox
-			echo "The ALLOW-FROM derivative is obsolete and no longer works \
+			wecho "The ALLOW-FROM derivative is obsolete and no longer works \
 in modern browsers."
-			echo "The Content-Security-Policy HTTP header has a \
+			wecho "The Content-Security-Policy HTTP header has a \
 frame-ancestors directive which you can use instead."
 			return 1
 			;;
 		*)
 			echo "X-Frame-Opitons" | drawInBox
-			echo "The X-Frame-Options HTTP response header can be used to \
+			wecho "The X-Frame-Options HTTP response header can be used to \
 indicate whether or not a browser should be allowed to render a page in a \
 <frame>, <iframe>, <embed> or <object>. Sites can use this to avoid \
 click-jacking attacks, by ensuring that their content is not embedded into \
@@ -158,7 +163,7 @@ text-align: center;
 </body>
 </html>
 "
-			echo "To verify, type paste the following into your browser:"
+			wecho "To verify, type paste the following into your browser:"
 			echo -e "\ndata:text/html;base64,$(echo "$source" | base64 -w 0)\n\n"
 
 			return 2
@@ -174,7 +179,7 @@ test_content-security-policy(){
 	
 	if [ -z "$value" ]; then
 		echo "Content-Security-Policy" | drawInBox
-		echo -e "The HTTP Content-Security-Policy response header allows web site \
+		wecho -e "The HTTP Content-Security-Policy response header allows web site \
 administrators to control resources the user agent is allowed to load for a \
 given page. With a few exceptions, policies mostly involve specifying server \
 origins and script endpoints. This helps guard against cross-site scripting \
@@ -182,13 +187,13 @@ attacks (XSS).\n\n"
 		return 2
 	elif echo "$value" | grep -q 'unsafe-inline'; then
 		echo "Content-Security-Policy" | drawInBox
-		echo -e "The content security policy includes the \
+		wecho -e "The content security policy includes the \
 ${ORANGE}unsafe-inline${NC} property which allows for inline JS/CSS assets. \
 This prevents the content security policy from effectively mitigating against
 reflected or stored XSS attacks\n\n"
 	elif echo "$value" | grep -q 'unsafe-eval'; then
 		echo "Content-Security-Policy" | drawInBox
-		echo -e "The content security policy includes the \
+		wecho -e "The content security policy includes the \
 ${ORANGE}unsafe-eval${NC} property which allows for eval to be used in JS. \
 This prevents the content security policy from effectively mitigating against
 DOM based XSS attacks\n\n"
@@ -223,7 +228,7 @@ channel.\n\n"
 
 	if [ "$ret" -gt 0 ]; then
 		echo "Strict-Transport-Security" | drawInBox
-		echo -e "$output"
+		wecho -e "$output"
 	fi
 	return $ret
 }
@@ -258,7 +263,7 @@ Strict means the browser sends the cookie only for same-site requests\n\n"
 	
 	if [ "$ret" -gt 0 ]; then
 		echo "Set-Cookie: $cookieName" | drawInBox
-		echo -e "$output"
+		wecho -e "$output"
 	fi
 
 	return "$ret"
