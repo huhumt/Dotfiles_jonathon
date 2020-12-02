@@ -82,7 +82,7 @@ test_server(){
 test_x-powered-by(){
 	local value="$(echo "$1" | cut -d ':' -f 2 | trimWhitespace)"
 	echo "X-Powered-By" | drawInBox
-	wecho -e "The server responds with ${ORANGE}$value${NC} in the X-Powered-By header" | wrap
+	wecho -e "The server responds with ${ORANGE}$value${NC} in the X-Powered-By header"
 	wecho -e "This is potentially un-necesary information disclosure\n\n"
 	[ -n "$value" ] && return 1 || return 0
 }
