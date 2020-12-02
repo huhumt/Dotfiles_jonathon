@@ -255,7 +255,8 @@ sent over unencrypted channels\n\n"
 	fi
 
 	if ! echo "$value" | grep -q "SameSite=Strict"; then
-		output+="SameSite controls whether a cookie is sent with cross-origin requests, \
+		output+="The SameSite flag isn't set to Strict. The SameSite flag \
+controls whether a cookie is sent with cross-origin requests, \
 providing some protection against cross-site request forgery attacks.
 Strict means the browser sends the cookie only for same-site requests\n\n"
 		ret=$((ret>1 ? ret : 1))
@@ -402,6 +403,7 @@ echo "$missingHeaders" | while read line; do
 	"$functionName" >> "$tmpfile"
 done
 
+echo ""
 
 cat "$tmpfile"
 rm "$tmpfile"
