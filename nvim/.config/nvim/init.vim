@@ -1,7 +1,9 @@
 let mapleader = "\<Space>"
 let maplocalleader = "\\"
 
+
 if has('packages')
+	packadd! AnsiEsc.vim
 	packadd! fzf.vim
 	packadd! gruvbox
 	packadd! vim-fugitive
@@ -17,6 +19,7 @@ if has('packages')
 		packadd! deoplete-abook
 		packadd! deoplete-lsp
 		packadd! deoplete-notmuch
+		packadd! firenvim
 	endif
 endif
 
