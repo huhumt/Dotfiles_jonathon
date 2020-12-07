@@ -31,6 +31,7 @@ borg create \
 	--exclude '/home/*/.ccache'          \
 	--exclude '/home/*/Downloads'        \
 	--exclude '/home/*/.dotfiles'        \
+	--exclude '/home/*/GitRepos'         \
 	::'{hostname}-{now}'                 \
 	/home 2>&1
 
