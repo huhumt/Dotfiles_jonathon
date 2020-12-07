@@ -31,11 +31,8 @@ borg create \
 	--exclude '/home/*/.ccache'          \
 	--exclude '/home/*/Downloads'        \
 	--exclude '/home/*/.dotfiles'        \
-	--exclude '/home/lost+found'         \
-	--exclude '*.img'                    \
-	--exclude '*.iso'                    \
 	::'{hostname}-{now}'                 \
-	$HOME 2>&1
+	/home 2>&1
 
 backup_exit=$?
 
