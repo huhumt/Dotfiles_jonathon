@@ -1,0 +1,70 @@
+#!/bin/sh
+
+# the repo and it's passphrase
+
+# This file should export the following (as a minimum)
+# BORG_REPO
+# BORG_PASSPHRASE
+source "$(dirname "$(readlink -f "$0")")/borg.secret"
+
+installed="/home/jonathan/pacman-installed"
+
+# some helpers and error handling:
+info() { printf "\n%s %s\n\n" "$( date )" "$*" >&2; }
+trap 'echo $( date ) Backup interrupted >&2; exit 2' INT TERM
+
+info "Starting backup"
+
+# get a list of all explicitly installed packages to include in the backup
+if type -p yay > /dev/null; then
+	yay -Qe > "$installed"
+else
+	pacman -Qe > "$installed"
+fi
+
+# backup the directories
+borg create \
+	--verbose --filter AME               \
+	--list --stats --show-rc             \
+	--compression zlib,5                 \
+	--exclude '/home/*/.cache'           \
+	--exclude '/home/*/.ccache'          \
+	--exclude '/home/*/Downloads'        \
+	--exclude '/home/*/.dotfiles'        \
+	--exclude '/home/lost+found'         \
+	--exclude '*.img'                    \
+	--exclude '*.iso'                    \
+	::'{hostname}-{now}'                 \
+	$HOME 2>&1
+
+backup_exit=$?
+
+rm "$installed"
+
+info "Pruning repository"
+
+# prune the repo
+borg prune \
+	--list \
+	--prefix '{hostname}-' \
+	--show-rc \
+	--keep-daily 7 \
+	--keep-weekly 4 \
+	--keep-monthly 3 2>&1
+
+prune_exit=$?
+
+# use highest exit code as exit code
+global_exit=$(( backup_exit > prune_exit ? backup_exit : prune_exit ))
+
+if [ ${global_exit} -eq 1 ];
+then
+	info "Backup and/or Prune finished with a warning"
+fi
+
+if [ ${global_exit} -gt 1 ];
+then
+	info "Backup and/or Prune finished with an error"
+fi
+
+exit ${global_exit}
