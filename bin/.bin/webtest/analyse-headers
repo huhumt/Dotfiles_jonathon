@@ -71,6 +71,16 @@ printKey(){
 \t${RED}Missing${NC}"
 }
 
+generic_version_disclosure(){
+	local value="$(echo "$1" | cut -d ':' -f 2- | trimWhitespace)"
+	local header="$(echo "$1" | cut -d ':' -f 1 | trimWhitespace)"
+	echo "$header" | drawInBox
+	wecho -e "The server responds with ${ORANGE}$value${NC} in the \
+$header header"
+	wecho -e "This is potentially un-necesary information disclosure\n\n"
+	[ -n "$value" ] && return 1 || return 0
+}
+
 test_server(){
 	local value="$(echo "$1" | cut -d ':' -f 2 | trimWhitespace)"
 	echo "Server" | drawInBox
@@ -83,15 +93,6 @@ test_x-powered-by(){
 	local value="$(echo "$1" | cut -d ':' -f 2 | trimWhitespace)"
 	echo "X-Powered-By" | drawInBox
 	wecho -e "The server responds with ${ORANGE}$value${NC} in the X-Powered-By header"
-	wecho -e "This is potentially un-necesary information disclosure\n\n"
-	[ -n "$value" ] && return 1 || return 0
-}
-
-test_x-aspnet-version(){
-	local value="$(echo "$1" | cut -d ':' -f 2 | trimWhitespace)"
-	echo "X-Powered-By" | drawInBox
-	wecho -e "The server responds with ${ORANGE}$value${NC} in the \
-X-AspNet-Version header"
 	wecho -e "This is potentially un-necesary information disclosure\n\n"
 	[ -n "$value" ] && return 1 || return 0
 }
@@ -434,6 +435,11 @@ while read line; do
 	functionName="test_$lowercase"
 	if declare -f "$functionName" > /dev/null; then
 		"$functionName" "$line" >> "$tmpfile"
+		colour="$(getColour "$?")"
+		echo -e "${colour}$line${NC}"
+	elif echo "$lowercase" | grep "version" > /dev/null; then
+		# if the word version is in the line, assume version disclosure
+		generic_version_disclosure "$line" >> "$tmpfile"
 		colour="$(getColour "$?")"
 		echo -e "${colour}$line${NC}"
 	else
