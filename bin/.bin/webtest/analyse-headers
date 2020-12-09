@@ -403,7 +403,13 @@ args+=("$@")
 url="${args[0]}"
 [ -z "$url" ] && die "You need to specify a url"
 
-headers="$(curl -s -I "$url")"
+# If url is -, read headers from stdin
+if [ "$url" = "-" ]; then
+	headers="$(cat -)"
+else
+	headers="$(curl -s -I "$url")"
+fi
+
 missingHeaders="x-frame-options
 content-security-policy
 x-xss-protection
