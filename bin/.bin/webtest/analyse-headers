@@ -241,14 +241,14 @@ test_set-cookie(){
 
 	if ! echo "$value" | grep -q "HttpOnly"; then
 		echo "$value"
-		echo "$value" | grep -q "HttpOnly" --color always
+		echo "$value" | grep -qi "HttpOnly" --color always
 		output+="The HttpOnly flag isn't set which means the cookie value can \
 be read by JavaScript. If a malicious actor manages to run JavaScript through \
 methods like XSS, they may be able to steal the contents of cookies\n\n"
 		ret=$((ret>1 ? ret : 1))
 	fi
 
-	if ! echo "$value" | grep -q "Secure"; then
+	if ! echo "$value" | grep -qi "Secure"; then
 		output+="The Secure flag isn't set which means the cookie could be \
 sent over unencrypted channels\n\n"
 		ret=$((ret>1 ? ret : 1))
