@@ -117,10 +117,10 @@ test_x-frame-options(){
 		"SAMEORIGIN"|"DENY") return 0 ;;
 		"ALLOW-FROM"*)
 			echo "X-Frame-Opitons" | drawInBox
-			wecho "The ALLOW-FROM derivative is obsolete and no longer works \
-in modern browsers."
-			wecho "The Content-Security-Policy HTTP header has a \
-frame-ancestors directive which you can use instead."
+			wecho -e "The ALLOW-FROM derivative is obsolete and no longer works \
+in modern browsers.\n\n"
+			wecho -e "The Content-Security-Policy HTTP header has a \
+frame-ancestors directive which you can use instead.\n\n"
 			return 1
 			;;
 		*)
@@ -130,6 +130,14 @@ indicate whether or not a browser should be allowed to render a page in a \
 <frame>, <iframe>, <embed> or <object>. Sites can use this to avoid \
 click-jacking attacks, by ensuring that their content is not embedded into \
 other sites."
+
+			if echo "$headers" |
+				grep -Eqi '^content-security-policy:.*frame-ancestors.*'; then
+				wecho "It looks like the content security policy contains the \
+frame ancestors directive. This also mitigates against the clickjacking \
+although browser support isn't as strong meaning you should still include the \
+x-frame-options header"
+			fi
 
 			source="
 <!DOCTYPE html>
