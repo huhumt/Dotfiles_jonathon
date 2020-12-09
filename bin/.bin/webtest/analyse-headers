@@ -313,7 +313,13 @@ to check for potential breakages\n\n"
 	elif ! echo "$value" | grep -q "enforce"; then
 		echo "Expect-CT" | drawInBox
 		wecho "The enforce directive was not found. It can be useful to omit \
-this whilst testing the header, but should be added once testing has finished.\n\n"
+this whilst testing the header, but should be added once testing has finished.
+Without the enforce directive, the browser will not refuse connections that \
+violate the Certificate Transparency policy.
+The Expect-CT will likely become obsolete in June 2021. Since May 2018 new \
+certificates are expected to support SCTs by default. Certificates before \
+March 2018 were allowed to have a lifetime of 39 months, those will all be \
+expired in June 2021.\n\n"
 		return 1
 	fi
 }
