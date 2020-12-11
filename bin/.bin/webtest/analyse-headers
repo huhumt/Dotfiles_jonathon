@@ -361,6 +361,32 @@ information (sent via the Referer header) should be included with requests.\n\n"
 	fi
 }
 
+test_access-control-allow-origin(){
+	local value
+	value="$(echo "$1" | cut -d ':' -f 2- | trimWhitespace)"
+	if [ "$value" = "*" ]; then
+		echo "Access-Control-Allow-Origin" | drawInBox
+		wecho "The Access-Control-Allow-Origin header indicates whether the \
+response can be shared with requesting code from the given origin
+The value was found to be * meaning any origin. This is not normally desirable.
+\n"
+		return 1
+	elif echo "$value" | grep -q "null"; then
+		echo "Access-Control-Allow-Origin" | drawInBox
+		wecho "The Access-Control-Allow-Origin header indicates whether the \
+response can be shared with requesting code from the given origin
+The value was found to be null. the serialization of the Origin of any \
+resource that uses a non-hierarchical scheme (such as data: or file: ) and \
+sandboxed documents is defined to be \"null\". Many User Agents will grant \
+such documents access to a response with an Access-Control-Allow-Origin: \
+\"null\" header, and any origin can create a hostile document with a \"null\" \
+Origin. The \"null\" value for the ACAO header should therefore be avoided.\n\n"
+		return 1
+	
+	fi
+	return 0
+}
+
 
 usage(){
 	echo -n "analyse-headers [OPTIONS]... URL
