@@ -72,8 +72,10 @@ printKey(){
 }
 
 generic_version_disclosure(){
-	local value="$(echo "$1" | cut -d ':' -f 2- | trimWhitespace)"
-	local header="$(echo "$1" | cut -d ':' -f 1 | trimWhitespace)"
+	local value
+	local header
+	value="$(echo "$1" | cut -d ':' -f 2- | trimWhitespace)"
+	header="$(echo "$1" | cut -d ':' -f 1 | trimWhitespace)"
 	echo "$header" | drawInBox
 	wecho -e "The server responds with ${ORANGE}$value${NC} in the \
 $header header"
@@ -82,7 +84,8 @@ $header header"
 }
 
 test_server(){
-	local value="$(echo "$1" | cut -d ':' -f 2 | trimWhitespace)"
+	local value
+	value="$(echo "$1" | cut -d ':' -f 2 | trimWhitespace)"
 	echo "Server" | drawInBox
 	wecho -e "The server responds with ${ORANGE}$value${NC} in the Server header"
 	wecho -e "This is potentially un-necesary information disclosure\n\n"
@@ -90,7 +93,8 @@ test_server(){
 }
 
 test_x-powered-by(){
-	local value="$(echo "$1" | cut -d ':' -f 2 | trimWhitespace)"
+	local value
+	value="$(echo "$1" | cut -d ':' -f 2 | trimWhitespace)"
 	echo "X-Powered-By" | drawInBox
 	wecho -e "The server responds with ${ORANGE}$value${NC} in the X-Powered-By header"
 	wecho -e "This is potentially un-necesary information disclosure\n\n"
@@ -98,7 +102,8 @@ test_x-powered-by(){
 }
 
 test_x-xss-protection(){
-	local value="$(echo "$1" | cut -d ':' -f 2 | grep -oE '[0-9]+' )"
+	local value
+	value="$(echo "$1" | cut -d ':' -f 2 | grep -oE '[0-9]+' )"
 	if [ "$value" = "1" ]; then
 		return 0
 	else
@@ -112,7 +117,8 @@ of old browsers\n\n"
 }
 
 test_x-frame-options(){
-	local value="$(echo "$1" | cut -d ':' -f 2 | trimWhitespace)"
+	local value
+	value="$(echo "$1" | cut -d ':' -f 2 | trimWhitespace)"
 	case "$value" in
 		"SAMEORIGIN"|"DENY") return 0 ;;
 		"ALLOW-FROM"*)
@@ -183,7 +189,8 @@ text-align: center;
 #}
 
 test_content-security-policy(){
-	local value="$(echo "$1" | cut -d ':' -f 2 | trimWhitespace)"
+	local value
+	value="$(echo "$1" | cut -d ':' -f 2 | trimWhitespace)"
 	# TODO: work on content security testing
 	
 	if [ -z "$value" ]; then
@@ -211,10 +218,14 @@ DOM based XSS attacks\n\n"
 }
 
 test_strict-transport-security(){
-	local value="$(echo "$1" | cut -d ':' -f 2 | trimWhitespace)"
-	local ret=0
-	local output=""
-	local maxAge="$(echo "$value" | grep -oE 'max-age=[0-9]+' |
+	local value
+	local ret
+	local output
+	local maxAge
+	value="$(echo "$1" | cut -d ':' -f 2 | trimWhitespace)"
+	ret=0
+	output=""
+	maxAge="$(echo "$value" | grep -oE 'max-age=[0-9]+' |
 		grep -oE '[0-9]+')"
 
 	if [ "$maxAge" -lt "31536000" ]; then
@@ -243,10 +254,14 @@ channel.\n\n"
 }
 
 test_set-cookie(){
-	local value="$(echo "$1" | cut -d ':' -f 2- | trimWhitespace)"
-	local cookieName="$(echo "$value" | cut -d '=' -f 1)"
-	local ret=0
-	local output=""
+	local value
+	local cookieName
+	local ret
+	local output
+	value="$(echo "$1" | cut -d ':' -f 2- | trimWhitespace)"
+	cookieName="$(echo "$value" | cut -d '=' -f 1)"
+	ret=0
+	output=""
 
 	if ! echo "$value" | grep -q "HttpOnly"; then
 		echo "$value"
@@ -287,7 +302,6 @@ used to allow or disallow certain browser features or apis in the interest of \
 security.\n\n"
 		return 2
 	fi
-	local value="$(echo "$1" | cut -d ':' -f 2- | trimWhitespace)"
 }
 
 test_feature-policy(){
@@ -306,11 +320,11 @@ header but should still be included for legacy browsers.
 It has been highlighted because the Permissions-policy header wasn't found.\n\n"
 		return 2
 	fi
-	local value="$(echo "$1" | cut -d ':' -f 2- | trimWhitespace)"
 }
 
 test_expect-ct(){
-	local value="$(echo "$1" | cut -d ':' -f 2- | trimWhitespace)"
+	local value
+	value="$(echo "$1" | cut -d ':' -f 2- | trimWhitespace)"
 	if [ -z "$1" ]; then
 		echo "Expect-CT" | drawInBox
 		wecho "When a site enables the Expect-CT header, they are requesting \
@@ -334,7 +348,8 @@ expired in June 2021.\n\n"
 }
 
 test_referer-policy-ct(){
-	local value="$(echo "$1" | cut -d ':' -f 2- | trimWhitespace)"
+	local value
+	value="$(echo "$1" | cut -d ':' -f 2- | trimWhitespace)"
 	if [ -z "$1" ]; then
 		echo "Referrer-Policy" | drawInBox
 		wecho "The Referrer-Policy HTTP header controls how much referrer \
@@ -394,7 +409,6 @@ done
 set -- "${options[@]}"
 unset options
 
-followRedirect="false"
 
 # Read the options and set stuff
 while [[ $1 = -?* ]]; do
@@ -436,9 +450,9 @@ echo ""
 
 echo "$headers" | sed -n '1p'
 
-while read line; do
+while read -r line; do
 	headerKey="$(echo "$line" | cut -d ':' -f1)"
-	lowercase="$(echo "$headerKey" | tr '[A-Z]' '[a-z]')"
+	lowercase="$(echo "$headerKey" | tr '[:upper:]' '[:lower:]')"
 	missingHeaders="$(echo -n "$missingHeaders" | sed '/'"$lowercase"'/d')"
 	functionName="test_$lowercase"
 	if declare -f "$functionName" > /dev/null; then
@@ -453,9 +467,9 @@ while read line; do
 	else
 		echo "$line"
 	fi
-done<<<$(echo "$headers" | sed '1d') # We don't want the initial http banner
+done<<<"$(echo "$headers" | sed '1d')" # We don't want the initial http banner
 
-echo "$missingHeaders" | while read line; do
+echo "$missingHeaders" | while read -r line; do
 	echo -e "${RED}$line${NC}"
 	functionName="test_$line"
 	"$functionName" >> "$tmpfile"
