@@ -331,7 +331,11 @@ test_expect-ct(){
 that the browser check that any certificate for that site appears in public \
 CT logs.
 Initially, set the header without the enforce option but with report in order \
-to check for potential breakages\n\n"
+to check for potential breakages.
+The Expect-CT will likely become obsolete in June 2021. Since May 2018 new \
+certificates are expected to support SCTs by default. Certificates before \
+March 2018 were allowed to have a lifetime of 39 months, those will all be \
+expired in June 2021.\n\n"
 		return 2
 	elif ! echo "$value" | grep -q "enforce"; then
 		echo "Expect-CT" | drawInBox
