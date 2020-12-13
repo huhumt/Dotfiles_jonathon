@@ -25,6 +25,6 @@ endfunction
 if has('autocmd')
 	augroup JHLanguageClientAutocmds
 		autocmd!
-		autocmd FileType go,vim  call s:ConfigureBuffer()
+		autocmd FileType sh,c,go,python,vim,vue  call s:ConfigureBuffer()
 	augroup END
 endif
