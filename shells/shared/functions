@@ -1,3 +1,5 @@
+#!/usr/bin/env bash
+
 # make xclip work as I would expect. Copy to clipboard if piped data. Paste from otherwise
 function clip(){
 if type -p /usr/bin/xclip >/dev/null; then

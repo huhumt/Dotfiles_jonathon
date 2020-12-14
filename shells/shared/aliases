@@ -1,3 +1,5 @@
+#!/usr/bin/env bash
+
 ##########################
 #  Add flags by default  #
 ##########################
@@ -124,7 +126,7 @@ type mycli > /dev/null && alias mysql="echo \"You might want to use mycli instea
 type pgcli > /dev/null && alias postgres="echo \"You might want to use pgcli instead\"; /usr/bin/postgres"
 
 # These are the gnu coreutils mv and cp with a progress bar patched in
-type mvg > /dev/null && alias mv="mvg --progress-bar"
+type mvg > /dev/null && alias mv="mvg -g"
 type cpg > /dev/null && alias cp="cpg --progress-bar"
 
 ###################
@@ -165,6 +167,8 @@ alias q='exit;'
 alias rnc="resize-netcat-listener -r $HOME/go/src/resize-nc-listener/examples/stty-resize-copy"
 
 alias wingcc='x86_64-w64-mingw32-gcc'
+
+alias r="fzf-remind"
 
 ################
 #  Pentesting  #
