@@ -85,9 +85,12 @@ function! DetectMode(mode)
 
 	" git branch
 	if exists("*FugitiveHead")
-		let statusline .= "%#GruvboxBg4#\ " . left
-		let statusline .= "%#PmenuThumb#%{FugitiveHead()}"
-		let statusline .= "%#GruvboxBg4#" . right . "\ "
+		let head = FugitiveHead()
+		if head != ''
+			let statusline .= "%#GruvboxBg4#\ " . left
+			let statusline .= "%#PmenuThumb#" . head
+			let statusline .= "%#GruvboxBg4#" . right . "\ "
+		endif
 	endif
 
 	" Filetype
