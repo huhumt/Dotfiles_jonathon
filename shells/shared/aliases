@@ -122,12 +122,12 @@ type -p sc-im > /dev/null && alias sc="sc-im"
 
 # These don't have the same syntax but I want to be reminded of the better
 # versions
-type mycli > /dev/null && alias mysql="echo \"You might want to use mycli instead\"; /usr/bin/mysql"
-type pgcli > /dev/null && alias postgres="echo \"You might want to use pgcli instead\"; /usr/bin/postgres"
+type -p mycli > /dev/null && alias mysql="echo \"You might want to use mycli instead\"; /usr/bin/mysql"
+type -p pgcli > /dev/null && alias postgres="echo \"You might want to use pgcli instead\"; /usr/bin/postgres"
 
 # These are the gnu coreutils mv and cp with a progress bar patched in
-type mvg > /dev/null && alias mv="mvg -g"
-type cpg > /dev/null && alias cp="cpg --progress-bar"
+type -p mvg > /dev/null && alias mv="mvg -g"
+type -p cpg > /dev/null && alias cp="cpg --progress-bar"
 
 ###################
 #  Git Shortcuts  #
