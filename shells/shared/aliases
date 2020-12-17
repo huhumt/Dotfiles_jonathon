@@ -129,6 +129,9 @@ type -p pgcli > /dev/null && alias postgres="echo \"You might want to use pgcli 
 type -p mvg > /dev/null && alias mv="mvg -g"
 type -p cpg > /dev/null && alias cp="cpg --progress-bar"
 
+# If enum4linux-ng is available, use that instead
+type -p enum4linux-ng > /dev/null && alias enum4linux="enum4linux-ng"
+
 ###################
 #  Git Shortcuts  #
 ###################
