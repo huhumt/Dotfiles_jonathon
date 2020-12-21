@@ -66,16 +66,16 @@ function! DetectMode(mode)
 	" red = read only and not modified
 	if &mod == 1
 		let statusline .= "%#GruvboxAqua#\ " . left
-		let statusline .= "%#DiffChange#%.20f"
+		let statusline .= "%#DiffChange#%.30f"
 		let statusline .= "%#GruvboxAqua#" . right . "\ "
 	else
 		if &readonly == 1
 			let statusline .= "%#GruvboxRed#\ " . left
-			let statusline .= "%#DiffDelete#%.20f"
+			let statusline .= "%#DiffDelete#%.30f"
 			let statusline .= "%#GruvboxRed#" . right . "\ "
 		else
 			let statusline .= "%#GruvboxBg4#\ " . left
-			let statusline .= "%#PmenuThumb#%.20f"
+			let statusline .= "%#PmenuThumb#%.30f"
 			let statusline .= "%#GruvboxBg4#" . right . "\ "
 		endif
 	endif
