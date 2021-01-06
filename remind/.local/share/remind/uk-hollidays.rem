@@ -48,20 +48,20 @@ IF wkdaynum(christmas) == 6
 	REM [christmas] MSG Christmas Day
 	REM [christmas+1] MSG Boxing Day
 	# The following Mon and Tues will be bank hollidays
-	OMIT [christmas+2] MSG Christmas day (bank holliday)
-	OMIT [christmas+3] MSG Boxing Day (bank holliday)
+	OMIT [christmas+2] MSG Christmas day (substitute bank holliday)
+	OMIT [christmas+3] MSG Boxing Day (substitute bank holliday)
 ELSE
 	# if it fell on a Friday
 	IF wkdaynum(christmas) == 5
 		OMIT [christmas] MSG Christmas Day
 		REM [christmas+1] MSG Boxing Day
-		OMIT [christmas+3] MSG Boxing Day (bank holliday)
+		OMIT [christmas+3] MSG Boxing Day (substitute bank holliday)
 	ELSE
 		# if it falls on a Sunday
 		IF wkdaynum(christmas) == 0
 			REM [christmas] MSG Christmas Day
 			OMIT [christmas+1] MSG Boxing Day
-			OMIT [christmas+2] MSG Christmas day (bank holliday)
+			OMIT [christmas+2] MSG Christmas day (substitute bank holliday)
 		ELSE
 			# otherwise, observed=actual
 			OMIT [christmas] MSG Christmas Day
