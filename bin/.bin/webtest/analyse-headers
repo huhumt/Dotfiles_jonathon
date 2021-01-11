@@ -118,7 +118,7 @@ of old browsers\n\n"
 
 test_x-frame-options(){
 	local value
-	value="$(echo "$1" | cut -d ':' -f 2 | trimWhitespace)"
+	value="$(echo "$1" | cut -d ':' -f 2 | trimWhitespace | tr '[:lower:]' '[:upper:]')"
 	case "$value" in
 		"SAMEORIGIN"|"DENY") return 0 ;;
 		"ALLOW-FROM"*)
