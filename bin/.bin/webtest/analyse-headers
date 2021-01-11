@@ -219,6 +219,7 @@ attacks (XSS).\n\n"
 		echo "Content-Security-Policy" | drawInBox
 		message="$(echo "$message" | tr -d '\t')"
 		wecho -e "$message"
+		return 1
 	fi
 	return 0
 }
