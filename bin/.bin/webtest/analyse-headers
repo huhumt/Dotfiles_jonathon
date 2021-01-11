@@ -190,8 +190,9 @@ text-align: center;
 
 test_content-security-policy(){
 	local value
-	value="$(echo "$1" | cut -d ':' -f 2 | trimWhitespace)"
+	value="$(echo "$1" | cut -d ':' -f 2- | trimWhitespace)"
 	# TODO: work on content security testing
+	local message=""
 	
 	if [ -z "$value" ]; then
 		echo "Content-Security-Policy" | drawInBox
@@ -201,18 +202,23 @@ given page. With a few exceptions, policies mostly involve specifying server \
 origins and script endpoints. This helps guard against cross-site scripting \
 attacks (XSS).\n\n"
 		return 2
-	elif echo "$value" | grep -q 'unsafe-inline'; then
+	else
+		if echo "$value" | grep -q 'unsafe-inline'; then
+			message+="The content security policy includes the \
+	${ORANGE}unsafe-inline${NC} property which allows for inline JS/CSS assets. \
+	This prevents the content security policy from effectively mitigating against
+	reflected or stored XSS attacks\n\n"
+		elif echo "$value" | grep -q 'unsafe-eval'; then
+			message+="The content security policy includes the \
+	${ORANGE}unsafe-eval${NC} property which allows for eval to be used in JS. \
+	This prevents the content security policy from effectively mitigating against
+	DOM based XSS attacks\n\n"
+		fi
+	fi
+	if [ -n "$message" ]; then
 		echo "Content-Security-Policy" | drawInBox
-		wecho -e "The content security policy includes the \
-${ORANGE}unsafe-inline${NC} property which allows for inline JS/CSS assets. \
-This prevents the content security policy from effectively mitigating against
-reflected or stored XSS attacks\n\n"
-	elif echo "$value" | grep -q 'unsafe-eval'; then
-		echo "Content-Security-Policy" | drawInBox
-		wecho -e "The content security policy includes the \
-${ORANGE}unsafe-eval${NC} property which allows for eval to be used in JS. \
-This prevents the content security policy from effectively mitigating against
-DOM based XSS attacks\n\n"
+		message="$(echo "$message" | tr -d '\t')"
+		wecho -e "$message"
 	fi
 	return 0
 }
