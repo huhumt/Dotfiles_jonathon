@@ -208,6 +208,7 @@ alias irmgpg="gpg --options ~/.gnupg/irmgpg.conf --keyring=irm.gpg"
 if [ -f "$HOME/GitRepos/openssl-weak/openssl-1.0.2-chacha/apps/openssl" ]; then
 	alias weakopenssl="$HOME/GitRepos/openssl-weak/openssl-1.0.2-chacha/apps/openssl"
 	alias testssl="testssl --openssl=\"$HOME/GitRepos/openssl-weak/openssl-1.0.2-chacha/apps/openssl\""
+	alias verifySSL="verifySSL --openssl \"$HOME/GitRepos/openssl-weak/openssl-1.0.2-chacha/apps/openssl\""
 fi
 
 
