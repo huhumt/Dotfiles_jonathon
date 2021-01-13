@@ -34,7 +34,12 @@ check-beast(){
 	echo "" | $openssl s_client -ssl3 -connect "${host}:${port}" > /dev/null 2>&1
 	ssl3="$?"
 
-	 $openssl ciphers -v | grep -i cbc | cut -d' ' -f1 | while read cipher; do
+	if [ $tls1 -gt 0 ] && [ $ssl3 -gt 0 ]; then
+		die "Neither TLSv1 or SSLv3 connected successfully so there is no need to test the ciphers"
+	fi
+
+	$openssl ciphers -v | grep -i cbc | cut -d' ' -f1 | while read cipher; do
+		echo "Testing $cipher" >&2
 		if [ $tls1 -eq 0 ]; then
 			echo "openssl s_client -tls1 -cipher $cipher -connect ${host}:${port}" >> "$tmpfile"
 			echo "" | $openssl s_client -tls1 -cipher "$cipher" -connect "${host}:${port}" >> "$tmpfile" 2>&1
