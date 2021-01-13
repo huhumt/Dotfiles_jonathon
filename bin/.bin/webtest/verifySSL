@@ -23,6 +23,7 @@ print_help(){
 list_vulnerabilites(){
 	echo "Beast"
 	echo "Sweet32"
+	echo "Lucky13"
 }
 
 check-beast(){
@@ -67,6 +68,18 @@ check-sweet32(){
 	rm "$tmpfile"
 }
 
+check-lucky13(){
+	local tmpfile="$(mktemp)"
+	$openssl ciphers -v | grep -i cbc3 | cut -d' ' -f1 | while read cipher; do
+		echo "\$ openssl s_client -tls1 -cipher $cipher -connect ${host}:${port}" >> "$tmpfile"
+		echo "" | $openssl s_client -tls1 -cipher "$cipher" -connect "${host}:${port}" >> "$tmpfile" 2>&1
+		if [ "$?" -eq 0 ]; then
+			cat "$tmpfile"
+		fi
+		rm "$tmpfile"
+	done
+}
+
 while [ "$#" -gt 0 ]; do
 	case "$1" in
 		-p|--port)
@@ -106,6 +119,9 @@ case "$(echo "$vulnerability" | tr '[:upper:]' '[:lower:]')" in
 		;;
 	sweet32)
 		check-sweet32
+		;;
+	lucky13)
+		check-lucky13
 		;;
 	*)
 		die "Unknown vulnerability $vulnerability"
