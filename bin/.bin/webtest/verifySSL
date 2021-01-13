@@ -1,0 +1,99 @@
+#!/usr/bin/env bash
+
+port=443
+vulnerability=""
+host=""
+openssl="$(which openssl)"
+
+die(){
+	echo "$@" >&2
+	exit 1
+}
+
+print_help(){
+	echo "Attempts to connect using different tls versions"
+	echo ""
+	echo "verifySSL [options] <host>"
+	echo ""
+	echo "-p | --port          Port number (default 443)"
+	echo "-v | --vulnerability The vulnerability to test"
+	echo "--list               List the vulnerabilities that can be tested"
+}
+
+list_vulnerabilites(){
+	echo "Beast"
+}
+
+check-beast(){
+	local tls1
+	local ssl3
+	local tmpfile="$(mktemp)"
+	# In order to test beast, you need to have a cbc cipher and tls1 or sslv3
+	echo "" | $openssl s_client -tls1 -connect "${host}:${port}" > /dev/null 2>&1
+	tls1="$?"
+	echo "" | $openssl s_client -ssl3 -connect "${host}:${port}" > /dev/null 2>&1
+	ssl3="$?"
+
+	 $openssl ciphers -v | grep -i cbc | cut -d' ' -f1 | while read cipher; do
+		if [ $tls1 -eq 0 ]; then
+			echo "openssl s_client -tls1 -cipher $cipher -connect ${host}:${port}" >> "$tmpfile"
+			echo "" | $openssl s_client -tls1 -cipher "$cipher" -connect "${host}:${port}" >> "$tmpfile" 2>&1
+			if [ "$?" -eq 0 ]; then
+				cat "$tmpfile"
+			fi
+			rm "$tmpfile"
+		fi
+
+		if [ $ssl3 -eq 0 ]; then
+			echo "openssl s_client -ssl3 -cipher $cipher -connect ${host}:${port}" >> "$tmpfile"
+			echo "" | $openssl s_client -ssl3 -cipher "$cipher" -connect "${host}:${port}" >> "$tmpfile" 2>&1
+			if [ "$?" -eq 0 ]; then
+				cat "$tmpfile"
+			fi
+			rm "$tmpfile"
+		fi
+	done
+
+}
+
+while [ "$#" -gt 0 ]; do
+	case "$1" in
+		-p|--port)
+			port="$2"
+			shift; shift
+			;;
+		-v|--vulnerability)
+			vulnerability="$2"
+			shift; shift
+			;;
+		--openssl)
+			openssl="$2"
+			shift;shift
+			;;
+		-h|--help)
+			print_help
+			exit 0
+			;;
+		--list)
+			list_vulnerabilites
+			exit 0
+			;;
+		*)
+			host="$1"
+			shift
+			;;
+	esac
+done
+
+if [ -z "$host" ]; then
+	die "No host provided"
+fi
+
+case "$(echo "$vulnerability" | tr '[:upper:]' '[:lower:]')" in
+	beast)
+		check-beast
+		;;
+	*)
+		die "Unknown vulnerability $vulnerability"
+		;;
+esac
