@@ -67,3 +67,9 @@
 [submodule "nvim/.config/nvim/pack/bundle/opt/firenvim"]
 	path = nvim/.config/nvim/pack/bundle/opt/firenvim
 	url = https://github.com/glacambre/firenvim
+[submodule "nvim/.config/nvim/pack/bundle/opt/ultisnips"]
+	path = nvim/.config/nvim/pack/bundle/opt/ultisnips
+	url = https://github.com/SirVer/ultisnips
+[submodule "nvim/.config/nvim/pack/bundle/opt/vim-snippets"]
+	path = nvim/.config/nvim/pack/bundle/opt/vim-snippets
+	url = https://github.com/honza/vim-snippets

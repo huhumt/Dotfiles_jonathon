@@ -71,3 +71,7 @@ nnoremap <leader>co :!opout <c-r>%<CR><CR>
 " Makes vim default to "very magic" searching
 nnoremap / /\v
 vnoremap / /\v
+
+" Makes vim re-select visual selection when using < or >
+vnoremap < <gv
+vnoremap > >gv
