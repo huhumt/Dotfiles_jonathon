@@ -41,6 +41,12 @@ drawInBox(){
 		stripped="$(echo -n "$line" | stripAnsi)"
 		leftPad=$(( ( innerWidth - ${#stripped} ) / 2))
 		rightPad=$(( ( innerWidth - leftPad ) - ${#stripped} ))
+		if [ "${#stripped}" -gt "$innerWidth" ]; then
+			line="$(echo -n "$line" | fold -w $((innerWidth - 5)) | head -n 1)..."
+			stripped="$(echo -n "$line" | stripAnsi)"
+			leftPad=$(( ( innerWidth - ${#stripped} ) / 2))
+			rightPad=$(( ( innerWidth - leftPad ) - ${#stripped} ))
+		fi
 		echo -en "${LBLUE}|${NC}"
 		head -c $leftPad /dev/zero | tr '\0' ' '
 		echo -n "$line"
@@ -271,8 +277,6 @@ test_set-cookie(){
 	output=""
 
 	if ! echo "$value" | grep -q "HttpOnly"; then
-		echo "$value"
-		echo "$value" | grep -qi "HttpOnly" --color always
 		output+="The HttpOnly flag isn't set which means the cookie value can \
 be read by JavaScript. If a malicious actor manages to run JavaScript through \
 methods like XSS, they may be able to steal the contents of cookies\n\n"
@@ -292,12 +296,13 @@ providing some protection against cross-site request forgery attacks.
 Strict means the browser sends the cookie only for same-site requests\n\n"
 		ret=$((ret>1 ? ret : 1))
 	fi
+
+
 	
 	if [ "$ret" -gt 0 ]; then
 		echo "Set-Cookie: $cookieName" | drawInBox
 		wecho -e "$output"
 	fi
-
 	return "$ret"
 }
 
@@ -492,6 +497,7 @@ while read -r line; do
 	lowercase="$(echo "$headerKey" | tr '[:upper:]' '[:lower:]')"
 	missingHeaders="$(echo -n "$missingHeaders" | sed '/'"$lowercase"'/d')"
 	functionName="test_$lowercase"
+
 	if declare -f "$functionName" > /dev/null; then
 		"$functionName" "$line" >> "$tmpfile"
 		colour="$(getColour "$?")"
