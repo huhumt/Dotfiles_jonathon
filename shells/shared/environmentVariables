@@ -21,10 +21,12 @@ done
 export PATH=~/Projects/current/bin:$mypath:$GOPATH/bin:$HOME/.local/share/bin:$PATH:.
 
 #Ruby things
-GEM_HOME=$(ls -t -U | ruby -e 'puts Gem.user_dir')
-GEM_PATH=$GEM_HOME
-export PATH=$PATH:$GEM_HOME/bin
-export GEM_HOME=$(ruby -e 'print Gem.user_dir')
+if type -p ruby > /dev/null; then
+	GEM_HOME=$(ls -t -U | ruby -e 'puts Gem.user_dir')
+	GEM_PATH=$GEM_HOME
+	export PATH=$PATH:$GEM_HOME/bin
+	export GEM_HOME=$(ruby -e 'print Gem.user_dir')
+fi
 
 export PATH=$PATH:$HOME/node_modules/.bin
 
