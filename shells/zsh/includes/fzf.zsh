@@ -5,6 +5,8 @@ export FZF_CTRL_R_OPTS=""
 export FZF_CTRL_T_OPTS="$FZF_DEFAULT_OPTS --ansi --preview \"fzf-preview {}\""
 export FZF_ALT_C_OPTS="$FZF_DEFAULT_OPTS --ansi --preview \"fzf-preview {}\""
 
+type -p fzf > /dev/null || return
+
 # Ctrl t and alt c command are set below
 sourced="False"
 
