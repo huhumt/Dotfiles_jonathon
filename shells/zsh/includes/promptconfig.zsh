@@ -161,6 +161,7 @@ prompt_last_exit_code() {
 }
 
 prompt_email(){
+	type -p notmuch > /dev/null || return 0
 	unread="$(notmuch count "tag:unread")"
 	if [ "$unread" -gt 0 ]; then
 		echo "🖂  $unread"
