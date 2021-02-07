@@ -1,0 +1,40 @@
+#!/usr/bin/env sh
+
+# A simple script to adjust the volume
+# Requires pulse and amixer
+
+
+function drawBar(){
+	local percent="$1";
+
+	for i in {1..10}; do
+		local boxPercent=$(($i*10))
+		if [ "$boxPercent" -lt "$percent" ]; then
+			echo -n "■"
+		elif [ "$boxPercent" -eq "$percent" ]; then
+			echo -n "■"
+		elif [ "$(($boxPercent-10))" -lt "$percent" ]; then
+			echo -n "▣"
+		else
+			echo -n "□"
+		fi
+	done
+
+}
+
+case "$1" in
+	"up")
+		brightnessctl set 10%+
+		;;
+	"down")
+		brightnessctl set 10%-
+		;;
+esac
+
+brightness="$(brightnessctl get)"
+brightnessMax="$(brightnessctl max)"
+brightnessPercent="$((brightness * 100 / brightnessMax))"
+
+
+
+command -v notify-send && notify-send -R "/tmp/brightness" "Brightness" "$(drawBar $brightnessPercent) ${brightnessPercent}%"
