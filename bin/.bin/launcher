@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+
+# This script will be called from dwm in order to launch a program
+#
+# It bascially just calls rofi of dmenu if rofi is not available
+
+if type -p rofi 2> /dev/null; then
+	notify-send "I get here"
+	rofi -show drun -modi drun -theme themes/launchpad.rasi
+else
+	dmenu
+fi
+
