@@ -1,13 +1,31 @@
 #!/usr/bin/sh
+if type -p rofi 2> /dev/null; then
+	selectcommand="rofi -dmenu -i -theme themes/five.rasi"
+	shutdown=""
+	reboot=""
+	lock=""
+	suspend=""
+	logout=""
+else
+	selectcommand="dmenu -i -p 'Option'"
+	shutdown="Shutdown"
+	reboot="Reboot"
+	lock="Lock"
+	suspend="Suspend"
+	logout="Logout"
+fi
+
+
 selection=$( \
-	echo -e "Lock\nLogout\nSuspend\nHibernate\nReboot\nShutdown" |\
-	rofi -dmenu -i -p 'Option');
+	#echo -e "$shutdown\n$reboot\n$lock\n$suspend\n$logout" | $selectcommand
+	echo -e "$shutdown\n$reboot\n$lock\n$suspend" | $selectcommand
+	);
 echo $selection;
 
 sleep .2
 
 case $selection in
-	Lock)
+	)
 		i3exit lock
 		;;
 	Logout)
