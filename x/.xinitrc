@@ -17,10 +17,10 @@ dbus-update-activation-environment --systemd DISPLAY
 export CORPUSER="jonathan.hodgson"
 export CORPPASSCOMMAND="pass IRM/corp"
 
-setxkbmap -layout gb,gb -variant "colemak," -option grp:shifts_toggle
-xset r rate 200 70
-xinput --list | grep -E 'ErgoDox EZ ErgoDox EZ\s+id' | grep -oE 'id=[0-9]+' | cut -d'=' -f2 | xargs -r setxkbmap -layout gb -device
-
+#setxkbmap -layout gb,gb -variant "colemak," -option grp:shifts_toggle
+#xset r rate 200 70
+#xinput --list | grep -E 'ErgoDox EZ ErgoDox EZ\s+id' | grep -oE 'id=[0-9]+' | cut -d'=' -f2 | xargs -r setxkbmap -layout gb -device
+#
 type -p compton > /dev/null && exec /usr/bin/compton --config "$HOME/.config/picom/picom.conf" &
 #setbackground &
 #/usr/bin/nitrogen --restore &
@@ -28,13 +28,20 @@ type -p compton > /dev/null && exec /usr/bin/compton --config "$HOME/.config/pic
 [ -f /usr/lib/kdeconnectd ] && /usr/lib/kdeconnectd &
 [ -f /usr/bin/pactl ] && /usr/bin/pactl load-module module-switch-on-connect &
 [ -f /usr/bin/unclutter ] && /usr/bin/unclutter &
+
+type -p lisgd 2> /dev/null && lisgd &
+
+if hostname | grep -q phone; then
+	xrandr --output DSI-1 --mode 720x1440 --dpi 192
+fi
+
 #greenclip daemon &
 #exec xrdb .Xresources
 #xbindkeys
 #exec i3 -V >> ~/i3log-$(date + '%F-%k-%M-%S') 2>&1
 #startxfce4
-while :; do
+#while :; do
 	dwm
-done;
+#done;
 #exec sh /home/jonathan/.conky/conky-startup.sh
 #xcape
