@@ -1,10 +1,10 @@
 #!/usr/bin/sh
 if type -p rofi 2> /dev/null; then
-	selectcommand="rofi -dmenu -i -theme themes/five.rasi"
-	shutdown=""
-	reboot=""
-	lock=""
-	suspend=""
+	selectcommand="rofi -dmenu -i -theme themes/four.rasi -me-select-entry '' -me-accept-entry 'Mouse1'"
+	shutdown=""
+	reboot=""
+	lock=""
+	suspend=""
 	logout=""
 else
 	selectcommand="dmenu -i -p 'Option'"
@@ -25,22 +25,20 @@ echo $selection;
 sleep .2
 
 case $selection in
-	)
-		i3exit lock
+	$lock)
+		#i3exit lock
 		;;
-	Logout)
-		i3exit logout
+	$logout)
+		pkill dwm
 		;;
-	Suspend)
-		i3exit suspend
+	$suspend)
+		systemctl suspend
+		#i3exit lock
 		;;
-	Hibernate)
-		i3exit hibernate
+	$reboot)
+		systemctl reboot
 		;;
-	Reboot)
-		i3exit reboot
-		;;
-	Shutdown)
-		i3exit shutdown
+	$shutdown)
+		systemctl poweroff
 		;;
 esac
