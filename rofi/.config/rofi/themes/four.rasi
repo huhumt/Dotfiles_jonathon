@@ -31,7 +31,7 @@ window {
 }
 
 listview {
-    lines:							5;
+    lines:							4;
     margin:                         8px;
     spacing:                        8px;
     cycle:                          true;
