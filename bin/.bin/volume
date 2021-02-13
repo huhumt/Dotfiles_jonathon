@@ -24,17 +24,34 @@ function drawBar(){
 
 case "$1" in
 	"up")
-		amixer -q -D default sset Master 5%+ unmute
+		if type -p pulseaudio-ctl 2> /dev/null; then
+			pulseaudio-ctl up
+		else
+			amixer -q -D default sset Master 5%+ unmute
+		fi
 		;;
 	"down")
-		amixer -q -D default sset Master 5%- unmute
+		if type -p pulseaudio-ctl 2> /dev/null; then
+			pulseaudio-ctl down
+		else
+			amixer -q -D default sset Master 5%- unmute
+		fi
 		;;
 	"toggle")
-		amixer -q -D default sset Master toggle
+		if type -p pulseaudio-ctl 2> /dev/null; then
+			pulseaudio-ctl mute
+		else
+			amixer -q -D default sset Master toggle
+		fi
 esac
 
-volume="$(amixer -D default sget Master | grep -o '\[.*\%'  | head -n 1 | tr -d '[%')"
-speakerStatus="$(amixer -D default sget Master | grep -o '\[\(on\|off\)'  | head -n 1 | tr -d '[')"
+if type -p pulseaudio-ctl 2> /dev/null; then
+	volume="$(pulseaudio-ctl full-status | cut -d ' ' -f1)"
+	speakerStatus="$(pulseaudio-ctl full-status | cut -d ' ' -f2 | sed 's/no/on/g')"
+else
+	volume="$(amixer -D default sget Master | grep -o '\[.*\%'  | head -n 1 | tr -d '[%')"
+	speakerStatus="$(amixer -D default sget Master | grep -o '\[\(on\|off\)'  | head -n 1 | tr -d '[')"
+fi
 
 
 if [[ "$speakerStatus" == "on" ]]; then
