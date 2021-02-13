@@ -1,0 +1,8 @@
+[Unit]
+Description=Check stock
+
+[Service]
+ExecStart=/home/jonathan/.config/systemd/user/checkStock
+
+[Install]
+WantedBy=default.target

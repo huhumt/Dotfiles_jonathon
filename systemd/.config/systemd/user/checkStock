@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+
+url="https://pine64.com/product/pinecil-smart-mini-portable-soldering-iron/"
+string="out of stock"
+
+curl -sL "$url" | hq h1 text | grep -vqi "$string"
+if [ "$?" -eq 0 ]; then
+	notify-send "Pinecil back in stock"
+fi
