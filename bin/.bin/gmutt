@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+
+export initialCommand="neomutt $@"
+/usr/local/bin/st

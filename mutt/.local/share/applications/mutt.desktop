@@ -1,0 +1,15 @@
+[Desktop Entry]
+_Name=NeoMutt
+_Comment=Manage your email
+_Keywords=email;
+Actions=compose;
+Exec=gmutt %U
+Icon=neomutt
+Terminal=false
+Type=Application
+StartupNotify=true
+MimeType=application/mbox;message/rfc822;x-scheme-handler/mailto;
+
+[Desktop Action compose]
+_Name=Compose a Message
+Exec=gmutt mailto:
