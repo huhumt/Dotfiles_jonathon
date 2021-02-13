@@ -1,0 +1,55 @@
+#!/usr/bin/env bash
+
+# replaces " with \"
+echoescaped(){
+	echo -n '"'
+	echo "$@" | sed 's/"/\\"/g'
+	echo -n '"'
+}
+printRow(){
+	local id="$1"
+	local title="$(echo "$container" | hq "#$id" text)"
+	local -a headings
+	local -a bodys
+	
+	while IFS= read -rd '' heading; do
+		headings+=("$heading")
+	done < <( echo "$container" | hq "#${id}-container" data  |\
+		hq -0 '.details-header' text )
+	while IFS= read -rd '' body; do
+		bodys+=("$body")
+	done < <( echo "$container" | hq "#${id}-container" data  |\
+		hq -0 '.details-header + div' text )
+
+	# For some reason the html output doesn't put the observed bit in a div like
+	# the others
+	local observed="$(echo "$container" | hq "#${id}-container" data |\
+		sed -n '/<h2/,$p' | hq 'div:nth-of-type(2)' text)"
+
+	local link="${bodys[2]}"
+	local expected="${bodys[5]}"
+	# For some reason the html output doesn't put the observed bit in a div like
+	# the others
+	local observed="$(echo "$container" | hq "#${id}-container" data |\
+		sed -n '/<h2/,$p' | hq 'div:nth-of-type(2)' text)"
+
+	echoescaped -n "${title}"
+	echo -n ","
+	echoescaped -n "${link}"
+	echo -n ","
+	echoescaped -n "${expected}"
+	echo -n ","
+	echoescaped -n "${observed}"
+	echo ","
+}
+
+# Expects a file on stdin
+# Get the bit between compliance failed and the next heading
+container="$(cat - | sed -n "/<h6.*Compliance 'FAILED'/,/<h6/p")"
+ids="$(echo "$container" | grep -Eo 'id="idp[0-9]*-container' |\
+	cut -d '"' -f2 | cut -d '-' -f1)"
+
+echo "Title,See Also,Expected,Observed"
+while read id; do
+	printRow "$id"
+done <<< "$ids"
