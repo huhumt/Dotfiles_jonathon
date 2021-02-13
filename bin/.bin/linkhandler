@@ -13,6 +13,7 @@ case "$url" in
 	*//*.youtube.*/*) open-youtube "$url"; exit 0 ;;
 	*"//videos.*"*) open-youtube "$url"; exit 0 ;;
 	*"//xkcd.com/"*) xkcd "$url"; exit 0 ;;
+	"mailto:"*) neomutt "$url"; exit 0 ;;
 	*) $browser "$url"; exit 0 ;;
 	#*) notify-send "$url"; exit ;;
 esac
