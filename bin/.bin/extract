@@ -81,6 +81,14 @@ if [ -f "$1" ] ; then
 				7z x "$1"
 			fi
 			;;
+		*.xz)
+			if [ "$2" ]; then
+				#7z x "$1" -o"$2"
+				echo "Not sure"
+			else
+				xz -d "$1"
+			fi
+			;;
 		*)           echo "don't know how to extract '$1'..." ;;
 	esac
 else
