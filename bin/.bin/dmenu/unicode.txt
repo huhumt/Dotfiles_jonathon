@@ -6113,7 +6113,7 @@ z latin small letter z
 › single right-pointing angle quotation mark
 ※ reference mark
 ‼ double exclamation mark
-‽ interrobang
+‽ interrobang !? ?!
 ‾ overline
 ‿ undertie
 ⁀ character tie
