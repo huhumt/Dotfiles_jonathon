@@ -26,8 +26,11 @@ if [ -n "$PID" ]; then
 		CWD=$(readlink /proc/$PID/cwd)
 	fi
 fi
+current="$(project current --path)"
 if [ -n "$CWD" ]; then
 	cd "$CWD" && $CMD
+elif [ -n "$current" ]; then
+	cd "$current" && $CMD
 else
 	$CMD
 fi
