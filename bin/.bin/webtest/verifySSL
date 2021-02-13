@@ -70,8 +70,8 @@ check-sweet32(){
 
 check-lucky13(){
 	local tmpfile="$(mktemp)"
-	$openssl ciphers -v | grep -i cbc3 | cut -d' ' -f1 | while read cipher; do
-		echo "\$ openssl s_client -tls1 -cipher $cipher -connect ${host}:${port}" >> "$tmpfile"
+	$openssl ciphers -v | grep -i cbc | cut -d' ' -f1 | while read cipher; do
+		echo "\$ openssl s_client -cipher $cipher -connect ${host}:${port}" >> "$tmpfile"
 		echo "" | $openssl s_client -tls1 -cipher "$cipher" -connect "${host}:${port}" >> "$tmpfile" 2>&1
 		if [ "$?" -eq 0 ]; then
 			cat "$tmpfile"
