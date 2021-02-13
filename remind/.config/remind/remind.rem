@@ -32,6 +32,7 @@ SET $DefaultColor "0 255 255"
 include /home/jonathan/.local/share/remind/yearly.secret.rem
 SET $DefaultColor "255 0 255"
 include /home/jonathan/.local/share/remind/one-off.secret.rem
+include /home/jonathan/.local/share/remind/monthly.secret.rem
 include /home/jonathan/.local/share/remind/weekly.secret.rem
 SET $DefaultColor "0 0 255"
 include /home/jonathan/.local/share/remind/work.rem
