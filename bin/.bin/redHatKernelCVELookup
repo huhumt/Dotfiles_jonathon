@@ -1,0 +1,24 @@
+#!/usr/bin/env bash
+
+if [ "$1" = "--rwt" ]; then
+	output="RWT"
+	shift
+else
+	output="NORMAL"
+fi
+kernelVersion="${1:-""}"
+
+if [ -z "$kernelVersion" ]; then
+	echo -n "Enter the kernel version (excluding architecture): "
+	read -r kernelVersion
+fi
+
+curl -s "https://cve-search.iicrai.org/link/redhat.rpms/kernel-0%3A$kernelVersion" |
+	hq -0 '#CVEs' data | sed 's/<\/td>/§/g' | hq tr text | column -t -s '§' |
+	sed '1d' | while read -r line; do
+		if [ "$output" = "RWT" ]; then
+			echo "$line" | awk -F '  +' '{print "https://nvd.nist.gov/vuln/detail/" $1 " " $1}'
+		else
+			echo "$line" | awk -F '  +' '{print $1 "\t" $2 "\thttps://cve-search.iicrai.org/cve/" $1}'
+		fi
+	done  | sort -t'	' -k 2nr | column -t -s '	'
