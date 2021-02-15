@@ -1,0 +1,133 @@
+#!/usr/bin/env bash
+
+# This is where sms messages will be stored
+SMS_DIR="${XDG_DATA_HOME:-$HOME/.local/share}/SMS/"
+
+FILE="$(mktemp)"
+
+die(){
+	echo "$@" > /dev/stderr
+	rm "$FILE"
+	exit 1
+}
+
+usage(){
+	echo "sendSMS [options] [message|-]"
+	echo "Options:"
+	echo "  -e|--edit       Edit the message"
+	echo "  -h|--help       Display this help text"
+	echo "  -m|--modem      Specify a modem"
+	echo "  -n|--number     Specify a number"
+	echo "  --dry-run       Don't actually send the message"
+}
+
+mkdir -p "$SMS_DIR"
+
+number=""
+dryrun="false"
+edit="false"
+
+# Assume we want the first modem
+# can be overwritten by the -m option
+modem="$(mmcli -L | grep -qoE 'Modem\/[0-9]+' | head -n 1 | cut -d'/' -f2)"
+
+
+# Iterate over options breaking -ab into -a -b when needed and --foo=bar into
+# --foo bar
+optstring=h
+unset options
+while (($#)); do
+	case $1 in
+		# If option is of type -ab
+		-[!-]?*)
+		# Loop over each character starting with the second
+		for ((i=1; i < ${#1}; i++)); do
+			c=${1:i:1}
+
+			# Add current char to options
+			options+=("-$c")
+
+			# If option takes a required argument, and it's not the last char make
+			# the rest of the string its argument
+			if [[ $optstring = *"$c:"* && ${1:i+1} ]]; then
+				options+=("${1:i+1}")
+				break
+			fi
+		done
+		;;
+
+		# If option is of type --foo=bar
+		--?*=*) options+=("${1%%=*}" "${1#*=}") ;;
+		# add --endopts for --
+		--) options+=(--endopts) ;;
+		# Otherwise, nothing special
+		*) options+=("$1") ;;
+	esac
+	shift
+done
+set -- "${options[@]}"
+unset options
+
+
+# Read the options and set stuff
+while [[ $1 = -?* ]]; do
+	case $1 in
+		-e|--edit) edit="true" ;;
+		-h|--help) usage; exit;;
+		-m|--modem) modem="$2"; shift ;;
+		-n|--number) number="$2"; shift ;;
+		--dry-run) dryrun="true" ;;
+		--) shift; break ;;
+		*) die "invalid option: '$1'." ;;
+	esac
+	shift
+done
+
+# Store the remaining part as arguments.
+args+=("$@")
+
+# If the remaining argement is -, use stdin
+if [ "${args[0]}" = "-" ]; then
+	cat - > "$FILE"
+else
+	echo "${args[*]}" > "$FILE"
+fi
+
+# Die if no number
+[ -z "$number" ] && die "No number provided"
+
+# Die if no modem
+[ -z "$modem" ] && [ "$dryrun" = "false" ] && die "No modem found"
+
+if [ "$edit" = "true" ]; then
+	"$EDITOR" "$FILE"
+fi
+
+if [ "$dryrun" = "false" ]; then
+	# Creates the message using the text from file
+	messageNumber=$(
+		mmcli -m "$modem" --messaging-create-sms="number=$number" \
+			--messaging-create-sms-with-data="$FILE" | grep -o "[0-9]*$"
+	)
+
+	# Send the message
+	mmcli -s "$messageNumber" --send || die "Can't send message"
+
+	# If the messaeg is too long, the previous command will split it up (i think)
+	# The following loop will delete all sent messages from the modem storage
+	for i in $(mmcli -m "$modem" --messaging-list-sms | grep " (sent)" |
+		cut -f5 -d' ') ; do
+		mmcli -m "$modem" --messaging-delete-sms="$i"
+	done
+
+fi
+
+mkdir -p "$SMS_DIR/$number"
+log="$SMS_DIR/$number/sms.log"
+
+echo "SENT"
+echo "RECIPIENT: $number" >> $log
+echo "TIME: $(date)" >> $log
+echo "----" >> $log
+cat "$FILE" >> $log
+printf '\00\n' >> $log
