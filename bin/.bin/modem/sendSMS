@@ -29,7 +29,7 @@ edit="false"
 
 # Assume we want the first modem
 # can be overwritten by the -m option
-modem="$(mmcli -L | grep -qoE 'Modem\/[0-9]+' | head -n 1 | cut -d'/' -f2)"
+modem="$(mmcli -L | grep -oE 'Modem\/[0-9]+' | head -n 1 | cut -d'/' -f2)"
 
 
 # Iterate over options breaking -ab into -a -b when needed and --foo=bar into
