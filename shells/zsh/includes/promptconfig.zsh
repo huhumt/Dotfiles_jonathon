@@ -8,9 +8,10 @@ prompt_dir(){
 	gitReposIcon=""
 	magentoSiteIcon=" "
 	dropboxIcon=""
+	dotfilesIcon=""
 	seperator="  "
 	seperatorDual="  "
-	root=" $seperator"
+	root=" "
 	# Gets the path.
 	local current_path="$(print -P "%~")"
 
@@ -54,15 +55,21 @@ prompt_dir(){
 	fi
 
 
-
 	# Replace Dropbox with icon
 	current_path=$(echo $current_path | sed -r -e "s/$homeIcon\/Dropbox/$dropboxIcon/")
 
 	# Replace GitRepos with icon
 	current_path=$(echo $current_path | sed -r -e "s/$homeIcon\/GitRepos/$gitReposIcon/")
 
+	# Replace GitRepos with icon
+	current_path=$(echo $current_path | sed -r -e "s/$homeIcon\/.dotfiles/$dotfilesIcon/")
+
 	# Set the root
-	current_path=$(echo $current_path | sed -r -e "s/^\//$root/g")
+	current_path=$(echo $current_path | sed -r -e "s/^\//$root\//g")
+	
+	if [[ $(tput cols) -lt 100 ]]; then
+		current_path=$(echo $current_path | sed -r -e "s/\/.*\//\/\//g")
+	fi
 	
 	# Set the dual seperator
 	current_path=$(echo $current_path | sed -r -e "s/\/\//$seperatorDual/g")
@@ -250,9 +257,7 @@ set_prompts(){
 		background="$(echo "$segment" | sed -n '2p')"
 	fi
 
-	invisibleSeperator=$(echo -e '\u2063')
-	
-	PROMPT="$PROMPT $(seperator "$background")$(resetColor)$invisibleSeperator"
+	PROMPT="$PROMPT $(seperator "$background")$(resetColor)"
 
 #$(resetColor)
 	RPROMPT="$(resetColor)$(prompt_last_exit_code "$RETVAL")$(resetColor)"
