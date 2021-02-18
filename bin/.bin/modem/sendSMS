@@ -106,8 +106,8 @@ fi
 if [ "$dryrun" = "false" ]; then
 	# Creates the message using the text from file
 	messageNumber=$(
-		mmcli -m "$modem" --messaging-create-sms="number=$number" \
-			--messaging-create-sms-with-data="$FILE" | grep -o "[0-9]*$"
+		mmcli -m "$modem" --messaging-create-sms="number=$number,\
+			text='$(cat "$FILE" | sed "s/'/\\\'/g")'" | grep -o "[0-9]*$"
 	)
 
 	# Send the message
