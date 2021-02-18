@@ -88,7 +88,7 @@ done
 ids="$( mmcli -m "$modem" --messaging-list-sms |
 	grep -Eo '/SMS/[0-9]+ \(received\)' | grep -Eo '[0-9]+' )"
 
-count="$(echo -n "$ids" | wc -l)"
+count="$(echo "$ids" | wc -l)"
 
 [ "$count" -eq 0 ] && return
 
