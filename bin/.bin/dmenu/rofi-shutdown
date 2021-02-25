@@ -1,6 +1,6 @@
 #!/usr/bin/sh
 if type -p rofi 2> /dev/null; then
-	alias selectcommand="rofi -dmenu -i -theme themes/four.rasi -me-select-entry '' -me-accept-entry MousePrimary"
+	alias selectcommand="rofi -dmenu -i -theme themes/power.rasi -me-select-entry '' -me-accept-entry MousePrimary"
 	shutdown=""
 	reboot=""
 	lock=""
