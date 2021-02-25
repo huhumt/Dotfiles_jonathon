@@ -1,13 +1,13 @@
 #!/usr/bin/sh
 if type -p rofi 2> /dev/null; then
-	selectcommand="rofi -dmenu -i -theme themes/four.rasi -me-select-entry '' -me-accept-entry 'Mouse1'"
+	alias selectcommand="rofi -dmenu -i -theme themes/four.rasi -me-select-entry '' -me-accept-entry MousePrimary"
 	shutdown=""
 	reboot=""
 	lock=""
 	suspend=""
-	logout=""
+	logout="﫼"
 else
-	selectcommand="dmenu -i -p 'Option'"
+	alias selectcommand="dmenu -i -p 'Option'"
 	shutdown="Shutdown"
 	reboot="Reboot"
 	lock="Lock"
@@ -17,8 +17,7 @@ fi
 
 
 selection=$( \
-	#echo -e "$shutdown\n$reboot\n$lock\n$suspend\n$logout" | $selectcommand
-	echo -e "$shutdown\n$reboot\n$lock\n$suspend" | $selectcommand
+	echo -e "$shutdown\n$reboot\n$lock\n$logout\n$suspend" | selectcommand
 	);
 echo $selection;
 
