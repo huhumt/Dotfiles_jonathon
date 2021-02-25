@@ -27,8 +27,9 @@ type -p compton > /dev/null && exec /usr/bin/compton --config "$HOME/.config/pic
 /usr/bin/systemctl --user start background.service
 [ -f /usr/lib/kdeconnectd ] && /usr/lib/kdeconnectd &
 [ -f /usr/bin/pactl ] && /usr/bin/pactl load-module module-switch-on-connect &
-[ -f /usr/bin/unclutter ] && /usr/bin/unclutter &
+[ -f /usr/bin/unclutter ] && /usr/bin/unclutter --hide-on-touch &
 
+killall lisgd
 type -p lisgd 2> /dev/null && lisgd &
 
 if hostname | grep -q phone; then
