@@ -130,4 +130,5 @@ echo "RECIPIENT: $number" >> $log
 echo "TIME: $(date)" >> $log
 echo "----" >> $log
 cat "$FILE" >> $log
+# I assume nobody will be sending me messages with null bytes in them
 printf '\00\n' >> $log

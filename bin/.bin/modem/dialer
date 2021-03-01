@@ -1,0 +1,32 @@
+#!/usr/bin/env bash
+
+prompt=""
+
+answer=""
+reject=""
+
+options="1
+4
+7
+*
+ 
+2
+5
+8
+0
+$answer
+3
+6
+9
+#
+# "
+
+while true; do
+	notify-send "$prompt"
+	input="$(echo "$options" |
+		rofi -dmenu -p "$prompt" -theme themes/dialer.rasi \
+			-me-select-entry '' -me-accept-entry MousePrimary)"
+	[ "$input" = "#" ] && exit
+	#exit
+	prompt+="$input"
+done
