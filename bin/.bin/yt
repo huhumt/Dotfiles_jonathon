@@ -1,0 +1,110 @@
+#!/usr/bin/env bash
+
+# Requires:
+# * curl
+# * fzf
+# * viu
+# * jq
+ttyecho(){
+	# Same as echo but always to tty
+	echo "$@" > /dev/tty
+}
+
+urlencodespecial() {
+	# urlencode <string>
+	old_lc_collate=$LC_COLLATE
+	LC_COLLATE=C
+	local length="${#1}"
+	for (( i = 0; i < length; i++ )); do
+		local c="${1:i:1}"
+		case "$c" in
+			[a-zA-Z0-9.~_-]) printf "$c" ;;
+			' ') printf "+" ;;
+			*) printf '%%%02X' "'$c" ;;
+		esac
+	done
+	LC_COLLATE=$old_lc_collate
+}
+
+forceread(){
+	# Read but always from tty and will keep asking until a non-empty value is
+	# given
+	# First param is given is prompt
+	local answer=""
+	local first="true"
+	while [ -z "$answer" ]; do
+		[ "$first" == "true" ] || ttyecho "Please provide an answer"
+		first="false"
+		ttyecho -n "$1: "
+		read answer < /dev/tty
+	done
+	echo "$answer"
+}
+
+getSearchTerm(){
+	# Uses fzf to get a search term
+	# It will filter suggestions using youtube's autocomplete
+	export -f getSearchSuggestions
+	export -f urlencodespecial
+	echo "" | fzf --bind 'change:reload:bash -c  "getSearchSuggestions {q}" || true' \
+		--header="Search Suggestions" \
+		--phony \
+		--height=50% --layout=reverse
+}
+
+getSearchSuggestions(){
+	# Takes a query and outputs the search suggestions that youtube makes
+	query="$(urlencodespecial "$1")"
+	curl "https://clients1.google.com/complete/search?client=youtube&hl=en&gl=gb&gs_rn=64&gs_ri=youtube&ds=yt&cp=5&gs_id=4e&q=$query&xhr=t&xssi=t" |
+		tail -n 1 | jq -r '.[1][][0]'
+}
+
+performSearch(){
+	# Returns the json object yt gives us
+	local raw="$1"
+	local url="https://www.youtube.com/results?search_query=$(urlencodespecial "$raw")"
+	curl -s "$url" | hq script data | grep 'ytInitialData' | head -n 1 | grep -o '{.*}'
+}
+
+extractVideoInfo(){
+jq '..|.videoRenderer?' | sed '/^null$/d' |
+	jq -r '{title: .title.runs[0].text,
+		channel: .longBylineText.runs[0].text,
+		views: .shortViewCountText.simpleText,
+		time: .lengthText.simpleText,
+		age: .publishedTimeText.simpleText,
+		video: .videoId
+	}'
+}
+
+chooseVideo(){
+	(echo -e "Title\tChannel\tViews\tTime\tAge\tId"
+	jq -r '[ .title, .channel, .views, .time, .age, .video ] | @tsv') |
+		column -t -s"	" | sed $'s/  \([^ ]\)/\u00a0\\1/g' |
+		fzf --header-lines="1" --with-nth=1,2,3,4,5 --delimiter=$'\u00a0' 
+}
+
+chooseQuality(){
+	videoId="$(cat - | awk -F $'\u00a0' '{print $6}')"
+	code="$( (
+		echo "bb          Best of Both"
+		youtube-dl "$videoId" -F | sed -n '/format code/,$ p' | sed 1d;
+	) | fzf --prompt "Quality " -m | cut -d ' ' -f 1 )"
+
+	code="$(echo "$code" | tr '\n' '+' | sed 's/+$//')"
+
+	case "$code" in
+		"bb") mpv "https://www.youtube.com/watch?v=$videoId" --ytdl-format="bestvideo+bestaudio" ;;
+		*) mpv "https://www.youtube.com/watch?v=$videoId" --ytdl-format="$code" ;;
+	esac
+}
+
+main(){
+	local searchTerm="$1"
+
+	[ -z "$searchTerm" ] && searchTerm="$(getSearchTerm)"
+
+	performSearch "$searchTerm" | extractVideoInfo | chooseVideo | chooseQuality
+}
+
+main "$@"

@@ -19,7 +19,16 @@ export CORPPASSCOMMAND="pass IRM/corp"
 
 #setxkbmap -layout gb,gb -variant "colemak," -option grp:shifts_toggle
 #xset r rate 200 70
-#xinput --list | grep -E 'ErgoDox EZ ErgoDox EZ\s+id' | grep -oE 'id=[0-9]+' | cut -d'=' -f2 | xargs -r setxkbmap -layout gb -device
+
+# Set keymap to colemak
+setxkbmap -layout gb,gb -variant "colemak," -option grp:shifts_toggle
+
+# Set key rate
+xset r rate 200 70;
+
+# Unset my ergodox as it is already colemak
+xinput --list | grep -Ei 'ErgoDox EZ\s+id' | grep -oE 'id=[0-9]+' |
+	cut -d'=' -f2 | xargs -r setxkbmap -layout gb -device
 #
 type -p compton > /dev/null && exec /usr/bin/compton --config "$HOME/.config/picom/picom.conf" &
 #setbackground &
