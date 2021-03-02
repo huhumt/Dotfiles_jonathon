@@ -1,0 +1,128 @@
+#!/usr/bin/env bash
+
+
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
+source "$DIR/common"
+
+usage(){
+	echo "checkCall [options] [message|-]"
+	echo "Options:"
+	echo "  -h|--help       Display this help text"
+	echo "  -m|--modem      Specify a modem"
+	echo "  --dry-run       Don't actually send the message"
+}
+
+
+# Stolen from sxmo
+lookupnumberfromcallid() {
+	local id=$1
+	mmcli -m "$modem" --voice-list-calls -o "$id" -K |
+		grep call.properties.number |
+		cut -d ':' -f 2 |
+		tr -d ' '
+}
+
+lookupcontact(){
+	echo "$1" |
+		# Remove the +44 and replace with 0
+		sed 's/^\+44/0/'
+	# This will eventually work with abook but for now just return the number
+}
+
+answer-call(){
+	mmcli -m "$modem" -o "$1" --accept
+}
+
+reject-call(){
+	notify-send "Reject"
+}
+
+prompt-incoming(){
+	export DISPLAY=:0.0
+
+	local answer=""
+	local reject=""
+
+	local choice=''
+	# Used for testing
+	local number="${1:-01234 567890}"
+
+	local prompt="$(echo -en "Incoming Call\n$number")"
+
+	while [ -z "$choice" ]; do
+
+		choice="$(echo -e "$answer\n$reject" | rofi -dmenu -i \
+			-theme themes/incoming-call.rasi -a 0 -u 1 \
+			-p "$prompt" \
+			-me-select-entry '' -me-accept-entry MousePrimary)"
+
+		case "$choice" in
+			"$answer") echo "answer" ;;
+			"$reject") echo "reject" ;;
+		esac
+	done
+}
+
+mkdir -p "$CALL_DIR"
+
+dryrun="false"
+
+# Assume we want the first modem
+# can be overwritten by the -m option
+modem="$(mmcli -L | grep -oE 'Modem\/[0-9]+' | head -n 1 | cut -d'/' -f2)"
+
+
+
+# Read the options and set stuff
+while [[ $1 = -?* ]]; do
+	case $1 in
+		-h|--help) usage; exit;;
+		-m|--modem) modem="$2"; shift ;;
+		--dry-run) dryrun="true" ;;
+		--) shift; break ;;
+		*) die "invalid option: '$1'." ;;
+	esac
+	shift
+done
+
+
+checkIncoming(){
+	local id="$( mmcli -m "$modem" --voice-list-calls |
+		grep -Eo '[0-9]+ incoming \(ringing-in\)' | grep -Eo '[0-9]+' )"
+
+	local count="$(echo "$id" | deleteEmptyLines | wc -l)"
+
+	[ "$count" -eq 0 ] && return
+
+	local number="$(lookupnumberfromcallid "$id")"
+	local contact="$(lookupcontact "$number")"
+
+	local action="$(prompt-incoming "$contact")"
+
+	case action in
+		accept) answer-call "$id" ;;
+		reject) reject-call "$id" ;;
+	esac
+}
+
+checkFinished(){
+	local ids="$( mmcli -m "$modem" --voice-list-calls |
+		grep -Eo '[0-9]+ incoming \(terminated\)' | grep -Eo '[0-9]+' )"
+
+	local count="$(echo "$ids" | deleteEmptyLines | wc -l)"
+
+	[ "$count" -eq 0 ] && return
+
+	echo "$ids" | while read -r id; do
+		# Delete from the modem
+		local number="$(lookupnumberfromcallid "$id")"
+		local contact="$(lookupcontact "$number")"
+
+		echo "Missed call from $contact" >> "$CALL_DIR/missed-calls"
+		mmcli -m "$modem" --voice-delete-call "$id"
+		
+	done
+}
+
+checkIncoming &
+checkFinished &

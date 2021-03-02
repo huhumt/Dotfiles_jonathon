@@ -1,0 +1,38 @@
+#!/usr/bin/env bash
+
+
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
+source "$DIR/common"
+
+usage(){
+	echo "missedCalls"
+	echo "-a      --all       Print all (default)"
+	echo "-c      --count     Print count"
+	echo "-l      --list      Print list"
+}
+
+toprint="all"
+# Read the options and set stuff
+while [[ $1 = -?* ]]; do
+	case $1 in
+		-a|--all) toprint="all" ;;
+		-c|--count) toprint="count" ;;
+		-l|--list) toprint="list" ;;
+		-h|--help) usage; exit;;
+		--) shift; break ;;
+		*) die "invalid option: '$1'." ;;
+	esac
+	shift
+done
+
+[ -f "$CALL_DIR/missed-calls" ] || exit
+
+if [ "$toprint" = "count" ] || [ "$toprint" = "all" ]; then
+	count="$(cat "$CALL_DIR/missed-calls" | deleteEmptyLines | wc -l )"
+	echo "$count missed calls"
+fi
+
+if [ "$toprint" = "list" ] || [ "$toprint" = "all" ]; then
+	cat "$CALL_DIR/missed-calls"
+fi
+
