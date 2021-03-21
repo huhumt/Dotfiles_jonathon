@@ -30,11 +30,13 @@ lookupcontact(){
 }
 
 answer-call(){
+	export DISPLAY=:0.0
+	echo "answer call $1" > /dev/tty
 	mmcli -m "$modem" -o "$1" --accept
 }
 
 reject-call(){
-	notify-send "Reject"
+	mmcli -m "$modem" -o "$1" --hangup
 }
 
 prompt-incoming(){
@@ -45,22 +47,20 @@ prompt-incoming(){
 
 	local choice=''
 	# Used for testing
-	local number="${1:-01234 567890}"
+	local contact="${1:-01234 567890}"
 
-	local prompt="$(echo -en "Incoming Call\n$number")"
+	local prompt="$(echo -en "Incoming Call\n$contact")"
 
-	while [ -z "$choice" ]; do
+	choice="$(echo -e "$answer\n$reject" | rofi -dmenu -i \
+		-theme themes/incoming-call.rasi -a 0 -u 1 \
+		-p "$prompt" \
+		-window-title "call-from-$contact" \
+		-me-select-entry '' -me-accept-entry MousePrimary)"
 
-		choice="$(echo -e "$answer\n$reject" | rofi -dmenu -i \
-			-theme themes/incoming-call.rasi -a 0 -u 1 \
-			-p "$prompt" \
-			-me-select-entry '' -me-accept-entry MousePrimary)"
-
-		case "$choice" in
-			"$answer") echo "answer" ;;
-			"$reject") echo "reject" ;;
-		esac
-	done
+	case "$choice" in
+		"$answer") echo "accept" ;;
+		"$reject") echo "reject" ;;
+	esac
 }
 
 mkdir -p "$CALL_DIR"
@@ -87,6 +87,7 @@ done
 
 
 checkIncoming(){
+	export DISPLAY=:0.0
 	local id="$( mmcli -m "$modem" --voice-list-calls |
 		grep -Eo '[0-9]+ incoming \(ringing-in\)' | grep -Eo '[0-9]+' )"
 
@@ -97,12 +98,15 @@ checkIncoming(){
 	local number="$(lookupnumberfromcallid "$id")"
 	local contact="$(lookupcontact "$number")"
 
-	local action="$(prompt-incoming "$contact")"
-
-	case action in
-		accept) answer-call "$id" ;;
-		reject) reject-call "$id" ;;
+	local action=""
+	while mmcli -m "$modem" --voice-list-calls | grep -Eoq "$id"' incoming \(ringing-in\)' && [ -z "$action" ]; do
+		action="$(prompt-incoming "$contact")"
+	done
+	case "$action" in
+		"accept") answer-call "$id"; break ;;
+		"reject") reject-call "$id"; break ;;
 	esac
+
 }
 
 checkFinished(){
@@ -113,14 +117,24 @@ checkFinished(){
 
 	[ "$count" -eq 0 ] && return
 
+
 	echo "$ids" | while read -r id; do
 		# Delete from the modem
 		local number="$(lookupnumberfromcallid "$id")"
 		local contact="$(lookupcontact "$number")"
 
-		echo "Missed call from $contact" >> "$CALL_DIR/missed-calls"
-		mmcli -m "$modem" --voice-delete-call "$id"
-		
+		# If there is a rofi process with the title of "call-from-number", then
+		# it hasn't been answerd yet.
+		# Treat as a missed call
+		if ps aux | grep -E '\Wrofi' | grep -q "call-from-$number"; then
+			echo "Missed call from $contact" >> "$CALL_DIR/missed-calls"
+			mmcli -m "$modem" --voice-delete-call "$id"
+			ps aux | grep -E '\Wrofi' | grep "call-from-$number" | 
+				awk '{print $2}' | xargs kill
+		fi
+
+
+			
 	done
 }
 
