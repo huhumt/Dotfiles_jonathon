@@ -46,8 +46,7 @@ prompt-incoming(){
 	local reject=""
 
 	local choice=''
-	# Used for testing
-	local contact="${1:-01234 567890}"
+	local contact="$1"
 
 	local prompt="$(echo -en "Incoming Call\n$contact")"
 
@@ -63,31 +62,13 @@ prompt-incoming(){
 	esac
 }
 
-mkdir -p "$CALL_DIR"
-
-dryrun="false"
-
-# Assume we want the first modem
-# can be overwritten by the -m option
-modem="$(mmcli -L | grep -oE 'Modem\/[0-9]+' | head -n 1 | cut -d'/' -f2)"
-
-
-
-# Read the options and set stuff
-while [[ $1 = -?* ]]; do
-	case $1 in
-		-h|--help) usage; exit;;
-		-m|--modem) modem="$2"; shift ;;
-		--dry-run) dryrun="true" ;;
-		--) shift; break ;;
-		*) die "invalid option: '$1'." ;;
-	esac
-	shift
-done
-
 
 checkIncoming(){
 	export DISPLAY=:0.0
+	if [ "$dryrun" = "true" ]; then
+		prompt-incoming "+441234567890"
+		return
+	fi
 	local id="$( mmcli -m "$modem" --voice-list-calls |
 		grep -Eo '[0-9]+ incoming \(ringing-in\)' | grep -Eo '[0-9]+' )"
 
@@ -117,7 +98,6 @@ checkFinished(){
 
 	[ "$count" -eq 0 ] && return
 
-
 	echo "$ids" | while read -r id; do
 		# Delete from the modem
 		local number="$(lookupnumberfromcallid "$id")"
@@ -129,7 +109,7 @@ checkFinished(){
 		if ps aux | grep -E '\Wrofi' | grep -q "call-from-$number"; then
 			echo "Missed call from $contact" >> "$CALL_DIR/missed-calls"
 			mmcli -m "$modem" --voice-delete-call "$id"
-			ps aux | grep -E '\Wrofi' | grep "call-from-$number" | 
+			ps aux | grep -E '\Wrofi' | grep "call-from-$number" |
 				awk '{print $2}' | xargs kill
 		fi
 
@@ -138,5 +118,30 @@ checkFinished(){
 	done
 }
 
+mkdir -p "$CALL_DIR"
+
+dryrun="false"
+
+# Assume we want the first modem
+# can be overwritten by the -m option
+modem="$(mmcli -L | grep -oE 'Modem\/[0-9]+' | head -n 1 | cut -d'/' -f2)"
+
+
+
+# Read the options and set stuff
+while [[ $1 = -?* ]]; do
+	case $1 in
+		-h|--help) usage; exit;;
+		-m|--modem) modem="$2"; shift ;;
+		--dry-run) dryrun="true" ;;
+		--) shift; break ;;
+		*) die "invalid option: '$1'." ;;
+	esac
+	shift
+done
+
 checkIncoming &
 checkFinished &
+
+
+
