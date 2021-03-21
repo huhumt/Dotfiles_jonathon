@@ -306,7 +306,7 @@ function backgroundColor() {
 function foregroundColor() {
   echo -n "%F{$(getColor $1)}"
 }
-
+HASFOCUS="true"
 function focusBackgroundColor() {
 	if [ "$HASFOCUS" = "true" ]; then
     backgroundColor "$@"
