@@ -1,6 +1,19 @@
 #!/usr/bin/sh
+
+isPhone(){
+	case "$(hostname)" in
+		*-phone) return 0 ;;
+		*) return 1 ;;
+	esac
+}
+
 if type -p rofi 2> /dev/null; then
-	alias selectcommand="rofi -dmenu -i -theme themes/power.rasi -me-select-entry '' -me-accept-entry MousePrimary"
+	if isPhone; then
+		theme="themes/power-phone.rasi"
+	else
+		theme="themes/power.rasi"
+	fi
+	alias selectcommand="rofi -dmenu -i -theme $theme -me-select-entry '' -me-accept-entry MousePrimary"
 	shutdown=""
 	reboot=""
 	lock=""
@@ -15,24 +28,33 @@ else
 	logout="Logout"
 fi
 
+hostname="$(hostname)"
 
-selection=$( \
-	echo -e "$shutdown\n$reboot\n$lock\n$logout\n$suspend" | selectcommand
-	);
-echo $selection;
+if isPhone; then
+	selection="$(echo -e "$shutdown\n$reboot\n$lock\n$logout" | selectcommand)"
+else
+	notify-send "Not phone"
+	selection="$(echo -e "$shutdown\n$reboot\n$lock\n$logout\n$suspend" | selectcommand)"
+fi
 
 sleep .2
 
 case $selection in
 	$lock)
-		#i3exit lock
+		if isPhone; then
+			screenlock --suspend
+		else
+			i3exit lock
+		fi
 		;;
 	$logout)
 		pkill dwm
 		;;
 	$suspend)
 		systemctl suspend
-		#i3exit lock
+		if !isPhone; then
+			i3exit lock
+		fi
 		;;
 	$reboot)
 		systemctl reboot

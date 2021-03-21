@@ -1,0 +1,29 @@
+#!/usr/bin/env bash
+
+# This was mostly taken from sxmo:
+# https://git.sr.ht/~mil/sxmo-utils/tree/1.3.2/item/scripts/modem/sxmo_modemmonitor.sh#L181-205
+#
+# Although the proccess for managing calls etc is a bit simpler IMO
+
+# Monitor for incoming calls
+dbus-monitor --system "interface='org.freedesktop.ModemManager1.Modem.Voice',type='signal',member='CallAdded'" | \
+	while read -r line; do
+		echo "$line" | grep -E "^signal" && checkCall
+	done &
+
+# Monitor for incoming texts
+dbus-monitor --system "interface='org.freedesktop.ModemManager1.Modem.Messaging',type='signal',member='Added'" | \
+	while read -r line; do
+		echo "$line" | grep -E "^signal" && checkSMS
+	done &
+
+# Monitor for finished calls
+dbus-monitor --system "interface='org.freedesktop.DBus.Properties',member='PropertiesChanged',arg0='org.freedesktop.ModemManager1.Call'" | \
+	while read -r line; do
+		echo "$line" | grep -E "^signal" && checkCall
+	done &
+
+wait
+wait
+wait
+

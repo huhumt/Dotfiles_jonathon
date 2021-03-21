@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+export DISPLAY=:0.0
 
 prompt=""
 
@@ -19,14 +20,14 @@ $answer
 6
 9
 #
-# "
+X"
 
 while true; do
-	notify-send "$prompt"
+	#notify-send "$prompt"
 	input="$(echo "$options" |
 		rofi -dmenu -p "$prompt" -theme themes/dialer.rasi \
 			-me-select-entry '' -me-accept-entry MousePrimary)"
-	[ "$input" = "#" ] && exit
+	[ "$input" = "X" ] && exit
 	#exit
 	prompt+="$input"
 done
