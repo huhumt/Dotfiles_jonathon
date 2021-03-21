@@ -44,7 +44,7 @@ overidecomplete(){
 					# If I want to install something, give a list of things to install
 					-S) toadd="$($cmd -Slq | fzf -m --preview "$cmd -Si {1}" | tr '\n' ' ')"; ret=0 ;;
 					# If I want to uninstall something, give a list of things to uninstall
-					-R*) toadd="$($cmd -Qq | fzf -m --preview "$cmd -Qi {1}" | tr '\n' ' ')"; ret=0 ;;
+					-R*) toadd="$($cmd -Qeq | fzf -m --preview "$cmd -Qi {1}" | tr '\n' ' ')"; ret=0 ;;
 					-Ql) toadd="$($cmd -Qq | fzf -m --preview "$cmd -Qi {1}" | tr '\n' ' ')"; ret=0 ;;
 				esac ;;
 			msfvenom)
