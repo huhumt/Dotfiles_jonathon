@@ -110,14 +110,16 @@ test_x-powered-by(){
 test_x-xss-protection(){
 	local value
 	value="$(echo "$1" | cut -d ':' -f 2 | grep -oE '[0-9]+' )"
-	if [ "$value" = "1" ]; then
+	if [ "$value" = "0" ]; then
 		return 0
 	else
 		echo "X-XSS-Protection" | drawInBox
-		wecho -e "The X-XSS-Protection header asks browsers to try and prevent \
-reflected cross site scripting attacks. It has been replaced in modern browsers \
-by the content-security-policy although should still be included for the sake \
-of old browsers\n\n"
+		wecho -e "The X-XSS-Protection header used to ask browsers to try and use \
+internal heuristics to prevent reflected XSS attacks. It has been depreciated in all \
+modern browsers that used to implement it.
+
+OWASP now suggests setting it to 0.
+https://owasp.org/www-project-secure-headers/#x-xss-protection\n\n"
 		return 1
 	fi
 }
