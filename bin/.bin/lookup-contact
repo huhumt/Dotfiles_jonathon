@@ -1,0 +1,18 @@
+#!/usr/bin/env bash
+
+addressbook="$HOME/.abook/addressbook"
+
+cat "$addressbook" |
+	grep -E '(\[[0-9]+\]|^$|name|phone|mobile)' |
+	awk -v RS="\n\n" -v ORS="\n" '{gsub("\n","\t",$0); print $0}' |
+	grep -E "(phone|mobile)" | while read -r line; do
+		name="$(echo "$line" | cut -d '	' -f 2 | cut -d '=' -f 2)"
+		echo "$line" | tr '\t' '\n' |
+			grep -E '(phone|mobile)' | while read -r numLine; do
+				num="$(echo "$numLine" | cut -d '=' -f 2 | tr -d ' ' | sed 's/+44(0)/+44/')"
+				numType="$(echo "$numLine" | cut -d '=' -f 1)"
+				echo -e "$name\t$num\t$numType"
+			done
+		
+		echo ""
+	done
