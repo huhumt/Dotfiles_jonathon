@@ -222,6 +222,10 @@ attacks (XSS).\n\n"
 	This prevents the content security policy from effectively mitigating against
 	DOM based XSS attacks\n\n"
 		fi
+		# TODO, I'd like to check for more CSP issues.
+		# See https://csp-evaluator.withgoogle.com/
+		# https://www.securing.pl/en/why-should-you-care-about-content-security-policy/
+		# https://lab.wallarm.com/how-to-trick-csp-in-letting-you-run-whatever-you-want-73cb5ff428aa/
 	fi
 	if [ -n "$message" ]; then
 		echo "Content-Security-Policy" | drawInBox
@@ -299,6 +303,21 @@ Strict means the browser sends the cookie only for same-site requests\n\n"
 		ret=$((ret>1 ? ret : 1))
 	fi
 
+	if echo "$value" | grep -iq "bigipserver"; then
+		local ip_enc="$(echo "$value" | cut -d '=' -f 2 | cut -d '.' -f 1)"
+		local port_enc="$(echo "$value" | cut -d '=' -f 2 | cut -d '.' -f 2)"
+		local ip="$(echo "ibase=10;obase=16;$ip_enc"| bc | grep -o .. | tac |
+			while read -r part; do echo -n "$((0x$part))."; done)"
+		local port="$((0x$(echo "ibase=10;obase=16;$port_enc" | bc | grep -o .. | tac | tr -d '\n') ))"
+		if echo "$ip" | grep -Eq '([0-9]{1,3}[\.]){3}[0-9]{1,3}'; then
+			output+="The Cookie discloses internal IP addresses used by the load ballencer\n"
+			output+="IP: $ip\n"
+			output+="Port: $port\n\n"
+			output+="Remediate this by enabling cookie encryption\n\
+https://support.f5.com/csp/article/K7784?sr=14607726"
+			ret=$((ret>1 ? ret : 1))
+		fi
+	fi
 
 	
 	if [ "$ret" -gt 0 ]; then
