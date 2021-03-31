@@ -13,6 +13,4 @@ cat "$addressbook" |
 				numType="$(echo "$numLine" | cut -d '=' -f 1)"
 				echo -e "$name\t$num\t$numType"
 			done
-		
-		echo ""
 	done
