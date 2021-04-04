@@ -5,6 +5,8 @@
 #
 # Although the proccess for managing calls etc is a bit simpler IMO
 
+export DISPLAY=:0.0
+
 # Monitor for incoming calls
 dbus-monitor --system "interface='org.freedesktop.ModemManager1.Modem.Voice',type='signal',member='CallAdded'" | \
 	while read -r line; do
@@ -14,6 +16,7 @@ dbus-monitor --system "interface='org.freedesktop.ModemManager1.Modem.Voice',typ
 # Monitor for incoming texts
 dbus-monitor --system "interface='org.freedesktop.ModemManager1.Modem.Messaging',type='signal',member='Added'" | \
 	while read -r line; do
+		notify-send "Added (SMS)"
 		echo "$line" | grep -E "^signal" && checkSMS
 	done &
 

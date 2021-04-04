@@ -72,4 +72,4 @@ echo "$ids" | while read -r id; do
 	mmcli -m "$modem" --messaging-delete-sms="$id"
 done
 
-notify-send "$count new messages"
+echo "$count new messages"

@@ -1,0 +1,41 @@
+#!/usr/bin/env bash
+
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
+source "$DIR/common"
+
+export DISPLAY=:0.0
+
+usage(){
+	echo "makeCall number"
+	echo "Options:"
+	echo "  -h|--help       Display this help text"
+	echo "  -m|--modem      Specify a modem"
+	echo "  --dry-run       Don't actually call"
+}
+
+modem="$(mmcli -L | grep -oE 'Modem\/[0-9]+' | head -n 1 | cut -d'/' -f2)"
+
+# Read the options and set stuff
+while [[ $1 = -?* ]]; do
+	case $1 in
+		-h|--help) usage; exit;;
+		-m|--modem) modem="$2"; shift ;;
+		--dry-run) dryrun="--dry-run" ;;
+		--) shift; break ;;
+		*) die "invalid option: '$1'." ;;
+	esac
+	shift
+done
+
+number="$1"
+
+[ -z "$number" ] && die "No Number Specified"
+
+callID="$(mmcli -m "$modem" --voice-create-call "number=$number" |
+	grep -Eo 'Call\/[0-9]+' | head -n 1 | cut -d'/' -f2)"
+
+
+
+checkCall $dryrun "$callID"
+
+
