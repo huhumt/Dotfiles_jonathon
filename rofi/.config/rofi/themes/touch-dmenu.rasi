@@ -1,0 +1,18 @@
+
+configuration {
+	font:							"iosevka 30";
+    disable-history:                false;
+    fullscreen:                     false;
+	hide-scrollbar: 				true;
+	sidebar-mode: 					false;
+}
+
+@import "gruvbox-dark.rasi"
+
+window {
+	width: 90%;
+}
+
+mainbox {
+    children:                       [ listview ];
+}
