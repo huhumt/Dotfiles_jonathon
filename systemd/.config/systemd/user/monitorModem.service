@@ -1,0 +1,9 @@
+[Unit]
+Description=Monitor Modem
+
+[Service]
+Environment="PATH=/usr/bin:/usr/local/bin:/home/jonathan/.bin:/home/jonathan/.bin/modem:/home/jonathan/.bin/dmenu"
+ExecStart=/home/jonathan/.bin/modem/monitorModem
+
+[Install]
+WantedBy=default.target
