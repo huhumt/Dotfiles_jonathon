@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+
+if pidof svkbd-colemak || pidof svkbd-numbers; then
+	pkill "svkbd-*"
+else
+	svkbd-colemak & disown
+fi

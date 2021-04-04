@@ -1,0 +1,21 @@
+#!/usr/bin/env bash
+
+options="End All Calls
+Check for Calls
+Check for Texts
+Dialer"
+
+while true ; do
+	choice="$(echo "$options" | trofi)"
+	case "$choice" in
+		"End All Calls")
+			modem="$(mmcli -L | grep -oE 'Modem\/[0-9]+' | head -n 1 | cut -d'/' -f2)"
+			mmcli -m "$modem" --voice-hangup-all
+			break ;;
+		"Check for Calls") checkCall ;;
+		"Check for Texts") checkSMS ;;
+		"Dialer") (dialer &); break ;;
+		"Back") break;;
+	esac
+done
+

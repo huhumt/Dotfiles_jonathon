@@ -1,0 +1,58 @@
+#!/usr/bin/env bash
+
+up=""
+down=""
+mute="ﱝ"
+
+
+while : ; do
+	active=""
+	urgent=""
+
+
+	if type -p pulseaudio-ctl 2> /dev/null; then
+		volume="$(pulseaudio-ctl full-status | cut -d ' ' -f1)"
+		speakerStatus="$(pulseaudio-ctl full-status | cut -d ' ' -f2 |
+			sed 's/no/on/g')"
+	else
+		volume="$(amixer -D default sget Master | grep -o '\[.*\%'  |
+			head -n 1 | tr -d '[%')"
+		speakerStatus="$(amixer -D default sget Master | grep -o '\[\(on\|off\)' |
+			head -n 1 | tr -d '[')"
+	fi
+
+	if [ "$speakerStatus" = "off" ]; then
+		volume="Muted"
+		urgent="-u 2"
+	else
+		active="-a 2"
+	fi
+
+	choice="$(echo -e "$up\n$down\n$mute" |
+		rofi -dmenu -theme 'themes/volume.rasi' -p "$volume" $urgent $active)"
+	case "$choice" in
+		"$up") 
+			if type -p pulseaudio-ctl 2> /dev/null; then
+				pulseaudio-ctl up
+			else
+				amixer -q -D default sset Master 5%+ unmute
+			fi
+			;;
+		"$down")
+			if type -p pulseaudio-ctl 2> /dev/null; then
+				pulseaudio-ctl down
+			else
+				amixer -q -D default sset Master 5%- unmute
+			fi
+			;;
+		"$mute")
+			if type -p pulseaudio-ctl 2> /dev/null; then
+				pulseaudio-ctl mute
+			else
+				amixer -q -D default sset Master toggle
+			fi
+			;;
+		"") break
+	esac
+
+done

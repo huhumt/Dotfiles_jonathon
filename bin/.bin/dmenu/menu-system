@@ -1,0 +1,37 @@
+#!/usr/bin/env bash
+
+options="Terminal
+Browser
+Phone
+Podcasts
+Go To Workspace
+Move To Workspace
+Power Menu
+Exit"
+
+chooseWorkspace(){
+	seq 1 10 | trofi
+}
+
+goToWorkspace(){
+	xdotool key --clearmodifiers "Super_L+$(chooseWorkspace)"
+}
+moveToWorkspace(){
+	xdotool key --clearmodifiers "Super_L+Shift+$(chooseWorkspace)"
+}
+
+while true ; do
+	choice="$(echo "$options" | trofi)"
+	case "$choice" in
+		"Terminal") (folder-shell &); break ;;
+		"Browser") (firefox &); break ;;
+		"Podcasts") (gnome-podcasts &); break ;;
+		"Phone") spawn-phone-menu phone ; break ;;
+		"Go To Workspace") goToWorkspace ; break ;;
+		"Move To Workspace") moveToWorkspace ; break ;;
+		"Power Menu") (rofi-shutdown &); break ;;
+		"Exit") sleep 0.3; xdotool key --clearmodifiers "Super_L+q"; break ;;
+		"") break;;
+	esac
+done
+
