@@ -1,9 +1,31 @@
 #!/usr/bin/env bash
 
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
+source "$DIR/../modem/common"
+
+viewMissedCalls(){
+	local choice="$( (
+	#cat "$CALL_DIR/missed-calls" | awk -F '\t' '{"date +%Y-%m-%d %H:%M:%S -d @" $1 |& getline $1; print $2 "<sub>" $1 "</sub>"}'
+	cat "$CALL_DIR/missed-calls" | awk -F '\t' '{"date  -d @" $1 "  \"+%Y-%m-%d %H:%M:%S\"" |& getline $1; print $2 "  <span size=\"xx-small\">" $1 "</span>"}'
+	echo "Clear"
+	)| trofi -markup-rows )"
+	case "$choice" in
+		"Clear") rm "$CALL_DIR/missed-calls" ;;
+		*)
+			local number="$(echo "$choice" | cut -d '	' -f 3)"
+			makeCall "$number"
+			;;
+	esac
+}
+
 options="End All Calls
 Check for Calls
 Check for Texts
-Dialer"
+$( [ -f "$CALL_DIR/missed-calls" ] && echo "Missed Calls" )
+Dialer
+Back"
+
+options="$(echo "$options" | sed '/^$/d')"
 
 while true ; do
 	choice="$(echo "$options" | trofi)"
@@ -14,6 +36,7 @@ while true ; do
 			break ;;
 		"Check for Calls") checkCall ;;
 		"Check for Texts") checkSMS ;;
+		"Missed Calls") viewMissedCalls; break ;;
 		"Dialer") (dialer &); break ;;
 		"Back") break;;
 	esac

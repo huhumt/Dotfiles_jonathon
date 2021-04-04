@@ -9,4 +9,4 @@ lines="$(echo "$input" | wc -l )"
 
 [ "$lines" -gt 15 ] && lines=15
 
-echo "$input" | rofi -dmenu -me-accept-entry '!MousePrimary' -theme "themes/touch-dmenu.rasi" -lines "$lines"
+echo "$input" | rofi -dmenu -me-accept-entry '!MousePrimary' -theme "themes/touch-dmenu.rasi" -lines "$lines" "$@"
