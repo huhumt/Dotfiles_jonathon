@@ -73,3 +73,6 @@
 [submodule "nvim/.config/nvim/pack/bundle/opt/vim-snippets"]
 	path = nvim/.config/nvim/pack/bundle/opt/vim-snippets
 	url = https://github.com/honza/vim-snippets
+[submodule "nvim/.config/nvim/pack/bundle/opt/lexima.vim"]
+	path = nvim/.config/nvim/pack/bundle/opt/lexima.vim
+	url = https://github.com/cohama/lexima.vim
