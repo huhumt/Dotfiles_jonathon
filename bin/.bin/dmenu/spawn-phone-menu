@@ -1,0 +1,27 @@
+#!/usr/bin/env bash
+
+# This script creates menus for applications running on my phone
+
+error(){
+	echo "$@" > /dev/stderr
+	exit 1
+}
+
+windowFocus="$(xdotool getwindowfocus)"
+if [ -n "$1" ]; then
+	menu="menu-$1"
+else
+	class="$(xprop -id "$windowFocus" | grep "WM_CLASS" | cut -d '"' -f 2)"
+	case "$class" in
+		"xterm-256color") menu="menu-st" ;;
+		*) menu="menu-$class" ;;
+	esac
+fi
+
+
+type "$menu" > /dev/null 2>&1 || menu="menu-system"
+
+"$menu"
+
+
+

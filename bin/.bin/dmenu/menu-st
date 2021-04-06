@@ -1,0 +1,21 @@
+#!/usr/bin/env bash
+
+options="Zoom In
+Zoom Out
+Paste
+System Menu
+Exit"
+
+choice=""
+while : ; do
+	choice="$(echo "$options" | trofi)"
+	case "$choice" in
+		"Zoom In") sleep 0.3; xdotool key --clearmodifiers "ctrl+shift+j" ;;
+		"Zoom Out") sleep 0.3; xdotool key --clearmodifiers "ctrl+shift+k" ;;
+		"Paste") sleep 0.3; xdotool key --clearmodifiers "ctrl+shift+v" ;;
+		"System Menu") menu-system; break ;;
+		"Exit") sleep 0.3; xdotool key --clearmodifiers "Super_L+q"; break ;;
+		"") break ;;
+	esac
+done
+

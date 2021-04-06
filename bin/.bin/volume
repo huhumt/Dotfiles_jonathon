@@ -43,6 +43,7 @@ case "$1" in
 		else
 			amixer -q -D default sset Master toggle
 		fi
+		;;
 esac
 
 if type -p pulseaudio-ctl 2> /dev/null; then

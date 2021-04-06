@@ -2,6 +2,7 @@
 
 CALL_DIR="${XDG_DATA_HOME:-$HOME/.local/share}/Calls/"
 SMS_DIR="${XDG_DATA_HOME:-$HOME/.local/share}/SMS/"
+ALSA_CONF_DIR="${XDG_CONFIG_HOME:-$HOME/.config}/alsa/"
 
 die(){
 	echo "$@" > /dev/stderr

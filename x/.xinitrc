@@ -33,6 +33,7 @@ xinput --list | grep -Ei 'ErgoDox EZ\s+id' | grep -oE 'id=[0-9]+' |
 type -p compton > /dev/null && exec /usr/bin/compton --config "$HOME/.config/picom/picom.conf" &
 #setbackground &
 #/usr/bin/nitrogen --restore &
+[ -e $HOME/Pictures/wallpaper ] && type -p feh > /dev/null && feh --bg-fill $HOME/Pictures/wallpaper
 /usr/bin/systemctl --user start background.service
 [ -f /usr/lib/kdeconnectd ] && /usr/lib/kdeconnectd &
 [ -f /usr/bin/pactl ] && /usr/bin/pactl load-module module-switch-on-connect &
@@ -44,6 +45,8 @@ type -p lisgd 2> /dev/null && lisgd &
 if hostname | grep -q phone; then
 	xrandr --output DSI-1 --mode 720x1440 --dpi 192
 fi
+
+dunst &
 
 #greenclip daemon &
 #exec xrdb .Xresources

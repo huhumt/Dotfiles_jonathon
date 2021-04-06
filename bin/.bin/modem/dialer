@@ -1,33 +1,67 @@
 #!/usr/bin/env bash
+
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
+source "$DIR/common"
+
 export DISPLAY=:0.0
 
-prompt=""
+usage(){
+	echo "dialer"
+	echo "Options:"
+	echo "  -h|--help       Display this help text"
+	echo "  -m|--modem      Specify a modem"
+	echo "  -l|--letters    Show letter keyboard rather than just numbers"
+	echo "  --dry-run       Don't actually call"
+}
 
-answer=""
-reject=""
+altKeyboard(){
+	notify-send "also here"
+	if [ "$keyboard" = "svkbd-numbers" ]; then
+		echo "svkbd-colemak"
+	else
+		echo "svkbd-numbers"
+	fi
+}
 
-options="1
-4
-7
-*
- 
-2
-5
-8
-0
-$answer
-3
-6
-9
-#
-X"
+modem="$(mmcli -L | grep -oE 'Modem\/[0-9]+' | head -n 1 | cut -d'/' -f2)"
+keyboard="svkbd-numbers"
+dryrun=""
 
-while true; do
-	#notify-send "$prompt"
-	input="$(echo "$options" |
-		rofi -dmenu -p "$prompt" -theme themes/dialer.rasi \
-			-me-select-entry '' -me-accept-entry MousePrimary)"
-	[ "$input" = "X" ] && exit
-	#exit
-	prompt+="$input"
+# Read the options and set stuff
+while [[ $1 = -?* ]]; do
+	case $1 in
+		-h|--help) usage; exit;;
+		-m|--modem) modem="$2"; shift ;;
+		-l|--letters) keyboard="svkbd-colemak"; shift ;;
+		--dry-run) dryrun="--dry-run" ;;
+		--) shift; break ;;
+		*) die "invalid option: '$1'." ;;
+	esac
+	shift
+done
+
+while : ; do
+
+	# Stop any running keyboards
+	pkill -9 'svkbd-*'
+
+	# Open the keyboard that we are using
+	"$keyboard" &
+
+	choice="$( (
+		echo "Switch Keyboard"
+		echo "Exit"
+		contact-numbers
+		) | rofi -dmenu -i -me-accept-entry '!MousePrimary' -p "Call" -normal-window -font 'Iosevka 20' )"
+	
+	case "$choice" in
+		"Switch Keyboard") keyboard="$(altKeyboard)" ;;
+		"Exit") break ;;
+		*)
+			num="$(echo "$choice" | cut -d '	' -f 2)"
+			pkill -9 'svkbd-*'
+			makeCall -m "$modem" $dryrun "$num"
+			break ;;
+	esac
+
 done

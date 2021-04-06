@@ -3,9 +3,10 @@
 
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 source "$DIR/common"
+export DISPLAY=:0.0
 
 usage(){
-	echo "checkCall [options] [message|-]"
+	echo "checkCall [options]"
 	echo "Options:"
 	echo "  -h|--help       Display this help text"
 	echo "  -m|--modem      Specify a modem"
@@ -22,24 +23,122 @@ lookupnumberfromcallid() {
 		tr -d ' '
 }
 
-lookupcontact(){
-	echo "$1" |
-		# Remove the +44 and replace with 0
-		sed 's/^\+44/0/'
-	# This will eventually work with abook but for now just return the number
+# Stolen from sxmo
+toggleflag() {
+	TOGGLEFLAG=$1
+	shift
+	FLAGS="$*"
+
+	echo -- "$FLAGS" | grep -- "$TOGGLEFLAG" >&2 &&
+		NEWFLAGS="$(echo -- "$FLAGS" | sed "s/$TOGGLEFLAG//g")" ||
+		NEWFLAGS="$(echo -- "$FLAGS $TOGGLEFLAG")"
+
+	NEWFLAGS="$(echo -- "$NEWFLAGS" | sed "s/--//g; s/  / /g")"
+
+	# shellcheck disable=SC2086
+	megiaudioroute $NEWFLAGS
+	echo -- "$NEWFLAGS"
 }
 
-answer-call(){
-	export DISPLAY=:0.0
+# Stolen from sxmo
+toggleflagset() {
+	FLAGS="$(toggleflag "$1" "$FLAGS")"
+}
+
+
+lookupcontact(){
+	local contact="$(contact-numbers "$1" | cut -d '	' -f 1)"
+	if [ -n "$contact" ]; then
+		echo "$contact"
+	else
+		echo "$1" |
+			# Remove the +44 and replace with 0
+			sed 's/^\+44/0/'
+	fi
+}
+
+dtmf(){
+	local id="$1"
+	svkbd-numbers &
+	local choice="$( (
+		echo "Exit"
+		) | rofi -dmenu -i -me-accept-entry '!MousePrimary' -p "Tones" -normal-window -font 'Iosevka 20' )"
+	if [ "$choice" = "Exit" ]; then
+		return
+	fi
+	echo "$choice" | grep -o '.' | while read -r tone; do
+	sleep 0.5
+		mmcli -m "$modem" -o "$id" --send-dtmf="$tone"
+	done
+	pkill svkbd-numbers
+
+}
+
+ongoingCall(){
+	local id="$1"
+
+	# Stolen from sxmo
+	FLAGS=" "
+	toggleflagset "-e"
+	toggleflagset "-m"
+	toggleflagset "-2"
+	toggleflagset "-2"
+	toggleflagset "-2"
+
+	notify-send "I get here"
+
+	while : ; do
+		choice="$( (
+			echo "Hang Up"
+			echo "DTMF Tones"
+			echo "Volume Up"
+			echo "Volume Down"
+			) | trofi)"
+
+		case "$choice" in
+			"Hang Up") rejectCall "$1"; break ;;
+			"DTMF Tones") dtmf "$1" ;;
+			"Volume"*) notify-send "Still need to implement" ;;
+		esac
+
+	done
+}
+
+answerCall(){
+
+	pkill mpv
+	sleep 0.2
+
 	echo "answer call $1" > /dev/tty
 	mmcli -m "$modem" -o "$1" --accept
+
+	ongoingCall "$1"
 }
 
-reject-call(){
+rejectCall(){
+	pkill mpv
+	echo "reject call $1" > /dev/tty
 	mmcli -m "$modem" -o "$1" --hangup
+	mmcli -m "$modem" --voice-delete-call="$1"
+
+	mmcli -m "$modem" --voice-hangup-all
+	for CALLID in $( mmcli -m "$modem" --voice-list-calls | grep -oE "Call\/[0-9]+" | cut -d'/' -f2); do
+		echo mmcli -m "$modem" --voice-delete-call "$CALLID" > ~/.hangup.log
+	done
+
+	# Not sure why but sometimes the modem changes
+	# To be sure, re-check the modem and delete all calls
+	local tmpmodem="$(mmcli -L | grep -oE 'Modem\/[0-9]+' | head -n 1 | cut -d'/' -f2)"
+
+	mmcli -m "$tmpmodem" --voice-hangup-all
+	for CALLID in $( mmcli -m "$tmpmodem" --voice-list-calls | grep -oE "Call\/[0-9]+" | cut -d'/' -f2); do
+		echo mmcli -m "$tmpmodem" --voice-delete-call "$CALLID" > ~/.hangup.log
+	done
+
+	alsactl --file "$ALSA_CONF_DIR/default_alsa_sound.conf" restore
 }
 
-prompt-incoming(){
+promptIncoming(){
 	export DISPLAY=:0.0
 
 	local answer=""
@@ -62,11 +161,21 @@ prompt-incoming(){
 	esac
 }
 
+checkOutgoing(){
+	export DISPLAY=:0.0
+	if [ "$dryrun" = "true" ]; then
+		return
+	fi
+	notify-send "outgoing call" "$1"
+	mmcli -m "$modem" -o "$1" --start
+
+	ongoingCall "$1"
+}
 
 checkIncoming(){
 	export DISPLAY=:0.0
 	if [ "$dryrun" = "true" ]; then
-		prompt-incoming "+441234567890"
+		promptIncoming "+441234567890"
 		return
 	fi
 	local id="$( mmcli -m "$modem" --voice-list-calls |
@@ -81,11 +190,12 @@ checkIncoming(){
 
 	local action=""
 	while mmcli -m "$modem" --voice-list-calls | grep -Eoq "$id"' incoming \(ringing-in\)' && [ -z "$action" ]; do
-		action="$(prompt-incoming "$contact")"
+		mpv "$HOME/.local/share/soundeffects/ringtone" --loop &
+		action="$(promptIncoming "$contact")"
 	done
 	case "$action" in
-		"accept") answer-call "$id"; break ;;
-		"reject") reject-call "$id"; break ;;
+		"accept") answerCall "$id"; ;;
+		"reject") rejectCall "$id"; ;;
 	esac
 
 }
@@ -95,6 +205,7 @@ checkFinished(){
 		grep -Eo '[0-9]+ incoming \(terminated\)' | grep -Eo '[0-9]+' )"
 
 	local count="$(echo "$ids" | deleteEmptyLines | wc -l)"
+	echo "Finished Count: $count"
 
 	[ "$count" -eq 0 ] && return
 
@@ -103,13 +214,16 @@ checkFinished(){
 		local number="$(lookupnumberfromcallid "$id")"
 		local contact="$(lookupcontact "$number")"
 
+		echo "I get here"
+
 		# If there is a rofi process with the title of "call-from-number", then
 		# it hasn't been answerd yet.
 		# Treat as a missed call
-		if ps aux | grep -E '\Wrofi' | grep -q "call-from-$number"; then
+		if ps aux | grep -E '\Wrofi' | grep -q "call-from-$contact"; then
 			echo "Missed call from $contact" >> "$CALL_DIR/missed-calls"
+			pkill mpv
 			mmcli -m "$modem" --voice-delete-call "$id"
-			ps aux | grep -E '\Wrofi' | grep "call-from-$number" |
+			ps aux | grep -E '\Wrofi' | grep "call-from-$contact" |
 				awk '{print $2}' | xargs kill
 		fi
 
@@ -140,8 +254,12 @@ while [[ $1 = -?* ]]; do
 	shift
 done
 
-checkIncoming &
-checkFinished &
+if [ -n "$1" ]; then
+	checkOutgoing "$1" &
+else
+	checkIncoming &
+	checkFinished &
+fi
 
 
 

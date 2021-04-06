@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+
+battery="$(cat /sys/class/power_supply/axp20x-battery/capacity)"
+batteryStatus="$(cat /sys/class/power_supply/axp20x-battery/status)"
+[ "$batteryStatus" = "Charging" ] && batteryIcon="🔌" || batteryIcon="🔋"
+
+time="$(date "+%H:%M")"
+
+notify-send "$(hostname)" "$batteryIcon ${battery}%\nTime $time"
+
