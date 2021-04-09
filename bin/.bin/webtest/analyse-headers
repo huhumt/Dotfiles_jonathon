@@ -533,7 +533,7 @@ while read -r line; do
 	fi
 done<<<"$(echo "$headers" | sed '1d')" # We don't want the initial http banner
 
-echo "$missingHeaders" | while read -r line; do
+echo -n "$missingHeaders" | while read -r line; do
 	echo -e "${RED}$line${NC}"
 	functionName="test_$line"
 	"$functionName" >> "$tmpfile"
