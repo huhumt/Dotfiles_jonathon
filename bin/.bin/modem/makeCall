@@ -27,7 +27,9 @@ while [[ $1 = -?* ]]; do
 	shift
 done
 
-number="$1"
+number="$(echo "$1" | sed 's/^0/+44/')"
+
+
 
 [ -z "$number" ] && die "No Number Specified"
 
