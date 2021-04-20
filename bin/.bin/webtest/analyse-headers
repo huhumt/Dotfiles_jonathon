@@ -432,6 +432,7 @@ usage(){
 
 	Options:
 	-h, --help              Display this help and exit
+	-k, --insecure          Ignores certificate errors
 "
 }
 
@@ -472,11 +473,13 @@ done
 set -- "${options[@]}"
 unset options
 
+insecure=""
 
 # Read the options and set stuff
 while [[ $1 = -?* ]]; do
 	case $1 in
 		-h|--help) usage; exit;;
+		-k|--insecure) insecure="-k" ;;
 		--) shift; break ;;
 		*) die "invalid option: '$1'." ;;
 	esac
@@ -493,7 +496,7 @@ url="${args[0]}"
 if [ "$url" = "-" ]; then
 	headers="$(cat -)"
 else
-	headers="$(curl -s -I "$url")"
+	headers="$(curl -s -I $insecure "$url")"
 fi
 
 missingHeaders="x-frame-options
@@ -533,7 +536,7 @@ while read -r line; do
 	fi
 done<<<"$(echo "$headers" | sed '1d')" # We don't want the initial http banner
 
-echo "$missingHeaders" | while read -r line; do
+echo -n "$missingHeaders" | while read -r line; do
 	echo -e "${RED}$line${NC}"
 	functionName="test_$line"
 	"$functionName" >> "$tmpfile"
