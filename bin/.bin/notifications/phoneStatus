@@ -23,8 +23,10 @@ done
 notification="
 $batteryIcon ${battery}%
 Time $time
+$( ip r | grep -v "default" | awk '{print $3 ": " $9}')
 $( [ "$missedCallsNo" -gt 0 ] && echo "$missedCallsNo Missed Calls" )
-$( [ "$newTexts" -gt 0 ] && echo "$newTexts New Texts" )"
+$( [ "$newTexts" -gt 0 ] && echo "$newTexts New Texts" )
+"
 
 notification="$( echo "$notification" | sed '/^$/d' )"
 notify-send "$(hostname)" "$notification"
