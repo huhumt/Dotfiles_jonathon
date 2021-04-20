@@ -6,13 +6,13 @@ source "$DIR/../modem/common"
 viewMissedCalls(){
 	local choice="$( (
 	#cat "$CALL_DIR/missed-calls" | awk -F '\t' '{"date +%Y-%m-%d %H:%M:%S -d @" $1 |& getline $1; print $2 "<sub>" $1 "</sub>"}'
-	cat "$CALL_DIR/missed-calls" | awk -F '\t' '{"date  -d @" $1 "  \"+%Y-%m-%d %H:%M:%S\"" |& getline $1; print $2 "  <span size=\"xx-small\">" $1 "</span>"}'
+	cat "$CALL_DIR/missed-calls" | awk -F '\t' '{"date  -d @" $1 "  \"+%Y-%m-%d %H:%M:%S\"" |& getline $1; print $2 "  <span size=\"xx-small\">" $1 "</span><span font=\"0\">"$3"</span>"}'
 	echo "Clear"
 	)| trofi -markup-rows )"
 	case "$choice" in
 		"Clear") rm "$CALL_DIR/missed-calls" ;;
 		*)
-			local number="$(echo "$choice" | cut -d '	' -f 3)"
+			local number="$(echo "$choice" | cut -d '>' -f 4 | cut -d '<' -f 1)"
 			makeCall "$number"
 			;;
 	esac
