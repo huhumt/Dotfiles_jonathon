@@ -34,8 +34,11 @@ set searchurls.aw https://wiki.archlinux.org/?search=%s
 set searchurls.gh https://github.com/search?q=%s
 set searchurls.wb https://web.archive.org/web/*/%s
 set searchurls.books https://b-ok.cc/s/%s
+set searchurls.yt https://yewtu.be/search?q=%s
 set searchurls.cve https://www.cvedetails.com/cve-details.php?t=1&cve_id=%s
 set searchurls.cvep https://www.cvedetails.com/product-search.php?vendor_id=0&search=%s
+set searchurls.video https://www.google.com/search?hl=en&q=intext%3A%22%s%22%20intitle%3A%22index.of%22%20%2B(wmv%7Cmpg%7Cavi%7Cmp4%7Cmkv%7Cmov)%20%2Dinurl%3A(jsp%7Cpl%7Cphp%7Chtml%7Caspx%7Chtm%7Ccf%7Cshtml)
+set searchurls.audio https://www.google.com/search?hl=en&ei=cSj3X5L0HYXykwXRpKvYAg&q=intext%3A%22%s%22+intitle%3A%22index.of.%2F%22+%28ac3%7Cflac%7Cm4a%7Cmp3%7Cogg%7Cwav%7Cwma%29+-inurl%3A%28jsp%7Cpl%7Cphp%7Chtml%7Caspx%7Chtm%7Ccf%7Cshtml%29&oq=intext%3A%22test%22+intitle%3A%22index.of.%2F%22+%28ac3%7Cflac%7Cm4a%7Cmp3%7Cogg%7Cwav%7Cwma%29+-inurl%3A%28jsp%7Cpl%7Cphp%7Chtml%7Caspx%7Chtm%7Ccf%7Cshtml%29&gs_lcp=CgZwc3ktYWIQA1CGD1jzEGDBEmgAcAB4AIABAIgBAJIBAJgBAaABAaoBB2d3cy13aXrAAQE&sclient=psy-ab&ved=0ahUKEwjS8PamkYruAhUF-aQKHVHSCisQ4dUDCAw&uact=5
 
 """"""""""""""
 "  Commands  "
@@ -45,6 +48,7 @@ command withUrl composite get_current_url |
 command openvid withUrl !s open-youtube
 command openvidLink composite hint -pipe a[href]:not([display="none"]):not([href=""]) href | !s open-youtube
 command testclickjacking withUrl !s $HOME/.config/tridactyl/scripts/clickjacking | nativeopen
+command openwithbrave withUrl !s /usr/bin/brave
 
 command hint_focus hint -;
 command wayback composite get_current_url | tabopen wb
