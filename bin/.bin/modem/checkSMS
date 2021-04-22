@@ -61,13 +61,15 @@ echo "$ids" | while read -r id; do
 
 	log="$SMS_DIR/$number/sms.log"
 
+	[ ! -f "$log" ] && printf '\00READ\00' >> "$log"
+
 	# Store the message in the log file
 	echo "RECIEVED"
-	echo "SENDER: $number" >> $log
-	echo "TIME: $(date -d "$time")" >> $log
-	echo "----" >> $log
-	echo -e "$text" >> $log
-	printf '\00\n' >> $log
+	echo "SENDER: $number" >> "$log"
+	echo "TIME: $(date -d "$time")" >> "$log"
+	echo "----" >> "$log"
+	echo -e "$text" >> "$log"
+	printf '\00\n' >> "$log"
 
 	mmcli -m "$modem" --messaging-delete-sms="$id"
 done

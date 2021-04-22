@@ -220,7 +220,7 @@ checkFinished(){
 		# it hasn't been answerd yet.
 		# Treat as a missed call
 		if ps aux | grep -E '\Wrofi' | grep -q "call-from-$contact"; then
-			echo "Missed call from $contact" >> "$CALL_DIR/missed-calls"
+			echo -e "$(date '+%s')\t$contact\t$number" >> "$CALL_DIR/missed-calls"
 			pkill mpv
 			mmcli -m "$modem" --voice-delete-call "$id"
 			ps aux | grep -E '\Wrofi' | grep "call-from-$contact" |

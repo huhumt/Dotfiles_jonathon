@@ -1,10 +1,33 @@
 #!/usr/bin/env bash
 
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
+source "$DIR/../modem/common"
+
 battery="$(cat /sys/class/power_supply/axp20x-battery/capacity)"
 batteryStatus="$(cat /sys/class/power_supply/axp20x-battery/status)"
 [ "$batteryStatus" = "Charging" ] && batteryIcon="🔌" || batteryIcon="🔋"
-
+missedCallsNo="$(cat "$CALL_DIR/missed-calls" | wc -l )"
 time="$(date "+%H:%M")"
 
-notify-send "$(hostname)" "$batteryIcon ${battery}%\nTime $time"
+newTexts=0
+for i in "$SMS_DIR"/*/sms.log; do
+	echo "$i"
+	count="$(sed -n '/\x0READ\x0/,$ p' "$i" | sed '1d' |
+		sed -n 's/\x0/-/p' | wc -l)"
+	echo "$count"
+	newTexts=$(( newTexts + count ))
+done
+
+
+
+notification="
+$batteryIcon ${battery}%
+Time $time
+$( ip r | grep -v "default" | awk '{print $3 ": " $9}')
+$( [ "$missedCallsNo" -gt 0 ] && echo "$missedCallsNo Missed Calls" )
+$( [ "$newTexts" -gt 0 ] && echo "$newTexts New Texts" )
+"
+
+notification="$( echo "$notification" | sed '/^$/d' )"
+notify-send "$(hostname)" "$notification"
 
