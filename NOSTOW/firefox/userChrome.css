@@ -16,7 +16,7 @@
 
 /* hides the url bar unless I hover over it */
 #navigator-toolbox {
-	margin-top: -72px;
+	margin-top: -82px;
 	transition: 0.2s margin-top ease-out;
 	border-bottom-width: 0;
 }
