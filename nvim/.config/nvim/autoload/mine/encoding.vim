@@ -56,7 +56,7 @@ function! mine#encoding#wrapper(fn) abort
 
 	" transform text
 	" adapted from: https://github.com/christianrondeau/vim-base64/blob/master/autoload/base64.vim#L36
-	execute "normal! c\<c-r>=mine#encoding#" . a:fn . "(@\")\<cr>\<esc>"
+	execute "normal! c\<c-r>=mine#encoding#" . a:fn . "(@\")\<cr>\<esc>`[v`]h"
 
 	" reset paste to whatever it was before
 	let &paste = l:paste
