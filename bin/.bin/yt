@@ -100,7 +100,7 @@ chooseQuality(){
 }
 
 main(){
-	local searchTerm="$1"
+	local searchTerm="$*"
 
 	[ -z "$searchTerm" ] && searchTerm="$(getSearchTerm)"
 
