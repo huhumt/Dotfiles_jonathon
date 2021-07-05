@@ -198,29 +198,31 @@ text-align: center;
 
 test_content-security-policy(){
 	local value
+	local ret=0
 	value="$(echo "$1" | cut -d ':' -f 2- | trimWhitespace)"
 	# TODO: work on content security testing
 	local message=""
 	
 	if [ -z "$value" ]; then
-		echo "Content-Security-Policy" | drawInBox
-		wecho -e "The HTTP Content-Security-Policy response header allows web site \
+		message+="The HTTP Content-Security-Policy response header allows web site \
 administrators to control resources the user agent is allowed to load for a \
 given page. With a few exceptions, policies mostly involve specifying server \
 origins and script endpoints. This helps guard against cross-site scripting \
 attacks (XSS).\n\n"
-		return 2
+		ret=2
 	else
 		if echo "$value" | grep -q 'unsafe-inline'; then
 			message+="The content security policy includes the \
 	${ORANGE}unsafe-inline${NC} property which allows for inline JS/CSS assets. \
 	This prevents the content security policy from effectively mitigating against
 	reflected or stored XSS attacks\n\n"
+			ret=$((ret>1 ? ret : 1))
 		elif echo "$value" | grep -q 'unsafe-eval'; then
 			message+="The content security policy includes the \
 	${ORANGE}unsafe-eval${NC} property which allows for eval to be used in JS. \
 	This prevents the content security policy from effectively mitigating against
 	DOM based XSS attacks\n\n"
+			ret=$((ret>1 ? ret : 1))
 		fi
 		# TODO, I'd like to check for more CSP issues.
 		# See https://csp-evaluator.withgoogle.com/
@@ -228,10 +230,41 @@ attacks (XSS).\n\n"
 		# https://lab.wallarm.com/how-to-trick-csp-in-letting-you-run-whatever-you-want-73cb5ff428aa/
 	fi
 	if [ -n "$message" ]; then
+		message+="The content security policy should be carefully considered \
+before implementing as mis-configuring it can lead to site breakages. Scripts \
+and stylesheets should be sourced from a carefully curated list of trusted \
+domains that do now allow user uploaded content. Some CDNs should also be \
+avoided if they host outdated versions of libraries that are known to be \
+vulnerable or JSONP content, as both of these can lead to Cross Site Scripting \
+(XSS). In order to prevent other types of XSS attack, unsafe-inline and \
+unsafe-eval sources should be avoided in favour of putting scripts / styles in \
+external resources or, if that is not possible, whitelisted inline scripts / \
+styles using <hash-algorithm>-<hash> sources.
+
+In order to prevent use of plugins such as flash and silverlight, use the \
+{code}object-src 'none'{/code} directive.
+
+In order to prevent framing, use the {code}frame-ancestors 'none'{/code} \
+directive.
+
+The recomended header for APIs is 
+
+{code}
+Content-Security-Policy: default-src 'none'; frame-ancestors 'none'
+{/code}
+
+Which disables loading of all sub-resources and stops the API response being 
+framed.
+
+There is also a related content-security-policy-report-only header that will \
+not enforce rules, but will report violations. This is useful for testing \
+purposes
+
+https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy\n\n"
 		echo "Content-Security-Policy" | drawInBox
 		message="$(echo "$message" | tr -d '\t')"
 		wecho -e "$message"
-		return 1
+		return "$ret"
 	fi
 	return 0
 }
@@ -244,22 +277,28 @@ test_strict-transport-security(){
 	value="$(echo "$1" | cut -d ':' -f 2 | trimWhitespace)"
 	ret=0
 	output=""
-	maxAge="$(echo "$value" | grep -oE 'max-age=[0-9]+' |
-		grep -oE '[0-9]+')"
+	if [ -z "$value" ]; then
+		output+="The HTTP Strict Transport Security response header intructs \
+		browsers to only connect to it via an encrypted channel.\n\n"
+		ret=2
+	else
+		maxAge="$(echo "$value" | grep -oE 'max-age=[0-9]+' |
+			grep -oE '[0-9]+')"
 
-	if [ "$maxAge" -lt "31536000" ]; then
-		output+="The max-age is set to a low value of ${ORANGE}$maxAge${NC}.
-We suggest setting it to at least 31536000.\n\n"
-		ret=$((ret>1 ? ret : 1))
+		if [ "$maxAge" -lt "31536000" ]; then
+			output+="The max-age is set to a low value of ${ORANGE}$maxAge${NC}.
+	We suggest setting it to at least 31536000.\n\n"
+			ret=$((ret>1 ? ret : 1))
+		fi
+
+		if ! echo "$value" | grep -q 'includeSubDomains'; then
+			output+="The ${ORANGE}includeSubdomains${NC} property was not found. \
+	When included browsers won't connect to subdomains unless over an encrypted \
+	channel.\n\n"
+			ret=$((ret>1 ? ret : 1))
+		fi
+
 	fi
-
-	if ! echo "$value" | grep -q 'includeSubDomains'; then
-		output+="The ${ORANGE}includeSubdomains${NC} property was not found. \
-When included browsers won't connect to subdomains unless over an encrypted \
-channel.\n\n"
-		ret=$((ret>1 ? ret : 1))
-	fi
-
 	#if ! echo "$value" | grep -q 'preload'; then
 	#	output+="The preload property "
 	#	ret=$((ret>1 ? ret : 1))
@@ -424,6 +463,20 @@ Origin. The \"null\" value for the ACAO header should therefore be avoided.\n\n"
 	return 0
 }
 
+test_cache-control(){
+	local value
+	value="$(echo "$1" | cut -d ':' -f 2- | trimWhitespace)"
+	if [ -z "$1" ] || ! echo "$value" | grep -q "no-store"; then
+		echo "Cache-Control" | drawInBox
+		wecho "The Cache-Control header instructs the browser if and for how \
+long browsers may cache responses. If responses contain sensitive information, \
+they should not be cached. In order to enforce this, add the no-store directive.\n"
+		echo -e "https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Cache-Control\n\n"
+		[ -z "$1" ] && return 2 || return 1
+	fi
+
+}
+
 
 usage(){
 	echo -n "analyse-headers [OPTIONS]... URL
@@ -500,11 +553,13 @@ else
 fi
 
 missingHeaders="x-frame-options
+strict-transport-security
 content-security-policy
 x-xss-protection
 x-content-type-options
 feature-policy
 permissions-policy
+cache-control
 expect-ct"
 
 tmpfile="$(mktemp)"
