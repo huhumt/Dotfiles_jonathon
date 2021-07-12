@@ -1,0 +1,32 @@
+#!/usr/bin/env bash
+
+die(){
+	echo "$@" > /dev/stderr
+	exit 1
+}
+
+printhelp(){
+	echo "Nessus Compliance Filter"
+	echo "This command should be given a nessus xml file on stdin"
+	echo "Stdout will contain a tsv file for each compliance issue (not pass)"
+	echo "Positional Arguments can be given and each will regex match the Check Name"
+	echo ""
+	echo "e.g."
+	echo "cat example.nessus | nessusComplianceFilter \"^18.\" \"Defender\""
+	echo "will output a tsv containing all failures (or warnings) that start with '18.' and contain the word 'Defender'"
+	exit 0
+}
+
+type -p xq >/dev/null || die -e "You need to install xq\nhttps://github.com/kislyuk/yq"
+
+[ "$1" = "-h" ] && printhelp
+
+filters=""
+
+while [ "$#" -gt 0 ]; do
+	filters="$filters | select( .\"cm:compliance-check-name\" | test(\"$1\"))"
+	shift
+done
+
+echo  "Compliance Check	Compliance Result	Current	Expected"
+cat - | xq -r ".NessusClientData_v2.Report.ReportHost.ReportItem[] | select(.compliance == \"true\") | select(.\"cm:compliance-result\" != \"PASSED\") $filters | [.\"cm:compliance-check-name\", .\"cm:compliance-result\", .\"cm:compliance-actual-value\", .\"cm:compliance-policy-value\"] | @tsv" | sort -V
