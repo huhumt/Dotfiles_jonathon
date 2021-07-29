@@ -3,8 +3,9 @@
 # Requires:
 # * curl
 # * fzf
-# * viu
 # * jq
+# * hq
+# * youtube-dl
 ttyecho(){
 	# Same as echo but always to tty
 	echo "$@" > /dev/tty
@@ -63,7 +64,14 @@ performSearch(){
 	# Returns the json object yt gives us
 	local raw="$1"
 	local url="https://www.youtube.com/results?search_query=$(urlencodespecial "$raw")"
-	curl -s "$url" | hq script data | grep 'ytInitialData' | head -n 1 | grep -o '{.*}'
+	if type -p hq > /dev/null; then
+		curl -s "$url" | hq script data | grep 'ytInitialData' | head -n 1 | grep -o '{.*}'
+	elif type -p pup > /dev/null; then
+		curl -s "$url" | pup script | grep 'ytInitialData' | head -n 1 | grep -o '{.*}'
+	else
+		echo "You need to install hq or pup"
+	fi
+
 }
 
 extractVideoInfo(){
