@@ -75,3 +75,6 @@ vnoremap / /\v
 " Makes vim re-select visual selection when using < or >
 vnoremap < <gv
 vnoremap > >gv
+
+nnoremap [c :cprevious<cr>
+nnoremap ]c :cnext<cr>

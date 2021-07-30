@@ -49,6 +49,14 @@ set formatoptions+=r
 " Automatically insert comment leader after hitting o or O
 set formatoptions+=o
 
+" Show the results of the substitute command as you type
+set inccommand=nosplit
+
+if executable('rg')
+  set grepprg=rg\ --vimgrep\ --no-heading\ --color=never\ --glob=\"!shell-logs/*\"
+  set grepformat=%f:%l:%c:%m,%f:%l:%m
+endif
+
 augroup colorcols
 	autocmd!
 	autocmd FileType,VimEnter,BufEnter * call mine#functions#colorcols()
