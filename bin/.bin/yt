@@ -2,10 +2,13 @@
 
 # Requires:
 # * curl
-# * fzf
+# * fzf | rofi
 # * jq
-# * hq
 # * youtube-dl
+# * hq | pup (recomended, although optional)
+
+rofi="auto"
+
 ttyecho(){
 	# Same as echo but always to tty
 	echo "$@" > /dev/tty
@@ -42,15 +45,30 @@ forceread(){
 	echo "$answer"
 }
 
+useRofi(){
+	[ "$rofi" = "yes" ] && return 0
+	local isxclient=$( readlink /dev/fd/2 | grep -q 'tty' && [[ -n $DISPLAY ]] ; echo $? )
+	if [[ ! -t 2  || $isxclient == "0" ]]; then
+		return 0
+	else
+		return 1
+	fi
+}
+
 getSearchTerm(){
-	# Uses fzf to get a search term
-	# It will filter suggestions using youtube's autocomplete
-	export -f getSearchSuggestions
-	export -f urlencodespecial
-	echo "" | fzf --bind 'change:reload:bash -c  "getSearchSuggestions {q}" || true' \
-		--header="Search Suggestions" \
-		--phony \
-		--height=50% --layout=reverse
+	if useRofi; then
+		# Rofi can't reload the suggestions so just display a search box
+		echo "" | rofi -dmenu -lines 0
+	else
+		# Uses fzf to get a search term
+		# It will filter suggestions using youtube's autocomplete
+		export -f getSearchSuggestions
+		export -f urlencodespecial
+		echo "" | fzf --bind 'change:reload:bash -c  "getSearchSuggestions {q}" || true' \
+			--header="Search Suggestions" \
+			--phony \
+			--height=50% --layout=reverse
+	fi
 }
 
 getSearchSuggestions(){
@@ -86,18 +104,35 @@ jq '..|.videoRenderer?' | sed '/^null$/d' |
 }
 
 chooseVideo(){
-	(echo -e "Title\tChannel\tViews\tTime\tAge\tId"
-	jq -r '[ .title, .channel, .views, .time, .age, .video ] | @tsv') |
-		column -t -s"	" | sed $'s/  \([^ ]\)/\u00a0\\1/g' |
-		fzf --header-lines="1" --with-nth=1,2,3,4,5 --delimiter=$'\u00a0' 
+	if useRofi; then
+		( jq -r '[ .title, .channel, .views, .time, .age, .video ] | @tsv') |
+			column -t -s"	" | sed $'s/  \([^ ]\)/\u00a0\\1/g' |
+			rofi -dmenu
+	else
+		(echo -e "Title\tChannel\tViews\tTime\tAge\tId"
+		jq -r '[ .title, .channel, .views, .time, .age, .video ] | @tsv') |
+			column -t -s"	" | sed $'s/  \([^ ]\)/\u00a0\\1/g' |
+			fzf --header-lines="1" --with-nth=1,2,3,4,5 --delimiter=$'\u00a0'
+	fi
 }
 
 chooseQuality(){
-	videoId="$(cat - | awk -F $'\u00a0' '{print $6}')"
-	code="$( (
-		echo "bb          Best of Both"
-		youtube-dl "$videoId" -F | sed -n '/format code/,$ p' | sed 1d;
-	) | fzf --prompt "Quality " -m | cut -d ' ' -f 1 )"
+	if [ -n "$1" ]; then
+		videoId="$1" 
+	else
+		videoId="$(cat - | awk -F $'\u00a0' '{print $6}')"
+	fi
+	if useRofi; then
+		code="$( (
+			echo "bb          Best of Both"
+			youtube-dl "$videoId" -F | sed -n '/format code/,$ p' | sed 1d;
+			) | rofi -dmenu -prompt "Quality " -m | cut -d ' ' -f 1 )"
+	else
+		code="$( (
+			echo "bb          Best of Both"
+			youtube-dl "$videoId" -F | sed -n '/format code/,$ p' | sed 1d;
+		) | fzf --prompt "Quality " -m | cut -d ' ' -f 1 )"
+	fi
 
 	code="$(echo "$code" | tr '\n' '+' | sed 's/+$//')"
 
@@ -107,12 +142,46 @@ chooseQuality(){
 	esac
 }
 
+
 main(){
-	local searchTerm="$*"
+	local url=""
+	local videoID=""
+	local searchTerm=""
+	while [[ "$1" = -?* ]]; do
+		case "$1" in
+			-u|--url)
+				if [ -n "$2" ]; then
+					url="$2"
+					shift
+				else
+					url="$(cat -)"
+				fi
+				shift
+				;;
+			--rofi)
+				rofi=yes
+				shift
+				;;
+		esac
+	done
 
-	[ -z "$searchTerm" ] && searchTerm="$(getSearchTerm)"
+	if [ -n "$url" ]; then
+		case "$url" in
+			# If it contains an equals sign, let's assume it's a url
+			# Get the value of the v parameter
+			*=*) videoID="$(echo "$url" | grep -Eo '(\?|&)v=[^?&]*' | cut -d '=' -f 2)" ;;
+			# If there isn't an =, assume it is just the video ID
+			*) videoID="$url"
+		esac
+		chooseQuality "$videoID"
+	else
+		searchTerm="$*"
 
-	performSearch "$searchTerm" | extractVideoInfo | chooseVideo | chooseQuality
+		[ -z "$searchTerm" ] && searchTerm="$(getSearchTerm)"
+
+		performSearch "$searchTerm" | extractVideoInfo | chooseVideo | chooseQuality
+
+	fi
 }
 
 main "$@"

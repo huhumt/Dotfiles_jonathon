@@ -45,8 +45,8 @@ set searchurls.audio https://www.google.com/search?hl=en&ei=cSj3X5L0HYXykwXRpKvY
 """"""""""""""
 
 command withUrl composite get_current_url |
-command openvid withUrl !s open-youtube
-command openvidLink composite hint -pipe a[href]:not([display="none"]):not([href=""]) href | !s open-youtube
+command openvid withUrl !s yt --url 
+command openvidLink composite hint -pipe a[href]:not([display="none"]):not([href=""]) href | !s yt --url
 command testclickjacking withUrl !s $HOME/.config/tridactyl/scripts/clickjacking | nativeopen
 command openwithbrave withUrl !s /usr/bin/brave
 

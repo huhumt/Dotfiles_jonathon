@@ -20,5 +20,7 @@ url="$(curl https://ippsec.rocks/dataset.json 2>/dev/null |\
 	fzf -d '	' --with-nth '3,2' --header-lines 1 --preview-window 'up:1' --preview 'bash -c '\''buildURL "$0"'\'' {}' |\
 	buildURL)"
 
-open-youtube "$url"
+echo "$url"
+
+yt "$url"
 
