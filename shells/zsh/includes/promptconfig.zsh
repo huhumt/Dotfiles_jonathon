@@ -91,6 +91,7 @@ prompt_dir(){
 }
 
 function prompt_project() {
+	type -p project > /dev/null || return
 	# Prints the current project and a recording symbol if appropriate
 	local parent_process="$(ps -ocommand -p $PPID | grep -v 'COMMAND' | cut -d' ' -f1)"
 	local current_project_full="$(project current --path)"
@@ -169,6 +170,7 @@ prompt_last_exit_code() {
 
 prompt_email(){
 	type -p notmuch > /dev/null || return 0
+	[ -n "$(project current)" ] && return 0
 	unread="$(notmuch count "tag:unread")"
 	if [ "$unread" -gt 0 ]; then
 		echo "🖂  $unread"
@@ -207,12 +209,16 @@ draw_segment(){
 	local foreground=""
 	local ret=""
 	if [ -n "$contents" ]; then
-		background="$(echo "$output" | sed -n '2p')"
-		foreground="$(echo "$output" | sed -n '3p')"
-		if [ -n "$previousBackground" ]; then
-			ret=" $(seperator $previousBackground $background)"
+		if [ -n "$NO_COLOR" ]; then
+			ret=" $(seperator white black) $contents"
+		else
+			background="$(echo "$output" | sed -n '2p')"
+			foreground="$(echo "$output" | sed -n '3p')"
+			if [ -n "$previousBackground" ]; then
+				ret=" $(seperator $previousBackground $background)"
+			fi
+			ret="$ret$(focusBackgroundColor $background) $(focusForegroundColor $foreground)$contents"
 		fi
-		ret="$ret$(focusBackgroundColor $background) $(focusForegroundColor $foreground)$contents"
 		echo "$ret"
 		echo "$background"
 	fi
