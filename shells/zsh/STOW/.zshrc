@@ -46,7 +46,7 @@ preexec() { echo -ne '\e[5 q' ;}
 bindkey -v '^?' backward-delete-char
 
 
-if [ ! -n "$SSH_CLIENT" ] && [ ! -n "$SSH_TTY" ]; then
+if [ ! -n "$SSH_CLIENT" ] && [ ! -n "$SSH_TTY" ] && [ ! -n "$NO_COLOR" ]; then
 	if [ -L $DOTFILES/shells/zsh/current-color-scheme ]; then
 		source $DOTFILES/shells/zsh/current-color-scheme
 	fi
@@ -66,7 +66,7 @@ if [ -n "$initialCommand" ]; then
 	echo "Running $initialCommand"
 	${=initialCommand} && exit
 else
-	local current="$(project current --path)"
+	local current="$(type -p project > /dev/null && project current --path)"
 	if [ -n "$current" ]; then
 		local script="/usr/bin/script"
 		if [[ ! "$(ps -ocommand -p $PPID | grep -v 'COMMAND' | cut -d' ' -f1 )" == "$script" ]]; then
@@ -74,7 +74,8 @@ else
 			/usr/bin/script -f "$current/shell-logs/$(date +"%d-%b-%y_%H-%M-%S")_shell.log"
 		fi
 	else
-		rem -@
+		type -p rem > /dev/null && rem -@
+		pkill rem
 	fi
 fi
 
@@ -86,5 +87,7 @@ done
 
 export PATH="$PATH:$ZSH_FOLDER/plugins/git-fuzzy/bin"
 
-# Load zsh-syntax-highlighting; should be last.
-source $HOME/.dotfiles/shells/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh 2> /dev/null
+if [ -z "$NO_COLOR" ]; then
+	# Load zsh-syntax-highlighting; should be last.
+	source $HOME/.dotfiles/shells/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh 2> /dev/null
+fi
