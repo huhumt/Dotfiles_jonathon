@@ -121,7 +121,7 @@ function prompt_project() {
 prompt_git(){
 	local repoTopLevel="$(command git rev-parse --show-toplevel 2> /dev/null)"
 	if [ -n "$repoTopLevel" ]; then
-		local branch="$(git branch --show-current 2> /dev/null)"
+		local branch="$(git branch --show-current 2> /dev/null || git rev-parse --abbrev-ref HEAD)"
 		local tag="$(git describe --tags --exact-match HEAD 2> /dev/null)"
 		local color="green"
 		local ret=""
