@@ -24,7 +24,7 @@ prompt_dir(){
 	# Replace wp-content/plugins with plugin icon if in plugin
 	# current_path=$(echo $current_path | sed -r -e "s/wp\-content\/plugins/$wpPluginsIcon/")
 
-	current_project_full="$(project current --path)"
+	current_project_full="$(type -p project > /dev/null && project current --path)"
 	if [ -n "$current_project_full" ]; then
 		if echo "$PWD" | grep -q "$current_project_full"; then
 			current_path=$(echo $PWD | sed -r -e "s#$current_project_full##" | sed -r -e 's/^\///')
