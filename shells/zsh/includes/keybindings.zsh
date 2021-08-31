@@ -164,7 +164,7 @@ find_current_file(){
 		return 0
 	fi
 	# Next try locate with an exact filename match
-	filepath="$(locate "*/$lastWord")"
+	filepath="$(locate "*/$lastWord" | sed -n 1p)"
 	if [ "$?" -eq 0 ]; then
 		tokens[-1]="$filepath"
 		LBUFFER="${tokens[@]}"
