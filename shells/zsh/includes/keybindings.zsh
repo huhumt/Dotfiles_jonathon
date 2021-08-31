@@ -153,4 +153,26 @@ zle -N swap_command
 bindkey '\ec' swap_command
 
 
+find_current_file(){
+	tokens=(${(z)LBUFFER})
+	local lastWord="${tokens[-1]}" filepath
+	# First assume I'm trying to edit a script. If it's in my path, use it
+	filepath="$(which "$lastWord")"
+	if [ "$?" -eq 0 ]; then
+		tokens[-1]="$filepath"
+		LBUFFER="${tokens[@]}"
+		return 0
+	fi
+	# Next try locate with an exact filename match
+	filepath="$(locate "*/$lastWord")"
+	if [ "$?" -eq 0 ]; then
+		tokens[-1]="$filepath"
+		LBUFFER="${tokens[@]}"
+		return 0
+	fi
+}
+zle -N find_current_file
+# ctrl + n
+bindkey '^n' find_current_file
+
 
