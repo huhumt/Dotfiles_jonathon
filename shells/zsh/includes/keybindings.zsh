@@ -100,11 +100,11 @@ make_current_word_directory(){
 	else
 		folder="${folder//\\ / }"
 	fi
-	folder="${folder%/*}"
-	if [ -e "$folder" ]; then
+	folder="${~folder%/*}"
+	if [ -e "${~folder}" ]; then
 		zle -M "$folder already exists"
 	else
-		output="$(mkdir -p "$folder" 2>&1)"
+		output="$(mkdir -p "${~folder}" 2>&1)"
 		if [ $? -eq 0 ]; then
 			zle -M "$folder created"
 		else
