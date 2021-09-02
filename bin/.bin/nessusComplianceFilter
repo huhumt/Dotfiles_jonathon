@@ -28,5 +28,10 @@ while [ "$#" -gt 0 ]; do
 	shift
 done
 
-echo  "Compliance Check	Compliance Result	Current	Expected"
-cat - | xq -r ".NessusClientData_v2.Report.ReportHost.ReportItem[] | select(.compliance == \"true\") | select(.\"cm:compliance-result\" != \"PASSED\") $filters | [.\"cm:compliance-check-name\", .\"cm:compliance-result\", .\"cm:compliance-actual-value\", .\"cm:compliance-policy-value\"] | @tsv" | sort -V
+echo  "Compliance Check	Compliance Result	Profile	Current	Expected	IP"
+cat - | xq -r ".NessusClientData_v2.Report.ReportHost | if (. | type == \"array\") then .[] else . end |
+	(.ReportItem[] + {ip:.\"@name\"}) |
+	select(.compliance == \"true\") |
+	select(.\"cm:compliance-result\" != \"PASSED\") $filters |
+	[.\"cm:compliance-check-name\", .\"cm:compliance-result\", ( .\"cm:compliance-audit-file\" | match(\"L(evel_)?[12]\").string | sub(\"_\";\" \") | sub(\"L1\"; \"Level 1\") | sub(\"L2\"; \"Level 2\") ), .\"cm:compliance-actual-value\", .\"cm:compliance-policy-value\", .ip]
+	| @tsv" | sort -V
