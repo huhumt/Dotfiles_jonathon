@@ -1,0 +1,80 @@
+#!/bin/bash
+
+# A simple wrapper around ffmpeg
+#
+# When run, a screenrecording will be made
+# The file path will be put in the primary selection
+# Will create notification containing file path
+#
+# If you have a project specified, it will put the sceenshot in that folder instead of /tmp
+#
+# Relies on ffmpeg for taking screenrecording
+
+PIDFILE="/tmp/screenrecord.pid"
+
+
+
+if [ -f "$PIDFILE" ]; then
+	pkill ffmpeg
+	exit
+fi
+
+echo $$ > "$PIDFILE"
+
+
+
+path='/tmp'
+command -v ffmpeg > /dev/null || ( echo -n "You need to install ffmpeg" && exit 1 )
+
+#If a project is set we will put screenshots in the project's folder
+command -v project > /dev/null && project=$(project current --path)
+if [ -n "$project" ]; then
+	path="$project/screenrecordings"
+	#Make the directory if it doesn't exist
+	mkdir "$path" 2> /dev/null
+fi
+
+filename="$(date +"%Y-%m-%dT%H-%M-%SZ").mkv"
+file="${path}/${filename}"
+
+[ "$1" = "-w" ] && sleep "$2" && shift && shift
+
+case $1 in
+	"select")
+		if [ -n "$WAYLAND_DISPLAY" ]; then
+			echo "Shouldn't get here"
+			echo "No wayland support yet" >&2
+			exit
+		else
+			echo "I get here"
+			ffmpeg -framerate 30 -f x11grab $(slop -l -c "0.41,0.62,0.42,0.2" -f "-video_size %wx%h -i :0.0+%x,%y") "$file"
+		fi
+		;;
+	*)
+		if [ -n "$WAYLAND_DISPLAY" ]; then
+			echo "No wayland support yet" >&2
+			exit
+		else
+			ffmpeg -framerate 30 -f x11grab -video_size "$(xdpyinfo | grep dimensions | awk '{print $2}')" -i :0.0 "$file"
+		fi
+		;;
+esac
+
+if [ -f "$file" ]; then
+	# Create a gif
+	ffmpeg -i "$file" -vf "fps=10,split[s0][s1];[s0]palettegen[p];[s1][p]paletteuse" -loop 0 "${file%.*}".gif
+	if [ -n "$WAYLAND_DISPLAY" ]; then
+		# Copies the image to your clipboard (ctrl + v)
+		wl-copy <  "${file%.*}.gif"
+		# Copies the filename to primary selection (shift + insert or middle mouse)
+		echo -n "${file%.*}.gif" | wl-copy --primary
+	else
+		# Copies the image to your clipboard (ctrl + v)
+		xclip -selection clipboard -target image/gif -i "${file%.*}.gif"
+		# Copies the filename to primary selection (shift + insert or middle mouse)
+		echo -n "${file%.*}.gif" | xclip -selection primary
+	fi
+	# Creates notification with file name
+	notify-send "New Screenrecording" "$file\n${file%.*}.gif"
+fi
+rm "$PIDFILE"
