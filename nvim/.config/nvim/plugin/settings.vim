@@ -52,6 +52,9 @@ set formatoptions+=o
 " Show the results of the substitute command as you type
 set inccommand=nosplit
 
+" Sets the default fold method to indent
+set foldmethod=indent
+
 if executable('rg')
   set grepprg=rg\ --vimgrep\ --no-heading\ --color=never\ --glob=\"!shell-logs/*\"
   set grepformat=%f:%l:%c:%m,%f:%l:%m
