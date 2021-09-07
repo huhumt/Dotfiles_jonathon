@@ -121,7 +121,7 @@ bindkey '\em' make_current_word_directory
 swap_command(){
 	# Each group should be seperated by a colon with each item in a group 
 	# seperated by a space
-	local groups="cd vim ls:ping mtr"
+	local groups="cd vim ls:ping mtr:mysql mycli postgres pgcli:du:ncdu"
 	local tokens=(${(z)LBUFFER})
 	local cmd="${tokens[1]}"
 	local newindex=0
