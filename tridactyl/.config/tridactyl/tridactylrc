@@ -9,7 +9,7 @@ colours dark
 
 set newtab about:blank
 set browser firefox-developer-edition
-set allowautofocus false
+"set allowautofocus false
 set editorcmd $HOME/.bin/gnvim
 set smoothscroll true
 set newtabfocus page
@@ -39,6 +39,9 @@ set searchurls.cve https://www.cvedetails.com/cve-details.php?t=1&cve_id=%s
 set searchurls.cvep https://www.cvedetails.com/product-search.php?vendor_id=0&search=%s
 set searchurls.video https://www.google.com/search?hl=en&q=intext%3A%22%s%22%20intitle%3A%22index.of%22%20%2B(wmv%7Cmpg%7Cavi%7Cmp4%7Cmkv%7Cmov)%20%2Dinurl%3A(jsp%7Cpl%7Cphp%7Chtml%7Caspx%7Chtm%7Ccf%7Cshtml)
 set searchurls.audio https://www.google.com/search?hl=en&ei=cSj3X5L0HYXykwXRpKvYAg&q=intext%3A%22%s%22+intitle%3A%22index.of.%2F%22+%28ac3%7Cflac%7Cm4a%7Cmp3%7Cogg%7Cwav%7Cwma%29+-inurl%3A%28jsp%7Cpl%7Cphp%7Chtml%7Caspx%7Chtm%7Ccf%7Cshtml%29&oq=intext%3A%22test%22+intitle%3A%22index.of.%2F%22+%28ac3%7Cflac%7Cm4a%7Cmp3%7Cogg%7Cwav%7Cwma%29+-inurl%3A%28jsp%7Cpl%7Cphp%7Chtml%7Caspx%7Chtm%7Ccf%7Cshtml%29&gs_lcp=CgZwc3ktYWIQA1CGD1jzEGDBEmgAcAB4AIABAIgBAJIBAJgBAaABAaoBB2d3cy13aXrAAQE&sclient=psy-ab&ved=0ahUKEwjS8PamkYruAhUF-aQKHVHSCisQ4dUDCAw&uact=5
+set searchurls.red https://www.reddit.com/search/?q=%s
+set searchurls.sred https://www.reddit.com/r/%s1/
+set searchurls.sreds https://www.reddit.com/r/%s1/search?q=%s2&restrict_sr=on
 
 """"""""""""""
 "  Commands  "
@@ -81,8 +84,8 @@ bind <space>G composite js "git clone " + document.location.href.replace(/https?
 bind <space>c composite hint_focus; !s xdotool key Menu
 
 " Makes link hints only hint links on duck duck go
-bindurl ^https://duckduckgo.com f hint -Jc [class=result__a]
-bindurl ^https://duckduckgo.com F hint -Jbc [class=result__a]
+""bindurl ^https://duckduckgo.com f hint -Jc [class=result__a]
+""bindurl ^https://duckduckgo.com F hint -Jbc [class=result__a]
 
 
 autocmd DocStart .*github\.com.* zoom 150

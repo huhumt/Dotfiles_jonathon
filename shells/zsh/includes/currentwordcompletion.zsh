@@ -10,6 +10,25 @@ wordlistSelect() {
 	fd -a --type f --hidden --follow --color=always --exclude .git --exclude \*.md --exclude \*.gif --exclude \*.jpg --exclude \*.png --exclude \*.lua --exclude \*.jar --exclude \*.pl '' /usr/share/wordlists/ | fzf --preview 'bat --color=always {}'
 }
 
+regexSelect(){
+	(
+		echo -e "Name\tRegex\tNotes"
+
+		echo -ne "IP Address\t"
+		echo -n '(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])'
+		echo -e "\tRequires extended regex -E in grep"
+
+		echo -ne "URLs\t"
+		echo -n 'https?://[^\"\\'"'"'> ]+'
+		echo -e "\tRequires extended regex -E in grep"
+
+		echo -ne "AWS Keys\t"
+		echo -n '([^A-Z0-9]|^)(AKIA|A3T|AGPA|AIDA|AROA|AIPA|ANPA|ANVA|ASIA)[A-Z0-9]{12,}'
+		echo -e "\tRequires extended regex -E in grep"
+
+	) | column -t -s $'\t' | fzf --preview-window top:1 --preview 'echo {3}' --delimiter '  +' --header-lines 1 --with-nth 1,2 | awk -F '  +' '{print "\"" $2 "\""}'
+}
+
 word_replace(){
 	local ret=1
 	local word="$1"
@@ -17,6 +36,7 @@ word_replace(){
 	case "$word" in
 		wl) wordlistSelect; return 0 ;;
 		myip) ip route | grep -oE '(dev|src) [^ ]+' | sed 'N;s/\n/,/;s/src //;s/dev //' | awk -F',' '{print $2 " " $1}' | sort -u | fzf -1 --no-preview | cut -d' ' -f1; return 0 ;;
+		regex) regexSelect; return 0 ;;
 	esac
 	return "$ret"
 }

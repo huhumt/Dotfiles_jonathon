@@ -3,18 +3,21 @@ if !has('nvim')
   finish
 endif
 lua <<EOF
+	if ( vim.lsp == nil ) then
+		vim.api.nvim_command("finish")
+	end
 	-- Bash Language Server
-	require'nvim_lsp'.bashls.setup{}
+	require'lspconfig'.bashls.setup{}
 	-- Clang Language Server
-	require'nvim_lsp'.clangd.setup{}
+	require'lspconfig'.clangd.setup{}
 	-- Go Language Server
-	require'nvim_lsp'.gopls.setup{}
+	require'lspconfig'.gopls.setup{}
 	-- Python Language Server
-	require'nvim_lsp'.pyls.setup{}
+	--require'lspconfig'.pyls.setup{}
 	-- Vim Language Server
-	require'nvim_lsp'.vimls.setup{}
+	require'lspconfig'.vimls.setup{}
 	-- VUE Language Server
-	require'nvim_lsp'.vuels.setup{}
+	require'lspconfig'.vuels.setup{}
 EOF
 function! s:ConfigureBuffer()
 	nnoremap <buffer> <silent> <c-]> <cmd>lua vim.lsp.buf.definition()<CR>

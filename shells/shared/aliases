@@ -33,6 +33,8 @@ alias imapfilter="imapfilter -c \"$XDG_CONFIG_HOME/imapfilter/config.lua\""
 # Makes rem output color by default
 alias rem="rem -@ -gaadd"
 
+# Make df show human readable format
+alias df="df -h"
 
 ####################
 #  Path Shortcuts  #
@@ -112,6 +114,7 @@ type -p exa > /dev/null && alias tree="exa -FT" || alias tree='tree -F -C'
 
 # If nvim is available, alias vim to neovim
 type -p nvim > /dev/null && alias vim="nvim"
+type -p nvim > /dev/null && alias vimdiff="nvim -d"
 
 # Trash instead of rm
 type -p rmtrash > /dev/null && alias rm="rmtrash"
@@ -124,6 +127,7 @@ type -p sc-im > /dev/null && alias sc="sc-im"
 # versions
 type -p mycli > /dev/null && alias mysql="echo \"You might want to use mycli instead\"; /usr/bin/mysql"
 type -p pgcli > /dev/null && alias postgres="echo \"You might want to use pgcli instead\"; /usr/bin/postgres"
+type -p ncdu > /dev/null && alias du="echo \"You might want to use ncdu instead\"; /usr/bin/du"
 
 # These are the gnu coreutils mv and cp with a progress bar patched in
 type -p mvg > /dev/null && alias mv="mvg -g"
@@ -192,7 +196,7 @@ alias rot13="tr 'A-Za-z' 'N-ZA-Mn-za-m'"
 # Make sqlmap put output in the current project folder
 alias sqlmap="[ -L ~/Projects/current ] && sqlmap --output-dir=\"~/Projects/current/sqlmap\""
 # Cd into the current project
-alias pp="[ -L ~/Projects/current ] && cd \$(readlink ~/Projects/current) || cd ~/Projects"
+alias pp="[ -L ~/Projects/current ] && cd \"\$(readlink ~/Projects/current)\" || cd ~/Projects"
 # Automatically switch project based on current location
 alias pa="project switch --auto"
 # Change project using fzf
@@ -209,6 +213,8 @@ if [ -f "$HOME/GitRepos/openssl-weak/openssl-1.0.2-chacha/apps/openssl" ]; then
 	alias weakopenssl="$HOME/GitRepos/openssl-weak/openssl-1.0.2-chacha/apps/openssl"
 	alias testssl="testssl --openssl=\"$HOME/GitRepos/openssl-weak/openssl-1.0.2-chacha/apps/openssl\""
 	alias verifySSL="verifySSL --openssl \"$HOME/GitRepos/openssl-weak/openssl-1.0.2-chacha/apps/openssl\""
+else
+	alias testssl="docker run --rm -ti -v \$PWD:/data drwetter/testssl.sh"
 fi
 
 
@@ -280,6 +286,10 @@ alias chrome-curl="node $HOME/GitRepos/chrome-curl/index.js"
 
 # Plays a youtube video or playlist - audio only
 alias ytaudio='mpv --ytdl-format="bestaudio"'
+
+alias asciicast2gif='docker run --rm -v $PWD:/data asciinema/asciicast2gif'
+
+alias anboxPrepare='sudo modprobe -a binder && sudo mkdir /dev/binderfs && sudo chmod 755 /dev/binderfs && sudo mount -t binder none /dev/binderfs && mount | grep binderfs && sudo systemctl start systemd-networkd anbox-container-manager'
 
 if type grc > /dev/null 2>&1; then
 	for cmd in "nmap" "ping" "traceroute" "mount" "netstat" "ps" "dig" "du" "df" "ip" "iptables" "lsblk" "id" "free" "tcpdump" "uptime" "showmount" "whois" ; do
