@@ -20,7 +20,11 @@ regexSelect(){
 
 		echo -ne "URLs\t"
 		echo -n 'https?://[^\"\\'"'"'> ]+'
-		echo -ne "\tRequires extended regex -E in grep"
+		echo -e "\tRequires extended regex -E in grep"
+
+		echo -ne "AWS Keys\t"
+		echo -n '([^A-Z0-9]|^)(AKIA|A3T|AGPA|AIDA|AROA|AIPA|ANPA|ANVA|ASIA)[A-Z0-9]{12,}'
+		echo -e "\tRequires extended regex -E in grep"
 
 	) | column -t -s $'\t' | fzf --preview-window top:1 --preview 'echo {3}' --delimiter '  +' --header-lines 1 --with-nth 1,2 | awk -F '  +' '{print "\"" $2 "\""}'
 }
