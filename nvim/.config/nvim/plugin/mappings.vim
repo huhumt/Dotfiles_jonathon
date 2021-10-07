@@ -78,3 +78,6 @@ vnoremap > >gv
 
 nnoremap [c :cprevious<cr>
 nnoremap ]c :cnext<cr>
+
+" Run proselint and put it in the quickfix list
+nnoremap <leader>p :call mine#functions#proselint()<CR>
