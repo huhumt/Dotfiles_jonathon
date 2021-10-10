@@ -1,0 +1,145 @@
+#!/usr/bin/env bash
+
+formatDate(){
+	date="$1"
+	if [[ "$date" = *"00" ]]; then
+		fixeddate="${date%-*}-01"
+		echo -e "$date\t$(date +"%B %Y" -d $fixeddate)"
+	else
+		echo -e "$date\t$(date +"%d %B %Y" -d $date)"
+	fi
+}
+export -f formatDate
+
+listMonths(){
+	for i in {01..12}; do
+		date -d "2020-$i-01" +"%B"
+	done
+}
+MONTHS="$(listMonths)"
+export MONTHS
+
+
+# Gets a list of months to pipe into fzf
+getMonthsList(){
+	typed="$1"
+	# For the current year, just get current and remaining months
+	currentMonth="$(date +"%m")"
+	currentYear="$(date +"%Y")"
+	if [[ -n "$typed" ]] && [[ "$typed" = *" "* ]]; then
+		if [[ "$typed" = "Next"* ]]; then
+			for i in {1..5}; do
+				echo "Next $i Weeks"
+			done
+			for i in {1..5}; do
+				echo "Next $i Months"
+			done
+		else
+			# If it contains a space
+			month=""
+			year=""
+			day=""
+			# Loop through each part and try to determine what it is
+			while read part; do
+				# totest will be 'a' if the first character is a letter
+				totest="$(echo -n "${part:0:1}" | tr '[a-zA-Z]' 'a')"
+				if [[ "$totest" = "a" ]]; then
+					# Assume if the first letter is a character, we have typed a month
+					month="$(echo "$MONTHS" | cat -n | grep -i "$part" | awk '{print $1}')"
+				else
+					# If we get here, it starts with a number so get rid of any letters
+					# Things like st, nd th
+					num="$(echo "$part" | tr -d '[a-zA-Z]')"
+					if [[ "$num" -lt 32 ]]; then
+						day="$num"
+					else
+						year="$num"
+					fi
+				fi
+			done <<<"$(echo "$typed" | tr ' ' '\n' )"
+			echo "Year: $year Month: $month Day: $day"
+			if [[ -n "$year" ]]; then
+				if [[ -n "$month" ]]; then
+					formatDate "$year-$month-00"
+					for day in {1..31}; do
+						date -d "$year-$month-$day" > /dev/null 2>&1 && formatDate "$year-$month-$day"
+					done
+				else
+					for month in $(seq 1 12); do
+						formatDate "$year-$month-00"
+						for day in {1..31}; do
+							date -d "$year-$month-$day" > /dev/null 2>&1 && formatDate "$year-$month-$day"
+						done
+					done
+				fi
+			else
+				for year in $(seq $((currentYear)) $((currentYear + 10)) ); do
+					if [[ -n "$month" ]]; then
+						formatDate "$year-$month-00"
+						for day in {1..31}; do
+							date -d "$year-$month-$day" > /dev/null 2>&1 && formatDate "$year-$month-$day"
+						done
+					else
+						for month in $(seq 1 12); do
+							formatDate "$year-$month-00"
+							for day in {1..31}; do
+								date -d "$year-$month-$day" > /dev/null 2>&1 && formatDate "$year-$month-$day"
+							done
+						done
+					fi
+				done
+			fi
+		fi
+	else
+		# Default
+		echo "Next 5 Weeks"
+		for month in $(seq $currentMonth 12); do
+			formatDate "$currentYear-$month-00"
+		done
+		for year in $(seq $((currentYear + 1)) $((currentYear + 10)) ); do
+			for month in $(seq 1 12); do
+				formatDate "$year-$month-00"
+			done
+		done
+		echo -e "Today\nTomorrow\nMonday\nTuesday\nWednesday\nThursday\nFriday\nSaturday\nSunday"
+		echo -e "Next 1 Week\nNext 1 Month"
+	fi
+}
+export -f getMonthsList
+
+preview(){
+	choice="$1"
+
+	# This manages things like "tomorow"
+	date -d "$choice" > /dev/null 2>&1 && choice="$(date -d "$choice" +"%Y-%m-%d")"
+
+
+	if [[ "$choice" = *"00" ]]; then
+		echo "option 1"
+		date="${choice%-*}-01"
+		rem -@ -w$FZF_PREVIEW_COLUMNS -c "$date"
+	elif [[ "$choice" = "Next"* ]]; then
+		echo "option 2"
+		num="$(echo "$choice" | tr -d '[a-zA-Z ]')"
+		echo "$choice"
+		case "${choice##* }" in
+			Week|Weeks) 
+				rem -@ -w$FZF_PREVIEW_COLUMNS "-c+$num"
+				;;
+			Month|Months)
+				rem -@ -w$FZF_PREVIEW_COLUMNS "-c$num"
+				;;
+		esac
+	else
+		echo "option 3"
+		echo "$choice"
+		rem -@ -w$FZF_PREVIEW_COLUMNS "$choice"
+	fi
+}
+export -f preview
+
+getMonthsList | fzf --delimiter "\t"\
+	--bind 'change:reload:bash -c "getMonthsList {q}" || true'\
+	--preview 'bash -c "preview {1}"'\
+	--preview-window="up:90%" --height="100%"
+	
