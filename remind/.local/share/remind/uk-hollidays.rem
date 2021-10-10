@@ -78,18 +78,18 @@ REM 1 Dec ++7 MSG %"Advent starts %b%"%_Have you bought an advent callender%_scr
 # Valentine's day is always 14th February
 REM 14 Feb ++14 MSG Valentine's Day %b
 # Early May bank holliday is the first Monday in May
-REM Mon 1 May SATISFY 1
+REM Mon 1 May SCANFROM [$U - 7] SATISFY 1
 OMIT [$T] MSG Early May Bank Holiday
 # Spring bank holiday is the last Monday in May
 # (7 days before first Monday in June)
-REM Mon 1 Jun --7 SATISFY 1
+REM Mon 1 Jun --7 SCANFROM [$U - 7] SATISFY 1
 OMIT [$T] MSG Spring Bank Holiday (Whitsun)
 # 3rd Sunday of June
 # This expression means the first Sunday after or on 15th June
 REM Sun 15 Jun MSG Father's Day
 # Summer bank holiday is the last Monday in May
 # (7 days before first Monday in June)
-REM Mon 1 Sep --7 SATISFY 1
+REM Mon 1 Sep --7 SCANFROM [$U - 7] SATISFY 1
 OMIT [$T] MSG Summer Bank Holiday
 # Black Friday is always the 4th Friday of November
 # that is the same as saying the friday on or after the 22nd
