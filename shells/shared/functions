@@ -325,3 +325,17 @@ function cat(){
 		/usr/bin/bat "$@"
 	fi
 }
+
+# These functions extend httpie in order to add an X-XSRF-TOKEN header based on the value of a cookie.
+http-xsrf(){
+	sessionfile="$(echo "$*" | grep -Eo -- '--session[= ][^ ]*' | sed 's/^--session[= ]//')"
+	cookie="$(jq -r '.cookies."XSRF-TOKEN".value' "$sessionfile")"
+	http "$@" "X-XSRF-TOKEN:$cookie"
+}
+
+https-xsrf(){
+	sessionfile="$(echo "$*" | grep -Eo -- '--session[= ][^ ]*' | sed 's/^--session[= ]//')"
+	cookie="$(jq -r '.cookies."XSRF-TOKEN".value' "$sessionfile")"
+	https "$@" "X-XSRF-TOKEN:$cookie"
+}
+
