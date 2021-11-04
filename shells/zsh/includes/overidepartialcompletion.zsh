@@ -53,6 +53,13 @@ overidecomplete(){
 				esac ;;
 			ytaudio)
 				toadd="\"$(cat "$HOME/Music/youtube-playlists" | fzf -d '	' --with-nth=2 --preview='echo {1}' --preview-window=up:1 | cut -d'	' -f1)\""; ret=0 ;;
+			hashcat)
+				case "$lastWord" in
+					-m|--hash-type) toadd="$( hashcat --example-hashes | grep -E '(mode|Example\.Hash\.\.|Name|^$)' | awk -F ': ' '{print $NF}' | sed 's/Hash mode #//' | awk -v RS="\n\n" -F="\t" '{gsub("\n","\t",$0);print $0}' | fzf -d "\t" --header="Mode Type" --with-nth='1,2' --preview='echo {3}' --preview-window=up:1 --height=40% | cut -d'	' -f1)"
+						ret=0
+						;;
+				esac
+				;;
 
 		esac
 	fi

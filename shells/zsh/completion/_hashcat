@@ -15,23 +15,11 @@ trim(){
 }
 
 _args(){
-	hashcat --help | sed -n '/Options/,/Hash modes/p' | tail -n +5 | head -n -2 | while read line; do
-		op="$(echo "$line" | cut -d"|" -f1 | trim)"
-		description="$(echo "$line" | cut -d"|" -f3 | trim)"
-		ty="$(echo "$line" | cut -d"|" -f2 | trim)"
-		echo "$op" | sed 's/,/\n/' | trim | awk "{print \$1 \":$description:$ty\"}"
-	done
+	hashcat --help | sed -n '/Options/,/Hash modes/p' | tail -n +5 | head -n -2 | awk -F '|' '{sub(/[ \t]+$/, "", $1); sub(/[ \t]+$/, "", $3); print $1  ":" $3 ":" $2}' | awk -F ':' '{ if ($1 ~ ",") { first=$1; second=$1; sub(/,.*/,"",first); sub(/.*,/,"",second); print first ":" $2 ":" $3 "\n" second ":" $2 ":" $3 } else {print $0} }' | trim
 }
 
 _hashes(){
-	if $(type fzf > /dev/null); then
-		# If fzf if available, use it for hash completion
-
-		hashcat --example-hashes | grep -E '(mode|Example\.Hash\.\.|Name|^$)' | awk -F ': ' '{print $NF}' | sed 's/Hash mode #//' | awk -v RS="\n\n" -F="\t" '{gsub("\n","\t",$0);print $0}' | fzf -d "\t" --header="Mode Type" --with-nth='1,2' --preview='echo {3}' --preview-window=up:1 --height=40% | cut -d'	' -f1
-	else
-		hashcat --example-hashes | awk -v RS="\n\n" -F "\t" '{gsub("\n","\t",$0); print $1 ":" $2 }' | sed 's/MODE: //; s/TYPE: //'
-	fi
-	return 0
+		hashcat --example-hashes | grep -E '(mode|Name|^$)' | awk -F ': ' '{print $NF}' | sed 's/Hash mode #//' | awk -v RS="\n\n" -F="\t" '{gsub("\n",":",$0);print $0}'
 }
 
 _basic_section(){
@@ -66,9 +54,8 @@ best_guess(){
 
 case "$previousArg" in
 	-m|--hash-type)
-		# hashes=("${(f)$(_hashes)}")
-		# _describe "Hashes" hashes ;;
-		compadd -- "$(_hashes)" ;;
+		hashes=("${(f)$(_hashes)}")
+		_describe "Hashes" hashes ;;
 	-a|--attack-mode)
 		ops=("${(f)$(_basic_section "Attack Modes")}")
 		_describe "Modes" ops ;;
