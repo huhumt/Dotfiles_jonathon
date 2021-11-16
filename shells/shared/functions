@@ -314,7 +314,9 @@ function cat(){
 		/usr/bin/cat "$@"
 		return $?
 	fi
-	if [ -f "$1" ]; then
+	if [ -d "$1" ]; then
+		l "$1"
+	elif [ -f "$1" ]; then
 		local ext="${1##*.}"
 		if [ -f "${grcConfigs}conf.${ext}" ]; then
 			/usr/bin/cat "$1" | /usr/bin/grcat "${grcConfigs}conf.${ext}" | /usr/bin/bat --file-name "$1"
