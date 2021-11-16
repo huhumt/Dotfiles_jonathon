@@ -1,0 +1,21 @@
+#!/usr/bin/env bash
+
+backgroundDir="$HOME/Pictures/wallpapers/"
+background="$(ls "$backgroundDir" | /usr/bin/shuf -n 1 | /usr/bin/awk \
+"{print \"$backgroundDir\" \$1}")"
+
+echo "Wayland Display: $WAYLAND_DISPLAY"
+
+if [ -n "$WAYLAND_DISPLAY" ]; then
+	while :; do
+		background="$(ls "$backgroundDir" | /usr/bin/shuf -n 1 | /usr/bin/awk \
+		"{print \"$backgroundDir\" \$1}")"
+		echo "I get here"
+		pkill swaybg
+		swaybg --mode fill -i "$background"
+		sleep 60
+	done
+else
+	/usr/bin/feh --bg-fill "$background"
+fi
+

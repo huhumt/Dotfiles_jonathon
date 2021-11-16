@@ -1,6 +1,0 @@
-#!/usr/bin/env bash
-
-backgroundDir="$HOME/Pictures/wallpapers/"
-
-ls "$backgroundDir" | /usr/bin/shuf -n 1 | /usr/bin/awk \
-"{print \"$backgroundDir\" \$1}" | /usr/bin/xargs /usr/bin/feh --bg-fill

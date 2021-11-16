@@ -3,6 +3,7 @@ Description=Change Wallpaper every minute
 
 [Timer]
 OnBootSec=1min
+OnActiveSec=1min
 OnUnitActiveSec=1min
 
 [Install]

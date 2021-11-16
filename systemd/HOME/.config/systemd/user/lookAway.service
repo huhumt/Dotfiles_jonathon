@@ -1,0 +1,8 @@
+[Unit]
+Description=Look Away
+
+[Service]
+ExecStart=/home/jonathan/.config/systemd/user/lookAway
+
+[Install]
+WantedBy=default.target
