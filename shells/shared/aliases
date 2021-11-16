@@ -23,9 +23,6 @@ alias grep="grep --color=auto"
 #Make the cal command default to start on Sunday
 alias cal='cal -s'
 
-# Makes jq use colour
-alias jq="jq -C"
-
 # Use the config files I want
 alias mbsync="mbsync -c \"$XDG_CONFIG_HOME/isync/mbsyncrc.secret\""
 alias imapfilter="imapfilter -c \"$XDG_CONFIG_HOME/imapfilter/config.lua\""
