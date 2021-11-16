@@ -52,16 +52,7 @@ export MSSQL_CLI_TELEMETRY_OPTOUT=1
 export DOTNET_CLI_TELEMETRY_OPTOUT=1
 export POWERSHELL_CLI_TELEMETRY_OPTOUT=1
 
-#export GTK_THEME=Adapta-Nokto
+# Askpass
+# I will use this for sudo writes in nvim
+[ -f "/usr/lib/seahorse/ssh-askpass" ] && export SUDO_ASKPASS=/usr/lib/seahorse/ssh-askpass
 
-if [ -n "$GTK_MODULES" ]
-then
-  export GTK_MODULES="$GTK_MODULES:unity-gtk-module"
-else
-  export GTK_MODULES="unity-gtk-module"
-fi
-
-if [ -z "$UBUNTU_MENUPROXY" ]
-then
-  export UBUNTU_MENUPROXY=1
-fi

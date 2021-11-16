@@ -81,3 +81,11 @@ nnoremap ]c :cnext<cr>
 
 " Run proselint and put it in the quickfix list
 nnoremap <leader>p :call mine#functions#proselint()<CR>
+
+if has('nvim')
+	if !empty($SUDO_ASKPASS)
+		cnoremap WW w !sudo -A tee % > /dev/null
+	endif
+else
+	cnoremap WW w !sudo tee % > /dev/null
+endif
