@@ -1,0 +1,42 @@
+#!/usr/bin/env bash
+
+# Requires pdflatex
+# May need to install texlive-acrotex - depends on your tex distrobution
+
+if [ "$1" = "-h" ]; then
+	echo 'js-in-pdf <pdf file> [<js file>]'
+	exit 0
+fi
+
+pdffile="$1"
+jsfile="${2}"
+
+if [ -n "$jsfile" ]; then
+	js="$(cat "$jsfile")"
+else
+	js='app.alert("The date is " + Date());'
+fi
+
+tempdir="$(mktemp -d)"
+
+trap "rm -rf $tempdir" EXIT
+
+cp "$pdffile" "$tempdir"
+
+echo "\documentclass{article}
+\usepackage[pdftex]{insdljs}
+\usepackage{pdfpages}
+\usepackage{blindtext}
+ 
+
+\OpenAction{\JS{%
+$js
+}}
+ 
+\begin{document}
+\includepdf[pages=-]{$pdffile}
+\end{document}" | tee "$tempdir/payload.tex"
+
+pdflatex -output-directory="$tempdir" "$tempdir/payload.tex"
+
+cp "$tempdir/payload.pdf" "${pdffile%.*}-payload.pdf"
