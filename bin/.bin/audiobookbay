@@ -1,0 +1,33 @@
+#!/usr/bin/env bash
+
+# I do not endorce using this for piracy, only use it if you want to download content that is uploaded as creative commons or other legal uses.
+
+urlencode() {
+	# urlencode <string>
+	old_lc_collate=$LC_COLLATE
+	LC_COLLATE=C
+	local length="${#1}"
+	for (( i = 0; i < length; i++ )); do
+		local c="${1:i:1}"
+		case $c in
+			[a-zA-Z0-9.~_-]) printf "$c" ;;
+			*) printf '%%%02X' "'$c" ;;
+		esac
+	done
+	LC_COLLATE=$old_lc_collate
+}
+
+url="$1"
+
+[ -z "$url" ] && echo "You need to enter a url"
+
+content="$(curl "$url")"
+
+trackers="$(echo "$content" | pup '.torrent_info tr' 'text{}' | sed '/^$/d' |
+	grep '^Tracker:$' -A 1 | sed -n 'n;p' | awk '{print "&tr=" $0}' | tr -d '\n' )"
+hash="$(echo "$content" | pup '.torrent_info tr' 'text{}' | sed '/^$/d' | grep '^Info Hash:$' -A 1 | sed -n 'n;p' )"
+title="$(echo "$content" | pup '.postTitle h1' 'text{}')"
+
+
+echo "magnet:?xt=urn:btih:${hash}&dn=$( urlencode "$title" )${trackers}"
+
