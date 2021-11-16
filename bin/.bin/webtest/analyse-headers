@@ -291,7 +291,7 @@ test_strict-transport-security(){
 			ret=$((ret>1 ? ret : 1))
 		fi
 
-		if ! echo "$value" | grep -q 'includeSubDomains'; then
+		if ! echo "$value" | grep -qi 'includeSubDomains'; then
 			output+="The ${ORANGE}includeSubdomains${NC} property was not found. \
 	When included browsers won't connect to subdomains unless over an encrypted \
 	channel.\n\n"
@@ -556,7 +556,6 @@ missingHeaders="x-frame-options
 strict-transport-security
 content-security-policy
 x-xss-protection
-x-content-type-options
 feature-policy
 permissions-policy
 cache-control
