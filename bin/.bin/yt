@@ -93,7 +93,7 @@ performSearch(){
 }
 
 extractVideoInfo(){
-jq '..|.videoRenderer?' | sed '/^null$/d' |
+jq '..|.videoRenderer? | values' |
 	jq -r '{title: .title.runs[0].text,
 		channel: .longBylineText.runs[0].text,
 		views: .shortViewCountText.simpleText,
@@ -122,16 +122,21 @@ chooseQuality(){
 	else
 		videoId="$(cat - | awk -F $'\u00a0' '{print $6}')"
 	fi
-	if useRofi; then
-		code="$( (
-			echo "bb          Best of Both"
-			youtube-dl "$videoId" -F | sed -n '/format code/,$ p' | sed 1d;
-			) | rofi -dmenu -prompt "Quality " -m | cut -d ' ' -f 1 )"
+	if type -p yt-dlp > /dev/null; then
+		choices=" bb          Best of Both
+$(yt-dlp "$videoID" -F --compat-options list-formats | sed -n '/format code/,$ p' | sed 1d)"
 	else
-		code="$( (
-			echo "bb          Best of Both"
-			youtube-dl "$videoId" -F | sed -n '/format code/,$ p' | sed 1d;
-		) | fzf --prompt "Quality " -m | cut -d ' ' -f 1 )"
+		# 249          webm       audio only tiny   50k , webm_dash container, opus @ 50k (48000Hz), 49.85MiB
+		# 250          webm       audio only tiny   60k , webm_dash container, opus @ 60k (48000Hz), 59.86MiB
+		# 251          webm       audio only tiny  115k , webm_dash container, opus @115k (48000Hz), 113.94MiB
+		# 140          m4a        audio only tiny  129k , m4a_dash container, mp4a.40.2@129k (44100Hz), 127.36MiB
+		choices=" bb          Best of Both
+$(youtube-dl "$videoId" -F | sed -n '/format code/,$ p' | sed 1d)"
+	fi
+	if useRofi; then
+		code="$( echo "$choices" | rofi -dmenu -prompt "Quality " -m | cut -d ' ' -f 1 )"
+	else
+		code="$( echo "$choices" | fzf --prompt "Quality " -m | cut -d ' ' -f 1 )"
 	fi
 
 	code="$(echo "$code" | tr '\n' '+' | sed 's/+$//')"
