@@ -18,7 +18,7 @@ for d in "$HOME"/.bin/*/; do
     mypath+=":$d"
 done
 
-export PATH=~/Projects/current/bin:$mypath:$GOPATH/bin:$HOME/.local/share/bin:$HOME/.config/composer/vendor/bin:$PATH:.
+export PATH=~/Projects/current/bin:$mypath:$GOPATH/bin:$HOME/.local/share/bin:$HOME/.local/bin:$HOME/.config/composer/vendor/bin:$PATH:.
 
 #Ruby things
 if type -p ruby > /dev/null; then
