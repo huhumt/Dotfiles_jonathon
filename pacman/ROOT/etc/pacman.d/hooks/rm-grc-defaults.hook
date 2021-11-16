@@ -1,0 +1,11 @@
+[Trigger]
+Operation = Upgrade
+Operation = Install
+Type = Package
+Target = grc
+
+[Action]
+Description = Delete grc defaults
+Depends = grc
+When = PostTransaction
+Exec = /usr/bin/rm /etc/profile.d/grc.sh
