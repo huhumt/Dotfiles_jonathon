@@ -31,14 +31,26 @@ file="${path}/${filename}"
 
 case $1 in
 	"window")
-		maim -i $(xdotool getactivewindow) "$file"
+		if [ -n "$WAYLAND_DISPLAY" ]; then
+			notify-send "Can't get current window yet in wayland"
+		else
+			maim -i $(xdotool getactivewindow) "$file"
+		fi
 		;;
 	"select")
-		#maim -s -r crosshair "$file"
-		maim -s -c 0.41,0.62,0.42,0.2 -l -u "$file"
+		if [ -n "$WAYLAND_DISPLAY" ]; then
+			grim -g "$(slurp)" "$file"
+		else
+			#maim -s -r crosshair "$file"
+			maim -s -c 0.41,0.62,0.42,0.2 -l -u "$file"
+		fi
 		;;
 	*)
-		maim "$file"
+		if [ -n "$WAYLAND_DISPLAY" ]; then
+			grim "$file"
+		else
+			maim "$file"
+		fi
 		;;
 esac
 
@@ -52,13 +64,25 @@ if [ -f "$file" ]; then
 			notify-send "ocr" "no text was detected\nimage file at $file"
 			exit 1
 		fi
-		cat "${file}.txt" | xclip -selection clipboard
-		echo -n "${file}.txt" | xclip -selection primary
+		if [ -n "$WAYLAND_DISPLAY" ]; then
+			cat "${file}.txt" | wl-copy
+			echo -n "${file}.txt" | wl-copy --primary
+		else
+			cat "${file}.txt" | xclip -selection clipboard
+			echo -n "${file}.txt" | xclip -selection primary
+		fi
 	else
-		# Copies the image to your clipboard (ctrl + v)
-		xclip -selection clipboard -target image/png -i "$file"
-		# Copies the filename to primary selection (shift + insert or middle mouse)
-		echo -n "$file" | xclip -selection primary
+		if [ -n "$WAYLAND_DISPLAY" ]; then
+			# Copies the image to your clipboard (ctrl + v)
+			wl-copy <  "$file"
+			# Copies the filename to primary selection (shift + insert or middle mouse)
+			echo -n "$file" | wl-copy --primary
+		else
+			# Copies the image to your clipboard (ctrl + v)
+			xclip -selection clipboard -target image/png -i "$file"
+			# Copies the filename to primary selection (shift + insert or middle mouse)
+			echo -n "$file" | xclip -selection primary
+		fi
 		# Creates notification with file name
 		notify-send "New Screenshot" "$file"
 	fi
