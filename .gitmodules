@@ -73,3 +73,9 @@
 [submodule "nvim/.config/nvim/pack/bundle/opt/lexima.vim"]
 	path = nvim/.config/nvim/pack/bundle/opt/lexima.vim
 	url = https://github.com/cohama/lexima.vim
+[submodule "nvim/.config/nvim/pack/bundle/nvim-biscuits"]
+	path = nvim/.config/nvim/pack/bundle/opt/nvim-biscuits
+	url = https://github.com/code-biscuits/nvim-biscuits
+[submodule "nvim/.config/nvim/pack/bundle/opt/nvim-treesitter"]
+	path = nvim/.config/nvim/pack/bundle/opt/nvim-treesitter
+	url = https://github.com/nvim-treesitter/nvim-treesitter

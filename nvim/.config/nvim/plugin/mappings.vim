@@ -85,6 +85,8 @@ nnoremap <leader>p :call mine#functions#proselint()<CR>
 if has('nvim')
 	if !empty($SUDO_ASKPASS)
 		cnoremap WW w !sudo -A tee % > /dev/null
+	else
+		cnoremap WW echo "SUDO_ASKPASS variable needs to be set"<cr>
 	endif
 else
 	cnoremap WW w !sudo tee % > /dev/null

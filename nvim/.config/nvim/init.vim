@@ -22,6 +22,8 @@ if has('packages')
 		packadd! deoplete-lsp
 		packadd! deoplete-notmuch
 		packadd! firenvim
+		packadd! nvim-treesitter
+		packadd! nvim-biscuits
 		lua <<EOF
 		if ( vim.lsp ~= nil ) then
 			vim.cmd "packadd! nvim-lspconfig"
