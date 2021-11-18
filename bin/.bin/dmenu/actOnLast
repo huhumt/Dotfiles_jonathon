@@ -1,0 +1,110 @@
+#!/usr/bin/env bash
+
+# This file should be bound to a keybinging
+# It allows for follow up actions
+#
+# For example, after taking a screenshot, I may wish to
+# * add a shadow
+# * open in gimp
+# * Apply tesseract ocr
+
+# The file .local/share/lastaction will contain the last action and potentially relevant information about it such as the screenshot's path
+
+
+# If this is true, the first is automatically taken
+first=false
+
+die(){
+	echo "$@" > /dev/stderr
+	exit 1
+}
+
+trimWhitespace(){
+	sed -e 's/^[[:space:]]*//' -e 's/[[:space:]]*$//'
+}
+
+deleteEmptyLines(){
+	sed '/^$/ d'
+}
+
+getSuggestions(){
+	case "$1" in
+		screenshot)
+			printf "View\tsxiv\n"
+			printf "add shadow\tscreenshotAddShadow\n"
+			printf "OCR\tscreenshotOCR\n"
+			;;
+		password)
+			echo "OTP	passwordOTP"
+			;;
+	esac
+	
+}
+
+screenshotOCR(){
+	file="$1"
+	tesseract "$file" "$file"
+	LINES=$(wc -l < "${file}.txt")
+	if [ "$LINES" -eq 0 ]; then
+		notify-send "ocr" "no text was detected\nimage file at $file"
+		exit 1
+	fi
+	if [ -n "$WAYLAND_DISPLAY" ]; then
+		cat "${file}.txt" | wl-copy
+		echo -n "${file}.txt" | wl-copy --primary
+	else
+		cat "${file}.txt" | xclip -selection clipboard
+		echo -n "${file}.txt" | xclip -selection primary
+	fi
+}
+
+screenshotAddShadow(){
+	file="$1"
+	newfile="${file%.*}-withshadow.${file##*.}"
+	[ ! -f "$file" ] && die "Can't find file"
+
+	#tmpfile="$(mktemp)"
+	convert "$file" \( +clone -background black -shadow 80x20+0+15 \) +swap -background transparent -layers merge +repage "$newfile"
+	#convert "$tmpfile" -bordercolor none -border 32 "$newfile"
+	#rm "$tmpfile"
+	if [ -n "$WAYLAND_DISPLAY" ]; then
+		# Copies the image to your clipboard (ctrl + v)
+		wl-copy <  "$file"
+		# Copies the filename to primary selection (shift + insert or middle mouse)
+		echo -n "$file" | wl-copy --primary
+	else
+		# Copies the image to your clipboard (ctrl + v)
+		xclip -selection clipboard -target image/png -i "$newfile"
+		# Copies the filename to primary selection (shift + insert or middle mouse)
+		echo -n "$newfile" | xclip -selection primary
+	fi
+	notify-send "New Shadow On Screenshot" "$newfile"
+	echo "screenshot $newfile" > "$lastactionfile"
+}
+
+passwordOTP(){
+	password-manager "$1" otp
+}
+
+[ "$1" == "--first" ] && first=true && shift
+lastactionfile="${XDG_DATA_HOME:-$HOME/.local/share}/lastaction"
+[ ! -f "$lastactionfile" ] && die "No last action"
+
+lastaction="$(sed -n 1p "$lastactionfile")"
+[ -z "$lastaction" ] && die "No last action"
+
+action="$(echo "$lastaction" | cut -d ' ' -f 1)"
+options="$(echo "$lastaction" | cut -d ' ' -f 2-)"
+
+suggestions="$(getSuggestions "$action")"
+
+torun=""
+if [ "$(echo "$suggestions" | wc -l)" -le 1 ] || [ "$first" == "true" ]; then
+	torun="$(echo "$suggestions" | sed -n 1p | cut -d '	' -f 2)"
+else
+	choice="$(echo "$suggestions" | cut -d '	' -f 1 | rofi -dmenu)"
+	[ -z "$choice" ] && die "Exited without selection"
+	torun="$(echo "$suggestions" | grep "^$choice" | cut -d '	' -f 2)"
+fi
+
+$torun $options
