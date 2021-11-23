@@ -33,6 +33,7 @@ getSuggestions(){
 			printf "View\tsxiv\n"
 			printf "add shadow\tscreenshotAddShadow\n"
 			printf "OCR\tscreenshotOCR\n"
+			printf "Clipboard\tscreenshotClipboard\n"
 			;;
 		password)
 			echo "OTP	passwordOTP"
@@ -67,6 +68,13 @@ screenshotAddShadow(){
 	convert "$file" \( +clone -background black -shadow 80x20+0+15 \) +swap -background transparent -layers merge +repage "$newfile"
 	#convert "$tmpfile" -bordercolor none -border 32 "$newfile"
 	#rm "$tmpfile"
+	screenshotClipboard "$newfile"
+	notify-send "New Shadow On Screenshot" "$newfile"
+	echo "screenshot $newfile" > "$lastactionfile"
+}
+
+screenshotClipboard(){
+	file="$1"
 	if [ -n "$WAYLAND_DISPLAY" ]; then
 		# Copies the image to your clipboard (ctrl + v)
 		wl-copy <  "$file"
@@ -74,12 +82,11 @@ screenshotAddShadow(){
 		echo -n "$file" | wl-copy --primary
 	else
 		# Copies the image to your clipboard (ctrl + v)
-		xclip -selection clipboard -target image/png -i "$newfile"
+		xclip -selection clipboard -target image/png -i "$file"
 		# Copies the filename to primary selection (shift + insert or middle mouse)
-		echo -n "$newfile" | xclip -selection primary
+		echo -n "$file" | xclip -selection primary
 	fi
-	notify-send "New Shadow On Screenshot" "$newfile"
-	echo "screenshot $newfile" > "$lastactionfile"
+
 }
 
 passwordOTP(){
