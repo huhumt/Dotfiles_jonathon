@@ -223,7 +223,7 @@ fi
 # Keyboard - reset
 # Sometimes, if I turn the screens off, the keyboard resets itself to defaults. Not sure why but this will put my keyboard back to how I like it
 #alias kb="xmodmap ~/.Xmodmap; xset r rate 200 70; xcape"
-alias keys="setxkbmap -layout gb,gb -variant \"colemak,\" -option grp:shifts_toggle -option compose:ralt; xset r rate 200 70; xinput --list | grep -Ei 'ErgoDox EZ\s+id' | grep -oE 'id=[0-9]+' | cut -d'=' -f2 | xargs -r setxkbmap -layout gb -device"
+alias keys="setxkbmap -layout gb -variant colemak -option shift:both_capslock -option compose:ralt; xset r rate 200 70; xinput --list | grep -Ei 'ErgoDox EZ\s+id' | grep -oE 'id=[0-9]+' | cut -d'=' -f2 | xargs -r setxkbmap -layout gb -device"
 
 alias colemak="setxkbmap -layout gb,gb -variant \"colemak,\" -option grp:shifts_toggle"
 alias qwerty="setxkbmap -layout gb"

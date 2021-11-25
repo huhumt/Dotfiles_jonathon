@@ -21,7 +21,7 @@ export CORPPASSCOMMAND="pass IRM/corp"
 #xset r rate 200 70
 
 # Set keymap to colemak
-setxkbmap -layout gb,gb -variant "colemak," -option grp:shifts_toggle -option compose:ralt
+setxkbmap -layout gb,gb -variant "colemak," -option shift:both_capslock -option compose:ralt
 
 # Set key rate
 xset r rate 200 70;
