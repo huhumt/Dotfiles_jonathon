@@ -131,6 +131,9 @@ set forward_format = "Fwd: %s" # https://neomutt.org/guide/reference#forward_for
 set forward_quote = yes # https://neomutt.org/guide/reference#forward_quote
 # Include the replied mesaage in the body
 set include = yes # https://neomutt.org/guide/reference#include
+# Prevents mutt putting '> ' when replying
+set indent_string = '' # https://neomutt.org/guide/reference#indent_string
+set attribution="\n________________________________________\nFrom: %F <%a>\nSent: %{%d %B %Y %R}\nTo: %r\nCc: %R\nSubject: %s\n"
 # Adds a header that is used to determine whether my send script should convert the markdown to html
 my_hdr Markdown: false
 
