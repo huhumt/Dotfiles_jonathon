@@ -11,6 +11,7 @@ if has('packages')
 	packadd! vim-fugitive
 	packadd! vim-json
 	packadd! vim-less
+	packadd! vim-projectionist
 	packadd! vim-repeat
 	packadd! vim-snippets
 	packadd! vim-surround

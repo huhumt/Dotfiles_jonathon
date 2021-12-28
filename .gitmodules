@@ -79,3 +79,6 @@
 [submodule "nvim/.config/nvim/pack/bundle/opt/nvim-treesitter"]
 	path = nvim/.config/nvim/pack/bundle/opt/nvim-treesitter
 	url = https://github.com/nvim-treesitter/nvim-treesitter
+[submodule "nvim/.config/nvim/pack/bundle/opt/vim-projectionist"]
+	path = nvim/.config/nvim/pack/bundle/opt/vim-projectionist
+	url = https://github.com/tpope/vim-projectionist
