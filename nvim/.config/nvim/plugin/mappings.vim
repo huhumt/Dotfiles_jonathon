@@ -91,3 +91,5 @@ if has('nvim')
 else
 	cnoremap WW w !sudo tee % > /dev/null
 endif
+
+nnoremap <leader>ve :edit $HOME/.config/nvim/init.vim<cr>
