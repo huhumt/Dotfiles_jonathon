@@ -64,3 +64,10 @@ augroup colorcols
 	autocmd!
 	autocmd FileType,VimEnter,BufEnter * call mine#functions#colorcols()
 augroup end
+
+" share data between nvim instances (registers etc)
+augroup SHADA
+	autocmd!
+	autocmd CursorHold,TextYankPost,FocusGained,FocusLost *
+		\ if exists(':rshada') | rshada | wshada | endif
+augroup END
