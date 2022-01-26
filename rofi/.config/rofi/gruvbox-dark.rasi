@@ -70,3 +70,7 @@
 
 @import "gruvbox-common.rasi"
 
+element-text, element-icon {
+    background-color: inherit;
+    text-color:       inherit;
+}
