@@ -91,3 +91,6 @@ bind <space>c composite hint_focus; !s xdotool key Menu
 autocmd DocStart .*github\.com.* zoom 150
 autocmd DocStart .*gitlab\.com.* zoom 150
 autocmd DocStart .*archlinux\.org.* zoom 150
+
+
+autocmd DocStart ^https?://wiki.archlinux.org js (window.location.href.match("[?|&]useskinversion=1") == null) && tri.excmds.urlmodify("-s", "useskinversion", "1")
