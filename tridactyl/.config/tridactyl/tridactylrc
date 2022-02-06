@@ -81,13 +81,20 @@ bind <space>Y openvidLink
 bind <space>g composite js "git clone " + document.location.href | clipboard yank
 bind <space>G composite js "git clone " + document.location.href.replace(/https?:\/\//,"git@").replace("/",":").replace(/$/,".git") | clipboard yank
 
-bind <space>c composite hint_focus; !s xdotool key Menu
+bind <space>h hint -F e => e.dispatchEvent(new MouseEvent('mouseover', {}))
 
 " Makes link hints only hint links on duck duck go
 ""bindurl ^https://duckduckgo.com f hint -Jc [class=result__a]
 ""bindurl ^https://duckduckgo.com F hint -Jbc [class=result__a]
 
+" Protonmail hints
+bindurl https://mail.protonmail.com/ f hint -Jc .item-subject,.item-checkbox,.navigation-link,.toolbar-button
+
 
 autocmd DocStart .*github\.com.* zoom 150
 autocmd DocStart .*gitlab\.com.* zoom 150
 autocmd DocStart .*archlinux\.org.* zoom 150
+
+setpref browser.pocket.enabled false
+setpref extensions.pocket.enabled false
+setpref toolkit.legacyUserProfileCustomizations.stylesheets true
