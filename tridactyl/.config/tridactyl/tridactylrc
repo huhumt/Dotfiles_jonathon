@@ -100,3 +100,4 @@ autocmd DocStart .*archlinux\.org.* zoom 150
 setpref browser.pocket.enabled false
 setpref extensions.pocket.enabled false
 setpref toolkit.legacyUserProfileCustomizations.stylesheets true
+setpref browser.tabs.closeWindowWithLastTab false
