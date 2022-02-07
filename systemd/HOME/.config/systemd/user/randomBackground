@@ -16,6 +16,10 @@ if [ -n "$WAYLAND_DISPLAY" ]; then
 		sleep 60
 	done
 else
-	/usr/bin/feh --bg-fill "$background"
+	if [ -f /usr/bin/feh ]; then
+		/usr/bin/feh --bg-fill "$background"
+	else
+		/usr/bin/hsetroot -fill "$background"
+	fi
 fi
 
