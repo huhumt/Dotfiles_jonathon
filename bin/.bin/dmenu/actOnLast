@@ -32,6 +32,7 @@ getSuggestions(){
 		screenshot)
 			printf "View\tsxiv\n"
 			printf "add shadow\tscreenshotAddShadow\n"
+			printf "Decode QR Code\tscreenshotQRCode\n"
 			printf "OCR\tscreenshotOCR\n"
 			printf "Clipboard\tscreenshotClipboard\n"
 			;;
@@ -87,6 +88,14 @@ screenshotClipboard(){
 		echo -n "$file" | xclip -selection primary
 	fi
 
+}
+
+screenshotQRCode(){
+	file="$1"
+	zbarimg "$file" > "$file.txt"
+	head -n 1 "$file.txt" | xclip -selection clipboard
+	echo -n "$file.txt" | xclip -selection primary
+	notify-send "QR code" "Decoded"
 }
 
 passwordOTP(){
