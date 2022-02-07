@@ -203,8 +203,7 @@ alias pn="project new"
 
 alias snmp-check="/usr/bin/snmpcheck-nothink"
 
-#alias irmgpg="gpg --no-default-keyring --keyring=irm.gpg"
-alias irmgpg="gpg --options ~/.gnupg/irmgpg.conf --keyring=irm.gpg"
+alias 7egpg="gpg --options ~/.gnupg/7egpg.conf --keyring=7e.gpg"
 
 if [ -f "$HOME/GitRepos/openssl-weak/openssl-1.0.2-chacha/apps/openssl" ]; then
 	alias weakopenssl="$HOME/GitRepos/openssl-weak/openssl-1.0.2-chacha/apps/openssl"
