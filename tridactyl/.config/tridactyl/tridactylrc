@@ -101,3 +101,5 @@ setpref browser.pocket.enabled false
 setpref extensions.pocket.enabled false
 setpref toolkit.legacyUserProfileCustomizations.stylesheets true
 setpref browser.tabs.closeWindowWithLastTab false
+
+autocmd DocStart ^https?://wiki.archlinux.org js (window.location.href.match("[?|&]useskinversion=1") == null) && tri.excmds.urlmodify("-s", "useskinversion", "1")
