@@ -33,3 +33,11 @@ colours=default,green,magenta
 # Network Distance:
 regexp=Network Distance:\s(\d+)
 colours=default,bold green
+-
+# commmon name
+regexp=commonName=([0-9a-z.*]*)
+colours=default,bold green
+-
+# SAN
+regexp=DNS:([0-9a-z.*]*)
+colours=default,bold green
