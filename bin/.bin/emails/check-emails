@@ -14,12 +14,11 @@ export NOTMUCH_CONFIG="$HOME/.config/notmuch/config"
 
 folder="${1:-all}"
 
-
 # Ping 1.1.1.1 to confirm that we are on the internet
 ping -c 1 "1.1.1.1" > /dev/null 2> /dev/null || die "Need to be connected to the internet"
 
 # Check that davmail is running
-ps -aux | grep -v grep | grep -q davmail || die "Need to start davmail"
+#ps -aux | grep -v grep | grep -q davmail || die "Need to start davmail"
 
 # Sync maildir with exchange
 mbsync -c "$HOME/.config/isync/mbsyncrc.secret" "work-$folder"
