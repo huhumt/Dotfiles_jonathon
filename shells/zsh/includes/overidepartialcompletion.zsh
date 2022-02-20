@@ -39,7 +39,7 @@ overidecomplete(){
 	if [ "${LBUFFER[-1]}" = " " ]; then
 		case "$cmd" in
 			# Pacman and yay have almost the same syntac so for simplicities sake, treat them the same
-			pacman|yay)
+			pacman|yay|paru)
 				case "$lastWord" in
 					# If I want to install something, give a list of things to install
 					-S) toadd="$($cmd -Slq | fzf -m --preview "$cmd -Si {1}" | tr '\n' ' ')"; ret=0 ;;
