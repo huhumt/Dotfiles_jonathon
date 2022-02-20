@@ -12,6 +12,12 @@ case "$url" in
 	*"//invidious.*/"*) yt --url "$url"; exit 0 ;;
 	*//*.youtube.*/*) yt --url "$url"; exit 0 ;;
 	*"//videos.*"*) yt --url "$url"; exit 0 ;;
+	*.png|*.jpg)
+		tmp="$(mktemp)"
+		curl -s -o "$tmp" --user-agent blar "$url"
+		sxiv "$tmp"
+		rm "$tmp"
+		;;
 	*"//xkcd.com/"*) xkcd "$url"; exit 0 ;;
 	"mailto:"*) neomutt "$url"; exit 0 ;;
 	*) $browser "$url"; exit 0 ;;
