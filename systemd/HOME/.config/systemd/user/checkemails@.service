@@ -1,7 +1,5 @@
 [Unit]
 Description=Check emails for %i
-After=davmail.service
-Requires=davmail.service
 
 [Service]
 ExecStart=/home/jonathan/.bin/emails/check-emails %i
