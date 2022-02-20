@@ -289,8 +289,10 @@ alias anboxPrepare='sudo modprobe -a binder && sudo mkdir /dev/binderfs && sudo 
 
 if type grc > /dev/null 2>&1; then
 	for cmd in "nmap" "ping" "traceroute" "mount" "netstat" "ps" "dig" "du" "df" "ip" "iptables" "lsblk" "id" "free" "tcpdump" "uptime" "showmount" "whois" ; do
-		alias "$cmd"="grc $(whence $cmd)"
-		alias "${cmd}c"="grc --colour=on $(whence $cmd)"
+		if type -p "$cmd" > /dev/null; then
+			alias "$cmd"="grc $(whence $cmd)"
+			alias "${cmd}c"="grc --colour=on $(whence $cmd)"
+		fi
 	done
 fi
 
