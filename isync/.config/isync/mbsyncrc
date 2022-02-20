@@ -29,6 +29,9 @@ Patterns * !'Sync Issues' !'Sync Issues/*'
 Create Both
 # Save the synchronization state files in the relevant directory
 SyncState *
+# Delete messages on both sides when one is deleted
+Expunge Both
+Sync All
 
 Channel work-inbox
 Master :work-remote:
@@ -39,3 +42,6 @@ Patterns Inbox Sent
 Create Both
 # Save the synchronization state files in the relevant directory
 SyncState *
+# Delete messages on both sides when one is deleted
+Expunge Both
+Sync All
