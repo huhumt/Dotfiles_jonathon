@@ -1,0 +1,8 @@
+[Unit]
+Description=Refreshes and notifies for newsboat
+
+[Service]
+ExecStart=newsboat -x reload
+
+[Install]
+WantedBy=default.target

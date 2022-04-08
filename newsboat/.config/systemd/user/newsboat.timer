@@ -1,0 +1,10 @@
+[Unit]
+Description=Update Newsboat every hour
+
+[Timer]
+OnBootSec=1hour
+OnActiveSec=1hour
+OnUnitActiveSec=1hour
+
+[Install]
+WantedBy=timers.target
