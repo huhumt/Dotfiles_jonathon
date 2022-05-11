@@ -1,15 +1,10 @@
 #https://feeds.bbci.co.uk/news/rss.xml	news
 http://graem.es/atom.xml	security
-https://linuxpaulm.club/index.xml
-https://drewdevault.com/blog/index.xml
-https://www.1729.live/	maths
-https://incoherency.co.uk/blog/
-https://blog.christophermullins.com/feed/	automation
-http://lxer.com/module/newswire/headlines.rss	linux aggregator
 http://turnoff.us/feed.xml	comic
 https://abstrusegoose.com/feed.xml	comic
 https://aymanbagabas.com/blog/feed.xml	linux
 https://bill.harding.blog/feed/	linux
+https://blog.christophermullins.com/feed/	smarthome
 https://blog.filippo.io/rss/	go security
 https://blog.ktz.me/rss/	self-hosted
 https://blog.ropnop.com/index.xml	linux security
@@ -17,18 +12,18 @@ https://blog.thechases.com/rss.xml	linux
 https://blog.xpnsec.com/rss.xml	security
 https://blog.z3bra.org/rss/feed.xml	linux
 https://castel.dev/rss.xml
-https://feeds.feedburner.com/ItsFoss	linux
+https://drewdevault.com/blog/index.xml
 https://gregjs.com/rss.xml	linux
 https://hackertarget.com/feed/	security
+https://hexdsl.com/feed/	linux
+https://incoherency.co.uk/blog/rss.xml
 https://jakearchibald.com/posts.rss	web
-https://jdhao.github.io/index.xml	linux
 https://jonathanh.co.uk/feed.rss
 https://jordanelver.co.uk/feed.xml	linux
 https://latexdraw.com/feed	latex
+https://linuxpaulm.club/index.xml
 https://opensource.com/feed	linux
 https://pentestlab.blog/feed/	security
-https://qmacro.org/autodidactics/feed.xml	linux
-https://rafaelc.org/tech/index.xml	linux
 https://redteaming.co.uk/feed/	security
 https://stevelosh.com/rss.xml	linux
 https://stuffjasondoes.com/feed/	security
@@ -39,12 +34,20 @@ https://weyl.io/index.xml	linux
 https://www.bleepingcomputer.com/feed/	security
 https://www.fsf.org/static/fsforg/rss/blogs.xml	linux
 https://www.fsf.org/static/fsforg/rss/news.xml	linux
-https://www.linuxtoday.com/liglt.rs	linux aggregator
 https://www.technicallywizardry.com/feed/	smarthome
 https://www.theregister.com/headlines.atom	tech
 https://www.troyhunt.com/rss/	security
-https://www.universetoday.com/	astronomy
+https://www.universetoday.com/feed/	astronomy
 https://www.wordfence.com/feed/	security
+https://xkcd.com/atom.xml	comic
+https://zanshin.net/atom.xml	linux
+https://www.casterbridge.xyz/rss.xml	linux
+https://linmob.net/feed.xml	linux
+https://adminswerk.de/feed.xml	linux
+https://www.ncsc.gov.uk/api/1/services/v1/all-rss-feed.xml	security
+https://xavi.privatedns.org/index.xml	linux
+https://blog.fuzzymistborn.com/post/index.xml	smarthome
+
 https://www.youtube.com/feeds/videos.xml?channel_id=UC2C_jShtL725hvbm1arSV9w	youtube "~CGP Grey" interest
 https://www.youtube.com/feeds/videos.xml?channel_id=UC4w1YQAJMWOz4qtxinq55LQ	youtube "~Level1Techs" tech
 https://www.patreon.com/rss/level1?auth=8DZBe2mob6xA3DAZShgdS6e9gb4ROEv2	patreon "~Level1 Patreon" tech
@@ -64,9 +67,12 @@ https://www.youtube.com/feeds/videos.xml?channel_id=UCljOhRB2a3sQgLCdK9CHQvQ	you
 https://www.youtube.com/feeds/videos.xml?channel_id=UCm9K6rby98W8JigLoZOh6FQ	youtube "~Lock Picking Lawyer" security
 https://www.youtube.com/feeds/videos.xml?channel_id=UCpoyhjwNIWZmsiKNKpsMAQQ	youtube "~VbScrub" security
 https://www.youtube.com/feeds/videos.xml?channel_id=UCsTcErHg8oDvUnTzoqsYeNw	youtube "~Unbox Therapy" security
-https://www.youtube.com/feeds/videos.xml?channel_id=UCsXVk37bltHxD1rDPwtNM8Q	youtube "~Kurzgesagt" vim
+https://www.youtube.com/feeds/videos.xml?channel_id=UCsXVk37bltHxD1rDPwtNM8Q	youtube "~Kurzgesagt" interest
 https://www.youtube.com/feeds/videos.xml?channel_id=UCuXy5tCgEninup9cGplbiFw	youtube "~Missing Semester"
 https://www.youtube.com/feeds/videos.xml?channel_id=UCy0tKL1T7wFoYcxCe0xjN6Q	youtube "~Technology Connections" interest
-https://www.youtube.com/feeds/videos.xml?channel_id=UCz_3xlMTVUYYTQqCfh9lD7w	youtube "~TLDR News Daily Briefing" news
-https://xkcd.com/atom.xml	comic
-https://zanshin.net/atom.xml	linux
+https://www.youtube.com/feeds/videos.xml?channel_id=UC5UAwBUum7CPN5buc-_N1Fw	youtube "~The Linux Experiment" interest
+https://www.youtube.com/feeds/videos.xml?channel_id=UC4NNPgQ9sOkBjw6GlkgCylg	youtube "~Ben Vallack" interest
+https://www.youtube.com/feeds/videos.xml?channel_id=UCMb0O2CdPBNi-QqPk5T3gsQ	youtube "~James Hoffmann" interest
+
+https://feeds.megaphone.fm/darknetdiaries	podcast
+https://feeds.fireside.fm/selfhosted/rss	podcast
