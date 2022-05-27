@@ -171,6 +171,16 @@ bind pager gg top
 bind pager j next-line
 bind pager k previous-line
 
+######################
+#  Compose settings  #
+######################
+
+
+macro compose Y "<first-entry>\
+<pipe-entry>convert-multipart<enter>\
+<enter-command>source /tmp/neomutt-commands<enter>
+
+
 ##############
 #  Contacts  #
 ##############
