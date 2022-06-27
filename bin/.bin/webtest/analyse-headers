@@ -388,6 +388,8 @@ attacks (XSS).\n\n"
 		local reportURI=false
 		local reportTO=false
 
+		[ -f "$lotsfile" ] || message+="WARNING: Lots file not available. Run with --fetch-lots in order to get it\n\n"
+
 		while read directive; do
 			local directiveName="$(echo "$directive" | cut -d ' ' -f 1)"
 			local directiveValue="$(echo "$directive" | cut -d ' ' -f 2-)"
@@ -424,7 +426,7 @@ attacks"
 						*)
 							local domain="$(echo "$source" | sed -E 's/([^/]*:\/\/)?([^/]*).*/\2/')"
 							lotsTags="$(lookup_lots "$domain")"
-							if [ -n "$lotsTags" ]; then
+							if [ $? -eq 0 ] && [ -n "$lotsTags" ]; then
 			sourcemessage+="The LOTS project has marked ${ORANGE}${domain}${NC} with the tags: $lotsTags."
 							fi
 							if [ "$directiveName" == "script-src" ] && checkJsonp "$domain"; then
