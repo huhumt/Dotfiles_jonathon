@@ -2,6 +2,8 @@
 
 set -o pipefail
 
+lotsfile="${XDG_DATA_HOME:-$HOME/.local/share}/analyse-headers/lots-domains.json"
+
 die(){
 	echo "$@" >&2
 	exit 1
@@ -75,6 +77,21 @@ printKey(){
 \t${GREEN}Fine${NC}\
 \t${YELLOW}Mis-configured${NC}\
 \t${RED}Missing${NC}"
+}
+
+fetchLots(){
+	# Make sure the directory exists
+	mkdir -p "$(dirname "$lotsfile")"
+	# Make sure we have jq and pup
+	type -p jq >/dev/null 2>&1 || die "You need jq to update lots"
+	# Update lots
+	type -p pup >/dev/null 2>&1 || die "You need pup to update lots"
+	# Update lots
+	curl https://lots-project.com/ | pup 'table#main-table tr json{}' | jq -r \
+	'[ .[] | . |= {
+		Site: .children[0]?.children[]?.text?,
+		Tags: [ .children[1]?.children[]?.children[]?.text ] 
+	} | objects] | map( { (.Site): [ .Tags[] ]} ) | add' > "$lotsfile"
 }
 
 generic_version_disclosure(){
@@ -193,8 +210,163 @@ text-align: center;
 	esac
 }
 
-#test_x-content-type-options(){
-#}
+test_x-content-type-options(){
+	local value
+	value="$(echo "$1" | cut -d ':' -f 2- | tr 'A-Z' 'a-z' | trimWhitespace )"
+	if [ "$value" = "nosniff" ]; then
+		return 0
+	else
+		echo "X-Content-Type-Options" | drawInBox
+		wecho -e "The X-Content-Type-Options header stops a browser from \
+trying to MIME-sniff the content type and forces it to stick with the \
+declared content-type.\n\n"
+		[ -z "$1" ] && return 2
+		return 1
+	fi
+}
+
+lookup_lots(){
+	if [ -f "$lotsfile" ]; then
+		jq -r '.["'"$1"'"]?[]?' "$lotsfile" | tr '\n' ',' | sed 's/,/, /g'
+	else
+		echo "No Lots File"
+		return 1
+	fi
+}
+
+checkJsonp(){
+	# This list came from here: https://github.com/google/csp-evaluator/blob/a21f94e348b0dfb0245c65af522bf3137a9647de/allowlist_bypasses/jsonp.ts
+	local domains="9.chart.apis.google.com
+a248.e.akamai.net
+accounts.google.com
+a.config.skype.com
+afpeng.alimama.com
+ajax.googleapis.com
+an.yandex.ru
+api.facebook.com
+api.flickr.com
+api.instagram.com
+api.map.baidu.com
+api.mixpanel.com
+api.twitter.com
+api.userlike.com
+api.vk.com
+appcenter.intuit.com
+a.tiles.mapbox.com
+autocomplete.travelpayouts.com
+awaps.yandex.ru
+bebezoo.1688.com
+beta.gismeteo.ru
+books.google.com
+c1n2.hypercomments.com
+c1n3.hypercomments.com
+catalog.api.2gis.ru
+cbks0.googleapis.com
+ccrprod.alipay.com
+cdn.jsdelivr.net
+cdn.syndication.twimg.com
+cdn.syndication.twitter.com
+clients1.google.com
+client.siteheart.com
+community.adobe.com
+connect.mail.ru
+count.tbcdn.cn
+cse.google.com
+c.tiles.mapbox.com
+d1f69o4buvlrj5.cloudfront.net
+data.gongchang.com
+de.blog.newrelic.com
+detector.alicdn.com
+dev.virtualearth.net
+fast.wistia.com
+fellowes.ugc.bazaarvoice.com
+gdata.youtube.com
+googleads.g.doubleclick.net
+google.ru
+googletagmanager.com
+graph.facebook.com
+group.aliexpress.com
+gum.criteo.com
+gupiao.baidu.com
+h.cackle.me
+ib.adnxs.com
+i.cackle.me
+id.rambler.ru
+kecngantang.blogspot.com
+links.services.disqus.com
+m.addthis.com
+maps.beeline.ru
+maps.googleapis.com
+maps.google.com
+maps.google.de
+maps.google.lv
+maps.google.ru
+mc.yandex.ru
+mt1.googleapis.com
+mts0.googleapis.com
+mts1.googleapis.com
+nominatim.openstreetmap.org
+offer.alibaba.com
+ok.go.mail.ru
+pagead2.googlesyndication.com
+partner.googleadservices.com
+passport.ngs.ru
+pass.yandex.com
+pass.yandex.ru
+pass.yandex.ua
+pin.aliyun.com
+pipes.yahooapis.com
+plugins.mozilla.org
+pro.netrox.sc
+pubsub.pubnub.com
+query.yahooapis.com
+rec.ydf.yandex.ru
+relap.io
+rexchange.begun.ru
+securepubads.g.doubleclick.net
+se.wikipedia.org
+share.yandex.net
+ssl.google-analytics.com
+suggest.taobao.com
+syndication.twitter.com
+target.ukr.net
+tj.gongchang.com
+translate.googleapis.com
+translate.google.com
+translate.yandex.net
+tr.indeed.com
+ulogin.ru
+video.media.yql.yahoo.com
+vimeo.com
+wb.amap.com
+widget.admitad.com
+widgets.pinterest.com
+wpd.b.qq.com
+wslocker.ru
+www.blogger.com
+www.facebook.com
+www.googleadservices.com
+www.google-analytics.com
+www.googleapis.com
+www.google.com
+www.google.de
+www.googletagmanager.com
+www.linkedin.com
+www.meteoprog.ua
+www-onepick-opensocial.googleusercontent.com
+www.panoramio.com
+www.sharethis.com
+www.travelpayouts.com
+www.youku.com
+www.youtube.com
+yandex.ru
+ynuf.alipay.com"
+	if echo "$domains" | grep -Eq "$1"; then
+		return 0
+	else
+		return 1
+	fi
+}
 
 test_content-security-policy(){
 	local value
@@ -211,23 +383,87 @@ origins and script endpoints. This helps guard against cross-site scripting \
 attacks (XSS).\n\n"
 		ret=2
 	else
-		if echo "$value" | grep -q 'unsafe-inline'; then
-			message+="The content security policy includes the \
-	${ORANGE}unsafe-inline${NC} property which allows for inline JS/CSS assets. \
-	This prevents the content security policy from effectively mitigating against
-	reflected or stored XSS attacks\n\n"
+		# If we get here, the csp is set
+		
+		local reportURI=false
+		local reportTO=false
+
+		while read directive; do
+			local directiveName="$(echo "$directive" | cut -d ' ' -f 1)"
+			local directiveValue="$(echo "$directive" | cut -d ' ' -f 2-)"
+			case "$directiveName" in
+				"report-uri" ) reportURI=true ;;
+				"report-to" ) reportTO=true ;;
+				*"-src")
+					# check sources
+					while read source; do
+						sourcemessage=''
+						case "$source" in
+							"'self'")
+								sourcemessage+="This is normally fine \
+although care should be taken if the site being tested has upload functionality"
+							ret=$((ret>1 ? ret : 1))
+							;;
+							"'unsafe-inline'")
+			sourcemessage+="This allows for inline assets and prevents the content \
+security policy from effectively mitigating against reflected or stored XSS \
+attacks"
+							;;
+						"'unsafe-eval'")
+			sourcemessage+="This allows for eval to be used in JS and prevents \
+the content security policy from effectively mitigating against DOM based XSS \
+attacks"
+							;;
+						"http:"|"https:"|"data:")
+			sourcemessage+="This allows the browser to source from any $source \
+				url. It is likely that a malicious actor could control one."
+							;;
+						"'"*)
+			sourcemessage+="${RED}Unknown source. URLS shouldn't have quotes around them${NC}"
+							;;
+						*)
+							local domain="$(echo "$source" | sed -E 's/([^/]*:\/\/)?([^/]*).*/\2/')"
+							lotsTags="$(lookup_lots "$domain")"
+							if [ -n "$lotsTags" ]; then
+			sourcemessage+="The LOTS project has marked ${ORANGE}${domain}${NC} with the tags: $lotsTags."
+							fi
+							if [ "$directiveName" == "script-src" ] && checkJsonp "$domain"; then
+								[ -n "$sourcemessage" ] && sourcemessage+="\n\n"
+			sourcemessage+="${ORANGE}${domain}${NC} is known to host jsonp endpoints which can sometimes be used to bypass the CSP"
+							fi
+							sourcemessage="$(echo -n "$sourcemessage")"
+							;;
+						esac
+
+						if [ -n "$sourcemessage" ]; then
+							message+="The directive \
+${ORANGE}$directiveName${NC} has a value of ${ORANGE}${source}${NC}.\n${sourcemessage}\n\n"
+						fi
+
+					done < <(echo "$directiveValue" | tr ' ' '\n' | trimWhitespace)
+					
+					;;
+			esac
+
+		done < <(echo "$value" | tr ';' '\n' | trimWhitespace)
+		
+		if [ "$reportTO" == "false" ]; then
+			message+="The content security policy doesn't include the \
+${ORANGE}report-to${NC} directive which is used to report CSP violations.\n\n"
 			ret=$((ret>1 ? ret : 1))
-		elif echo "$value" | grep -q 'unsafe-eval'; then
-			message+="The content security policy includes the \
-	${ORANGE}unsafe-eval${NC} property which allows for eval to be used in JS. \
-	This prevents the content security policy from effectively mitigating against
-	DOM based XSS attacks\n\n"
+
+		fi
+		if [ "$reportURI" == "false" ]; then
+			message+="The content security policy doesn't include the \
+${ORANGE}report-uri${NC} directive which is used to report CSP violations. \
+Eventually the report-to header will deprecate this directive, but it is not \
+yet supported in most browsers so including both is recomended.\n\n"
 			ret=$((ret>1 ? ret : 1))
 		fi
-		# TODO, I'd like to check for more CSP issues.
-		# See https://csp-evaluator.withgoogle.com/
-		# https://www.securing.pl/en/why-should-you-care-about-content-security-policy/
-		# https://lab.wallarm.com/how-to-trick-csp-in-letting-you-run-whatever-you-want-73cb5ff428aa/
+	 	
+	#	elif echo "$value" | grep -q 'unsafe-eval'; then
+	#		ret=$((ret>1 ? ret : 1))
+	#	fi
 	fi
 	if [ -n "$message" ]; then
 		message+="The content security policy should be carefully considered \
@@ -321,7 +557,7 @@ test_set-cookie(){
 	ret=0
 	output=""
 
-	if ! echo "$value" | grep -q "HttpOnly"; then
+	if ! echo "$value" | grep -qi "HttpOnly"; then
 		output+="The HttpOnly flag isn't set which means the cookie value can \
 be read by JavaScript. If a malicious actor manages to run JavaScript through \
 methods like XSS, they may be able to steal the contents of cookies\n\n"
@@ -334,7 +570,7 @@ sent over unencrypted channels\n\n"
 		ret=$((ret>1 ? ret : 1))
 	fi
 
-	if ! echo "$value" | grep -q "SameSite=Strict"; then
+	if ! echo "$value" | grep -qi "SameSite=Strict"; then
 		output+="The SameSite flag isn't set to Strict. The SameSite flag \
 controls whether a cookie is sent with cross-origin requests, \
 providing some protection against cross-site request forgery attacks.
@@ -486,6 +722,7 @@ usage(){
 	Options:
 	-h, --help              Display this help and exit
 	-k, --insecure          Ignores certificate errors
+	--fetch-lots            Updates domains from https://lots-project.com/ and exit
 "
 }
 
@@ -533,6 +770,7 @@ while [[ $1 = -?* ]]; do
 	case $1 in
 		-h|--help) usage; exit;;
 		-k|--insecure) insecure="-k" ;;
+		--fetch-lots ) fetchLots; exit ;;
 		--) shift; break ;;
 		*) die "invalid option: '$1'." ;;
 	esac
@@ -556,6 +794,7 @@ missingHeaders="x-frame-options
 strict-transport-security
 content-security-policy
 x-xss-protection
+x-content-type-options
 feature-policy
 permissions-policy
 cache-control
@@ -573,7 +812,7 @@ echo "$headers" | sed -n '1p'
 while read -r line; do
 	headerKey="$(echo "$line" | cut -d ':' -f1)"
 	lowercase="$(echo "$headerKey" | tr '[:upper:]' '[:lower:]')"
-	missingHeaders="$(echo -n "$missingHeaders" | sed '/'"$lowercase"'/d')"
+	missingHeaders="$(echo -n "$missingHeaders" | sed '/^'"$lowercase"'$/d')"
 	functionName="test_$lowercase"
 
 	if declare -f "$functionName" > /dev/null; then
@@ -589,6 +828,7 @@ while read -r line; do
 		echo "$line"
 	fi
 done<<<"$(echo "$headers" | sed '1d')" # We don't want the initial http banner
+
 
 echo -n "$missingHeaders" | while read -r line; do
 	echo -e "${RED}$line${NC}"
