@@ -799,8 +799,7 @@ x-xss-protection
 x-content-type-options
 feature-policy
 permissions-policy
-cache-control
-expect-ct"
+cache-control"
 
 tmpfile="$(mktemp)"
 touch "$tmpfile"
