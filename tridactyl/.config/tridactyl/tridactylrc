@@ -30,6 +30,7 @@ set searchengine ddg
 
 set searchurls.alternativeto https://alternativeto.net/browse/search/?q=%s
 set searchurls.ebay https://www.ebay.co.uk/sch/i.html?_nkw=%s
+set searchurls.amazon https://www.amazon.co.uk/s?k=%s
 set searchurls.ddg https://duckduckgo.co.uk/?q=%s
 set searchurls.aur https://aur.archlinux.org/packages/?O=0&K=%s
 set searchurls.aw https://wiki.archlinux.org/?search=%s
@@ -60,6 +61,7 @@ command wayback composite get_current_url | tabopen wb
 
 command autodark js document.body.parentElement.classList.toggle("auto-dark")
 
+command km2miles js document.body.innerHTML = document.body.innerHTML.replaceAll(/([0-9\.])+km/g,"miles")
 
 
 """""""""""
@@ -73,6 +75,10 @@ bind / fillcmdline find
 bind ? fillcmdline find -?
 bind n findnext 1
 bind N findnext -1
+
+" Tab switching feels the wrong way for me
+bind J tabnext
+bind K tabprev
 
 bind ; fillcmdline_notrail
 
@@ -93,13 +99,54 @@ bind <space>h hint -F e => e.dispatchEvent(new MouseEvent('mouseover', {}))
 bindurl https://mail.protonmail.com/ f hint -Jc .item-subject,.item-checkbox,.navigation-link,.toolbar-button
 
 
-autocmd DocStart .*github\.com.* zoom 150
-autocmd DocStart .*gitlab\.com.* zoom 150
-autocmd DocStart .*archlinux\.org.* zoom 150
+autocmd DocStart .*github\.com.* zoom 150 false TRI_FIRED_MOZ_TABID
+autocmd DocStart .*gitlab\.com.* zoom 150 false TRI_FIRED_MOZ_TABID
+autocmd DocStart .*archlinux\.org.* zoom 150 false TRI_FIRED_MOZ_TABID
 
 setpref browser.pocket.enabled false
 setpref extensions.pocket.enabled false
 setpref toolkit.legacyUserProfileCustomizations.stylesheets true
 setpref browser.tabs.closeWindowWithLastTab false
 
-autocmd DocStart ^https?://wiki.archlinux.org js (window.location.href.match("[?|&]useskinversion=1") == null) && tri.excmds.urlmodify("-s", "useskinversion", "1")
+
+"""""""""""""""
+"  Redirects  "
+"""""""""""""""
+
+
+" Redirect to old style arch wiki
+" Note that the seperator match needs to get to js as \?  which means escaping the \ in the rc file
+autocmd BeforeRequest https://wiki.archlinux.org/* (e)=>{\
+	if ( e.type == "main_frame" && null == e.url.match("[?|&]useskinversion=") ){\
+		let seperator= e.url.match("\\?")!=null ? "&" : "?" ;\
+		return {redirectUrl: e.url + seperator + "useskinversion=1"};\
+	} return {}\
+}
+
+" Redirect medium articlues to a paywall alternative
+command mediumredirect autocmd BeforeRequest *://medium.com/* (e)=>{\
+	if ( e.type == "main_frame" && null == e.url.match("[?|&]noredirect=1") ){\
+		return {redirectUrl: e.url.replace("medium.com", "scribe.rip")};\
+	} return {}\
+}
+command stopmediumredirect autocmddelete BeforeRequest *://medium.com/*
+mediumredirect
+
+" Redirect twitter to nitter
+command twitterredirect autocmd BeforeRequest *://twitter.com/* (e)=>{\
+	if ( e.type == "main_frame" && null == e.url.match("[?|&]noredirect=1") ){\
+		return {redirectUrl: e.url.replace("twitter.com", "nitter.net")};\
+	} return {}\
+}
+command stoptwitterredirect autocmddelete BeforeRequest *://twitter.com/*
+twitterredirect
+
+" Redirect twitter to nitter
+command youtuberedirect autocmd BeforeRequest *://*.youtube.com/* (e)=>{\
+	if ( e.type == "main_frame" && null == e.url.match("[?|&]noredirect=1") ){\
+		return {redirectUrl: e.url.replace("youtube.com", "yewtu.be")};\
+	} return {}\
+}
+command stopyoutuberedirect autocmddelete BeforeRequest *://*youtube.com/*
+youtuberedirect
+
