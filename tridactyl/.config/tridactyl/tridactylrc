@@ -141,7 +141,7 @@ command twitterredirect autocmd BeforeRequest *://twitter.com/* (e)=>{\
 command stoptwitterredirect autocmddelete BeforeRequest *://twitter.com/*
 twitterredirect
 
-" Redirect twitter to nitter
+" Redirect youtube to yewtu.be
 command youtuberedirect autocmd BeforeRequest *://*.youtube.com/* (e)=>{\
 	if ( e.type == "main_frame" && null == e.url.match("[?|&]noredirect=1") ){\
 		return {redirectUrl: e.url.replace("youtube.com", "yewtu.be")};\
