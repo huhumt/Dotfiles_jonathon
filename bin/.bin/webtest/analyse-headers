@@ -725,6 +725,7 @@ usage(){
 	-h, --help              Display this help and exit
 	-k, --insecure          Ignores certificate errors
 	--fetch-lots            Updates domains from https://lots-project.com/ and exit
+	--nojoke                Prevents script making windows joke
 "
 }
 
@@ -767,12 +768,18 @@ unset options
 
 insecure=""
 
+windowsjoke=false
+if grep -q Microsoft /proc/version; then
+	windowsjoke=true
+fi
+
 # Read the options and set stuff
 while [[ $1 = -?* ]]; do
 	case $1 in
 		-h|--help) usage; exit;;
 		-k|--insecure) insecure="-k" ;;
 		--fetch-lots ) fetchLots; exit ;;
+		--nojoke ) windowsjoke=false ;;
 		--) shift; break ;;
 		*) die "invalid option: '$1'." ;;
 	esac
@@ -797,12 +804,16 @@ strict-transport-security
 content-security-policy
 x-xss-protection
 x-content-type-options
-feature-policy
 permissions-policy
+feature-policy
 cache-control"
 
 tmpfile="$(mktemp)"
 touch "$tmpfile"
+
+if [ "$windowsjoke" == "true" ]; then
+  echo "Why would you use windows, do you hate yourself?"
+fi
 
 printKey
 
@@ -830,8 +841,7 @@ while read -r line; do
 	fi
 done<<<"$(echo "$headers" | sed '1d')" # We don't want the initial http banner
 
-
-echo -n "$missingHeaders" | while read -r line; do
+echo "$missingHeaders" | while read -r line; do
 	echo -e "${RED}$line${NC}"
 	functionName="test_$line"
 	"$functionName" >> "$tmpfile"
