@@ -14,6 +14,12 @@ printhelp(){
 	echo "e.g."
 	echo "cat example.nessus | nessusComplianceFilter \"^18.\" \"Defender\""
 	echo "will output a tsv containing all failures (or warnings) that start with '18.' and contain the word 'Defender'"
+	echo ""
+	echo "It has been built with extensability in mind. It should work well with other unix-y tools"
+	echo ""
+	echo "e.g. Only show the name and ip addresses grouped"
+	echo "cat example.nessus | nessusComplianceFilter | awk awk -F \$'\t' 'NR>1{arr[\$1] = arr[\$1] \$6 \", \"}END{for (a in arr) print a \"\\t\" arr[a]}'"
+
 	exit 0
 }
 
