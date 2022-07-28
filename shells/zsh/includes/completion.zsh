@@ -20,6 +20,10 @@ zstyle ':completion:*' format ' %F{yellow}-- %d --%f'
 zstyle ':completion:*' group-name ''
 zstyle ':completion:*' verbose yes
 
+# Improve tab completion for encrypt and decrypt funcitons
+zstyle ':completion:*:decrypt:*' file-patterns '*.(pgp|gpg)'
+zstyle ':completion:*:encrypt:*' ignored-patterns '*.(pgp|gpg)'
+
 export LISTMAX=-1
 
 zmodload zsh/complist
