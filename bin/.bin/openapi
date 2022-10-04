@@ -1,0 +1,97 @@
+#!/usr/bin/env bash
+
+print_help(){
+	echo "Help: todo"
+}
+
+echo_header(){
+	[ -n "$header" ] && echo "$@"
+}
+
+# Gets requests in a json format where each request method is a top level item
+get_requests(){
+	cat "$json" | jq -r '.paths | to_entries | .[] | .key as $slug | .value | to_entries | map_values({slug: $slug, method: .key} + .value) | .[]'
+}
+
+list_requests(){
+	echo_header -e "Method\tSlug\tSummary"
+	get_requests | jq -r '[.method, .slug, .summary] | @tsv'
+}
+
+list_servers(){
+	echo_header -e "Url"
+	cat "$json" | jq -r '.servers[].url'
+}
+
+list_urls(){
+	for server in $(list_servers); do
+		for path in $(list_requests | cut -d $'\t' -f 2 | sort -u ); do
+			echo "$server$path"
+		done
+	done
+}
+
+view_request(){
+	path="$1"
+	method="${2:-get}"
+	path="$(echo "$path" | tr 'A-Z' 'a-z')"
+	method="$(echo "$method" | tr 'A-Z' 'a-z')"
+	for server in $(list_servers); do
+		path="$(echo "$path" | sed "s#^$server##")"
+	done
+	#get_requests | jq --slurp ".[]"
+	get_requests | jq ". | select( .slug | ascii_downcase == \"${path}\" ) | select( .method | ascii_downcase == \"${method}\" )"
+}
+
+unset options
+while (($#)); do
+	case $1 in
+		# If option is of type -ab
+		-[!-]?*)
+		# Loop over each character starting with the second
+		for ((i=1; i < ${#1}; i++)); do
+			c=${1:i:1}
+
+			# Add current char to options
+			options+=("-$c")
+
+		done
+		;;
+
+		# If option is of type --foo=bar
+		--?*=*) options+=("${1%%=*}" "${1#*=}") ;;
+		# add --endopts for --
+		--) options+=(--endopts) ;;
+		# Otherwise, nothing special
+		*) options+=("$1") ;;
+	esac
+	shift
+done
+set -- "${options[@]}"
+unset options
+
+# Print help if no arguments were passed.
+# Uncomment to force arguments when invoking the script
+[[ $# -eq 0 ]] && set -- "--help"
+
+json=""
+header=""
+
+# Read the options and set stuff
+while [[ $1 = -?* ]]; do
+	case $1 in
+		-h|--help) print_help >&2 ;;
+		--json|-j) json="$2"; shift ;;
+		--header) header="yes" ;;
+		*) echo "Unknown option $1"; print_help >&2 ;;
+	esac
+	shift
+done
+
+
+case "$1" in
+	requests) list_requests ;;
+	servers) list_servers ;;
+	urls) list_urls ;;
+	request) shift; view_request "$@"
+esac

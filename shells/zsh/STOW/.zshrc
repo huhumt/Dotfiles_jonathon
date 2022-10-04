@@ -72,6 +72,7 @@ else
 		if [[ ! "$(ps -ocommand -p $PPID | grep -v 'COMMAND' | cut -d' ' -f1 )" == "$script" ]]; then
 			if [ -f "$current/index.yaml" ]; then
 				export repdef="$(realpath "$current/$(yq -r .repdef "$current/index.yaml")")"
+				export OPENAPI="$(realpath "$current/$(yq -r .openapi "$current/index.yaml")")"
 			fi
 			mkdir "$current/shell-logs" 2> /dev/null
 			/usr/bin/script -f "$current/shell-logs/$(date +"%d-%b-%y_%H-%M-%S")_shell.log"

@@ -152,4 +152,23 @@ if [ "$sourced" = "True" ]; then
 	bind-git-helper f b t r h s
 	unset -f bind-git-helper
 
+	fzf-openapi-widget(){
+		if [ -n "$OPENAPI" ] && [ -f "$OPENAPI" ]; then
+			server="$(openapi -j "$OPENAPI" servers | fzf -1 --prompt Server)"
+			request="$(openapi -j "$OPENAPI" requests | column -t -s $'\t' | fzf -d '  +' --height 90% --preview "openapi -j \"$OPENAPI\" request {2} {1} | jq -C '.'")"
+			method="$(echo -n "$request" | awk -F '  +' '{print $1}' | tr 'a-z' 'A-Z')"
+			url="$(echo -n "$request" | awk -F '  +' '{print $2}')"
+
+			case "$LBUFFER" in
+				http*|https*) LBUFFER+=" $method $server$url" ;;
+				curl*) LBUFFER+=" -X $method $server$url" ;;
+			esac
+			LBUFFER="$(echo -n "$LBUFFER" | sed -E 's/  +/ /g')"
+			zle reset-prompt
+		fi
+	}
+	zle -N fzf-openapi-widget
+	bindkey '^o' fzf-openapi-widget
+
+
 fi
