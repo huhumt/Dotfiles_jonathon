@@ -199,8 +199,8 @@ $endif$
 \newlfmP{Headlinewd=0pt,Footlinewd=0pt}
  
 \namefrom{$if(from-name)$$from-name$$else$Jonathan Hodgson$endif$}
-\addrfrom{$if(return-address)$$for(return-address)$$return-address$$sep$\\$endfor$$else$***REMOVED***$endif$}
-\phonefrom{$if(phone-from)$$phone-from$$else$***REMOVED***$endif$}
+\addrfrom{$if(return-address)$$for(return-address)$$return-address$$sep$\\$endfor$$else$PUT YOUR ADDRERR HERE$endif$}
+\phonefrom{$if(phone-from)$$phone-from$$else$PUT YOUR NUMBER HERE$endif$}
 \emailfrom{$if(email-from)$$email-from$$else$jonathan@lunarweb.co.uk$endif$}
  
 \nameto{$if(to-name)$$to-name$$else$Please enter a name for the top line of the to address in the variable to-name$endif$}
