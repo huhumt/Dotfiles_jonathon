@@ -79,3 +79,6 @@
 [submodule "nvim/.config/nvim/pack/bundle/opt/gruvbox-baby"]
 	path = nvim/.config/nvim/pack/bundle/opt/gruvbox-baby
 	url = https://github.com/luisiacc/gruvbox-baby
+[submodule "nvim/.config/nvim/pack/bundle/opt/vim-openscad"]
+	path = nvim/.config/nvim/pack/bundle/opt/vim-openscad
+	url = https://github.com/sirtaj/vim-openscad
