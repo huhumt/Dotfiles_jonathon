@@ -1,11 +1,14 @@
 #https://feeds.bbci.co.uk/news/rss.xml	news
 http://graem.es/atom.xml	security
+http://rtpg.co/feed.xml	linux
 http://turnoff.us/feed.xml	comic
 https://abstrusegoose.com/feed.xml	comic
+https://adminswerk.de/feed.xml	linux
 https://aymanbagabas.com/blog/feed.xml	linux
 https://bill.harding.blog/feed/	linux
 https://blog.christophermullins.com/feed/	smarthome
 https://blog.filippo.io/rss/	go security
+https://blog.fuzzymistborn.com/post/index.xml	smarthome
 https://blog.ktz.me/rss/	self-hosted
 https://blog.ropnop.com/index.xml	linux security
 https://blog.thechases.com/rss.xml	linux
@@ -13,52 +16,57 @@ https://blog.xpnsec.com/rss.xml	security
 https://blog.z3bra.org/rss/feed.xml	linux
 https://castel.dev/rss.xml
 https://drewdevault.com/blog/index.xml
-https://gregjs.com/rss.xml	linux
+#https://gregjs.com/rss.xml	linux
 https://hackertarget.com/feed/	security
-https://hexdsl.com/feed/	linux
+https://hexdsl.com/feed.xml	linux
 https://incoherency.co.uk/blog/rss.xml
 https://jakearchibald.com/posts.rss	web
 https://jonathanh.co.uk/feed.rss
 https://jordanelver.co.uk/feed.xml	linux
 https://latexdraw.com/feed	latex
-https://linuxpaulm.club/index.xml
-https://opensource.com/feed	linux
+https://linmob.net/feed.xml	linux
+https://paulthenerd.co.uk/feed/
 https://pentestlab.blog/feed/	security
 https://redteaming.co.uk/feed/	security
 https://stevelosh.com/rss.xml	linux
 https://stuffjasondoes.com/feed/	security
-https://thehackernews.com/feeds/posts/default	security
 https://theorangeone.net/posts/index.xml	linux
-https://torrentfreak.com/feed/	security
 https://weyl.io/index.xml	linux
-https://www.bleepingcomputer.com/feed/	security
+https://www.casterbridge.xyz/rss.xml	linux
 https://www.fsf.org/static/fsforg/rss/blogs.xml	linux
 https://www.fsf.org/static/fsforg/rss/news.xml	linux
+https://www.ncsc.gov.uk/api/1/services/v1/all-rss-feed.xml	security
 https://www.technicallywizardry.com/feed/	smarthome
-https://www.theregister.com/headlines.atom	tech
 https://www.troyhunt.com/rss/	security
 https://www.universetoday.com/feed/	astronomy
 https://www.wordfence.com/feed/	security
+https://xavi.privatedns.org/index.xml	linux
 https://xkcd.com/atom.xml	comic
 https://zanshin.net/atom.xml	linux
-https://www.casterbridge.xyz/rss.xml	linux
-https://linmob.net/feed.xml	linux
-https://adminswerk.de/feed.xml	linux
-https://www.ncsc.gov.uk/api/1/services/v1/all-rss-feed.xml	security
-https://xavi.privatedns.org/index.xml	linux
-https://blog.fuzzymistborn.com/post/index.xml	smarthome
+https://www.joshuacrewe.co.uk/index.xml	linux
+
+#############
+#  Youtube  #
+#############
 
 https://www.youtube.com/feeds/videos.xml?channel_id=UC2C_jShtL725hvbm1arSV9w	youtube "~CGP Grey" interest
+https://www.youtube.com/feeds/videos.xml?channel_id=UC2gyzKcHbYfqoXA5xbyGXtQ	youtube "~The Hook Up" smarthome
+https://www.youtube.com/feeds/videos.xml?channel_id=UC4NNPgQ9sOkBjw6GlkgCylg	youtube "~Ben Vallack" interest
 https://www.youtube.com/feeds/videos.xml?channel_id=UC4w1YQAJMWOz4qtxinq55LQ	youtube "~Level1Techs" tech
-https://www.patreon.com/rss/level1?auth=8DZBe2mob6xA3DAZShgdS6e9gb4ROEv2	patreon "~Level1 Patreon" tech
+https://www.youtube.com/feeds/videos.xml?channel_id=UC5UAwBUum7CPN5buc-_N1Fw	youtube "~The Linux Experiment" interest
+https://www.youtube.com/feeds/videos.xml?channel_id=UC67SMH0qLMJ4b4Guud0mKjw	youtube "~Home Automation Guy" smarthome
 https://www.youtube.com/feeds/videos.xml?channel_id=UC8ENHE5xdFSwx71u3fDH5Xw	youtube "~The Primeagen" vim
 https://www.youtube.com/feeds/videos.xml?channel_id=UCBJycsmduvYEL83R_U4JriQ	youtube "~MKBHD" security
 https://www.youtube.com/feeds/videos.xml?channel_id=UCBa659QWEk1AI4Tg--mrJ2A	youtube "~Tom Scott" interest
 https://www.youtube.com/feeds/videos.xml?channel_id=UCFzGyNKXPAglNq28qWYTDFA	youtube "~Kai Hendry" linux
+https://www.youtube.com/feeds/videos.xml?channel_id=UCGaAf70zQAa01a_r_k1XJ1Q	youtube "~This Smart House" smarthome
+https://www.youtube.com/feeds/videos.xml?channel_id=UCMb0O2CdPBNi-QqPk5T3gsQ	youtube "~James Hoffmann" interest
 https://www.youtube.com/feeds/videos.xml?channel_id=UCOWcZ6Wicl-1N34H0zZe38w	youtube "~Level1Linux" linux
+https://www.youtube.com/feeds/videos.xml?channel_id=UCQRm_z7seHnGsBiWDNEWr6A	youtube "~Mark Watt Tech" smarthome
 https://www.youtube.com/feeds/videos.xml?channel_id=UCRE3NFNtdjR96-H4QG4U1Fg	youtube "~Hex DSL"
 https://www.youtube.com/feeds/videos.xml?channel_id=UCSMqateX8OA2s1wsOR2EgJA	youtube "~TLDR News UK" news
 https://www.youtube.com/feeds/videos.xml?channel_id=UCXPHFM88IlFn68OmLwtPmZA	youtube "~Greg Hurrell - Vim Screencasts" linux
+https://www.youtube.com/feeds/videos.xml?channel_id=UCYLnawaM-36HncBBUeWrlGA	youtube "~Paul Hibbert" smarthome
 https://www.youtube.com/feeds/videos.xml?channel_id=UCa6eh7gCkpPo5XXUDfygQQA	youtube "~Ippsec" security
 https://www.youtube.com/feeds/videos.xml?channel_id=UCd3dNckv1Za2coSaHGHl5aA	youtube "~TJDeVries" vim
 https://www.youtube.com/feeds/videos.xml?channel_id=UCgREucssIfY9e0Iy3yhse8w	youtube "~Nix Casts" linux
@@ -66,13 +74,23 @@ https://www.youtube.com/feeds/videos.xml?channel_id=UCiG4mll4HhVwvgP0FtKA7cw	you
 https://www.youtube.com/feeds/videos.xml?channel_id=UCljOhRB2a3sQgLCdK9CHQvQ	youtube "~Leafshade Software" linux
 https://www.youtube.com/feeds/videos.xml?channel_id=UCm9K6rby98W8JigLoZOh6FQ	youtube "~Lock Picking Lawyer" security
 https://www.youtube.com/feeds/videos.xml?channel_id=UCpoyhjwNIWZmsiKNKpsMAQQ	youtube "~VbScrub" security
-https://www.youtube.com/feeds/videos.xml?channel_id=UCsTcErHg8oDvUnTzoqsYeNw	youtube "~Unbox Therapy" security
+https://www.youtube.com/feeds/videos.xml?channel_id=UCrVLgIniVg6jW38uVqDRIiQ	youtube "~Everything Smart Home" smarthome
 https://www.youtube.com/feeds/videos.xml?channel_id=UCsXVk37bltHxD1rDPwtNM8Q	youtube "~Kurzgesagt" interest
+https://www.youtube.com/feeds/videos.xml?channel_id=UCtQpGuWY5sTUqrED4SgScVA	youtube "~Smart Solutions for Home" smarthome
+https://www.youtube.com/feeds/videos.xml?channel_id=UCuDjPZFSQKFNPwPypJlgZeg	youtube "~3ATIVE VFX Studio" smarthome
 https://www.youtube.com/feeds/videos.xml?channel_id=UCuXy5tCgEninup9cGplbiFw	youtube "~Missing Semester"
+https://www.youtube.com/feeds/videos.xml?channel_id=UCv7UOhZ2XuPwm9SN5oJsCjA	youtube "~Intermit.tech" smarthome
+https://www.youtube.com/feeds/videos.xml?channel_id=UCwOBG77Tm8cE24FPxHb_abw	youtube "~Smart Home Solver" smarthome
 https://www.youtube.com/feeds/videos.xml?channel_id=UCy0tKL1T7wFoYcxCe0xjN6Q	youtube "~Technology Connections" interest
-https://www.youtube.com/feeds/videos.xml?channel_id=UC5UAwBUum7CPN5buc-_N1Fw	youtube "~The Linux Experiment" interest
-https://www.youtube.com/feeds/videos.xml?channel_id=UC4NNPgQ9sOkBjw6GlkgCylg	youtube "~Ben Vallack" interest
-https://www.youtube.com/feeds/videos.xml?channel_id=UCMb0O2CdPBNi-QqPk5T3gsQ	youtube "~James Hoffmann" interest
+https://www.youtube.com/feeds/videos.xml?channel_id=UCSju5G2aFaWMqn-_0YBtq5A	youtube "~Stand-up Maths" maths
+https://www.youtube.com/feeds/videos.xml?channel_id=UCO79NsDE5FpMowUH1YcBFcA	youtube "~Jonathan Pie" funny
+https://www.youtube.com/feeds/videos.xml?channel_id=UCUW49KGPezggFi0PGyDvcvg	youtube "~Zack Freedman" diy
+https://www.youtube.com/feeds/videos.xml?channel_id=UCbgBDBrwsikmtoLqtpc59Bw	youtube "~Teaching Tech" diy
+https://www.youtube.com/feeds/videos.xml?channel_id=UCtRSKEipM17PF7n0mi66btQ	youtube "~Automate Your Life" smarthome
+
+##############
+#  Podcasts  #
+##############
 
 https://feeds.megaphone.fm/darknetdiaries	podcast
 https://feeds.fireside.fm/selfhosted/rss	podcast
